@@ -1,0 +1,17 @@
+@import url("../../utils/styles/base/_normalize.scss");
+
+.DefaultButton {
+  color: #a9a9a9;
+  border-radius: 100%;
+  transition: 0.2s background-color ease-in-out;
+}
+.DefaultButton:hover {
+  background-color: #303030;
+}
+.DefaultButton > svg {
+  width: 25px;
+  height: 25px;
+  padding: 8px;
+}
+
+/*# sourceMappingURL=style.module.css.map */
