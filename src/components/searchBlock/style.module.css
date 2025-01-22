@@ -1,6 +1,7 @@
 @import url("../../utils/styles/base/_normalize.scss");
 
 .SearchContainer {
+  position: relative;
   display: flex;
   width: 100%;
   padding: 0 8px;
@@ -11,9 +12,27 @@
   border-radius: 22px;
   background-color: #181818;
   border: 1px solid #2f2f2f;
-  padding: 0 25px;
+  padding: 0 44px;
   color: white;
-  font-size: 18px;
+  transition: 0.2s all ease-in-out;
+  caret-shape: underscore;
+  caret-color: #2f2f2f;
+}
+.SearchContainer .SearchInput:focus {
+  box-shadow: 0 0 0 1px #2f2f2f inset;
+  background-color: #212121;
+}
+.SearchContainer .SearchInput::placeholder {
+  color: #989898;
+}
+.SearchContainer .SearchIcon {
+  position: absolute;
+  bottom: 50%;
+  left: 22px;
+  transform: translateY(50%);
+  color: #818181;
+  width: 22px;
+  height: 22px;
 }
 
 /*# sourceMappingURL=style.module.css.map */
