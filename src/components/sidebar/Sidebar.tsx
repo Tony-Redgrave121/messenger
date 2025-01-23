@@ -3,6 +3,7 @@ import { HiBars3 } from "react-icons/hi2"
 import style from './style.module.css'
 import Buttons from '../buttons/Buttons'
 import SearchBlock from "../searchBlock/SearchBlock"
+import ChatList from "../chatList/ChatList";
 
 const Sidebar = () => {
     return (
@@ -11,6 +12,7 @@ const Sidebar = () => {
                 <Buttons.DefaultButton><HiBars3 /></Buttons.DefaultButton>
                 <SearchBlock />
             </div>
+            <ChatList />
         </aside>
     )
 }

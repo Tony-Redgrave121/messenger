@@ -1,0 +1,11 @@
+@import url("../../utils/styles/base/_normalize.scss");
+
+.LayoutContainer {
+  display: flex;
+  justify-content: center;
+
+  .Layout {
+    display: flex;
+    max-width: 1680px;
+  }
+}

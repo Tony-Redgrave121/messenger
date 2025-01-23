@@ -1,5 +1,4 @@
-@use '../../../utils/styles/base/_variables.css' as v;
-@import url("../../../utils/styles/base/_normalize.scss");
+@import url("../../utils/styles/base/_normalize.scss");
 
 .NotFoundContainer {
   display: -webkit-box;
@@ -24,17 +23,16 @@
   -webkit-box-shadow: 10px 10px 400px 250px rgba(0, 0, 0, 0.75) inset;
   box-shadow: 10px 10px 400px 250px rgba(0, 0, 0, 0.75) inset;
   gap: 20px;
-
-  h1 {
-    margin-bottom: 14px;
-  }
-
-  a {
-    position: relative;
-    border-radius: 15px;
-
-    &:hover {
-      text-decoration: underline;
-    }
-  }
 }
+.NotFoundContainer h1 {
+  margin-bottom: 14px;
+}
+.NotFoundContainer a {
+  position: relative;
+  border-radius: 15px;
+}
+.NotFoundContainer a:hover {
+  text-decoration: underline;
+}
+
+/*# sourceMappingURL=style.module.css.map */

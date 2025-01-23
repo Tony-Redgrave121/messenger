@@ -9,6 +9,7 @@
   background-color: #303030;
 }
 .DefaultButton > svg {
+  display: flex;
   width: 25px;
   height: 25px;
   padding: 8px;

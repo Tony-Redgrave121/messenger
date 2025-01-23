@@ -3,16 +3,17 @@
 .SidebarContainer {
   position: relative;
   display: flex;
+  flex-direction: column;
   max-width: 420px;
   width: 100%;
   height: 100vh;
   background-color: #212121;
   border-right: 1px solid #2f2f2f;
-  box-shadow: 20px 0 25px 5px rgba(47, 47, 47, 0.8);
+  padding: 0 8px;
 }
 .SidebarContainer .TopBar {
   display: flex;
-  padding: 8px 16px;
+  padding: 8px 8px;
   width: 100%;
   height: 56px;
 }

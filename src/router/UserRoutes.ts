@@ -1,10 +1,9 @@
-import {lazy} from "react";
-import HomePage from "../components/pages/homePage/HomePage";
+import Chat from "../components/chat/Chat";
 
 const UserRoutes = [
     {
-        path: "/",
-        Component: HomePage
+        path: "chat/:id",
+        Component: Chat
     },
 ]
 

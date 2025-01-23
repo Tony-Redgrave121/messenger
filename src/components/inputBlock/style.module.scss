@@ -1,0 +1,27 @@
+@import url("../../utils/styles/base/_normalize.scss");
+
+.InputContainer {
+  position: absolute;
+  bottom: 15px;
+  display: flex;
+  align-items: end;
+  width: 100%;
+  min-height: 50px;
+  background-color: #212121;
+  border-radius: 18px;
+  padding: 5px 8px;
+
+  textarea {
+    align-self: center;
+    caret-color: #656565;
+    width: 100%;
+    color: white;
+    line-height: 1.2;
+    padding: 0 8px;
+    overflow-wrap: break-word;
+
+    &::placeholder {
+      color: #989898;
+    }
+  }
+}

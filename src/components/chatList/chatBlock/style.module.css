@@ -1,0 +1,45 @@
+@import url("../../../utils/styles/base/_normalize.scss");
+
+.ChatContainer {
+  display: flex;
+  color: white;
+  padding: 8px;
+  border-radius: 12px;
+  transition: 0.2s background-color ease-in-out;
+}
+.ChatContainer .DescContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: calc(100% - 54px);
+  padding-left: 8px;
+  line-height: 1.5;
+}
+.ChatContainer .DescContainer p {
+  color: #a9a9a9;
+}
+.ChatContainer .DescContainer h3, .ChatContainer .DescContainer > p {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.ChatContainer .DescContainer span {
+  display: flex;
+  justify-content: space-between;
+}
+.ChatContainer .DescContainer span p {
+  font-size: 12px;
+  white-space: nowrap;
+  margin-left: 15px;
+}
+.ChatContainer h3 {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+.ChatContainer:hover {
+  background-color: #2d2d2d;
+}
+
+/*# sourceMappingURL=style.module.css.map */
