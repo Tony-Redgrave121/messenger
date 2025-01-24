@@ -1,5 +1,5 @@
 import React, {useEffect, useRef, useState} from 'react'
-import { HiOutlineFaceSmile, HiMiniPaperClip } from "react-icons/hi2"
+import { HiOutlineFaceSmile, HiMiniPaperClip, HiOutlinePaperAirplane } from "react-icons/hi2"
 import Buttons from '../buttons/Buttons'
 import style from './style.module.css'
 
@@ -19,13 +19,18 @@ const InputBlock = () => {
 
     return (
         <div className={style.InputContainer}>
-            <Buttons.DefaultButton>
-                <HiOutlineFaceSmile />
-            </Buttons.DefaultButton>
-            <textarea maxLength={850} rows={1} placeholder="Message" ref={refTextarea} onChange={event => setInputText(event.target.value)} />
-            <Buttons.DefaultButton>
-                <HiMiniPaperClip />
-            </Buttons.DefaultButton>
+            <div className={style.Input}>
+                <Buttons.DefaultButton>
+                    <HiOutlineFaceSmile />
+                </Buttons.DefaultButton>
+                <textarea maxLength={850} rows={1} placeholder="Message" ref={refTextarea} onChange={event => setInputText(event.target.value)} />
+                <Buttons.DefaultButton>
+                    <HiMiniPaperClip />
+                </Buttons.DefaultButton>
+            </div>
+            <Buttons.InterButton>
+                <HiOutlinePaperAirplane />
+            </Buttons.InterButton>
         </div>
     )
 }

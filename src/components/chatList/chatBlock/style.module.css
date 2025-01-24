@@ -3,9 +3,13 @@
 .ChatContainer {
   display: flex;
   color: white;
-  padding: 8px;
+  padding: 9px;
   border-radius: 12px;
   transition: 0.2s background-color ease-in-out;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 .ChatContainer .DescContainer {
   display: flex;
@@ -31,12 +35,6 @@
   font-size: 12px;
   white-space: nowrap;
   margin-left: 15px;
-}
-.ChatContainer h3 {
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
 }
 .ChatContainer:hover {
   background-color: #2d2d2d;

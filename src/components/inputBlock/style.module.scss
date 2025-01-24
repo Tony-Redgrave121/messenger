@@ -4,24 +4,35 @@
   position: absolute;
   bottom: 15px;
   display: flex;
-  align-items: end;
+  gap: 8px;
+  justify-content: space-between;
   width: 100%;
-  min-height: 50px;
-  background-color: #212121;
-  border-radius: 18px;
-  padding: 5px 8px;
 
-  textarea {
-    align-self: center;
-    caret-color: #656565;
+  .Input {
+    display: flex;
+    align-items: end;
     width: 100%;
-    color: white;
-    line-height: 1.2;
-    padding: 0 8px;
-    overflow-wrap: break-word;
+    min-height: 50px;
+    background-color: #212121;
+    border-radius: 18px;
+    padding: 5px 8px;
 
-    &::placeholder {
-      color: #989898;
+    textarea {
+      align-self: center;
+      caret-color: #656565;
+      width: 100%;
+      color: white;
+      line-height: 1.5;
+      padding: 0 8px;
+      overflow-wrap: break-word;
+
+      &::placeholder {
+        color: #989898;
+      }
     }
+  }
+
+  > button {
+    align-self: end;
   }
 }

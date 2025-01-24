@@ -3,6 +3,12 @@
   position: absolute;
   bottom: 15px;
   display: flex;
+  gap: 8px;
+  justify-content: space-between;
+  width: 100%;
+}
+.InputContainer .Input {
+  display: flex;
   align-items: end;
   width: 100%;
   min-height: 50px;
@@ -10,17 +16,20 @@
   border-radius: 18px;
   padding: 5px 8px;
 }
-.InputContainer textarea {
+.InputContainer .Input textarea {
   align-self: center;
   caret-color: #656565;
   width: 100%;
   color: white;
-  line-height: 1.2;
+  line-height: 1.5;
   padding: 0 8px;
   overflow-wrap: break-word;
 }
-.InputContainer textarea::placeholder {
+.InputContainer .Input textarea::placeholder {
   color: #989898;
+}
+.InputContainer > button {
+  align-self: end;
 }
 
 /*# sourceMappingURL=style.module.css.map */
