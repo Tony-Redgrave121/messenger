@@ -54,7 +54,7 @@ const Sidebar = () => {
             <div className={style.TopBar}>
                 <Buttons.DefaultButton foo={() => setSettings(!settings)}>
                     <HiBars3/>
-                    <Popup list={list}/>
+                    <Popup list={list} state={settings} setState={setSettings}/>
                 </Buttons.DefaultButton>
                 <SearchBlock/>
             </div>

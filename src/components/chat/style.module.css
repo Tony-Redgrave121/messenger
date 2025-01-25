@@ -27,6 +27,11 @@
 .ChatContainer header > span {
   gap: 8px;
 }
+.ChatContainer header > span > :last-child ul {
+  right: 0;
+  top: calc(100% + 13px);
+  transform-origin: top right;
+}
 .ChatContainer header .DeskBlock {
   line-height: 1.5;
   gap: 16px;

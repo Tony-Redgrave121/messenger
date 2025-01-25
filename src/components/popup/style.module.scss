@@ -11,6 +11,8 @@
   overflow: hidden;
   border-radius: 10px;
   box-shadow: rgba(50, 50, 93, 0.25) 0 6px 12px -2px, rgba(0, 0, 0, .3) 0px 3px 7px -3px;
+  transform-origin: top left;
+  cursor: default;
 
   &:before {
     content: '';
@@ -33,6 +35,7 @@
     font-weight: bolder;
     padding: 5px 10px;
     border-radius: 5px;
+    cursor: pointer;
 
     svg {
       width: 24px;
@@ -42,5 +45,19 @@
     &:hover {
       background-color: rgba(66, 66, 66, 0.5);
     }
+  }
+}
+
+.EmojiContainer {
+  display: flex;
+  flex-wrap: wrap;
+  width: 330px;
+
+  li {
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    padding: 20px;
+    font-size: 28px;
   }
 }

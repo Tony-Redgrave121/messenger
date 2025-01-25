@@ -28,6 +28,18 @@
 .InputContainer .Input textarea::placeholder {
   color: #989898;
 }
+.InputContainer .Input:first-child ul, .InputContainer .Input:last-child ul {
+  top: unset;
+  bottom: calc(100% + 10px);
+}
+.InputContainer .Input > :first-child ul {
+  left: 0;
+  transform-origin: bottom left;
+}
+.InputContainer .Input > :last-child ul {
+  right: 0;
+  transform-origin: bottom right;
+}
 .InputContainer > button {
   align-self: end;
 }

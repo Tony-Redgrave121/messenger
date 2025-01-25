@@ -30,6 +30,27 @@
         color: #989898;
       }
     }
+
+    &:first-child, &:last-child {
+      ul {
+        top: unset;
+        bottom: calc(100% + 10px);
+      }
+    }
+
+    >:first-child {
+      ul {
+        left: 0;
+        transform-origin: bottom left;
+      }
+    }
+
+    >:last-child {
+      ul {
+        right: 0;
+        transform-origin: bottom right;
+      }
+    }
   }
 
   > button {

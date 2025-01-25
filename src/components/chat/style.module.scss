@@ -28,6 +28,12 @@
 
     > span {
       gap: 8px;
+
+      >:last-child ul {
+        right: 0;
+        top: calc(100% + 13px);
+        transform-origin: top right;
+      }
     }
 
     .DeskBlock {
