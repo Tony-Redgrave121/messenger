@@ -1,0 +1,9 @@
+@use '../../../utils/styles/base/_variables.css' as v;
+@import url("../../../utils/styles/base/_normalize.scss");
+
+.TopBar {
+  display: flex;
+  padding: 8px 8px;
+  width: 100%;
+  height: 56px;
+}

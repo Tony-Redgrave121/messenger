@@ -3,6 +3,7 @@
 
 .SidebarContainer {
   position: relative;
+  z-index: 2;
   display: flex;
   flex-direction: column;
   max-width: 420px;
@@ -11,11 +12,12 @@
   background-color: #212121;
   border-right: 1px solid #2f2f2f;
   padding: 0 8px;
+}
 
-  .TopBar {
-    display: flex;
-    padding: 8px 8px;
-    width: 100%;
-    height: 56px;
-  }
+.RightSidebarContainer {
+  border-left: 1px solid #2f2f2f;
+  align-items: center;
+  max-width: 420px;
+  padding: 0;
+  transform-origin: right;
 }

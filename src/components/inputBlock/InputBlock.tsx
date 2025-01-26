@@ -8,8 +8,8 @@ import {
 } from "react-icons/hi2"
 import Buttons from '../buttons/Buttons'
 import style from './style.module.css'
-import Popup from "../popup/Popup";
-import useEmojis from "./useEmojis";
+import Popup from "../popup/Popup"
+import useEmojis from "./useEmojis"
 
 const list2 = [
     {
@@ -29,10 +29,8 @@ const list2 = [
 const InputBlock = () => {
     const refTextarea = useRef<HTMLTextAreaElement>(null)
     const [inputText, setInputText] = useState('')
-
     const [file, setFile] = useState(false)
     const [emoji, setEmoji] = useState(false)
-
     const emojis = useEmojis(refTextarea, setInputText)
 
     useEffect(() => {

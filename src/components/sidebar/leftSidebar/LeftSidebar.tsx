@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useRef, useState} from 'react'
 import {
     HiBars3,
     HiOutlineCog8Tooth,
@@ -8,10 +8,11 @@ import {
     HiOutlineBugAnt
 } from "react-icons/hi2"
 import style from './style.module.css'
-import Buttons from '../buttons/Buttons'
-import SearchBlock from "../searchBlock/SearchBlock"
-import ChatList from "../chatList/ChatList"
-import Popup from "../popup/Popup"
+import Buttons from '../../buttons/Buttons'
+import SearchBlock from "../../searchBlock/SearchBlock"
+import ChatList from "../../chatList/ChatList"
+import Popup from "../../popup/Popup"
+import SidebarContainer from "../SidebarContainer";
 
 const list = [
     {
@@ -46,21 +47,22 @@ const list = [
     }
 ]
 
-const Sidebar = () => {
+const LeftSidebar = () => {
     const [settings, setSettings] = useState(false)
+    const refSearch = useRef<HTMLDivElement>(null)
 
     return (
-        <aside className={style.SidebarContainer}>
+        <SidebarContainer>
             <div className={style.TopBar}>
                 <Buttons.DefaultButton foo={() => setSettings(!settings)}>
                     <HiBars3/>
                     <Popup list={list} state={settings} setState={setSettings}/>
                 </Buttons.DefaultButton>
-                <SearchBlock/>
+                <SearchBlock ref={refSearch}/>
             </div>
             <ChatList/>
-        </aside>
+        </SidebarContainer>
     )
 }
 
-export default Sidebar
+export default LeftSidebar

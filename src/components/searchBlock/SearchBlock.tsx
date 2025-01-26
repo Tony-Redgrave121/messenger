@@ -2,9 +2,13 @@ import React from 'react'
 import style from './style.module.css'
 import { HiOutlineMagnifyingGlass } from "react-icons/hi2"
 
-const SearchBlock = () => {
+interface ISearchBlock {
+    ref: React.RefObject<HTMLDivElement | null>
+}
+
+const SearchBlock: React.FC<ISearchBlock> = ({ref}) => {
     return (
-        <div className={style.SearchContainer}>
+        <div className={style.SearchContainer} ref={ref}>
             <HiOutlineMagnifyingGlass className={style.SearchIcon}/>
             <input className={style.SearchInput} placeholder='Search'></input>
         </div>

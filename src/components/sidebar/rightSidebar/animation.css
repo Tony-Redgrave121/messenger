@@ -1,0 +1,20 @@
+.right-sidebar-node-enter {
+    opacity: 0;
+    transform: scale(0);
+}
+
+.right-sidebar-node-enter-active {
+    opacity: 1;
+    transform: scale(1);
+    transition: opacity .3s ease-in-out, transform .3s ease-in-out;
+}
+
+.right-sidebar-node-exit {
+    opacity: 1;
+}
+
+.right-sidebar-node-exit-active {
+    opacity: 0;
+    transform: scale(0);
+    transition: opacity .3s ease-in-out, transform .3s ease-in-out;
+}
