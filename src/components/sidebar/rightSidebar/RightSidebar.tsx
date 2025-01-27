@@ -4,6 +4,7 @@ import {
     HiOutlineXMark,
     HiOutlineExclamationCircle,
     HiOutlinePaperClip,
+    HiOutlineBell
 } from "react-icons/hi2"
 import style from './style.module.css'
 import './animation.css'
@@ -27,6 +28,8 @@ interface IRightSidebar {
 }
 
 const RightSidebar: React.FC<IRightSidebar> = ({entity, ref, state, setState}) => {
+    const [notification, setNotification] = React.useState(false)
+
     return (
         <CSSTransition
             in={state}
@@ -36,31 +39,47 @@ const RightSidebar: React.FC<IRightSidebar> = ({entity, ref, state, setState}) =
             unmountOnExit
         >
             <SidebarContainer styles={['RightSidebarContainer']} ref={ref}>
-                <div className={style.TopBar}>
-                    <Buttons.DefaultButton foo={() => setState(false)}>
-                        <HiOutlineXMark/>
-                    </Buttons.DefaultButton>
-                    <h1>{entity.entityType} Info</h1>
-                    <Buttons.DefaultButton foo={() => {}}>
-                        <HiOutlinePencil/>
-                    </Buttons.DefaultButton>
-                </div>
-                <div className={style.EntityImageBlock} style={{backgroundImage: `url('${unImage}')`}}>
-                    <div>
-                        <h1>{entity.entityTitle}</h1>
-                        <p>{entity.entityDesc}</p>
+                <div className={style.Wrapper}>
+                    <div className={style.TopBar}>
+                        <Buttons.DefaultButton foo={() => setState(false)}>
+                            <HiOutlineXMark/>
+                        </Buttons.DefaultButton>
+                        <h1>{entity.entityType} Info</h1>
+                        <Buttons.DefaultButton foo={() => {
+                        }}>
+                            <HiOutlinePencil/>
+                        </Buttons.DefaultButton>
                     </div>
+                    <div className={style.EntityImageBlock} style={{backgroundImage: `url('${unImage}')`}}>
+                        <div>
+                            <h1>{entity.entityTitle}</h1>
+                            <p>{entity.entityDesc}</p>
+                        </div>
+                    </div>
+                    <ul className={style.InfoList}>
+                        <li>
+                            <button onClick={() => window.navigator.clipboard.writeText(entity.entityBio)}>
+                                <HiOutlineExclamationCircle/>
+                                <p>{entity.entityBio} <p className={style.LiType}>Bio</p></p>
+                            </button>
+                        </li>
+                        <li>
+                            <button onClick={() => window.navigator.clipboard.writeText(entity.entityLink)}>
+                                <HiOutlinePaperClip/>
+                                <p>{entity.entityLink} <p className={style.LiType}>Link</p></p>
+                            </button>
+                        </li>
+                        <li>
+                            <button onClick={() => setNotification(!notification)}>
+                                <span>
+                                    <HiOutlineBell/>
+                                    <p>Notifications</p>
+                                </span>
+                                <Buttons.SwitchButton state={notification} foo={() => setNotification(!notification)}/>
+                            </button>
+                        </li>
+                    </ul>
                 </div>
-                <ul className={style.InfoList}>
-                    <li>
-                        <HiOutlineExclamationCircle/>
-                        <p>{entity.entityBio} <p className={style.LiType}>Bio</p></p>
-                    </li>
-                    <li>
-                        <HiOutlinePaperClip/>
-                        <p>{entity.entityLink} <p className={style.LiType}>Link</p></p>
-                    </li>
-                </ul>
             </SidebarContainer>
         </CSSTransition>
     )

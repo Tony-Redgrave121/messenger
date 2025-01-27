@@ -15,9 +15,13 @@
 }
 
 .RightSidebarContainer {
+  right: 0;
   border-left: 1px solid #2f2f2f;
+  border-right: none;
   align-items: center;
   max-width: 420px;
   padding: 0;
-  transform-origin: right;
+  background-color: #181818;
+  overflow-y: auto;
+  overflow-x: hidden;
 }

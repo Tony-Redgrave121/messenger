@@ -8,6 +8,7 @@
   background-size: 280px;
   width: calc(100vw - 420px);
   height: 100vh;
+  overflow: hidden;
 }
 .MainContainer:after {
   content: "";

@@ -1,0 +1,30 @@
+@import url("../../utils/styles/base/_normalize.scss");
+
+.ChatMessageContainer {
+  position: relative;
+  background-color: #181818;
+  padding: 8px;
+  border-radius: 15px 15px 15px 0;
+  line-height: 1.5;
+  max-width: 75%;
+}
+.ChatMessageContainer .ChatMessageFile > div {
+  display: flex;
+  flex-wrap: wrap;
+}
+.ChatMessageContainer .ChatMessageFile > div > * {
+  border: 1px solid #212121;
+  width: 33.333333%;
+}
+.ChatMessageContainer .ChatMessageFile > div > :first-child {
+  height: 100%;
+  width: 100%;
+}
+
+.Owner {
+  background-color: #212121;
+  border-radius: 15px 15px 0 15px;
+  align-self: end;
+}
+
+/*# sourceMappingURL=style.module.css.map */

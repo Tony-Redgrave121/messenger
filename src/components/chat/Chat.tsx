@@ -17,6 +17,8 @@ import Popup from "../popup/Popup";
 import SearchBlock from "../searchBlock/SearchBlock"
 import {CSSTransition} from 'react-transition-group'
 import RightSidebar from "../sidebar/rightSidebar/RightSidebar"
+import Message from "../message/Message";
+import geralt from './geralt.png'
 
 const list = [
     {
@@ -59,7 +61,7 @@ const entity = {
     entityTitle: 'Український Наступ | #УкрТг ∆',
     entityLink: 't.me/ukrnastup',
     entityDesc: '140 609 subscribers',
-    entityBio: 'Боремося на громадсько-мемних фронтах інформаційної війни з 2014-го Боремося на громадсько-мемних фронтах інформаційної війни з 2014-го Боремося на громадсько-мемних фронтах інформаційної війни з 2014-го'
+    entityBio: 'Боремося на громадсько-мемних фронтах інформаційної війни з 2014-го Боремося на громадсько-мемних фронтах інформаційної війни з 2014-го Боремося на громадсько-мемних інформаційної війни з 2014-го'
 }
 
 const Chat = () => {
@@ -101,6 +103,11 @@ const Chat = () => {
                     </span>
                 </header>
                 <div className={style.Chat}>
+                    <div className={style.MessageBlock}>
+                        <Message.ChatMessage type='Message' date={new Date()} text='Lorem ipsum dolor sit amet, consectetur adipisicing elit. Debitis, dolores!'/>
+                        <Message.ChatMessage type='Message' date={new Date()} owner={true} text='Lorem ipsum dolor sit amet, consectetur adipisicing elit. Debitis, dolores!'/>
+                        <Message.ChatMessage type='File' date={new Date()} owner={true} text='Lorem ipsum dolor sit amet, consectetur adipisicing elit. Debitis, dolores!' files={[geralt, geralt, geralt]}/>
+                    </div>
                     <InputBlock/>
                 </div>
             </div>
