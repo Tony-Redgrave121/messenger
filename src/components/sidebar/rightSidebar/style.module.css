@@ -8,7 +8,7 @@
 }
 .Wrapper .TopBar {
   position: absolute;
-  z-index: 5;
+  z-index: 1;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -49,7 +49,8 @@
   display: flex;
   width: 100%;
 }
-.Wrapper .InfoList li > button {
+.Wrapper .InfoList li > div {
+  cursor: pointer;
   color: white;
   font-size: 16px;
   width: 100%;
@@ -57,26 +58,26 @@
   border-radius: 10px;
   transition: 0.2s background-color ease-in-out;
 }
-.Wrapper .InfoList li > button, .Wrapper .InfoList li > button span {
+.Wrapper .InfoList li > div, .Wrapper .InfoList li > div span {
   display: flex;
   align-items: center;
   gap: 16px;
 }
-.Wrapper .InfoList li > button .LiType {
+.Wrapper .InfoList li > div .LiType {
   font-size: 14px;
   color: #a9a9a9;
 }
-.Wrapper .InfoList li > button:hover {
+.Wrapper .InfoList li > div:hover {
   background-color: #2b2b2b;
 }
-.Wrapper .InfoList li > button:active {
+.Wrapper .InfoList li > div:active {
   background-color: #323232;
 }
-.Wrapper .InfoList li > button svg {
+.Wrapper .InfoList li > div svg {
   min-width: 28px;
   min-height: 28px;
 }
-.Wrapper .InfoList li > button button {
+.Wrapper .InfoList li > div button {
   margin: 0 8px 0 auto;
 }
 

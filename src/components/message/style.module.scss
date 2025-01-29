@@ -9,21 +9,28 @@
   line-height: 1.5;
   max-width: 75%;
 
-  .ChatMessageFile {
-    > div {
-      display: flex;
-      flex-wrap: wrap;
+  .ReplyBlock {
+    border-left: 3px solid white;
+    background-color: #2f2f2f;
+    padding: 5px;
+    border-radius: 5px;
+    font-size: 14px;
+    line-height: 1.4;
+    transition: .2s background-color ease-in-out;
 
-      > * {
-        border: 1px solid #212121;
-        width: 33.333333%;
-      }
-
-      >:first-child {
-        height: 100%;
-        width: 100%;
-      }
+    &:hover {
+      background-color: #353535;
     }
+  }
+
+  &, .ChatMessageMedia {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .ChatMessageMedia {
+    overflow: hidden;
   }
 }
 

@@ -9,7 +9,7 @@
 
   .TopBar {
     position: absolute;
-    z-index: 5;
+    z-index: 1;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -55,7 +55,9 @@
       display: flex;
       width: 100%;
 
-      > button {
+      > div {
+        cursor: pointer;
+
         &, span {
           display: flex;
           align-items: center;

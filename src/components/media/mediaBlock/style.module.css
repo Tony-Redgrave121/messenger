@@ -1,0 +1,25 @@
+@import url("../../../utils/styles/base/_normalize.scss");
+
+.MediaBlock {
+  display: flex;
+  flex-wrap: wrap;
+}
+.MediaBlock img {
+  border: 1px solid #212121;
+  height: auto;
+  object-fit: cover;
+  cursor: pointer;
+}
+.MediaBlock > img {
+  width: 100%;
+}
+.MediaBlock > span {
+  display: flex;
+}
+.MediaBlock > span img {
+  flex-shrink: 1;
+  max-width: 100%;
+  min-width: 0;
+}
+
+/*# sourceMappingURL=style.module.css.map */

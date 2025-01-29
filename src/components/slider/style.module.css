@@ -1,0 +1,38 @@
+@import url("../../utils/styles/base/_normalize.scss");
+
+.SliderContainer {
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 5;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.8);
+  padding: 8px 20px;
+}
+.SliderContainer .ToolsBlock {
+  display: flex;
+  justify-content: space-between;
+}
+.SliderContainer .ToolsBlock > button {
+  display: flex;
+  gap: 16px;
+  opacity: 0.5;
+  transition: 0.2s opacity ease-in-out;
+}
+.SliderContainer .ToolsBlock > button p {
+  font-size: 14px;
+}
+.SliderContainer .ToolsBlock > button > :first-child {
+  width: 44px;
+  height: 44px;
+}
+.SliderContainer .ToolsBlock > button:hover {
+  opacity: 1;
+}
+.SliderContainer .ToolsBlock > span svg {
+  width: 24px;
+  height: 24px;
+}
+
+/*# sourceMappingURL=style.module.css.map */

@@ -58,25 +58,25 @@ const RightSidebar: React.FC<IRightSidebar> = ({entity, ref, state, setState}) =
                     </div>
                     <ul className={style.InfoList}>
                         <li>
-                            <button onClick={() => window.navigator.clipboard.writeText(entity.entityBio)}>
+                            <div onClick={() => window.navigator.clipboard.writeText(entity.entityBio)}>
                                 <HiOutlineExclamationCircle/>
-                                <p>{entity.entityBio} <p className={style.LiType}>Bio</p></p>
-                            </button>
+                                <p>{entity.entityBio} <br/><small className={style.LiType}>Bio</small></p>
+                            </div>
                         </li>
                         <li>
-                            <button onClick={() => window.navigator.clipboard.writeText(entity.entityLink)}>
+                            <div onClick={() => window.navigator.clipboard.writeText(entity.entityLink)}>
                                 <HiOutlinePaperClip/>
-                                <p>{entity.entityLink} <p className={style.LiType}>Link</p></p>
-                            </button>
+                                <p>{entity.entityLink} <br/><small className={style.LiType}>Link</small></p>
+                            </div>
                         </li>
                         <li>
-                            <button onClick={() => setNotification(!notification)}>
+                            <div onClick={() => setNotification(!notification)}>
                                 <span>
                                     <HiOutlineBell/>
                                     <p>Notifications</p>
                                 </span>
                                 <Buttons.SwitchButton state={notification} foo={() => setNotification(!notification)}/>
-                            </button>
+                            </div>
                         </li>
                     </ul>
                 </div>

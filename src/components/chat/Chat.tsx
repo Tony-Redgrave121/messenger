@@ -18,7 +18,13 @@ import SearchBlock from "../searchBlock/SearchBlock"
 import {CSSTransition} from 'react-transition-group'
 import RightSidebar from "../sidebar/rightSidebar/RightSidebar"
 import Message from "../message/Message";
-import geralt from './geralt.png'
+
+
+import geralt from './pictures/geralt.png'
+import hardware from './pictures/hardware.jpg'
+import skeleton from './pictures/skeleton.jpg'
+import ASCII from './pictures/ASCII Art.png'
+
 
 const list = [
     {
@@ -104,9 +110,9 @@ const Chat = () => {
                 </header>
                 <div className={style.Chat}>
                     <div className={style.MessageBlock}>
-                        <Message.ChatMessage type='Message' date={new Date()} text='Lorem ipsum dolor sit amet, consectetur adipisicing elit. Debitis, dolores!'/>
-                        <Message.ChatMessage type='Message' date={new Date()} owner={true} text='Lorem ipsum dolor sit amet, consectetur adipisicing elit. Debitis, dolores!'/>
-                        <Message.ChatMessage type='File' date={new Date()} owner={true} text='Lorem ipsum dolor sit amet, consectetur adipisicing elit. Debitis, dolores!' files={[geralt, geralt, geralt]}/>
+                        <Message.ChatMessage type='Message' date={new Date()} text='Lorem ipsum dolor sit amet, consectetur adipisicing elit. Debitis, dolores!' ownerName='Igor Link'/>
+                        <Message.ChatMessage type='Message' date={new Date()} owner={true} text='Lorem ipsum dolor sit amet, consectetur adipisicing elit. Debitis, dolores!' ownerName='Igor Link'/>
+                        <Message.ChatMessage type='Media' date={new Date()} owner={true} text='Lorem ipsum dolor sit amet, consectetur adipisicing elit. Debitis, dolores!' media={[geralt, hardware, skeleton, ASCII]} reply={{reply_name: 'Igor Link', reply_text: 'Lorem ipsum dolor sit amet'}} ownerName='Tony Redgrave'/>
                     </div>
                     <InputBlock/>
                 </div>
