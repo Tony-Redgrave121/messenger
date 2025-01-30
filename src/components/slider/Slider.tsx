@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useEffect, useRef, useState} from 'react'
 import style from './style.module.css'
 import {CSSTransition} from 'react-transition-group'
 import './animation.css'
@@ -11,9 +11,10 @@ import {
     HiOutlineDocumentArrowDown,
     HiMagnifyingGlassMinus,
     HiMagnifyingGlassPlus,
-    HiOutlineXMark
+    HiOutlineXMark,
+    HiOutlineChevronLeft,
+    HiOutlineChevronRight,
 } from "react-icons/hi2";
-import * as events from "node:events";
 
 interface ISlider {
     ref: React.RefObject<HTMLDivElement | null>,
@@ -25,6 +26,31 @@ interface ISlider {
 }
 
 const Slider: React.FC<ISlider> = ({ref, state, setState, media, owner, date}) => {
+    const [slide, setSlide] = useState(0)
+    const [mediaArr, setMediaArr] = useState([...media])
+    const [currMedia, setCurrMedia] = useState(media[0])
+    const refSwipe = useRef<HTMLDivElement | null>(null)
+
+    const swipeSlide = (side: boolean) => {
+        setSlide(prev => {
+            console.log(prev)
+            const newSlide = side
+                ? prev + (100 / mediaArr.length)
+                : prev - (100 / mediaArr.length)
+
+            if (newSlide >= 0 && newSlide < 100 && refSwipe.current) {
+                refSwipe.current.style.left = `-${newSlide}%`
+                return newSlide
+            }
+
+            return prev
+        })
+    }
+
+    const deleteMedia = () => {
+
+    }
+
     return (
         <CSSTransition
             in={state}
@@ -33,7 +59,7 @@ const Slider: React.FC<ISlider> = ({ref, state, setState, media, owner, date}) =
             classNames='slider-node'
             unmountOnExit
         >
-            <div className={style.SliderContainer} ref={ref} onClick={() => setState(false)}>
+            <div className={style.SliderContainer} ref={ref}>
                 <div onClick={event => event.stopPropagation()} className={style.ToolsBlock}>
                     <button>
                         <LoadImage chatImg='' chatTitle={owner}/>
@@ -59,6 +85,25 @@ const Slider: React.FC<ISlider> = ({ref, state, setState, media, owner, date}) =
                             <HiOutlineXMark/>
                         </Button.WhiteButton>
                     </span>
+                </div>
+                <div className={style.Slider} onClick={() => setState(false)}>
+                    <div onClick={event => event.stopPropagation()}>
+                        {slide > 0 && <Button.WhiteButton foo={() => swipeSlide(false)}>
+                            <HiOutlineChevronLeft/>
+                        </Button.WhiteButton>}
+                        {slide <= 100 && <Button.WhiteButton foo={() => swipeSlide(true)}>
+                            <HiOutlineChevronRight/>
+                        </Button.WhiteButton>}
+                    </div>
+                    <div className={style.Swipe} ref={refSwipe}>
+                        {
+                            media.map(media => (
+                                <div key={media} className={style.ImageBlock}>
+                                    <img src={media} alt={media} onClick={(event) => event.stopPropagation()}/>
+                                </div>
+                            ))
+                        }
+                    </div>
                 </div>
             </div>
         </CSSTransition>
