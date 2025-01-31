@@ -7,7 +7,7 @@ interface IDefaultButton {
 }
 
 interface ISwitchButton extends IDefaultButton {
-    state: boolean
+    state: boolean,
 }
 
 namespace Buttons {
@@ -26,9 +26,9 @@ namespace Buttons {
             <button className={`${style.SwitchButton} ${state && style.SwitchButtonOn}`} onClick={foo}></button>
         )
     }
-    export const WhiteButton: React.FC<IDefaultButton> = ({foo, children}) => {
+    export const WhiteButton: React.FC<IDefaultButton> = ({foo, children, ...props}) => {
         return (
-            <button className={`${style.DefaultButton} ${style.WhiteButton}`} onClick={foo}>{children}</button>
+            <button className={`${style.DefaultButton} ${style.WhiteButton}`} onClick={foo} {...props}>{children}</button>
         )
     }
 }

@@ -4,9 +4,10 @@ import style from "./style.module.css"
 interface IMediaBlock {
     media: Array<string>,
     setSlider: (state: boolean) => void,
+    setCurrMedia: (state: string) => void,
 }
 
-const MediaBlock: React.FC<IMediaBlock> = memo(({media, setSlider}) => {
+const MediaBlock: React.FC<IMediaBlock> = memo(({media, setSlider, setCurrMedia}) => {
     const getTag = (name: string) => {
         const isPicture = ['png', 'jpg', 'jpeg', 'webp']
         const isVideo = ['mp4', 'webm']
@@ -16,11 +17,17 @@ const MediaBlock: React.FC<IMediaBlock> = memo(({media, setSlider}) => {
 
         if (isVideo.includes(ext)) {
             return (
-                <video src={name} key={name} onClick={() => setSlider(true)}></video>
+                <video src={name} key={name} onClick={() => {
+                    setCurrMedia(name)
+                    setSlider(true)
+                }}></video>
             )
         } else if (isPicture.includes(ext)) {
             return (
-                <img src={name} alt="name" key={name} onClick={() => setSlider(true)}/>
+                <img src={name} alt="name" key={name} onClick={() => {
+                    setCurrMedia(name)
+                    setSlider(true)
+                }}/>
             )
         }
     }

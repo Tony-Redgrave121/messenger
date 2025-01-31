@@ -10,6 +10,10 @@
   height: 100vh;
   background-color: rgba(0, 0, 0, 0.8);
   padding: 8px 20px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 
   .ToolsBlock {
     position: relative;
@@ -52,31 +56,29 @@
     }
   }
 
+  .LeftArrow, .RightArrow {
+    position: absolute;
+    display: flex;
+    top: 50%;
+    z-index: 3;
+    transform: translateY(-50%);
+
+    button svg {
+      width: 48px;
+      height: 48px;
+    }
+  }
+
+  .RightArrow {
+    right: 20px;
+  }
+
   .Slider {
     position: absolute;
     top: 0;
     left: 0;
     display: flex;
     height: 100%;
-
-    >:first-child {
-      position: absolute;
-      top: 50%;
-      z-index: 2;
-      display: flex;
-      width: 100vw;
-      padding: 0 20px;
-      transform: translateY(-50%);
-
-      >:last-child {
-        margin-left: auto;
-      }
-
-      button svg {
-        width: 48px;
-        height: 48px;
-      }
-    }
 
     .Swipe {
       position: relative;

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useEffect, useRef, useState} from 'react'
 import style from "./style.module.css"
 import Slider from "../slider/Slider";
 import MediaBlock from "../media/mediaBlock/MediaBlock";
@@ -18,8 +18,14 @@ interface IChatMessage {
 
 namespace Message {
     export const ChatMessage: React.FC<IChatMessage> = ({text, reply, type, owner = false, media, ownerName, date}) => {
-        const [slider, setSlider] = React.useState(false)
-        const refSlider = React.useRef<HTMLDivElement>(null)
+        const [animationState, setAnimationState] = useState(false)
+        const [currMedia, setCurrMedia] = useState('')
+        const refSlider = useRef<HTMLDivElement>(null)
+        const [mediaArr, setMediaArr] = useState(media)
+
+        useEffect(() => {
+            media && setCurrMedia(media[0])
+        }, [media])
 
         return (
             <div className={`${style.ChatMessageContainer} ${owner && style.Owner}`}>
@@ -30,10 +36,23 @@ namespace Message {
                     </button>
                 }
                 <div className={style[`ChatMessage${type}`]}>
-                    {media && <MediaBlock media={media} setSlider={setSlider}/>}
+                    {(mediaArr && mediaArr.length > 0) &&
+                        <MediaBlock media={mediaArr} setSlider={setAnimationState} setCurrMedia={setCurrMedia}/>
+                    }
                     <p>{text}</p>
                 </div>
-                {media && <Slider ref={refSlider} state={slider} setState={setSlider} media={media} owner={ownerName} date={date}/>}
+                {mediaArr &&
+                    <Slider animation={{
+                        state: animationState,
+                        setState: setAnimationState,
+                        ref: refSlider
+                    }} media={{
+                        mediaArr: mediaArr,
+                        setMediaArr: setMediaArr,
+                        currentSlide: currMedia
+                    }} user={{owner: ownerName, date: date}}
+                    />
+                }
             </div>
         )
     }
