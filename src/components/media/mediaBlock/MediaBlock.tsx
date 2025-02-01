@@ -2,30 +2,42 @@ import React, {memo} from 'react'
 import style from "./style.module.css"
 
 interface IMediaBlock {
-    media: Array<string>,
+    media: Array<{
+        mediaId: string,
+        mediaUrl: string
+    }>,
     setSlider: (state: boolean) => void,
-    setCurrMedia: (state: string) => void,
+    setCurrMedia: React.Dispatch<React.SetStateAction<{
+        mediaId: string,
+        mediaUrl: string
+    }>>,
 }
 
 const MediaBlock: React.FC<IMediaBlock> = memo(({media, setSlider, setCurrMedia}) => {
-    const getTag = (name: string) => {
+    const getTag = (currMedia: { mediaId: string, mediaUrl: string }) => {
         const isPicture = ['png', 'jpg', 'jpeg', 'webp']
         const isVideo = ['mp4', 'webm']
 
-        const type = name!.split('.')
+        const type = currMedia.mediaUrl!.split('.')
         const ext = type[type.length - 1]
 
         if (isVideo.includes(ext)) {
             return (
-                <video src={name} key={name} onClick={() => {
-                    setCurrMedia(name)
+                <video src={currMedia.mediaUrl} key={currMedia.mediaId} onClick={() => {
+                    setCurrMedia({
+                        mediaId: currMedia.mediaId,
+                        mediaUrl: currMedia.mediaUrl
+                    })
                     setSlider(true)
                 }}></video>
             )
         } else if (isPicture.includes(ext)) {
             return (
-                <img src={name} alt="name" key={name} onClick={() => {
-                    setCurrMedia(name)
+                <img src={currMedia.mediaUrl} alt="name" key={currMedia.mediaId} onClick={() => {
+                    setCurrMedia({
+                        mediaId: currMedia.mediaId,
+                        mediaUrl: currMedia.mediaUrl
+                    })
                     setSlider(true)
                 }}/>
             )

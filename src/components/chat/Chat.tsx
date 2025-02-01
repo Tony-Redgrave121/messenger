@@ -70,11 +70,28 @@ const entity = {
     entityBio: 'Боремося на громадсько-мемних фронтах інформаційної війни з 2014-го Боремося на громадсько-мемних фронтах інформаційної війни з 2014-го Боремося на громадсько-мемних інформаційної війни з 2014-го'
 }
 
+const mediaTest = [
+    {
+        mediaId: '41246321',
+        mediaUrl: geralt
+    },
+    {
+        mediaId: '41246322',
+        mediaUrl: hardware
+    },
+    {
+        mediaId: '41246323',
+        mediaUrl: skeleton
+    },
+    {
+        mediaId: '41246324',
+        mediaUrl: ASCII
+    }]
+
 const Chat = () => {
     const [settings, setSettings] = useState(false)
     const [inputState, setInputState] = useState(false)
     const [sidebarState, setSidebarState] = useState(false)
-
     const refSearch = useRef<HTMLDivElement>(null)
     const refRightSidebar = useRef<HTMLDivElement>(null)
 
@@ -112,7 +129,7 @@ const Chat = () => {
                     <div className={style.MessageBlock}>
                         <Message.ChatMessage type='Message' date={new Date()} text='Lorem ipsum dolor sit amet, consectetur adipisicing elit. Debitis, dolores!' ownerName='Igor Link'/>
                         <Message.ChatMessage type='Message' date={new Date()} owner={true} text='Lorem ipsum dolor sit amet, consectetur adipisicing elit. Debitis, dolores!' ownerName='Igor Link'/>
-                        <Message.ChatMessage type='Media' date={new Date()} owner={true} text='Lorem ipsum dolor sit amet, consectetur adipisicing elit. Debitis, dolores!' media={[geralt, hardware, skeleton, ASCII]} reply={{reply_name: 'Igor Link', reply_text: 'Lorem ipsum dolor sit amet'}} ownerName='Tony Redgrave'/>
+                        <Message.ChatMessage type='Media' date={new Date()} owner={true} text='Lorem ipsum dolor sit amet, consectetur adipisicing elit. Debitis, dolores!' media={mediaTest} reply={{reply_name: 'Igor Link', reply_text: 'Lorem ipsum dolor sit amet'}} ownerName='Tony Redgrave'/>
                     </div>
                     <InputBlock/>
                 </div>

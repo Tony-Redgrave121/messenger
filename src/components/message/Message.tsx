@@ -12,14 +12,20 @@ interface IChatMessage {
     type: string,
     owner?: boolean,
     ownerName: string,
-    media?: Array<string>,
+    media?: Array<{
+        mediaId: string,
+        mediaUrl: string
+    }>,
     date: Date,
 }
 
 namespace Message {
     export const ChatMessage: React.FC<IChatMessage> = ({text, reply, type, owner = false, media, ownerName, date}) => {
         const [animationState, setAnimationState] = useState(false)
-        const [currMedia, setCurrMedia] = useState('')
+        const [currMedia, setCurrMedia] = useState({
+            mediaId: '',
+            mediaUrl: ''
+        })
         const refSlider = useRef<HTMLDivElement>(null)
         const [mediaArr, setMediaArr] = useState(media)
 

@@ -1,4 +1,4 @@
-import React, {useRef, useState} from 'react'
+import React, {useRef} from 'react'
 import style from './style.module.css'
 import {CSSTransition} from 'react-transition-group'
 import './animation.css'
@@ -24,10 +24,13 @@ interface ISlider {
         ref: React.RefObject<HTMLDivElement | null>
     },
     media: {
-        mediaArr: string[],
-        setMediaArr: React.Dispatch<React.SetStateAction<string[] | undefined>>,
-        currentSlide: string
-    },
+        mediaArr: Array<{
+            mediaId: string,
+            mediaUrl: string
+        }>,
+        setMediaArr: React.Dispatch<React.SetStateAction<{ mediaId: string, mediaUrl: string; }[] | undefined>>,
+        currentSlide: { mediaId: string, mediaUrl: string}
+        },
     user: {
         owner: string,
         date: Date,
@@ -36,9 +39,8 @@ interface ISlider {
 
 const Slider: React.FC<ISlider> = ({animation, media, user}) => {
     const refSwipe = useRef<HTMLDivElement | null>(null)
-    const [zoom, setZoom] = useState(0)
 
-    const {downloadMedia, deleteMedia, swipeSlide, zoomMedia, shareMedia, slide} = useSlider({
+    const {downloadMedia, deleteMedia, swipeSlide, zoomMedia, setZoomState, zoomState, shareMedia, slide, zoomSize} = useSlider({
         mediaArr: media.mediaArr,
         setMediaArr: media.setMediaArr,
         currentSlide: media.currentSlide,
@@ -46,6 +48,13 @@ const Slider: React.FC<ISlider> = ({animation, media, user}) => {
         setAnimationState: animation.setState,
         refSwipe,
     })
+
+    const handleZoom = (side: boolean) => {
+        const newZoom = side ? zoomSize - 20 : zoomSize + 20
+
+        if (newZoom >= 100 && newZoom <= 200) zoomMedia(newZoom.toString())
+        else side ? zoomMedia('100') : zoomMedia('200')
+    }
 
     return (
         <CSSTransition
@@ -74,25 +83,40 @@ const Slider: React.FC<ISlider> = ({animation, media, user}) => {
                         <Button.WhiteButton foo={() => downloadMedia()}>
                             <HiOutlineDocumentArrowDown/>
                         </Button.WhiteButton>
-                        <Button.WhiteButton foo={() => zoomMedia()}>
-                            <HiMagnifyingGlassPlus/>
+                        <Button.WhiteButton foo={() => {
+                            setZoomState(!zoomState)
+                            zoomMedia(zoomState ? '100' : '125')
+                        }}>
+                            {zoomState ? <HiMagnifyingGlassMinus/> : <HiMagnifyingGlassPlus/>}
                         </Button.WhiteButton>
                         <Button.WhiteButton foo={() => animation.setState(false)}>
                             <HiOutlineXMark/>
                         </Button.WhiteButton>
                     </span>
                 </div>
-                {slide.slideNumber > 0 &&
+
+                {(!zoomState && slide.slideNumber > 0) &&
                     <span className={style.LeftArrow}>
                         <Button.WhiteButton foo={() => swipeSlide(false)}>
                             <HiOutlineChevronLeft/>
                         </Button.WhiteButton>
                     </span>
                 }
-                {slide.slideNumber < media.mediaArr.length - 1 &&
+                {(!zoomState && slide.slideNumber < media.mediaArr.length - 1) &&
                     <span className={style.RightArrow}>
                         <Button.WhiteButton foo={() => swipeSlide(true)}>
                             <HiOutlineChevronRight/>
+                        </Button.WhiteButton>
+                    </span>
+                }
+                {zoomState &&
+                    <span className={style.Zoom}>
+                        <Button.WhiteButton foo={() => handleZoom(true)}>
+                            <HiMagnifyingGlassMinus/>
+                        </Button.WhiteButton>
+                        <input type="range" min={100} max={200} value={zoomSize} onChange={(event) => zoomMedia(event.target.value)}/>
+                        <Button.WhiteButton foo={() => handleZoom(false)}>
+                            <HiMagnifyingGlassPlus/>
                         </Button.WhiteButton>
                     </span>
                 }
@@ -100,8 +124,8 @@ const Slider: React.FC<ISlider> = ({animation, media, user}) => {
                     <div className={style.Swipe} ref={refSwipe}>
                         {
                             media.mediaArr.map(media => (
-                                <div key={media} className={style.ImageBlock}>
-                                    <img src={media} alt={media} onClick={(event) => event.stopPropagation()}/>
+                                <div key={media.mediaId} className={style.ImageBlock} id={media.mediaId}>
+                                    <img src={media.mediaUrl} alt={media.mediaUrl} onClick={(event) => event.stopPropagation()}/>
                                 </div>
                             ))
                         }
