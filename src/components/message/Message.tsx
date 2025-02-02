@@ -27,10 +27,16 @@ namespace Message {
             mediaUrl: ''
         })
         const refSlider = useRef<HTMLDivElement>(null)
-        const [mediaArr, setMediaArr] = useState(media)
+        const [mediaArr, setMediaArr] = useState<{
+            mediaId: string,
+            mediaUrl: string
+        }[] | undefined>()
 
         useEffect(() => {
-            media && setCurrMedia(media[0])
+            if (media) {
+                setMediaArr(media)
+                media && setCurrMedia(media[0])
+            }
         }, [media])
 
         return (

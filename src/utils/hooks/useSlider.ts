@@ -1,4 +1,5 @@
-import React, {useEffect, useState} from "react"
+import React, {useCallback, useEffect, useState} from "react"
+import * as events from "node:events";
 
 interface IUseSliderProps {
     mediaArr: { mediaId: string, mediaUrl: string }[],
@@ -12,20 +13,20 @@ interface IUseSliderProps {
 const useSlider = (media: IUseSliderProps) => {
     const [slide, setSlide] = useState({
         slideNumber: 0,
-        currentSlide: { mediaId: '', mediaUrl: ''},
+        currentSlide: {mediaId: '', mediaUrl: ''},
     })
     const [zoomState, setZoomState] = useState(false)
     const [zoomSize, setZoomSize] = useState(100)
-    const refZoom = React.useRef<HTMLDivElement | null>(null)
+    const refZoom = React.useRef<HTMLImageElement | null>(null)
 
-    const handlePosition = (pos: number, lng: number, id: string) => {
+    const handlePosition = useCallback((pos: number, lng: number, id: string) => {
         const curr = media.refSwipe.current
 
         if (curr) {
             refZoom.current = curr.querySelector(`[id="${id}"]`)
             if (media.refSwipe.current) media.refSwipe.current.style.left = `-${pos * (100 / lng)}%`
         }
-    }
+    }, [media.refSwipe])
 
     const swipeSlide = (side: boolean) => {
         setSlide(prev => {
@@ -46,22 +47,26 @@ const useSlider = (media: IUseSliderProps) => {
             if (!prev) return prev
             const newMediaArr = prev.filter(el => el.mediaId !== slide.currentSlide.mediaId)
 
-            setSlide(prevSlide => {
-                console.log(prevSlide)
-                const newSlide = Math.max(prevSlide.slideNumber - 1, 0)
-                handlePosition(newSlide, newMediaArr.length, newMediaArr[newSlide].mediaId)
-
-                return {
-                    slideNumber: newSlide,
-                    currentSlide: newMediaArr[newSlide]
-                }
-            })
-
-            if (newMediaArr.length === 0) media.setAnimationState(false)
+            if (newMediaArr.length === 0) {
+                media.setAnimationState(false)
+                return newMediaArr
+            }
 
             return newMediaArr
         })
     }
+
+    useEffect(() => {
+        if (media.mediaArr && media.mediaArr.length > 0) {
+            const newSlide = Math.max(slide.slideNumber - 1, 0)
+            handlePosition(newSlide, media.mediaArr.length, media.mediaArr[newSlide].mediaId)
+
+            setSlide({
+                slideNumber: newSlide,
+                currentSlide: media.mediaArr[newSlide]
+            })
+        }
+    }, [media.mediaArr])
 
     const downloadMedia = () => {
         const regex = new RegExp('\\/([^/.]+)\\.', 'i')
@@ -92,6 +97,8 @@ const useSlider = (media: IUseSliderProps) => {
     }
 
     useEffect(() => {
+        setZoomState(false)
+
         setSlide(() => {
             let index = 0
 
@@ -113,6 +120,59 @@ const useSlider = (media: IUseSliderProps) => {
             }
         })
     }, [media.animationState])
+
+    const draggableImage = (event: MouseEvent) => {
+        if (!refZoom.current) return
+        const img = refZoom.current
+        const imgRect = img.getBoundingClientRect()
+        const screenWidth = window.innerWidth, screenHeight = window.innerHeight
+        const restWidth = imgRect.width - screenWidth, restHeight = imgRect.height - screenHeight
+
+        let startX = event.clientX
+        let startY = event.clientY
+        let offsetX = imgRect.left
+        let offsetY = imgRect.top
+
+        const handlerDrag = (event: MouseEvent) => {
+            const dx = event.clientX - startX, dy = event.clientY - startY
+            const left = offsetX + dx, top = offsetY + dy
+            const halfWidth = restWidth / 2, halfHeight = restHeight / 2
+
+            if (restWidth >= 0 && left >= -halfWidth && left <= halfWidth) img.style.left = left + "px"
+            if (restHeight >= 0 && top >= -halfHeight && top <= halfHeight) img.style.top = top + "px"
+        }
+
+        const stopDrag = () => {
+            img.removeEventListener('mousemove', handlerDrag)
+            img.removeEventListener('mouseup', stopDrag)
+        }
+
+        img.addEventListener('mousemove', handlerDrag)
+        img.addEventListener('mouseup', stopDrag)
+
+        return () => {
+            refZoom.current!.addEventListener('mousemove', (event) => handlerDrag(event))
+            refZoom.current!.addEventListener('mouseup', () => refZoom.current!.removeEventListener('mousemove', (event) => handlerDrag(event)))
+        }
+    }
+
+    useEffect(() => {
+        const img = refZoom.current
+        if (!img) return
+
+        const { width, height } = img.getBoundingClientRect()
+        const clientWidth = window.innerWidth, clientHeight = window.innerHeight
+
+        if (width > clientWidth || height > clientHeight)
+            img.addEventListener('mousedown', draggableImage)
+        else {
+            img.style.left = '0'
+            img.style.top = '0'
+            img.removeEventListener('mousedown', draggableImage)
+        }
+
+        return () => img.removeEventListener('mousedown', draggableImage)
+    }, [zoomSize])
 
     return {
         swipeSlide,

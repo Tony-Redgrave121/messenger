@@ -1,4 +1,4 @@
-import React, {useRef} from 'react'
+import React, {useEffect, useRef} from 'react'
 import style from './style.module.css'
 import {CSSTransition} from 'react-transition-group'
 import './animation.css'
@@ -15,7 +15,7 @@ import {
     HiOutlineChevronLeft,
     HiOutlineChevronRight,
 } from "react-icons/hi2";
-import useSlider from "../../utils/logic/slider";
+import useSlider from "../../utils/hooks/useSlider";
 
 interface ISlider {
     animation: {
@@ -124,8 +124,8 @@ const Slider: React.FC<ISlider> = ({animation, media, user}) => {
                     <div className={style.Swipe} ref={refSwipe}>
                         {
                             media.mediaArr.map(media => (
-                                <div key={media.mediaId} className={style.ImageBlock} id={media.mediaId}>
-                                    <img src={media.mediaUrl} alt={media.mediaUrl} onClick={(event) => event.stopPropagation()}/>
+                                <div key={media.mediaId} className={style.ImageBlock}>
+                                    <img src={media.mediaUrl} alt={media.mediaUrl} onClick={(event) => event.stopPropagation()} id={media.mediaId} draggable={'false'}/>
                                 </div>
                             ))
                         }

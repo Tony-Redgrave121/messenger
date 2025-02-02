@@ -123,6 +123,7 @@
   transform: scale(1);
 }
 .SliderContainer .Slider .Swipe .ImageBlock img {
+  position: relative;
   z-index: 2;
   max-height: 65%;
   object-fit: contain;

@@ -141,6 +141,7 @@
         transform: scale(1);
 
         img {
+          position: relative;
           z-index: 2;
           max-height: 65%;
           object-fit: contain;
