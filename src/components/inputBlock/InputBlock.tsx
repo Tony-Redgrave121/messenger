@@ -10,9 +10,10 @@ import Buttons from '../buttons/Buttons'
 import style from './style.module.css'
 import DropDown from "../dropDown/DropDown"
 import useEmojis from "./useEmojis"
-import Popup from "../popup/Popup";
+import PopupContainer from "../popup/PopupContainer";
 import {FilesState} from "../../utils/types/FilesState";
 import TextareaBlock from "../textareaBlock/textareaBlock";
+import PopupInputBlock from "../popup/popupInputBlock/PopupInputBlock";
 
 const InputBlock = () => {
     const [inputText, setInputText] = useState('')
@@ -24,7 +25,8 @@ const InputBlock = () => {
     const [upload, setUpload] = useState(false)
     const [filesState, setFilesState] = useState<FilesState>({
         files: null,
-        popup: false
+        popup: false,
+        type: ''
     })
 
     useEffect(() => {
@@ -33,8 +35,12 @@ const InputBlock = () => {
         }
     }, [filesState.files])
 
-    const uploadFiles = (event: ChangeEvent<HTMLInputElement>) => {
-        setFilesState(prev => ({...prev, files: Array.from(event.target.files || [])}))
+    const uploadFiles = (event: ChangeEvent<HTMLInputElement>, type: string) => {
+        setFilesState(prev => ({
+            ...prev,
+            type: type,
+            files: Array.from(event.target.files || [])
+        }))
     }
 
     const dropDownUpload = [
@@ -42,7 +48,7 @@ const InputBlock = () => {
             liChildren:
                 <>
                     <label htmlFor="images"><HiOutlineFolderOpen/> Photo or Video</label>
-                    <input name='images' id='images'  type="file" accept='image/*, video/*' style={{ display: 'none' }} onChange={(event) => uploadFiles(event)} multiple/>
+                    <input name='images' id='images' type="file" accept='image/*, video/*' style={{ display: 'none' }} onChange={(event) => uploadFiles(event, 'Image')} multiple/>
                 </>,
             liFoo: () => {}
         },
@@ -50,7 +56,7 @@ const InputBlock = () => {
             liChildren:
                 <>
                     <label htmlFor="documentInput"><HiOutlineDocument/> Document</label>
-                    <input name='document' id='documentInput' type="file" style={{ display: 'none' }} onChange={(event) => uploadFiles(event)} multiple/>
+                    <input name='document' id='documentInput' type="file" style={{ display: 'none' }} onChange={(event) => uploadFiles(event, 'Document')} multiple/>
                 </>,
             liFoo: () => {}
         }
@@ -68,7 +74,11 @@ const InputBlock = () => {
                     <HiMiniPaperClip />
                     <DropDown list={dropDownUpload} state={upload} setState={setUpload}/>
                 </Buttons.DefaultButton>
-                {filesState.files && <Popup files={filesState.files} state={filesState.popup} setState={setFilesState}></Popup>}
+                {filesState.files &&
+                    <PopupContainer state={filesState.popup} setState={setFilesState}>
+                        <PopupInputBlock type={filesState.type} files={filesState.files} setState={setFilesState}></PopupInputBlock>
+                    </PopupContainer>
+                }
             </div>
             <Buttons.InterButton >
                 <HiOutlinePaperAirplane />

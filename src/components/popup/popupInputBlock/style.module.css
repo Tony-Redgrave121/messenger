@@ -1,0 +1,65 @@
+@import url("../../../utils/styles/base/_normalize.scss");
+
+.ToolsBlock {
+  justify-content: space-between;
+}
+.ToolsBlock, .ToolsBlock span, .ToolsBlock svg {
+  display: flex;
+  align-items: center;
+}
+.ToolsBlock h1 {
+  margin-left: 24px;
+  font-size: 20px;
+}
+.ToolsBlock label svg {
+  width: 25px;
+  height: 25px;
+  padding: 8px;
+  cursor: pointer;
+}
+
+.FilesBlock {
+  flex-direction: column;
+  gap: 8px;
+  padding: 8px 0;
+}
+.FilesBlock, .FilesBlock > div {
+  display: flex;
+}
+.FilesBlock > div {
+  align-items: center;
+  gap: 8px;
+  line-height: 1.4;
+  width: calc(100% - 65px);
+}
+.FilesBlock > div h4 {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 15px;
+}
+.FilesBlock > div p {
+  font-size: 13px;
+}
+.FilesBlock > div svg, .FilesBlock > div label {
+  width: 50px;
+  height: 50px;
+  stroke-width: 1px;
+}
+
+.SubmitBlock {
+  display: flex;
+  align-items: end;
+  margin-top: 8px;
+}
+.SubmitBlock > button {
+  padding: 14px 16px;
+  background-color: #1c1c1c;
+  border-radius: 10px;
+  transition: 0.2s background-color ease-in-out;
+}
+.SubmitBlock > button:hover {
+  background-color: #191919;
+}
+
+/*# sourceMappingURL=style.module.css.map */

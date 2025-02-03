@@ -1,4 +1,5 @@
 export type FilesState = {
-    files: File[] | null;
-    popup: boolean;
+    files: File[] | null,
+    popup: boolean,
+    type: string
 }

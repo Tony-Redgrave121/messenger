@@ -70,19 +70,19 @@ const entity = {
 
 const mediaTest = [
     {
-        mediaId: '41246321',
+        mediaId: '41246321.png',
         mediaUrl: geralt
     },
     {
-        mediaId: '41246322',
+        mediaId: '41246322.png',
         mediaUrl: hardware
     },
     {
-        mediaId: '41246323',
+        mediaId: '41246323.png',
         mediaUrl: skeleton
     },
     {
-        mediaId: '41246324',
+        mediaId: '41246324.png',
         mediaUrl: ASCII
     }]
 

@@ -3,7 +3,7 @@ import style from './style.module.css'
 import './animation.css'
 import {CSSTransition} from "react-transition-group"
 
-interface IPopup {
+interface IDropDown {
     list: Array<{
         liChildren: React.ReactNode,
         liText?: string,
@@ -14,7 +14,7 @@ interface IPopup {
     styles?: Array<string>
 }
 
-const DropDown: React.FC<IPopup> = ({list, state, setState, styles}) => {
+const DropDown: React.FC<IDropDown> = ({list, state, setState, styles}) => {
     const refUl = React.useRef<HTMLUListElement>(null)
 
     useEffect(() => {

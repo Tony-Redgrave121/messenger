@@ -5,78 +5,27 @@
   top: 0;
   left: 0;
   z-index: 5;
-  display: flex;
   align-items: center;
-  justify-content: center;
   width: 100%;
   height: 100%;
   background-color: rgba(0, 0, 0, 0.3);
 }
+.PopupContainer, .PopupContainer > div {
+  display: flex;
+  justify-content: center;
+}
 .PopupContainer > div {
+  flex-direction: column;
+  gap: 8px;
   width: 400px;
   background-color: #212121;
   border-radius: 10px;
   box-shadow: 0 2px 2px rgba(0, 0, 0, 0.1411764706), 0 3px 1px -2px rgba(0, 0, 0, 0.1215686275), 0 1px 5px rgba(0, 0, 0, 0.2);
-  padding: 8px 16px;
+  padding: 8px;
   color: white;
 }
-.PopupContainer > div .ToolsBlock {
-  justify-content: space-between;
-}
-.PopupContainer > div .ToolsBlock, .PopupContainer > div .ToolsBlock span, .PopupContainer > div .ToolsBlock svg {
-  display: flex;
-  align-items: center;
-}
-.PopupContainer > div .ToolsBlock h1 {
-  margin-left: 24px;
-  font-size: 20px;
-}
-.PopupContainer > div .ToolsBlock label svg {
-  width: 25px;
-  height: 25px;
-  padding: 8px;
-  cursor: pointer;
-}
-.PopupContainer > div .FilesBlock {
-  flex-direction: column;
-  gap: 8px;
-  padding: 8px 0;
-}
-.PopupContainer > div .FilesBlock, .PopupContainer > div .FilesBlock > div {
-  display: flex;
-}
-.PopupContainer > div .FilesBlock > div {
-  align-items: center;
-  gap: 8px;
-  line-height: 1.4;
-  width: calc(100% - 65px);
-}
-.PopupContainer > div .FilesBlock > div h4 {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  font-size: 15px;
-}
-.PopupContainer > div .FilesBlock > div p {
-  font-size: 13px;
-}
-.PopupContainer > div .FilesBlock > div svg, .PopupContainer > div .FilesBlock > div label {
-  width: 50px;
-  height: 50px;
-  stroke-width: 1px;
-}
-.PopupContainer > div .SubmitBlock {
-  display: flex;
-  align-items: end;
-}
-.PopupContainer > div .SubmitBlock > button {
-  padding: 14px 16px;
-  background-color: #1c1c1c;
-  border-radius: 10px;
-  transition: 0.2s background-color ease-in-out;
-}
-.PopupContainer > div .SubmitBlock > button:hover {
-  background-color: #191919;
+.PopupContainer > div img {
+  cursor: auto;
 }
 
 /*# sourceMappingURL=style.module.css.map */
