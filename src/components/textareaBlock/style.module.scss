@@ -1,0 +1,15 @@
+@import url("../../utils/styles/base/_normalize.scss");
+
+textarea {
+  align-self: center;
+  caret-color: #656565;
+  width: 100%;
+  color: white;
+  line-height: 1.5;
+  padding: 0 8px;
+  overflow-wrap: break-word;
+
+  &::placeholder {
+    color: #989898;
+  }
+}

@@ -2,6 +2,8 @@ import React, {useEffect, useRef, useState} from 'react'
 import style from "./style.module.css"
 import Slider from "../slider/Slider";
 import MediaBlock from "../media/mediaBlock/MediaBlock";
+import {getTime} from "../../utils/logic/getDate";
+import { HiOutlineDocumentText } from "react-icons/hi2"
 
 interface IChatMessage {
     text?: string,
@@ -9,18 +11,23 @@ interface IChatMessage {
         reply_name: string,
         reply_text: string
     },
-    type: string,
     owner?: boolean,
     ownerName: string,
     media?: Array<{
         mediaId: string,
         mediaUrl: string
     }>,
+    documents?: Array<{
+        documentId: string,
+        documentName: string,
+        documentSize: number
+        documentUrl: string
+    }>
     date: Date,
 }
 
 namespace Message {
-    export const ChatMessage: React.FC<IChatMessage> = ({text, reply, type, owner = false, media, ownerName, date}) => {
+    export const ChatMessage: React.FC<IChatMessage> = ({text, reply, owner = false, media, ownerName, date, documents}) => {
         const [animationState, setAnimationState] = useState(false)
         const [currMedia, setCurrMedia] = useState({
             mediaId: '',
@@ -47,11 +54,27 @@ namespace Message {
                         <p>{reply.reply_text}</p>
                     </button>
                 }
-                <div className={style[`ChatMessage${type}`]}>
+                <div className={style.ChatMessageBlock}>
                     {(mediaArr && mediaArr.length > 0) &&
                         <MediaBlock media={mediaArr} setSlider={setAnimationState} setCurrMedia={setCurrMedia}/>
                     }
-                    <p>{text}</p>
+                    {documents &&
+                        <div className={style.ChatDocumentBlock}>
+                            {documents.map(doc => (
+                                <a download={doc.documentUrl} href={doc.documentUrl} key={doc.documentId}>
+                                    <HiOutlineDocumentText/>
+                                    <div>
+                                        <h4>{doc.documentName}</h4>
+                                        <p>{(doc.documentSize / 1048576).toFixed(2)} MB &#183;</p>
+                                    </div>
+                                </a>
+                            ))}
+                        </div>
+                    }
+                    <p>
+                        {text}
+                        <small>{getTime(date)}</small>
+                    </p>
                 </div>
                 {mediaArr &&
                     <Slider animation={{

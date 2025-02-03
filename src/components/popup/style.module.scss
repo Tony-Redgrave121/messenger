@@ -2,62 +2,94 @@
 @import url("../../utils/styles/base/_normalize.scss");
 
 .PopupContainer {
-  position: absolute;
-  top: calc(100% + 10px);
-  z-index: 99;
-  padding: 5px;
-  background-color: rgba(40, 40, 40, .9);
-  backdrop-filter: blur(3px);
-  overflow: hidden;
-  border-radius: 10px;
-  box-shadow: rgba(50, 50, 93, 0.25) 0 6px 12px -2px, rgba(0, 0, 0, .3) 0px 3px 7px -3px;
-  transform-origin: top left;
-  cursor: default;
-
-  &:before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    z-index: -1;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(300deg, rgba(33, 33, 33, .4) 20%, rgba(70, 0, 0, .1) 100%);
-  }
-
-  li {
-    display: flex;
-    align-items: center;
-    gap: 20px;
-    color: white;
-    text-wrap: nowrap;
-    font-size: 14px;
-    font-weight: bolder;
-    padding: 5px 10px;
-    border-radius: 5px;
-    cursor: pointer;
-
-    svg {
-      width: 24px;
-      height: 24px;
-    }
-
-    &:hover {
-      background-color: rgba(66, 66, 66, 0.5);
-    }
-  }
-}
-
-.EmojiContainer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 5;
   display: flex;
-  flex-wrap: wrap;
-  width: 330px;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.3);
 
-  li {
-    justify-content: center;
-    width: 34px;
-    height: 34px;
-    padding: 20px;
-    font-size: 28px;
+  > div {
+    width: 400px;
+    background-color: #212121;
+    border-radius: 10px;
+    box-shadow: 0 2px 2px #00000024,0 3px 1px -2px #0000001f,0 1px 5px #0003;
+    padding: 8px 16px;
+    color: white;
+
+    .ToolsBlock {
+      justify-content: space-between;
+
+      &, span, svg {
+        display: flex;
+        align-items: center;
+      }
+
+      h1 {
+        margin-left: 24px;
+        font-size: 20px;
+      }
+
+      label svg {
+        width: 25px;
+        height: 25px;
+        padding: 8px;
+        cursor: pointer;
+      }
+    }
+
+    .FilesBlock {
+      flex-direction: column;
+      gap: 8px;
+      padding: 8px 0;
+
+      &, > div {
+        display: flex;
+      }
+
+      > div {
+        align-items: center;
+        gap: 8px;
+        line-height: 1.4;
+        width: calc(100% - 65px);
+
+        h4 {
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          font-size: 15px;
+        }
+
+        p {
+          font-size: 13px;
+        }
+
+        svg, label {
+          width: 50px;
+          height: 50px;
+          stroke-width: 1px;
+        }
+      }
+    }
+
+    .SubmitBlock {
+      display: flex;
+      align-items: end;
+
+      > button {
+        padding: 14px 16px;
+        background-color: #1c1c1c;
+        border-radius: 10px;
+        transition: .2s background-color ease-in-out;
+
+        &:hover {
+          background-color: #191919;
+        }
+      }
+    }
   }
 }

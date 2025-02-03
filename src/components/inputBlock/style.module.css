@@ -33,13 +33,13 @@
   top: unset;
   bottom: calc(100% + 10px);
 }
+.InputContainer .Input > button ul {
+  right: 0;
+  transform-origin: bottom right;
+}
 .InputContainer .Input > :first-child ul {
   left: 0;
   transform-origin: bottom left;
-}
-.InputContainer .Input > :last-child ul {
-  right: 0;
-  transform-origin: bottom right;
 }
 .InputContainer > button {
   align-self: end;

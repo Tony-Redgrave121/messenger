@@ -8,7 +8,7 @@ export const getDate = (date: Date) => {
     const time = new Date().getTime() - newDate.getTime()
 
     if (time <= 86400000) {
-        return `${zeroPad(newDate.getHours())}:${zeroPad(newDate.getMinutes())}`
+        return getTime(newDate)
     } else if (time <= 86400000 * new Date(
         currentDate.getFullYear(),
         currentDate.getMonth(),
@@ -17,4 +17,8 @@ export const getDate = (date: Date) => {
     } else {
         return `${zeroPad(newDate.getMonth() + 1)}/${zeroPad(newDate.getDay())}/${newDate.getFullYear()}`
     }
+}
+
+export const getTime = (date: Date) => {
+    return `${zeroPad(date.getHours())}:${zeroPad(date.getMinutes())}`
 }

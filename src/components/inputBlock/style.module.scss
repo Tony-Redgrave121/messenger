@@ -39,17 +39,17 @@
       }
     }
 
+    > button {
+      ul {
+        right: 0;
+        transform-origin: bottom right;
+      }
+    }
+
     >:first-child {
       ul {
         left: 0;
         transform-origin: bottom left;
-      }
-    }
-
-    >:last-child {
-      ul {
-        right: 0;
-        transform-origin: bottom right;
       }
     }
   }

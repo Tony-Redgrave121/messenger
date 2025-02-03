@@ -3,7 +3,7 @@
 .ChatMessageContainer {
   position: relative;
   background-color: #181818;
-  padding: 8px;
+  padding: 8px 8px 15px 8px;
   border-radius: 15px 15px 15px 0;
   line-height: 1.5;
   max-width: 75%;
@@ -20,13 +20,56 @@
 .ChatMessageContainer .ReplyBlock:hover {
   background-color: #353535;
 }
-.ChatMessageContainer, .ChatMessageContainer .ChatMessageMedia {
+.ChatMessageContainer, .ChatMessageContainer .ChatMessageBlock {
   display: flex;
   flex-direction: column;
   gap: 4px;
 }
-.ChatMessageContainer .ChatMessageMedia {
+.ChatMessageContainer .ChatMessageBlock {
   overflow: hidden;
+}
+.ChatMessageContainer .ChatMessageBlock small {
+  position: absolute;
+  right: 8px;
+  bottom: 4px;
+  line-height: 1;
+  color: #a9a9a9;
+  font-size: 12px;
+}
+.ChatMessageContainer .ChatDocumentBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.ChatMessageContainer .ChatDocumentBlock > a {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  line-height: 1.4;
+  color: white;
+  padding: 5px;
+  border-radius: 5px;
+  transition: 0.2s background-color ease-in-out;
+}
+.ChatMessageContainer .ChatDocumentBlock > a:hover {
+  background-color: #2f2f2f;
+}
+.ChatMessageContainer .ChatDocumentBlock > a svg {
+  stroke-width: 1px;
+  width: 48px;
+  height: 48px;
+}
+.ChatMessageContainer .ChatDocumentBlock > a > div {
+  width: calc(100% - 65px);
+}
+.ChatMessageContainer .ChatDocumentBlock > a > div h4 {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 15px;
+}
+.ChatMessageContainer .ChatDocumentBlock > a > div p {
+  font-size: 13px;
 }
 
 .Owner {

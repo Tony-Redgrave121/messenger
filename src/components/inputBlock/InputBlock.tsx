@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from 'react'
+import React, {ChangeEvent, useEffect, useRef, useState} from 'react'
 import {
     HiOutlineFaceSmile,
     HiMiniPaperClip,
@@ -8,53 +8,67 @@ import {
 } from "react-icons/hi2"
 import Buttons from '../buttons/Buttons'
 import style from './style.module.css'
-import Popup from "../popup/Popup"
+import DropDown from "../dropDown/DropDown"
 import useEmojis from "./useEmojis"
-
-const list2 = [
-    {
-        liIcon: <HiOutlineFolderOpen/>,
-        liText: 'Photo or Video',
-        liFoo: () => {
-        }
-    },
-    {
-        liIcon: <HiOutlineDocument/>,
-        liText: 'Document',
-        liFoo: () => {
-        }
-    }
-]
+import Popup from "../popup/Popup";
+import {FilesState} from "../../utils/types/FilesState";
+import TextareaBlock from "../textareaBlock/textareaBlock";
 
 const InputBlock = () => {
-    const refTextarea = useRef<HTMLTextAreaElement>(null)
     const [inputText, setInputText] = useState('')
-    const [file, setFile] = useState(false)
+    const refTextarea = useRef<HTMLTextAreaElement>(null)
+
     const [emoji, setEmoji] = useState(false)
     const emojis = useEmojis(refTextarea, setInputText)
 
-    useEffect(() => {
-        const curr = refTextarea.current
+    const [upload, setUpload] = useState(false)
+    const [filesState, setFilesState] = useState<FilesState>({
+        files: null,
+        popup: false
+    })
 
-        if (curr) {
-            curr.style.height = "auto"
-            curr.style.height = curr.scrollHeight + "px"
-            curr.parentElement!.style.height = Number(curr.scrollHeight) + 10 + "px"
+    useEffect(() => {
+        if (filesState.files) {
+            setFilesState(prev => ({...prev, popup: true}))
         }
-    }, [inputText])
+    }, [filesState.files])
+
+    const uploadFiles = (event: ChangeEvent<HTMLInputElement>) => {
+        setFilesState(prev => ({...prev, files: Array.from(event.target.files || [])}))
+    }
+
+    const dropDownUpload = [
+        {
+            liChildren:
+                <>
+                    <label htmlFor="images"><HiOutlineFolderOpen/> Photo or Video</label>
+                    <input name='images' id='images'  type="file" accept='image/*, video/*' style={{ display: 'none' }} onChange={(event) => uploadFiles(event)} multiple/>
+                </>,
+            liFoo: () => {}
+        },
+        {
+            liChildren:
+                <>
+                    <label htmlFor="documentInput"><HiOutlineDocument/> Document</label>
+                    <input name='document' id='documentInput' type="file" style={{ display: 'none' }} onChange={(event) => uploadFiles(event)} multiple/>
+                </>,
+            liFoo: () => {}
+        }
+    ]
 
     return (
         <div className={style.InputContainer}>
             <div className={style.Input}>
                 <Buttons.DefaultButton foo={() => setEmoji(!emoji)}>
                     <HiOutlineFaceSmile />
-                    <Popup list={emojis} state={emoji} setState={setEmoji} styles={['EmojiContainer']}/>
+                    <DropDown list={emojis} state={emoji} setState={setEmoji} styles={['EmojiContainer']}/>
                 </Buttons.DefaultButton>
-                <textarea maxLength={850} rows={1} placeholder="Message" ref={refTextarea} onChange={event => setInputText(event.target.value)} />
-                <Buttons.DefaultButton foo={() => setFile(!file)}>
+                <TextareaBlock ref={refTextarea} inputText={inputText} setInputText={setInputText}/>
+                <Buttons.DefaultButton foo={() => setUpload(!upload)}>
                     <HiMiniPaperClip />
-                    <Popup list={list2} state={file} setState={setFile}/>
+                    <DropDown list={dropDownUpload} state={upload} setState={setUpload}/>
                 </Buttons.DefaultButton>
+                {filesState.files && <Popup files={filesState.files} state={filesState.popup} setState={setFilesState}></Popup>}
             </div>
             <Buttons.InterButton >
                 <HiOutlinePaperAirplane />

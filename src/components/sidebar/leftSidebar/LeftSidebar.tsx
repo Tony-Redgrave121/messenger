@@ -11,36 +11,36 @@ import style from './style.module.css'
 import Buttons from '../../buttons/Buttons'
 import SearchBlock from "../../searchBlock/SearchBlock"
 import ChatList from "../../chatList/ChatList"
-import Popup from "../../popup/Popup"
+import DropDown from "../../dropDown/DropDown"
 import SidebarContainer from "../SidebarContainer";
 
 const list = [
     {
-        liIcon: <HiOutlineBookmark/>,
+        liChildren: <HiOutlineBookmark/>,
         liText: 'Saved Messages',
         liFoo: () => {
         }
     },
     {
-        liIcon: <HiOutlineUsers/>,
+        liChildren: <HiOutlineUsers/>,
         liText: 'Contacts',
         liFoo: () => {
         }
     },
     {
-        liIcon: <HiOutlineCog8Tooth/>,
+        liChildren: <HiOutlineCog8Tooth/>,
         liText: 'Settings',
         liFoo: () => {
         }
     },
     {
-        liIcon: <HiOutlineQuestionMarkCircle/>,
+        liChildren: <HiOutlineQuestionMarkCircle/>,
         liText: 'Messenger Features',
         liFoo: () => {
         }
     },
     {
-        liIcon: <HiOutlineBugAnt/>,
+        liChildren: <HiOutlineBugAnt/>,
         liText: 'Report Bug',
         liFoo: () => {
         }
@@ -56,7 +56,7 @@ const LeftSidebar = () => {
             <div className={style.TopBar}>
                 <Buttons.DefaultButton foo={() => setSettings(!settings)}>
                     <HiBars3/>
-                    <Popup list={list} state={settings} setState={setSettings}/>
+                    <DropDown list={list} state={settings} setState={setSettings}/>
                 </Buttons.DefaultButton>
                 <SearchBlock ref={refSearch}/>
             </div>

@@ -19,7 +19,7 @@ const useEmojis = (ref: React.RefObject<HTMLTextAreaElement | null>, setInputTex
         }
     }
 
-    return emojiList.map(emoji => ({liIcon: emoji, liFoo: () => addEmoji(emoji)}))
+    return emojiList.map(emoji => ({liChildren: emoji, liFoo: () => addEmoji(emoji)}))
 }
 
 export default useEmojis
