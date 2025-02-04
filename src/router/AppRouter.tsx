@@ -1,17 +1,19 @@
-import React, {lazy} from 'react';
-import {Route, Routes} from "react-router-dom";
-import Layout from "../components/layout/Layout";
-import UserRoutes from "./UserRoutes";
+import React, {lazy} from 'react'
+import {Route, Routes} from "react-router-dom"
+import Layout from "../components/layout/Layout"
+import UserRoutes from "./UserRoutes"
+
+const AuthForm = lazy(() => import('../components/authForm/AuthForm'))
+const NotFound = lazy(() => import('../components/notFound/NotFound'))
 
 const AppRouter = () => {
-    const NotFoundPage = lazy(() => import('../components/notFoundPage/NotFoundPage'))
-
     return (
         <Routes>
             <Route path="/" element={<Layout/>}>
                 {UserRoutes.map(({path, Component}) => <Route key={path} path={path} element={<Component/>}/>)}
             </Route>
-            <Route path="*" element={<NotFoundPage/>}/>
+            <Route path="/auth" element={<AuthForm/>}/>
+            <Route path="*" element={<NotFound/>}/>
         </Routes>
     )
 }

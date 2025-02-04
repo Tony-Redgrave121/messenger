@@ -2,7 +2,7 @@ import React from 'react'
 import {Link} from "react-router-dom";
 import style from './style.module.css';
 
-const NotFoundPage = () => {
+const NotFound = () => {
     return (
         <div className={style.NotFoundContainer}>
             <h1><i>404</i></h1>
@@ -12,4 +12,4 @@ const NotFoundPage = () => {
     )
 }
 
-export default NotFoundPage
+export default NotFound

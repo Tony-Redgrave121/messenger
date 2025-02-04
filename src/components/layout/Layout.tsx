@@ -8,10 +8,12 @@ const Layout = () => {
     return (
         <div className={style.LayoutContainer}>
             <div className={style.Layout}>
-                <LeftSidebar/>
-                <MainContainer>
-                    <Outlet/>
-                </MainContainer>
+                <Suspense fallback={<div>Loading...</div>}>
+                    <LeftSidebar/>
+                    <MainContainer>
+                        <Outlet/>
+                    </MainContainer>
+                </Suspense>
             </div>
         </div>
     )

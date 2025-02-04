@@ -1,6 +1,6 @@
 import React, {useRef, useState} from 'react'
 import style from './style.module.css'
-import {FilesState} from "../../../utils/types/FilesState";
+import FilesState from "../../../utils/types/FilesState";
 import Buttons from "../../buttons/Buttons";
 import {HiOutlineDocumentPlus, HiOutlineDocumentText, HiOutlineXMark} from "react-icons/hi2";
 import TextareaBlock from "../../textareaBlock/textareaBlock";

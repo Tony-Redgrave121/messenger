@@ -11,7 +11,7 @@ import style from './style.module.css'
 import DropDown from "../dropDown/DropDown"
 import useEmojis from "./useEmojis"
 import PopupContainer from "../popup/PopupContainer";
-import {FilesState} from "../../utils/types/FilesState";
+import FilesState from "../../utils/types/FilesState";
 import TextareaBlock from "../textareaBlock/textareaBlock";
 import PopupInputBlock from "../popup/popupInputBlock/PopupInputBlock";
 

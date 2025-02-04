@@ -10,6 +10,10 @@ interface ISwitchButton extends IDefaultButton {
     state: boolean,
 }
 
+interface IFormButton extends IDefaultButton {
+    type?: "button" | "submit" | "reset" | undefined,
+}
+
 namespace Buttons {
     export const DefaultButton: React.FC<IDefaultButton> = ({children, foo}) => {
         return (
@@ -29,6 +33,11 @@ namespace Buttons {
     export const WhiteButton: React.FC<IDefaultButton> = ({foo, children, ...props}) => {
         return (
             <button className={`${style.DefaultButton} ${style.WhiteButton}`} onClick={foo} {...props}>{children}</button>
+        )
+    }
+    export const FormButton: React.FC<IFormButton> = ({foo, children, type}) => {
+        return (
+            <button className={style.FormButton} onClick={foo} type={type}>{children}</button>
         )
     }
 }

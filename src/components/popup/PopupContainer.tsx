@@ -2,7 +2,7 @@ import React from 'react'
 import style from './style.module.css'
 import './animation.css'
 import {CSSTransition} from "react-transition-group"
-import {FilesState} from "../../utils/types/FilesState";
+import FilesState from "../../utils/types/FilesState";
 
 interface IPopup {
     state: boolean,

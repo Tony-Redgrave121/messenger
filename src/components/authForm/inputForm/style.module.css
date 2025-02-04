@@ -1,0 +1,32 @@
+@import url("../../../utils/styles/base/_normalize.scss");
+.InputBlock {
+  position: relative;
+  display: flex;
+  width: 100%;
+}
+.InputBlock input {
+  padding: 15px;
+  border-radius: 10px;
+  color: #9d9d9d;
+  box-shadow: 0 0 0 1px #2f2f2f;
+  width: 100%;
+  height: auto;
+  transition: 0.2s all ease-in-out;
+}
+.InputBlock input:hover {
+  color: white;
+  box-shadow: 0 0 0 1px white;
+}
+.InputBlock input:focus {
+  color: white;
+  box-shadow: 0 0 0 2px white;
+}
+
+small {
+  position: absolute;
+  bottom: -25px;
+  color: #ca0000;
+  font-size: 14px;
+}
+
+/*# sourceMappingURL=style.module.css.map */

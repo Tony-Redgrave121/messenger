@@ -1,5 +1,5 @@
 import React from 'react'
-import {FilesState} from "../../../utils/types/FilesState";
+import FilesState from "../../../utils/types/FilesState";
 
 interface IUpload {
     setState: React.Dispatch<React.SetStateAction<FilesState>>
