@@ -10,29 +10,52 @@
   overflow: hidden;
 
   .AuthForm {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    gap: 25px;
     width: 100%;
-    max-width: 360px;
-    color: white;
-    line-height: 1.5;
 
-    > img {
-      width: 160px;
+    &, > div {
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
 
-    .TitleBlock {
-      text-align: center;
+    input[type="file"] {
+      display: none;
+    }
 
-      h1 {
-        font-size: 32px;
+    > div {
+      flex-direction: column;
+      gap: 25px;
+      width: 100%;
+      max-width: 360px;
+      color: white;
+      line-height: 1.5;
+
+      svg, img {
+        height: 160px;
+        width: 160px;
+        border-radius: 50%;
       }
 
-      p {
-        color: #a6a6a6;
+      img {
+        object-fit: cover;
+      }
+
+      .TitleBlock {
+        text-align: center;
+
+        h1 {
+          font-size: 32px;
+        }
+
+        p {
+          color: #a6a6a6;
+        }
+      }
+
+      .ButtonBlock {
+        display: flex;
+        width: 100%;
+        gap: 25px;
       }
     }
   }

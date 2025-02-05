@@ -27,6 +27,21 @@ button, input, textarea {
   all: unset;
 }
 
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input::-ms-reveal,
+input::-ms-clear {
+  display: none;
+}
+
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
 ::-ms-reveal {
   filter: invert(100%);
 }

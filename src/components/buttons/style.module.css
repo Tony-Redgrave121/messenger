@@ -84,5 +84,8 @@
 .FormButton:hover {
   background-color: #282828;
 }
+.FormButton:disabled {
+  background-color: #282828;
+}
 
 /*# sourceMappingURL=style.module.css.map */

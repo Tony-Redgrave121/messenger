@@ -1,0 +1,17 @@
+.form-node-enter {
+    opacity: 0;
+}
+
+.form-node-enter-active {
+    opacity: 1;
+    transition: opacity .3s ease-in-out;
+}
+
+.form-node-exit {
+    opacity: 1;
+}
+
+.form-node-exit-active {
+    opacity: 0;
+    transition: opacity .3s ease-in-out;
+}

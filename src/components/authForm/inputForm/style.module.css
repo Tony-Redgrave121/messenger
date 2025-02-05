@@ -4,7 +4,7 @@
   display: flex;
   width: 100%;
 }
-.InputBlock input {
+.InputBlock input, .InputBlock textarea {
   padding: 15px;
   border-radius: 10px;
   color: #9d9d9d;
@@ -13,13 +13,17 @@
   height: auto;
   transition: 0.2s all ease-in-out;
 }
-.InputBlock input:hover {
+.InputBlock input:hover, .InputBlock textarea:hover {
   color: white;
   box-shadow: 0 0 0 1px white;
 }
-.InputBlock input:focus {
+.InputBlock input:focus, .InputBlock textarea:focus {
   color: white;
   box-shadow: 0 0 0 2px white;
+}
+.InputBlock textarea {
+  word-wrap: break-word;
+  word-break: break-all;
 }
 
 small {

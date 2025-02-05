@@ -11,7 +11,7 @@ interface ISwitchButton extends IDefaultButton {
 }
 
 interface IFormButton extends IDefaultButton {
-    type?: "button" | "submit" | "reset" | undefined,
+    type?: "button" | "submit" | "reset" | undefined
 }
 
 namespace Buttons {

@@ -11,6 +11,7 @@ interface IButton {
 const InputForm: React.FC<IButton> = memo(({children, errors, field}) => {
     return (
         <div className={style.InputBlock}>
+            <label htmlFor={field}/>
             {children}
             <small>
                 {errors[field] && `${errors[field]!.message?.toString()}*`}

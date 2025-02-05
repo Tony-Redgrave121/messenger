@@ -9,27 +9,45 @@
   overflow: hidden;
 }
 .AuthContainer .AuthForm {
+  width: 100%;
+}
+.AuthContainer .AuthForm, .AuthContainer .AuthForm > div {
   display: flex;
-  flex-direction: column;
   justify-content: center;
   align-items: center;
+}
+.AuthContainer .AuthForm input[type=file] {
+  display: none;
+}
+.AuthContainer .AuthForm > div {
+  flex-direction: column;
   gap: 25px;
   width: 100%;
   max-width: 360px;
   color: white;
   line-height: 1.5;
 }
-.AuthContainer .AuthForm > img {
+.AuthContainer .AuthForm > div svg, .AuthContainer .AuthForm > div img {
+  height: 160px;
   width: 160px;
+  border-radius: 50%;
 }
-.AuthContainer .AuthForm .TitleBlock {
+.AuthContainer .AuthForm > div img {
+  object-fit: cover;
+}
+.AuthContainer .AuthForm > div .TitleBlock {
   text-align: center;
 }
-.AuthContainer .AuthForm .TitleBlock h1 {
+.AuthContainer .AuthForm > div .TitleBlock h1 {
   font-size: 32px;
 }
-.AuthContainer .AuthForm .TitleBlock p {
+.AuthContainer .AuthForm > div .TitleBlock p {
   color: #a6a6a6;
+}
+.AuthContainer .AuthForm > div .ButtonBlock {
+  display: flex;
+  width: 100%;
+  gap: 25px;
 }
 
 /*# sourceMappingURL=style.module.css.map */
