@@ -3,7 +3,7 @@ import {
     LOGOUT_ROUTE,
     REFRESH_ROUTE,
     REGISTRATION_ROUTE,
-    DELETE_ACCOUNT_ROUTE
+    DELETE_ACCOUNT_ROUTE,
 } from "../utils/const/const"
 import $api from '../http/index'
 import {AxiosResponse} from 'axios'

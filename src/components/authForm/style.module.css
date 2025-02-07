@@ -21,7 +21,7 @@
 }
 .AuthContainer .AuthForm > div {
   flex-direction: column;
-  gap: 25px;
+  gap: 30px;
   width: 100%;
   max-width: 360px;
   color: white;
@@ -30,9 +30,9 @@
 .AuthContainer .AuthForm > div svg, .AuthContainer .AuthForm > div img {
   height: 160px;
   width: 160px;
-  border-radius: 50%;
 }
 .AuthContainer .AuthForm > div img {
+  border-radius: 50%;
   object-fit: cover;
 }
 .AuthContainer .AuthForm > div .TitleBlock {

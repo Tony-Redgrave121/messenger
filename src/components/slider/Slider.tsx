@@ -1,4 +1,4 @@
-import React, {useEffect, useRef} from 'react'
+import React, {useRef} from 'react'
 import style from './style.module.css'
 import {CSSTransition} from 'react-transition-group'
 import './animation.css'
@@ -94,7 +94,6 @@ const Slider: React.FC<ISlider> = ({animation, media, user}) => {
                         </Button.WhiteButton>
                     </span>
                 </div>
-
                 {(!zoomState && slide.slideNumber > 0) &&
                     <span className={style.LeftArrow}>
                         <Button.WhiteButton foo={() => swipeSlide(false)}>

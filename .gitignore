@@ -11,6 +11,12 @@
 # production
 /build
 
+# server
+.env
+/server/.env
+/server/node_modules
+/server/src/static/
+
 # misc
 .DS_Store
 .env.local

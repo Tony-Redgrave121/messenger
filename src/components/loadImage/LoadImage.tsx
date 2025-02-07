@@ -2,7 +2,7 @@ import React, {useEffect, useRef, useState} from 'react'
 import style from './style.module.css'
 
 interface ILoadImage {
-    chatImg: string,
+    chatImg?: string,
     chatTitle: string,
 }
 

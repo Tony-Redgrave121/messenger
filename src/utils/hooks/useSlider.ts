@@ -1,5 +1,4 @@
 import React, {useCallback, useEffect, useState} from "react"
-import * as events from "node:events";
 
 interface IUseSliderProps {
     mediaArr: { mediaId: string, mediaUrl: string }[],

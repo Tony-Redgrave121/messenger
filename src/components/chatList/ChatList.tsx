@@ -1,47 +1,36 @@
-import React from 'react'
+import React, {memo, useEffect, useState} from 'react'
 import ChatBlock from "./chatBlock/ChatBlock";
+import UserService from '../../service/UserService'
+import {useAppSelector} from "../../utils/hooks/useRedux";
+import IMessengerResponse from "../../utils/types/IMessengerResponse";
 
-const ChatList = () => {
-    const list = [
-        {
-            chatImg: '',
-            chatTitle: 'Игорь Линк',
-            chatLink: 'link1',
-            chatLastMessage: 'Lorem ipsum dolor sit amet.',
-            chatLastMessageDate: new Date('2025-01-23T11:03:01')
-        },
-        {
-            chatImg: '',
-            chatTitle: 'Марципановый Ликёр',
-            chatLink: 'link2',
-            chatLastMessage: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit.',
-            chatLastMessageDate: new Date('2024-01-23T15:12:15')
-        },
-        {
-            chatImg: '',
-            chatTitle: 'Український Наступ | #УкрТг ∆',
-            chatLink: 'link3',
-            chatLastMessage: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nisi, voluptates.',
-            chatLastMessageDate: new Date('2025-01-15T09:09:25')
-        },
-        {
-            chatImg: '',
-            chatTitle: 'Eq 21-01',
-            chatLink: 'link3',
-            chatLastMessage: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nisi, voluptates.',
-            chatLastMessageDate: new Date('2025-01-15T09:09:25')
-        },
-    ]
+const ChatList = memo(() => {
+    const [messengerList, setMessengerList] = useState<IMessengerResponse[]>([])
+    const user_id = useAppSelector(state => state.user.userId)
+
+    useEffect(() => {
+        const handleMessengerList = async () => {
+            try {
+                const list = await UserService.fetchMessengers(user_id)
+
+                if (list.data) setMessengerList(list.data)
+            } catch (e) {}
+        }
+
+        handleMessengerList().catch()
+    }, [user_id])
+
+    console.log(messengerList)
 
     return (
         <ul>
             {
-                list.map(chat =>
-                    <ChatBlock chat={chat} key={chat.chatTitle}/>
+                messengerList.map(chat =>
+                    <ChatBlock messenger={chat} key={chat.messenger_id}/>
                 )
             }
         </ul>
     )
-}
+})
 
 export default ChatList

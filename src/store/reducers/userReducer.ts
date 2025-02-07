@@ -43,7 +43,8 @@ export const registration = createAsyncThunk("registration", async ({formData}: 
 export const login = createAsyncThunk("login", async ({formData}: IRegistrationArgs, thunkAPI) => {
     try {
         const response = await AuthService.login(formData)
-        localStorage.setItem('token', response.data.accessToken)
+
+        if (response.data.accessToken) localStorage.setItem('token', response.data.accessToken)
 
         return response.data
     } catch (e: any) {
@@ -55,6 +56,8 @@ export const logout = createAsyncThunk("logout", async (_, thunkAPI) => {
     try {
         await AuthService.logout()
         localStorage.removeItem('token')
+
+        return true
     } catch (e: any) {
         return thunkAPI.rejectWithValue(e.response?.data?.message || "Could not fetch user data")
     }
@@ -64,6 +67,8 @@ export const deleteAccount = createAsyncThunk("deleteAccount", async ({user_id}:
     try {
         await AuthService.deleteAccount(user_id)
         localStorage.removeItem('token')
+
+        return true
     } catch (e: any) {
         return thunkAPI.rejectWithValue(e.response?.data?.message || "Could not fetch user data")
     }

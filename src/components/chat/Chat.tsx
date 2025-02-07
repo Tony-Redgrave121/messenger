@@ -22,7 +22,7 @@ import Message from "../message/Message";
 import geralt from './pictures/geralt.png'
 import hardware from './pictures/hardware.jpg'
 import skeleton from './pictures/skeleton.jpg'
-import ASCII from './pictures/ASCII Art.png'
+import abstract from './pictures/abstract.png'
 
 const list = [
     {
@@ -78,12 +78,12 @@ const mediaTest = [
         mediaUrl: hardware
     },
     {
-        mediaId: '41246323.png',
-        mediaUrl: skeleton
+        mediaId: '41246324.png',
+        mediaUrl: abstract
     },
     {
-        mediaId: '41246324.png',
-        mediaUrl: ASCII
+        mediaId: '41246323.png',
+        mediaUrl: skeleton
     }]
 
 const documents= [

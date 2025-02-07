@@ -1,17 +1,16 @@
-import React, {useEffect, useRef, useState} from 'react'
+import React, {useRef, useState} from 'react'
 import style from './style.module.css'
 import InputForm from "./inputForm/InputForm";
 import Buttons from "../buttons/Buttons";
 import {Controller, useForm} from "react-hook-form";
 import IAuthForm from "../../utils/types/IAuthForm";
-import {registration} from "../../store/reducers/userReducer";
-import {Navigate} from 'react-router-dom'
+import {login, registration} from "../../store/reducers/userReducer";
+import {useNavigate} from 'react-router-dom'
 import {useAppDispatch} from "../../utils/hooks/useRedux";
 import {CSSTransition} from "react-transition-group"
 import './animation.css'
 import {
     HiOutlineChatBubbleLeftRight,
-    HiOutlineEnvelope,
     HiOutlineFingerPrint,
     HiOutlineUserCircle
 } from "react-icons/hi2";
@@ -22,6 +21,7 @@ const AuthForm = () => {
     const [formState, setFormState] = useState(true)
     const [picture, setPicture] = useState<File | null>(null)
     const refForm = useRef<HTMLDivElement>(null)
+    const navigate = useNavigate()
 
     const dispatch = useAppDispatch()
     const {register,
@@ -29,7 +29,6 @@ const AuthForm = () => {
         formState: {errors},
         trigger,
         watch,
-        getValues,
         control} = useForm({
         defaultValues: {
             user_email: '',
@@ -73,16 +72,15 @@ const AuthForm = () => {
         formData.append('user_name', data.user_name)
         formData.append('user_email', data.user_email)
         formData.append('user_password', data.user_password)
+        formData.append('user_bio', data.user_bio)
 
         const res = await dispatch(registration({formData: formData})) as any
 
-        if (res.payload.message) setErrorForm(res.payload.message)
-        else return <Navigate to='/'/>
-    }
+        console.log(res)
 
-    useEffect(() => {
-        console.log(getValues())
-    }, [getValues, register])
+        if (res.payload.message) setErrorForm(res.payload.message)
+        else return navigate('/')
+    }
 
     const handlePrev = (num: number) => {
         setFormState(false)
@@ -95,12 +93,24 @@ const AuthForm = () => {
     const handleNext = async (name: "user_code" | "user_image" | "user_name" | "user_bio" | "user_email" | "user_password", num: number) => {
         const isValid = await trigger([name])
         if (isValid) {
+            if (name === 'user_password') {
+                const formData = new FormData()
+                formData.append('user_email', watch('user_email'))
+                formData.append('user_password', watch('user_password'))
+
+                const res = await dispatch(login({formData: formData})) as any
+                if (res.payload.message) setErrorForm(res.payload.message)
+                else return navigate('/')
+            }
+
             setFormState(false)
             setTimeout(() => {
                 setFormNumber(prev => prev + num)
                 setFormState(true)
             }, 300)
         }
+
+        return true
     }
 
     const handleImageChange = (file: FileList | null, onChange: (value: File) => void) => {
@@ -127,32 +137,32 @@ const AuthForm = () => {
                 </>
             ),
         },
+        // {
+        //     id: 1,
+        //     component: (
+        //         <>
+        //             <HiOutlineEnvelope/>
+        //             <div className={style.TitleBlock}>
+        //                 <h1>{watch('user_email')}</h1>
+        //                 <p>We have sent you a message in Email with the code.</p>
+        //             </div>
+        //             <InputForm errors={errors} field="user_code">
+        //                 <input
+        //                     type="number"
+        //                     id="user_code"
+        //                     placeholder="Code"
+        //                     {...register('user_code', registerOptions.user_code)}
+        //                 />
+        //             </InputForm>
+        //             <div className={style.ButtonBlock}>
+        //                 <Buttons.FormButton foo={() => handlePrev(1)}>PREV</Buttons.FormButton>
+        //                 <Buttons.FormButton foo={() => handleNext('user_code', 1)}>NEXT</Buttons.FormButton>
+        //             </div>
+        //         </>
+        //     ),
+        // },
         {
             id: 1,
-            component: (
-                <>
-                    <HiOutlineEnvelope/>
-                    <div className={style.TitleBlock}>
-                        <h1>{watch('user_email')}</h1>
-                        <p>We have sent you a message in Email with the code.</p>
-                    </div>
-                    <InputForm errors={errors} field="user_code">
-                        <input
-                            type="number"
-                            id="user_code"
-                            placeholder="Code"
-                            {...register('user_code', registerOptions.user_code)}
-                        />
-                    </InputForm>
-                    <div className={style.ButtonBlock}>
-                        <Buttons.FormButton foo={() => handlePrev(1)}>PREV</Buttons.FormButton>
-                        <Buttons.FormButton foo={() => handleNext('user_code', 1)}>NEXT</Buttons.FormButton>
-                    </div>
-                </>
-            ),
-        },
-        {
-            id: 2,
             component: (
                 <>
                     <HiOutlineFingerPrint/>
@@ -176,7 +186,7 @@ const AuthForm = () => {
             ),
         },
         {
-            id: 3,
+            id: 2,
             component: (
                 <>
                     <div className={style.FileBlock}>
@@ -227,6 +237,7 @@ const AuthForm = () => {
                 >
                     <div ref={refForm}>
                         {steps[formNumber].component}
+                        {errorForm && <small>{errorForm}</small>}
                     </div>
                 </CSSTransition>
             </form>
