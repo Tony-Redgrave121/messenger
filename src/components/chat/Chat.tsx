@@ -1,4 +1,4 @@
-import React, {useRef, useState} from 'react'
+import React, {useEffect, useRef, useState} from 'react'
 import style from './style.module.css'
 import './animation.css'
 import InputBlock from "../inputBlock/InputBlock";
@@ -23,6 +23,10 @@ import geralt from './pictures/geralt.png'
 import hardware from './pictures/hardware.jpg'
 import skeleton from './pictures/skeleton.jpg'
 import abstract from './pictures/abstract.png'
+import UserService from "../../service/UserService";
+import {useAppSelector} from "../../utils/hooks/useRedux";
+import {useParams} from "react-router-dom";
+import IMessagesResponse from "../../utils/types/IMessagesResponse";
 
 const list = [
     {
@@ -68,38 +72,38 @@ const entity = {
     entityBio: 'Боремося на громадсько-мемних фронтах інформаційної війни з 2014-го Боремося на громадсько-мемних фронтах інформаційної війни з 2014-го Боремося на громадсько-мемних інформаційної війни з 2014-го'
 }
 
-const mediaTest = [
-    {
-        mediaId: '41246321.png',
-        mediaUrl: geralt
-    },
-    {
-        mediaId: '41246322.png',
-        mediaUrl: hardware
-    },
-    {
-        mediaId: '41246324.png',
-        mediaUrl: abstract
-    },
-    {
-        mediaId: '41246323.png',
-        mediaUrl: skeleton
-    }]
-
-const documents= [
-    {
-        documentId: '13156213',
-        documentName: 'Pauers_JavaScript-Recepty-dlya-razrabotchikov.pdf',
-        documentSize: 1000000,
-        documentUrl: './documents/Pauers_JavaScript-Recepty-dlya-razrabotchikov.pdf'
-    },
-    {
-        documentId: '13156223',
-        documentName: 'Pauers_JavaScript-Recepty-dlya-razrabotchikov.pdf',
-        documentSize: 5000000,
-        documentUrl: './documents/Pauers_JavaScript-Recepty-dlya-razrabotchikov.pdf'
-    },
-    ]
+// const mediaTest = [
+//     {
+//         mediaId: '41246321.png',
+//         mediaUrl: geralt
+//     },
+//     {
+//         mediaId: '41246322.png',
+//         mediaUrl: hardware
+//     },
+//     {
+//         mediaId: '41246324.png',
+//         mediaUrl: abstract
+//     },
+//     {
+//         mediaId: '41246323.png',
+//         mediaUrl: skeleton
+//     }]
+//
+// const documents= [
+//     {
+//         documentId: '13156213',
+//         documentName: 'Pauers_JavaScript-Recepty-dlya-razrabotchikov.pdf',
+//         documentSize: 1000000,
+//         documentUrl: './documents/Pauers_JavaScript-Recepty-dlya-razrabotchikov.pdf'
+//     },
+//     {
+//         documentId: '13156223',
+//         documentName: 'Pauers_JavaScript-Recepty-dlya-razrabotchikov.pdf',
+//         documentSize: 5000000,
+//         documentUrl: './documents/Pauers_JavaScript-Recepty-dlya-razrabotchikov.pdf'
+//     },
+//     ]
 
 const Chat = () => {
     const [settings, setSettings] = useState(false)
@@ -108,12 +112,33 @@ const Chat = () => {
     const refSearch = useRef<HTMLDivElement>(null)
     const refRightSidebar = useRef<HTMLDivElement>(null)
 
+    const [messagesList, setMessagesList] = useState<IMessagesResponse[]>([])
+
+    const user = useAppSelector(state => state.user)
+    const {id} = useParams()
+
+    useEffect(() => {
+        const handleMessageList = async () => {
+            try {
+                if (id) {
+                    const list = await UserService.fetchMessages(user.userId, id)
+                    if (list.data) setMessagesList(list.data)
+                }
+            } catch (e) {}
+
+            return true
+        }
+
+        handleMessageList().catch()
+    }, [user.userId, id])
+    console.log(messagesList)
+
     return (
         <>
             <div className={style.ChatContainer}>
                 <header>
                     <button className={style.DeskBlock} onClick={() => setSidebarState(true)}>
-                        <LoadImage chatImg={chat.chatImg} chatTitle={chat.chatTitle}/>
+                        <LoadImage imagePath={chat.chatImg} imageTitle={chat.chatTitle}/>
                         <div>
                             <h3>{chat.chatTitle}</h3>
                             <p>{chat.chatDesk}</p>
@@ -139,9 +164,7 @@ const Chat = () => {
                     </span>
                 </header>
                 <div className={style.MessageBlock}>
-                    <Message.ChatMessage date={new Date()} text='Lorem ipsum dolor sit amet, consectetur adipisicing elit. Debitis, dolores!' ownerName='Igor Link' documents={documents}/>
-                    <Message.ChatMessage date={new Date()} owner={true} text='Lorem ipsum dolor sit amet, consectetur adipisicing elit. Debitis, dolores!' ownerName='Igor Link'/>
-                    <Message.ChatMessage date={new Date()} owner={true} text='Lorem ipsum dolor sit amet, consectetur adipisicing elit. Debitis, dolores!' media={mediaTest} reply={{reply_name: 'Igor Link', reply_text: 'Lorem ipsum dolor sit amet'}} ownerName='Tony Redgrave'/>
+                    {messagesList.map(message => <Message.ChatMessage message={message} key={message.message_id}/>)}
                 </div>
                 <InputBlock/>
             </div>

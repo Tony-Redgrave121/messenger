@@ -5,4 +5,5 @@ export const REGISTRATION_ROUTE = '/registration'
 export const ACTIVATION_PAGE = '/activate/:link'
 export const DELETE_ACCOUNT_ROUTE = '/delete'
 export const FETCH_MESSENGERS = '/messengers/:user_id'
+export const FETCH_MESSAGES = `/messages/`
 

@@ -1,10 +1,10 @@
 import React, {useCallback, useEffect, useState} from "react"
 
 interface IUseSliderProps {
-    mediaArr: { mediaId: string, mediaUrl: string }[],
-    setMediaArr: React.Dispatch<React.SetStateAction<{ mediaId: string, mediaUrl: string; }[] | undefined>>,
+    mediaArr: { message_file_id: string, message_file_name: string}[],
+    setMediaArr: React.Dispatch<React.SetStateAction<{ message_file_id: string, message_file_name: string; }[] | undefined>>,
     setAnimationState: React.Dispatch<React.SetStateAction<boolean>>,
-    currentSlide: { mediaId: string, mediaUrl: string },
+    currentSlide: { message_file_id: string, message_file_name: string },
     animationState: boolean,
     refSwipe: React.RefObject<HTMLDivElement | null>
 }
@@ -12,7 +12,7 @@ interface IUseSliderProps {
 const useSlider = (media: IUseSliderProps) => {
     const [slide, setSlide] = useState({
         slideNumber: 0,
-        currentSlide: {mediaId: '', mediaUrl: ''},
+        currentSlide: {message_file_id: '', message_file_name: ''},
     })
     const [zoomState, setZoomState] = useState(false)
     const [zoomSize, setZoomSize] = useState(100)
@@ -32,7 +32,7 @@ const useSlider = (media: IUseSliderProps) => {
             const newSlide = side ? prev.slideNumber + 1 : prev.slideNumber - 1
             if ((newSlide < 0 || newSlide >= media.mediaArr.length) && media.refSwipe.current) return prev
 
-            handlePosition(newSlide, media.mediaArr.length, media.mediaArr[newSlide].mediaId)
+            handlePosition(newSlide, media.mediaArr.length, media.mediaArr[newSlide].message_file_id)
 
             return {
                 slideNumber: newSlide,
@@ -44,7 +44,7 @@ const useSlider = (media: IUseSliderProps) => {
     const deleteMedia = () => {
         media.setMediaArr(prev => {
             if (!prev) return prev
-            const newMediaArr = prev.filter(el => el.mediaId !== slide.currentSlide.mediaId)
+            const newMediaArr = prev.filter(el => el.message_file_id !== slide.currentSlide.message_file_id)
 
             if (newMediaArr.length === 0) {
                 media.setAnimationState(false)
@@ -58,7 +58,7 @@ const useSlider = (media: IUseSliderProps) => {
     useEffect(() => {
         if (media.mediaArr && media.mediaArr.length > 0) {
             const newSlide = Math.max(slide.slideNumber - 1, 0)
-            handlePosition(newSlide, media.mediaArr.length, media.mediaArr[newSlide].mediaId)
+            handlePosition(newSlide, media.mediaArr.length, media.mediaArr[newSlide].message_file_id)
 
             setSlide({
                 slideNumber: newSlide,
@@ -69,14 +69,14 @@ const useSlider = (media: IUseSliderProps) => {
 
     const downloadMedia = () => {
         const regex = new RegExp('\\/([^/.]+)\\.', 'i')
-        const name = slide.currentSlide.mediaUrl.match(regex)
-        const ext = slide.currentSlide.mediaUrl.split('.').pop()
+        const name = slide.currentSlide.message_file_name.match(regex)
+        const ext = slide.currentSlide.message_file_name.split('.').pop()
 
         if (!name || !ext) return null
 
         const link = document.createElement('a')
 
-        link.href = slide.currentSlide.mediaUrl
+        link.href = slide.currentSlide.message_file_name
         link.download = `${name[1]}.${ext}`
         document.body.appendChild(link)
         link.click()
@@ -102,19 +102,19 @@ const useSlider = (media: IUseSliderProps) => {
             let index = 0
 
             for (let i = 0; i < media.mediaArr.length; i++) {
-                if (media.mediaArr[i].mediaId === media.currentSlide.mediaId) {
+                if (media.mediaArr[i].message_file_id === media.currentSlide.message_file_id) {
                     index = i
                     break
                 }
             }
 
-            handlePosition(index, media.mediaArr.length, media.currentSlide.mediaId)
+            handlePosition(index, media.mediaArr.length, media.currentSlide.message_file_id)
 
             return {
                 slideNumber: index,
                 currentSlide: {
-                    mediaId: media.currentSlide.mediaId,
-                    mediaUrl: media.currentSlide.mediaUrl
+                    message_file_id: media.currentSlide.message_file_id,
+                    message_file_name: media.currentSlide.message_file_name
                 },
             }
         })

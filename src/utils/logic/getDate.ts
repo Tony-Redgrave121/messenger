@@ -1,8 +1,6 @@
-const zeroPad = (num: number) => {
-    return num.toString().padStart(2, '0')
-}
+const zeroPad = (num: number) => num.toString().padStart(2, '0')
 
-export const getDate = (date: Date) => {
+export const getDate = (date: string | Date) => {
     const newDate = new Date(date)
     const currentDate = new Date()
     const time = new Date().getTime() - newDate.getTime()
@@ -11,14 +9,14 @@ export const getDate = (date: Date) => {
         return getTime(newDate)
     } else if (time <= 86400000 * new Date(
         currentDate.getFullYear(),
-        currentDate.getMonth(),
-        0).getDate()) {
+        currentDate.getMonth() + 1, 0).getDate()) {
         return `${newDate.toLocaleString('en', { month: 'short'})} ${newDate.getDate()}`
     } else {
         return `${zeroPad(newDate.getMonth() + 1)}/${zeroPad(newDate.getDay())}/${newDate.getFullYear()}`
     }
 }
 
-export const getTime = (date: Date) => {
-    return `${zeroPad(date.getHours())}:${zeroPad(date.getMinutes())}`
+export const getTime = (date: string | Date) => {
+    const newDate = new Date(date)
+    return `${zeroPad(newDate.getHours())}:${zeroPad(newDate.getMinutes())}`
 }

@@ -14,4 +14,5 @@ router.get(const_1.REFRESH_ROUTE, userController_1.default.refresh);
 router.get(const_1.ACTIVATION_PAGE, userController_1.default.activate);
 router.post(const_1.DELETE_ACCOUNT_ROUTE, userController_1.default.deleteAccount);
 router.get(const_1.FETCH_MESSENGERS, userController_1.default.fetchMessengers);
+router.get(const_1.FETCH_MESSAGES, userController_1.default.fetchMessages);
 exports.default = router;

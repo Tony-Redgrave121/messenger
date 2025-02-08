@@ -36,7 +36,7 @@ const messenger = db_js_1.default.define("messenger", {
 }, { timestamps: false });
 const message = db_js_1.default.define("message", {
     message_id: { type: sequelize_1.DataTypes.UUID, primaryKey: true },
-    message_text: { type: sequelize_1.DataTypes.STRING, allowNull: false },
+    message_text: { type: sequelize_1.DataTypes.STRING, allowNull: true },
     message_date: { type: sequelize_1.DataTypes.DATE, allowNull: false, defaultValue: sequelize_1.DataTypes.NOW },
     message_type: { type: sequelize_1.DataTypes.STRING, allowNull: false },
     reply_id: { type: sequelize_1.DataTypes.UUID, allowNull: true }
@@ -44,6 +44,7 @@ const message = db_js_1.default.define("message", {
 const message_file = db_js_1.default.define("message_file", {
     message_file_id: { type: sequelize_1.DataTypes.UUID, primaryKey: true },
     message_file_name: { type: sequelize_1.DataTypes.STRING, allowNull: false },
+    message_file_size: { type: sequelize_1.DataTypes.INTEGER, allowNull: true },
 }, { timestamps: false });
 users.hasMany(user_tokens, { foreignKey: { name: 'user_id', allowNull: false }, onDelete: 'CASCADE', onUpdate: 'CASCADE' });
 user_tokens.belongsTo(users, { foreignKey: 'user_id' });

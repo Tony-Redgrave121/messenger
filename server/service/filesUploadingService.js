@@ -36,24 +36,24 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.default = getUserImgService;
+exports.default = filesUploadingService;
 const uuid = __importStar(require("uuid"));
 const path = __importStar(require("path"));
 const fs = __importStar(require("fs"));
 const ApiError_js_1 = __importDefault(require("../error/ApiError.js"));
-function getUserImgService(folder, file, fileName) {
+function filesUploadingService(folder, file) {
     try {
-        const fileExtension = fileName.split('.').pop().toLowerCase();
-        const resFile = uuid.v4() + "." + fileExtension;
-        const folderPath = path.resolve(__dirname + "/../src/static/users", folder);
+        const fileExt = file.name.split('.').pop().toLowerCase();
+        const resFile = uuid.v4() + "." + fileExt;
+        const folderPath = path.resolve(__dirname + "/../src/static", folder);
         if (!fs.existsSync(folderPath))
             fs.mkdirSync(folderPath, { recursive: true });
         else
-            return ApiError_js_1.default.internalServerError('An error occurred while fetching the user');
+            return ApiError_js_1.default.internalServerError('An error occurred while uploading the file');
         file.mv(path.resolve(folderPath, resFile));
-        return resFile;
+        return { file: resFile, size: file.size };
     }
     catch (e) {
-        return ApiError_js_1.default.internalServerError('An error occurred while fetching the user');
+        return ApiError_js_1.default.internalServerError('An error occurred while uploading the file');
     }
 }

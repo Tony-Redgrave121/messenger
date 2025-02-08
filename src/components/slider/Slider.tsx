@@ -25,11 +25,11 @@ interface ISlider {
     },
     media: {
         mediaArr: Array<{
-            mediaId: string,
-            mediaUrl: string
+            message_file_id: string,
+            message_file_name: string
         }>,
-        setMediaArr: React.Dispatch<React.SetStateAction<{ mediaId: string, mediaUrl: string; }[] | undefined>>,
-        currentSlide: { mediaId: string, mediaUrl: string}
+        setMediaArr: React.Dispatch<React.SetStateAction<{ message_file_id: string, message_file_name: string; }[] | undefined>>,
+        currentSlide: { message_file_id: string, message_file_name: string}
         },
     user: {
         owner: string,
@@ -67,7 +67,7 @@ const Slider: React.FC<ISlider> = ({animation, media, user}) => {
             <div className={style.SliderContainer} ref={animation.ref}>
                 <div onClick={event => event.stopPropagation()} className={style.ToolsBlock}>
                     <button>
-                        <LoadImage chatImg='' chatTitle={user.owner}/>
+                        <LoadImage imagePath='' imageTitle={user.owner}/>
                         <div>
                             <h4>{user.owner}</h4>
                             <p>{getDate(user.date)}</p>
@@ -123,8 +123,8 @@ const Slider: React.FC<ISlider> = ({animation, media, user}) => {
                     <div className={style.Swipe} ref={refSwipe}>
                         {
                             media.mediaArr.map(media => (
-                                <div key={media.mediaId} className={style.ImageBlock}>
-                                    <img src={media.mediaUrl} alt={media.mediaUrl} onClick={(event) => event.stopPropagation()} id={media.mediaId} draggable={'false'}/>
+                                <div key={media.message_file_id} className={style.ImageBlock}>
+                                    <img src={media.message_file_name} alt={media.message_file_name} onClick={(event) => event.stopPropagation()} id={media.message_file_id} draggable={'false'}/>
                                 </div>
                             ))
                         }

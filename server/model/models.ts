@@ -36,7 +36,7 @@ const messenger = sequelize.define("messenger", {
 
 const message = sequelize.define("message", {
     message_id: {type: DataTypes.UUID, primaryKey: true},
-    message_text: {type: DataTypes.STRING, allowNull: false},
+    message_text: {type: DataTypes.STRING, allowNull: true},
     message_date: {type: DataTypes.DATE, allowNull: false, defaultValue: DataTypes.NOW},
     message_type: {type: DataTypes.STRING, allowNull: false},
     reply_id: {type: DataTypes.UUID, allowNull: true}
@@ -45,6 +45,7 @@ const message = sequelize.define("message", {
 const message_file = sequelize.define("message_file", {
     message_file_id: {type: DataTypes.UUID, primaryKey: true},
     message_file_name: {type: DataTypes.STRING, allowNull: false},
+    message_file_size: {type: DataTypes.INTEGER, allowNull: true},
 }, {timestamps: false})
 
 users.hasMany(user_tokens, {foreignKey: {name: 'user_id', allowNull: false}, onDelete: 'CASCADE', onUpdate: 'CASCADE'})

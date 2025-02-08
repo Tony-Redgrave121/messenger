@@ -2,18 +2,18 @@ import React, {useEffect, useRef, useState} from 'react'
 import style from './style.module.css'
 
 interface ILoadImage {
-    chatImg?: string,
-    chatTitle: string,
+    imagePath?: string,
+    imageTitle: string,
 }
 
-const LoadImage: React.FC<ILoadImage> = ({chatImg, chatTitle}) => {
+const LoadImage: React.FC<ILoadImage> = ({imagePath, imageTitle}) => {
     const [load, setLoad] = useState(false)
     const [image, setImage] = useState('')
     const refImageContainer = useRef<HTMLDivElement>(null)
 
     useEffect(() => {
         if (image) {
-            fetch(`https://image/${chatImg}`)
+            fetch(`https://image/${imagePath}`)
                 .then(data => data.blob())
                 .then(image => {
                     setImage(URL.createObjectURL(image))
@@ -22,7 +22,7 @@ const LoadImage: React.FC<ILoadImage> = ({chatImg, chatTitle}) => {
                 })
                 .catch(error => console.log(error))
         } else setLoad(true)
-    }, [image, chatImg])
+    }, [image, imagePath])
 
     const createImage = (title: string) => {
         const words = title.split(' ')
@@ -40,7 +40,7 @@ const LoadImage: React.FC<ILoadImage> = ({chatImg, chatTitle}) => {
 
     return (
         <div className={style.ImageContainer} ref={refImageContainer}>
-            {load && image ? <img src={image} alt={chatTitle}/> : <h1>{createImage(chatTitle)}</h1>}
+            {load && image ? <img src={image} alt={imageTitle}/> : <h1>{createImage(imageTitle)}</h1>}
         </div>
     )
 }

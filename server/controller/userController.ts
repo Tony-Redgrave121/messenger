@@ -86,16 +86,31 @@ class UserController {
 
     async fetchMessengers(req: Request, res: Response): Promise<any> {
         try {
+            if (!req.params) return res.json(ApiError.internalServerError('An error occurred while fetching the messengers'))
+            const messengers = await userService.fetchMessengers(req.params.user_id)
 
+            if (messengers instanceof ApiError) return res.json(ApiError.internalServerError('An error occurred while fetching the messengers'))
+
+            return res.json(messengers)
         } catch (e) {
             return res.json(ApiError.internalServerError("An error occurred while fetching the messengers"))
         }
-        if (!req.params) return res.json(ApiError.internalServerError('An error occurred while fetching the messengers'))
-        const messengers = await userService.fetchMessengers(req.params.user_id)
+    }
 
-        if (messengers instanceof ApiError) return res.json(ApiError.internalServerError('An error occurred while fetching the messengers'))
+    async fetchMessages(req: Request, res: Response): Promise<any> {
+        try {
 
-        return res.json(messengers)
+        } catch (e) {
+            return res.json(ApiError.internalServerError("An error occurred while fetching the messages"))
+        }
+        const {user_id, messenger_id} = req.query
+
+        if (!user_id || !messenger_id || typeof user_id !== 'string' || typeof messenger_id !== 'string') return res.json(ApiError.internalServerError('An error occurred while fetching the messages'))
+        const messages = await userService.fetchMessages(user_id, messenger_id)
+
+        if (messages instanceof ApiError) return res.json(ApiError.internalServerError('An error occurred while fetching the messages'))
+
+        return res.json(messages)
     }
 }
 

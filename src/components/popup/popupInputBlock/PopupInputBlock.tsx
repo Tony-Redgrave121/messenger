@@ -45,8 +45,8 @@ const PopupInputBlock: React.FC<IPopupInputBlock> = ({setState, files, type}) =>
                 </div> :
                 <MediaBlock media={[...files].map(file => (
                     {
-                        mediaId: file.name,
-                        mediaUrl: URL.createObjectURL(file),
+                        message_file_id: file.name,
+                        message_file_name: URL.createObjectURL(file),
                     }
                 ))} />
             }

@@ -12,15 +12,14 @@ const ChatList = memo(() => {
         const handleMessengerList = async () => {
             try {
                 const list = await UserService.fetchMessengers(user_id)
-
                 if (list.data) setMessengerList(list.data)
             } catch (e) {}
+
+            return true
         }
 
         handleMessengerList().catch()
     }, [user_id])
-
-    console.log(messengerList)
 
     return (
         <ul>

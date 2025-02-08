@@ -3,40 +3,40 @@ import style from "./style.module.css"
 
 interface IMediaBlock {
     media: Array<{
-        mediaId: string,
-        mediaUrl: string
+        message_file_id: string,
+        message_file_name: string
     }>,
     setSlider?: (state: boolean) => void,
     setCurrMedia?: React.Dispatch<React.SetStateAction<{
-        mediaId: string,
-        mediaUrl: string
+        message_file_id: string,
+        message_file_name: string
     }>>,
 }
 
 const MediaBlock: React.FC<IMediaBlock> = memo(({media, setSlider, setCurrMedia}) => {
-    const getTag = (currMedia: { mediaId: string, mediaUrl: string }) => {
+    const getTag = (currMedia: { message_file_id: string, message_file_name: string }) => {
         const isPicture = ['png', 'jpg', 'jpeg', 'webp']
         const isVideo = ['mp4', 'webm']
 
-        const type = currMedia.mediaId!.split('.')
+        const type = currMedia.message_file_id!.split('.')
         const ext = type[type.length - 1]
 
         if (isVideo.includes(ext)) {
             return (
-                <video src={currMedia.mediaUrl} key={currMedia.mediaId} onClick={() => {
+                <video src={currMedia.message_file_name} key={currMedia.message_file_id} onClick={() => {
                     setCurrMedia && setCurrMedia({
-                        mediaId: currMedia.mediaId,
-                        mediaUrl: currMedia.mediaUrl
+                        message_file_id: currMedia.message_file_id,
+                        message_file_name: currMedia.message_file_name
                     })
                     setSlider && setSlider(true)
                 }}></video>
             )
         } else if (isPicture.includes(ext)) {
             return (
-                <img src={currMedia.mediaUrl} alt="name" key={currMedia.mediaId} onClick={() => {
+                <img src={currMedia.message_file_name} alt="name" key={currMedia.message_file_id} onClick={() => {
                     setCurrMedia && setCurrMedia({
-                        mediaId: currMedia.mediaId,
-                        mediaUrl: currMedia.mediaUrl
+                        message_file_id: currMedia.message_file_id,
+                        message_file_name: currMedia.message_file_name
                     })
                     setSlider && setSlider(true)
                 }}/>

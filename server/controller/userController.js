@@ -104,16 +104,32 @@ class UserController {
     fetchMessengers(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
+                if (!req.params)
+                    return res.json(ApiError_1.default.internalServerError('An error occurred while fetching the messengers'));
+                const messengers = yield userService_1.default.fetchMessengers(req.params.user_id);
+                if (messengers instanceof ApiError_1.default)
+                    return res.json(ApiError_1.default.internalServerError('An error occurred while fetching the messengers'));
+                return res.json(messengers);
             }
             catch (e) {
                 return res.json(ApiError_1.default.internalServerError("An error occurred while fetching the messengers"));
             }
-            if (!req.params)
-                return res.json(ApiError_1.default.internalServerError('An error occurred while fetching the messengers'));
-            const messengers = yield userService_1.default.fetchMessengers(req.params.user_id);
-            if (messengers instanceof ApiError_1.default)
-                return res.json(ApiError_1.default.internalServerError('An error occurred while fetching the messengers'));
-            return res.json(messengers);
+        });
+    }
+    fetchMessages(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+            }
+            catch (e) {
+                return res.json(ApiError_1.default.internalServerError("An error occurred while fetching the messages"));
+            }
+            const { user_id, messenger_id } = req.query;
+            if (!user_id || !messenger_id || typeof user_id !== 'string' || typeof messenger_id !== 'string')
+                return res.json(ApiError_1.default.internalServerError('An error occurred while fetching the messages'));
+            const messages = yield userService_1.default.fetchMessages(user_id, messenger_id);
+            if (messages instanceof ApiError_1.default)
+                return res.json(ApiError_1.default.internalServerError('An error occurred while fetching the messages'));
+            return res.json(messages);
         });
     }
 }

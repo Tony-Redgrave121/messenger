@@ -4,7 +4,7 @@ import models from "../model/models"
 import * as uuid from "uuid"
 import IUser from "../types/IUser"
 import bcrypt from "bcrypt"
-import getUserImgService from "./getUserImgService"
+import filesUploadingService from "./filesUploadingService"
 import mailService from "./mailService"
 import { UploadedFile } from 'express-fileupload'
 import IRegistrationResponse from "../types/IRegistrationResponse";
@@ -30,16 +30,16 @@ class UserService {
         let userImg = null
         const user_id = uuid.v4(), user_activation_code = uuid.v4()
 
-        if (user_files) if (user_files.user_image) userImg = getUserImgService(user_id + '/image', user_files.user_image, user_files.user_image.name)
+        if (user_files && user_files.user_image) userImg = filesUploadingService('/users' + user_id, user_files.user_image)
+
+        if (userImg instanceof ApiError || !userImg) return ApiError.badRequest(`Error with user image creation`)
 
         const hash_user_password = await bcrypt.hash(user_password, 5)
-        await models.users.create({user_id: user_id, user_name, user_email, user_password: hash_user_password, user_img: userImg, user_activation_code: user_activation_code, user_bio: user_bio})
+        await models.users.create({user_id: user_id, user_name, user_email, user_password: hash_user_password, user_img: userImg.file, user_activation_code: user_activation_code, user_bio: user_bio})
 
         const tokens = tokenService.generateToken({user_id, user_email, user_name})
         await tokenService.saveToken(user_id, tokens!.refreshToken)
         await mailService.sendMail(user_email, `${process.env.API_URL}/activate/${user_activation_code}`)
-
-        if (userImg instanceof ApiError) return ApiError.badRequest(`Error with user image creation`)
 
         return {
             ...tokens,
@@ -47,7 +47,7 @@ class UserService {
             user_name: user_name,
             user_email: user_email,
             user_state: false,
-            user_img: userImg,
+            user_img: userImg.file,
         }
     }
 
@@ -124,6 +124,29 @@ class UserService {
         if (!messengers) return ApiError.internalServerError("An error occurred while fetching the messengers")
 
         return messengers
+    }
+
+    async fetchMessages(user_id: string, messenger_id: string) {
+        if (!user_id) return ApiError.internalServerError("An error occurred while fetching the messages")
+
+        const messages = await models.message.findAll({
+            where: {user_id: user_id, messenger_id: messenger_id},
+            include: [
+                {model: models.message_file, attributes: ['message_file_id', 'message_file_name', 'message_file_size']},
+                {model: models.users, attributes: ['user_name']},
+                {
+                    model: models.message,
+                    as: 'reply',
+                    attributes: ['message_text'],
+                    include: [{model: models.users, attributes: ['user_name']}]
+                }
+            ],
+            order: [['message_date', 'DESC']]
+        })
+
+        if (!messages) return ApiError.internalServerError("An error occurred while fetching the messages")
+
+        return messages
     }
 }
 

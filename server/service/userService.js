@@ -50,7 +50,7 @@ const ApiError_1 = __importDefault(require("../error/ApiError"));
 const models_1 = __importDefault(require("../model/models"));
 const uuid = __importStar(require("uuid"));
 const bcrypt_1 = __importDefault(require("bcrypt"));
-const getUserImgService_1 = __importDefault(require("./getUserImgService"));
+const filesUploadingService_1 = __importDefault(require("./filesUploadingService"));
 const mailService_1 = __importDefault(require("./mailService"));
 const path_1 = __importDefault(require("path"));
 const fs = __importStar(require("fs"));
@@ -63,17 +63,16 @@ class UserService {
                 return ApiError_1.default.badRequest(`User with email already exists`);
             let userImg = null;
             const user_id = uuid.v4(), user_activation_code = uuid.v4();
-            if (user_files)
-                if (user_files.user_image)
-                    userImg = (0, getUserImgService_1.default)(user_id + '/image', user_files.user_image, user_files.user_image.name);
+            if (user_files && user_files.user_image)
+                userImg = (0, filesUploadingService_1.default)('/users' + user_id, user_files.user_image);
+            if (userImg instanceof ApiError_1.default || !userImg)
+                return ApiError_1.default.badRequest(`Error with user image creation`);
             const hash_user_password = yield bcrypt_1.default.hash(user_password, 5);
-            yield models_1.default.users.create({ user_id: user_id, user_name, user_email, user_password: hash_user_password, user_img: userImg, user_activation_code: user_activation_code, user_bio: user_bio });
+            yield models_1.default.users.create({ user_id: user_id, user_name, user_email, user_password: hash_user_password, user_img: userImg.file, user_activation_code: user_activation_code, user_bio: user_bio });
             const tokens = tokenService_1.default.generateToken({ user_id, user_email, user_name });
             yield tokenService_1.default.saveToken(user_id, tokens.refreshToken);
             yield mailService_1.default.sendMail(user_email, `${process.env.API_URL}/activate/${user_activation_code}`);
-            if (userImg instanceof ApiError_1.default)
-                return ApiError_1.default.badRequest(`Error with user image creation`);
-            return Object.assign(Object.assign({}, tokens), { user_id: user_id, user_name: user_name, user_email: user_email, user_state: false, user_img: userImg });
+            return Object.assign(Object.assign({}, tokens), { user_id: user_id, user_name: user_name, user_email: user_email, user_state: false, user_img: userImg.file });
         });
     }
     login(user_body) {
@@ -133,6 +132,29 @@ class UserService {
             if (!messengers)
                 return ApiError_1.default.internalServerError("An error occurred while fetching the messengers");
             return messengers;
+        });
+    }
+    fetchMessages(user_id, messenger_id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            if (!user_id)
+                return ApiError_1.default.internalServerError("An error occurred while fetching the messages");
+            const messages = yield models_1.default.message.findAll({
+                where: { user_id: user_id, messenger_id: messenger_id },
+                include: [
+                    { model: models_1.default.message_file, attributes: ['message_file_id', 'message_file_name', 'message_file_size'] },
+                    { model: models_1.default.users, attributes: ['user_name'] },
+                    {
+                        model: models_1.default.message,
+                        as: 'reply',
+                        attributes: ['message_text'],
+                        include: [{ model: models_1.default.users, attributes: ['user_name'] }]
+                    }
+                ],
+                order: [['message_date', 'DESC']]
+            });
+            if (!messages)
+                return ApiError_1.default.internalServerError("An error occurred while fetching the messages");
+            return messages;
         });
     }
 }
