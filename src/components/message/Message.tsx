@@ -26,6 +26,7 @@ namespace Message {
 
         useEffect(() => {
             if (message.message_files) {
+                setMediaArr(message.message_files)
                 setCurrMedia(message.message_files[0])
             }
         }, [message.message_files])

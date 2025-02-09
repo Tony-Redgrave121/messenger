@@ -10,6 +10,13 @@
   width: 54px;
   height: 54px;
   border-radius: 50%;
+  overflow: hidden;
+
+  img {
+    width: inherit;
+    height: inherit;
+    object-fit: cover;
+  }
 
   h1 {
     font-size: 18px;

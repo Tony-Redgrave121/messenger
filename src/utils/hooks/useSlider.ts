@@ -19,12 +19,16 @@ const useSlider = (media: IUseSliderProps) => {
     const refZoom = React.useRef<HTMLImageElement | null>(null)
 
     const handlePosition = useCallback((pos: number, lng: number, id: string) => {
+        if (!media.refSwipe.current) return
         const curr = media.refSwipe.current
 
-        if (curr) {
-            refZoom.current = curr.querySelector(`[id="${id}"]`)
-            if (media.refSwipe.current) media.refSwipe.current.style.left = `-${pos * (100 / lng)}%`
-        }
+        const observer = new MutationObserver(() => {
+            const element = curr.querySelector(`[id="${id}"]`) as HTMLImageElement
+            if (element) refZoom.current = element
+        })
+
+        media.refSwipe.current!.style.left = `-${pos * (100 / lng)}%`
+        observer.observe(curr, { childList: true, subtree: true })
     }, [media.refSwipe])
 
     const swipeSlide = (side: boolean) => {
@@ -84,6 +88,7 @@ const useSlider = (media: IUseSliderProps) => {
     }
 
     const zoomMedia = (value: string) => {
+        console.log(refZoom.current)
         if (refZoom.current) {
             setZoomSize(Number(value))
             refZoom.current.style.transform = `scale(${value}%)`

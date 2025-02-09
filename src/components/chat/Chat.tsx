@@ -2,7 +2,7 @@ import React, {useEffect, useRef, useState} from 'react'
 import style from './style.module.css'
 import './animation.css'
 import InputBlock from "../inputBlock/InputBlock";
-import LoadImage from "../loadImage/LoadImage"
+import LoadFile from "../loadFile/LoadFile"
 import {
     HiOutlineMagnifyingGlass,
     HiEllipsisVertical,
@@ -138,7 +138,7 @@ const Chat = () => {
             <div className={style.ChatContainer}>
                 <header>
                     <button className={style.DeskBlock} onClick={() => setSidebarState(true)}>
-                        <LoadImage imagePath={chat.chatImg} imageTitle={chat.chatTitle}/>
+                        <LoadFile imagePath={chat.chatImg} imageTitle={chat.chatTitle}/>
                         <div>
                             <h3>{chat.chatTitle}</h3>
                             <p>{chat.chatDesk}</p>

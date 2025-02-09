@@ -1,28 +1,15 @@
-import React, {useEffect, useRef, useState} from 'react'
+import React, {useRef} from 'react'
 import style from './style.module.css'
+import useLoadFile from "../../utils/hooks/useLoadFile"
 
 interface ILoadImage {
     imagePath?: string,
     imageTitle: string,
 }
 
-const LoadImage: React.FC<ILoadImage> = ({imagePath, imageTitle}) => {
-    const [load, setLoad] = useState(false)
-    const [image, setImage] = useState('')
+const LoadFile: React.FC<ILoadImage> = ({imagePath, imageTitle}) => {
     const refImageContainer = useRef<HTMLDivElement>(null)
-
-    useEffect(() => {
-        if (image) {
-            fetch(`https://image/${imagePath}`)
-                .then(data => data.blob())
-                .then(image => {
-                    setImage(URL.createObjectURL(image))
-                    setLoad(true)
-                    return true
-                })
-                .catch(error => console.log(error))
-        } else setLoad(true)
-    }, [image, imagePath])
+    const {load, image} = useLoadFile(imagePath)
 
     const createImage = (title: string) => {
         const words = title.split(' ')
@@ -45,4 +32,4 @@ const LoadImage: React.FC<ILoadImage> = ({imagePath, imageTitle}) => {
     )
 }
 
-export default LoadImage
+export default LoadFile

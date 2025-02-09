@@ -9,12 +9,12 @@
   height: auto;
   object-fit: cover;
   cursor: pointer;
-}
-.MediaBlock > img {
+  max-height: 350px;
   width: 100%;
 }
 .MediaBlock > span {
   display: flex;
+  width: 100%;
 }
 .MediaBlock > span img {
   flex-shrink: 1;

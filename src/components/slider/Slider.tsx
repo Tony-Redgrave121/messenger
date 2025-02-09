@@ -2,7 +2,7 @@ import React, {useRef} from 'react'
 import style from './style.module.css'
 import {CSSTransition} from 'react-transition-group'
 import './animation.css'
-import LoadImage from "../loadImage/LoadImage";
+import LoadFile from "../loadFile/LoadFile";
 import {getDate} from "../../utils/logic/getDate";
 import Button from "../buttons/Buttons";
 import {
@@ -16,6 +16,7 @@ import {
     HiOutlineChevronRight,
 } from "react-icons/hi2";
 import useSlider from "../../utils/hooks/useSlider";
+import MediaTag from "../media/mediaTag/MediaTag";
 
 interface ISlider {
     animation: {
@@ -24,13 +25,10 @@ interface ISlider {
         ref: React.RefObject<HTMLDivElement | null>
     },
     media: {
-        mediaArr: Array<{
-            message_file_id: string,
-            message_file_name: string
-        }>,
+        mediaArr: { message_file_id: string, message_file_name: string }[],
         setMediaArr: React.Dispatch<React.SetStateAction<{ message_file_id: string, message_file_name: string; }[] | undefined>>,
         currentSlide: { message_file_id: string, message_file_name: string}
-        },
+    },
     user: {
         owner: string,
         date: Date,
@@ -67,7 +65,7 @@ const Slider: React.FC<ISlider> = ({animation, media, user}) => {
             <div className={style.SliderContainer} ref={animation.ref}>
                 <div onClick={event => event.stopPropagation()} className={style.ToolsBlock}>
                     <button>
-                        <LoadImage imagePath='' imageTitle={user.owner}/>
+                        <LoadFile imagePath='' imageTitle={user.owner}/>
                         <div>
                             <h4>{user.owner}</h4>
                             <p>{getDate(user.date)}</p>
@@ -124,7 +122,7 @@ const Slider: React.FC<ISlider> = ({animation, media, user}) => {
                         {
                             media.mediaArr.map(media => (
                                 <div key={media.message_file_id} className={style.ImageBlock}>
-                                    <img src={media.message_file_name} alt={media.message_file_name} onClick={(event) => event.stopPropagation()} id={media.message_file_id} draggable={'false'}/>
+                                    <MediaTag media={media} key={media.message_file_id}/>
                                 </div>
                             ))
                         }

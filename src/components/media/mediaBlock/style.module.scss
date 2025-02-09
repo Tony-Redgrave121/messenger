@@ -10,14 +10,13 @@
     height: auto;
     object-fit: cover;
     cursor: pointer;
-  }
-
-  > img {
+    max-height: 350px;
     width: 100%;
   }
 
   > span {
     display: flex;
+    width: 100%;
 
     img {
       flex-shrink: 1;
