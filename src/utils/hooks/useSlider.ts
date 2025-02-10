@@ -18,17 +18,71 @@ const useSlider = (media: IUseSliderProps) => {
     const [zoomSize, setZoomSize] = useState(100)
     const refZoom = React.useRef<HTMLImageElement | null>(null)
 
+    useEffect(() => {
+        if (media.mediaArr && media.mediaArr.length > 0) {
+            const newSlide = Math.max(slide.slideNumber - 1, 0)
+            handlePosition(newSlide, media.mediaArr.length, media.mediaArr[newSlide].message_file_id)
+
+            setSlide({
+                slideNumber: newSlide,
+                currentSlide: media.mediaArr[newSlide]
+            })
+        }
+    }, [media.mediaArr])
+
+    useEffect(() => {
+        setZoomState(false)
+
+        setSlide(() => {
+            let index = 0
+
+            for (let i = 0; i < media.mediaArr.length; i++) {
+                if (media.mediaArr[i].message_file_id === media.currentSlide.message_file_id) {
+                    index = i
+                    break
+                }
+            }
+
+            handlePosition(index, media.mediaArr.length, media.currentSlide.message_file_id)
+
+            return {
+                slideNumber: index,
+                currentSlide: {
+                    message_file_id: media.currentSlide.message_file_id,
+                    message_file_name: media.currentSlide.message_file_name
+                },
+            }
+        })
+    }, [media.animationState])
+
+    useEffect(() => {
+        const img = refZoom.current
+        if (!img) return
+
+        const { width, height } = img.getBoundingClientRect()
+        const clientWidth = window.innerWidth, clientHeight = window.innerHeight
+
+        if (width > clientWidth || height > clientHeight)
+            img.addEventListener('mousedown', draggableImage)
+        else {
+            img.style.left = '0'
+            img.style.top = '0'
+            img.removeEventListener('mousedown', draggableImage)
+        }
+
+        return () => img.removeEventListener('mousedown', draggableImage)
+    }, [zoomSize])
+
     const handlePosition = useCallback((pos: number, lng: number, id: string) => {
         if (!media.refSwipe.current) return
         const curr = media.refSwipe.current
 
-        const observer = new MutationObserver(() => {
+        setTimeout(() => {
             const element = curr.querySelector(`[id="${id}"]`) as HTMLImageElement
             if (element) refZoom.current = element
-        })
+        }, 100)
 
         media.refSwipe.current!.style.left = `-${pos * (100 / lng)}%`
-        observer.observe(curr, { childList: true, subtree: true })
     }, [media.refSwipe])
 
     const swipeSlide = (side: boolean) => {
@@ -59,18 +113,6 @@ const useSlider = (media: IUseSliderProps) => {
         })
     }
 
-    useEffect(() => {
-        if (media.mediaArr && media.mediaArr.length > 0) {
-            const newSlide = Math.max(slide.slideNumber - 1, 0)
-            handlePosition(newSlide, media.mediaArr.length, media.mediaArr[newSlide].message_file_id)
-
-            setSlide({
-                slideNumber: newSlide,
-                currentSlide: media.mediaArr[newSlide]
-            })
-        }
-    }, [media.mediaArr])
-
     const downloadMedia = () => {
         const regex = new RegExp('\\/([^/.]+)\\.', 'i')
         const name = slide.currentSlide.message_file_name.match(regex)
@@ -99,31 +141,6 @@ const useSlider = (media: IUseSliderProps) => {
     const shareMedia = () => {
 
     }
-
-    useEffect(() => {
-        setZoomState(false)
-
-        setSlide(() => {
-            let index = 0
-
-            for (let i = 0; i < media.mediaArr.length; i++) {
-                if (media.mediaArr[i].message_file_id === media.currentSlide.message_file_id) {
-                    index = i
-                    break
-                }
-            }
-
-            handlePosition(index, media.mediaArr.length, media.currentSlide.message_file_id)
-
-            return {
-                slideNumber: index,
-                currentSlide: {
-                    message_file_id: media.currentSlide.message_file_id,
-                    message_file_name: media.currentSlide.message_file_name
-                },
-            }
-        })
-    }, [media.animationState])
 
     const draggableImage = (event: MouseEvent) => {
         if (!refZoom.current) return
@@ -159,24 +176,6 @@ const useSlider = (media: IUseSliderProps) => {
             refZoom.current!.addEventListener('mouseup', () => refZoom.current!.removeEventListener('mousemove', (event) => handlerDrag(event)))
         }
     }
-
-    useEffect(() => {
-        const img = refZoom.current
-        if (!img) return
-
-        const { width, height } = img.getBoundingClientRect()
-        const clientWidth = window.innerWidth, clientHeight = window.innerHeight
-
-        if (width > clientWidth || height > clientHeight)
-            img.addEventListener('mousedown', draggableImage)
-        else {
-            img.style.left = '0'
-            img.style.top = '0'
-            img.removeEventListener('mousedown', draggableImage)
-        }
-
-        return () => img.removeEventListener('mousedown', draggableImage)
-    }, [zoomSize])
 
     return {
         swipeSlide,

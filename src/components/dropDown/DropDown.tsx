@@ -11,10 +11,14 @@ interface IDropDown {
     }>,
     state: boolean,
     setState: ((state: boolean) => void),
-    styles?: Array<string>
+    styles?: Array<string>,
+    position?: {
+        x: number,
+        y: number
+    }
 }
 
-const DropDown: React.FC<IDropDown> = ({list, state, setState, styles}) => {
+const DropDown: React.FC<IDropDown> = ({list, state, setState, styles, position}) => {
     const refUl = React.useRef<HTMLUListElement>(null)
 
     useEffect(() => {
@@ -34,7 +38,11 @@ const DropDown: React.FC<IDropDown> = ({list, state, setState, styles}) => {
             classNames='drop-down-node'
             unmountOnExit
         >
-            <ul className={`${style.DropDownContainer} ${styles && styles.map(name => style[name]).join(' ')}`} ref={refUl} onClick={(event) => event.stopPropagation()}>
+            <ul className={`${style.DropDownContainer} ${styles && styles.map(name => style[name]).join(' ')}`} ref={refUl} onClick={(event) => event.stopPropagation()}
+                style={{
+                    left: position && position.x,
+                    top: position && position.y,
+                }}>
                 {
                     list.map((item, index) =>
                         <li key={index} onClick={item.liFoo}>

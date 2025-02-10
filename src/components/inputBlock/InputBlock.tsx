@@ -4,7 +4,8 @@ import {
     HiMiniPaperClip,
     HiOutlinePaperAirplane,
     HiOutlineDocument,
-    HiOutlineFolderOpen
+    HiOutlineFolderOpen,
+    HiOutlineArrowUturnLeft, HiOutlineXMark
 } from "react-icons/hi2"
 import Buttons from '../buttons/Buttons'
 import style from './style.module.css'
@@ -14,8 +15,14 @@ import PopupContainer from "../popup/PopupContainer";
 import FilesState from "../../utils/types/FilesState";
 import TextareaBlock from "../textareaBlock/textareaBlock";
 import PopupInputBlock from "../popup/popupInputBlock/PopupInputBlock";
+import IMessagesResponse from "../../utils/types/IMessagesResponse";
 
-const InputBlock = () => {
+interface IInputBlock {
+    reply: IMessagesResponse | null,
+    setReply: React.Dispatch<React.SetStateAction<IMessagesResponse | null>>
+}
+
+const InputBlock: React.FC<IInputBlock> = ({reply, setReply}) => {
     const [inputText, setInputText] = useState('')
     const refTextarea = useRef<HTMLTextAreaElement>(null)
 
@@ -43,6 +50,10 @@ const InputBlock = () => {
         }))
     }
 
+    const handleSubmit = () => {
+
+    }
+
     const dropDownUpload = [
         {
             liChildren:
@@ -65,22 +76,36 @@ const InputBlock = () => {
     return (
         <div className={style.InputContainer}>
             <div className={style.Input}>
-                <Buttons.DefaultButton foo={() => setEmoji(!emoji)}>
-                    <HiOutlineFaceSmile />
-                    <DropDown list={emojis} state={emoji} setState={setEmoji} styles={['EmojiContainer']}/>
-                </Buttons.DefaultButton>
-                <TextareaBlock ref={refTextarea} inputText={inputText} setInputText={setInputText}/>
-                <Buttons.DefaultButton foo={() => setUpload(!upload)}>
-                    <HiMiniPaperClip />
-                    <DropDown list={dropDownUpload} state={upload} setState={setUpload}/>
-                </Buttons.DefaultButton>
-                {filesState.files &&
-                    <PopupContainer state={filesState.popup} setState={setFilesState}>
-                        <PopupInputBlock type={filesState.type} files={filesState.files} setState={setFilesState}></PopupInputBlock>
-                    </PopupContainer>
+                {reply &&
+                    <div className={style.ReplyBlock}>
+                        <span><HiOutlineArrowUturnLeft/></span>
+                        <button className={style.ReplyMessage}>
+                            <h4>Reply to {reply.user.user_name}</h4>
+                            <p>{reply.message_text}</p>
+                        </button>
+                        <Buttons.DefaultButton foo={() => setReply(null)}>
+                            <HiOutlineXMark/>
+                        </Buttons.DefaultButton>
+                    </div>
                 }
+                <div className={style.InputBlock}>
+                    <Buttons.DefaultButton foo={() => setEmoji(!emoji)}>
+                        <HiOutlineFaceSmile/>
+                        <DropDown list={emojis} state={emoji} setState={setEmoji} styles={['EmojiContainer']}/>
+                    </Buttons.DefaultButton>
+                    <TextareaBlock ref={refTextarea} inputText={inputText} setInputText={setInputText}/>
+                    <Buttons.DefaultButton foo={() => setUpload(!upload)}>
+                        <HiMiniPaperClip />
+                        <DropDown list={dropDownUpload} state={upload} setState={setUpload}/>
+                    </Buttons.DefaultButton>
+                    {filesState.files &&
+                        <PopupContainer state={filesState.popup} setState={setFilesState}>
+                            <PopupInputBlock type={filesState.type} files={filesState.files} setState={setFilesState}></PopupInputBlock>
+                        </PopupContainer>
+                    }
+                </div>
             </div>
-            <Buttons.InterButton >
+            <Buttons.InterButton foo={handleSubmit}>
                 <HiOutlinePaperAirplane />
             </Buttons.InterButton>
         </div>

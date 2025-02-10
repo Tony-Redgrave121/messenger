@@ -2,18 +2,21 @@ import React, {memo, useEffect, useState} from 'react'
 import ChatBlock from "./chatBlock/ChatBlock";
 import UserService from '../../service/UserService'
 import {useAppSelector} from "../../utils/hooks/useRedux";
-import IMessengerResponse from "../../utils/types/IMessengerResponse";
+import IMessengersListResponse from "../../utils/types/IMessengersListResponse";
 
 const ChatList = memo(() => {
-    const [messengerList, setMessengerList] = useState<IMessengerResponse[]>([])
+    const [messengerList, setMessengerList] = useState<IMessengersListResponse[]>()
     const user_id = useAppSelector(state => state.user.userId)
 
     useEffect(() => {
         const handleMessengerList = async () => {
             try {
-                const list = await UserService.fetchMessengers(user_id)
-                if (list.data) setMessengerList(list.data)
-            } catch (e) {}
+                await UserService.fetchMessengersList(user_id)
+                    .then(data => setMessengerList(data.data))
+                    .catch(error => console.log(error))
+            } catch (e) {
+                console.log(e)
+            }
 
             return true
         }
@@ -23,10 +26,8 @@ const ChatList = memo(() => {
 
     return (
         <ul>
-            {
-                messengerList.map(chat =>
-                    <ChatBlock messenger={chat} key={chat.messenger_id}/>
-                )
+            {messengerList &&
+                messengerList.map(chat => <ChatBlock messenger={chat} key={chat.messenger_id}/>)
             }
         </ul>
     )

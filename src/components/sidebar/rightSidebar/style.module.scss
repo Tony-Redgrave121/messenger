@@ -20,6 +20,10 @@
     font-size: 20px;
     background-color: rgba(33, 33, 33, 0.9);
     backdrop-filter: blur(5px);
+
+    h1 {
+      text-transform: capitalize;
+    }
   }
 
   .EntityImageBlock {
@@ -91,6 +95,10 @@
 
         button {
           margin: 0 8px 0 auto;
+        }
+
+        small {
+          display: block;
         }
       }
     }

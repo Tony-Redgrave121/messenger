@@ -18,15 +18,11 @@ import SearchBlock from "../searchBlock/SearchBlock"
 import {CSSTransition} from 'react-transition-group'
 import RightSidebar from "../sidebar/rightSidebar/RightSidebar"
 import Message from "../message/Message";
-
-import geralt from './pictures/geralt.png'
-import hardware from './pictures/hardware.jpg'
-import skeleton from './pictures/skeleton.jpg'
-import abstract from './pictures/abstract.png'
 import UserService from "../../service/UserService";
 import {useAppSelector} from "../../utils/hooks/useRedux";
 import {useParams} from "react-router-dom";
 import IMessagesResponse from "../../utils/types/IMessagesResponse";
+import IMessengerResponse from "../../utils/types/IMessengerResponse";
 
 const list = [
     {
@@ -55,120 +51,88 @@ const list = [
     }
 ]
 
-const chat = {
-    chatImg: '',
-    chatTitle: 'Игорь Линк',
-    chatLink: 'link1',
-    chatDesk: '140609 subscribers',
-    chatLastMessageDate: new Date('2025-01-23T11:03:01')
-}
-
-const entity = {
-    entityImage: '',
-    entityType: 'User',
-    entityTitle: 'Український Наступ | #УкрТг ∆',
-    entityLink: 't.me/ukrnastup',
-    entityDesc: '140 609 subscribers',
-    entityBio: 'Боремося на громадсько-мемних фронтах інформаційної війни з 2014-го Боремося на громадсько-мемних фронтах інформаційної війни з 2014-го Боремося на громадсько-мемних інформаційної війни з 2014-го'
-}
-
-// const mediaTest = [
-//     {
-//         mediaId: '41246321.png',
-//         mediaUrl: geralt
-//     },
-//     {
-//         mediaId: '41246322.png',
-//         mediaUrl: hardware
-//     },
-//     {
-//         mediaId: '41246324.png',
-//         mediaUrl: abstract
-//     },
-//     {
-//         mediaId: '41246323.png',
-//         mediaUrl: skeleton
-//     }]
-//
-// const documents= [
-//     {
-//         documentId: '13156213',
-//         documentName: 'Pauers_JavaScript-Recepty-dlya-razrabotchikov.pdf',
-//         documentSize: 1000000,
-//         documentUrl: './documents/Pauers_JavaScript-Recepty-dlya-razrabotchikov.pdf'
-//     },
-//     {
-//         documentId: '13156223',
-//         documentName: 'Pauers_JavaScript-Recepty-dlya-razrabotchikov.pdf',
-//         documentSize: 5000000,
-//         documentUrl: './documents/Pauers_JavaScript-Recepty-dlya-razrabotchikov.pdf'
-//     },
-//     ]
-
 const Chat = () => {
     const [settings, setSettings] = useState(false)
     const [inputState, setInputState] = useState(false)
     const [sidebarState, setSidebarState] = useState(false)
     const refSearch = useRef<HTMLDivElement>(null)
     const refRightSidebar = useRef<HTMLDivElement>(null)
-
     const [messagesList, setMessagesList] = useState<IMessagesResponse[]>([])
+    const [messenger, setMessenger] = useState<IMessengerResponse>()
+    const [reply, setReply] = useState<IMessagesResponse | null>(messagesList[0])
 
-    const user = useAppSelector(state => state.user)
     const {id} = useParams()
+
+    const user_id = useAppSelector(state => state.user.userId)
+    const user = useAppSelector(state => state.user)
 
     useEffect(() => {
         const handleMessageList = async () => {
             try {
                 if (id) {
-                    const list = await UserService.fetchMessages(user.userId, id)
-                    if (list.data) setMessagesList(list.data)
+                    Promise.all([
+                        UserService.fetchMessages(user.userId, id),
+                        UserService.fetchMessenger(user_id)
+                    ]).then(data => {
+                        setMessagesList(data[0].data)
+                        setMessenger(data[1].data)
+                        setReply(data[0].data[0])
+                    }).catch(error => console.log(error))
                 }
-            } catch (e) {}
+            } catch (e) {
+                console.log(e)
+            }
 
             return true
         }
 
         handleMessageList().catch()
-    }, [user.userId, id])
-    console.log(messagesList)
+    }, [user.userId, id, user_id])
 
     return (
         <>
-            <div className={style.ChatContainer}>
-                <header>
-                    <button className={style.DeskBlock} onClick={() => setSidebarState(true)}>
-                        <LoadFile imagePath={chat.chatImg} imageTitle={chat.chatTitle}/>
-                        <div>
-                            <h3>{chat.chatTitle}</h3>
-                            <p>{chat.chatDesk}</p>
+            {messenger &&
+                <>
+                    <div className={style.ChatContainer}>
+                        <header>
+                            <button className={style.DeskBlock} onClick={() => setSidebarState(true)}>
+                                <LoadFile
+                                    imagePath={messenger ? `messengers/${messenger.messenger_id}/${messenger.messenger_image}` : ''}
+                                    imageTitle={messenger.messenger_name}/>
+                                <div>
+                                    <h3>{messenger.messenger_name}</h3>
+                                    <p>{messenger.messenger_type}</p>
+                                </div>
+                            </button>
+                            <span>
+                            <CSSTransition
+                                in={inputState}
+                                nodeRef={refSearch}
+                                timeout={300}
+                                classNames='search-node'
+                                unmountOnExit
+                            >
+                                <SearchBlock ref={refSearch}/>
+                            </CSSTransition>
+                            <Buttons.DefaultButton foo={() => setInputState(!inputState)}>
+                                {inputState ? <HiOutlineXMark/> : <HiOutlineMagnifyingGlass/>}
+                            </Buttons.DefaultButton>
+                            <Buttons.DefaultButton foo={() => setSettings(!settings)}>
+                                <HiEllipsisVertical/>
+                                <DropDown list={list} state={settings} setState={setSettings}/>
+                            </Buttons.DefaultButton>
+                        </span>
+                        </header>
+                        <div className={style.MessageBlock}>
+                            {messagesList.map(message =>
+                                <Message.ChatMessage message={message} key={message.message_id} setReply={setReply} reply={reply}/>
+                            )}
                         </div>
-                    </button>
-                    <span>
-                        <CSSTransition
-                            in={inputState}
-                            nodeRef={refSearch}
-                            timeout={300}
-                            classNames='search-node'
-                            unmountOnExit
-                        >
-                            <SearchBlock ref={refSearch}/>
-                        </CSSTransition>
-                        <Buttons.DefaultButton foo={() => setInputState(!inputState)}>
-                            {inputState ? <HiOutlineXMark/> : <HiOutlineMagnifyingGlass/>}
-                        </Buttons.DefaultButton>
-                        <Buttons.DefaultButton foo={() => setSettings(!settings)}>
-                            <HiEllipsisVertical/>
-                            <DropDown list={list} state={settings} setState={setSettings}/>
-                        </Buttons.DefaultButton>
-                    </span>
-                </header>
-                <div className={style.MessageBlock}>
-                    {messagesList.map(message => <Message.ChatMessage message={message} key={message.message_id}/>)}
-                </div>
-                <InputBlock/>
-            </div>
-            <RightSidebar entity={entity} ref={refRightSidebar} state={sidebarState} setState={setSidebarState}/>
+                        <InputBlock setReply={setReply} reply={reply}/>
+                    </div>
+                    <RightSidebar entity={messenger} ref={refRightSidebar} state={sidebarState} setState={setSidebarState}/>
+                </>
+            }
         </>
     )
 }

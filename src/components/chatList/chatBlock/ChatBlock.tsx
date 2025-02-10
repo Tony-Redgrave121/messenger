@@ -3,10 +3,10 @@ import LoadFile from "../../loadFile/LoadFile";
 import style from './style.module.css'
 import {Link} from "react-router-dom";
 import {getDate} from "../../../utils/logic/getDate";
-import IMessengerResponse from "../../../utils/types/IMessengerResponse";
+import IMessengersListResponse from "../../../utils/types/IMessengersListResponse";
 
 interface IChatBlock {
-    messenger: IMessengerResponse
+    messenger: IMessengersListResponse
 }
 
 const ChatBlock: React.FC<IChatBlock> = memo(({messenger}) => {
@@ -16,9 +16,9 @@ const ChatBlock: React.FC<IChatBlock> = memo(({messenger}) => {
             <div className={style.DescContainer}>
                 <span>
                     <h3>{messenger.messenger_name}</h3>
-                    {/*{messenger.messengerLastMessageDate && <p>{getDate(messenger.messengerLastMessageDate)}</p>}*/}
+                    {messenger.messages[0].message_date && <p>{getDate(messenger.messages[0].message_date)}</p>}
                 </span>
-                {/*{messenger.messengerLastMessage && <p>{messenger.messengerLastMessage}</p>}*/}
+                {messenger.messages[0].message_text && <p>{messenger.messages[0].message_text}</p>}
             </div>
         </Link>
     )

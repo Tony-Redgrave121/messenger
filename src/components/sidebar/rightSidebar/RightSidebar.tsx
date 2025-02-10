@@ -10,18 +10,12 @@ import style from './style.module.css'
 import './animation.css'
 import Buttons from '../../buttons/Buttons'
 import SidebarContainer from "../SidebarContainer"
-import unImage from './un-image.jpg'
 import {CSSTransition} from 'react-transition-group'
+import IMessengerResponse from "../../../utils/types/IMessengerResponse";
+import useLoadFile from "../../../utils/hooks/useLoadFile";
 
 interface IRightSidebar {
-    entity: {
-        entityImage: string,
-        entityType: string,
-        entityTitle: string,
-        entityLink: string,
-        entityDesc: string,
-        entityBio: string
-    },
+    entity: IMessengerResponse,
     ref: React.RefObject<HTMLDivElement | null>,
     state: boolean,
     setState: (state: boolean) => void
@@ -29,6 +23,7 @@ interface IRightSidebar {
 
 const RightSidebar: React.FC<IRightSidebar> = ({entity, ref, state, setState}) => {
     const [notification, setNotification] = React.useState(false)
+    const {image} = useLoadFile(`messengers/${entity.messenger_id}/${entity.messenger_image}`)
 
     return (
         <CSSTransition
@@ -44,29 +39,31 @@ const RightSidebar: React.FC<IRightSidebar> = ({entity, ref, state, setState}) =
                         <Buttons.DefaultButton foo={() => setState(false)}>
                             <HiOutlineXMark/>
                         </Buttons.DefaultButton>
-                        <h1>{entity.entityType} Info</h1>
+                        <h1>{entity.messenger_type} info</h1>
                         <Buttons.DefaultButton foo={() => {
                         }}>
                             <HiOutlinePencil/>
                         </Buttons.DefaultButton>
                     </div>
-                    <div className={style.EntityImageBlock} style={{backgroundImage: `url('${unImage}')`}}>
+                    <div className={style.EntityImageBlock} style={{backgroundImage: `url('${image}')`}}>
                         <div>
-                            <h1>{entity.entityTitle}</h1>
-                            <p>{entity.entityDesc}</p>
+                            <h1>{entity.messenger_name}</h1>
+                            <p>{entity.messenger_type}</p>
                         </div>
                     </div>
                     <ul className={style.InfoList}>
+                        {entity.messenger_desc &&
+                            <li>
+                                <div onClick={() => window.navigator.clipboard.writeText(entity.messenger_desc!)}>
+                                    <HiOutlineExclamationCircle/>
+                                    <p>{entity.messenger_desc}<small className={style.LiType}>Bio</small></p>
+                                </div>
+                            </li>
+                        }
                         <li>
-                            <div onClick={() => window.navigator.clipboard.writeText(entity.entityBio)}>
-                                <HiOutlineExclamationCircle/>
-                                <p>{entity.entityBio} <br/><small className={style.LiType}>Bio</small></p>
-                            </div>
-                        </li>
-                        <li>
-                            <div onClick={() => window.navigator.clipboard.writeText(entity.entityLink)}>
+                            <div onClick={() => window.navigator.clipboard.writeText(`http://localhost:3000/${entity.messenger_type}/${entity.messenger_id}`)}>
                                 <HiOutlinePaperClip/>
-                                <p>{entity.entityLink} <br/><small className={style.LiType}>Link</small></p>
+                                <p>{entity.messenger_id} <br/><small className={style.LiType}>Link</small></p>
                             </div>
                         </li>
                         <li>

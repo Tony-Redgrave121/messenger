@@ -179,7 +179,7 @@ const AuthForm = () => {
                         />
                     </InputForm>
                     <div className={style.ButtonBlock}>
-                        <Buttons.FormButton foo={() => handlePrev(2)}>PREV</Buttons.FormButton>
+                        <Buttons.FormButton foo={() => handlePrev(1)}>PREV</Buttons.FormButton>
                         <Buttons.FormButton foo={() => handleNext('user_password', 1)}>NEXT</Buttons.FormButton>
                     </div>
                 </>

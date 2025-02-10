@@ -37,6 +37,9 @@
   color: #a9a9a9;
   font-size: 12px;
 }
+.ChatMessageContainer .ChatMessageBlock ul {
+  transform-origin: center center;
+}
 .ChatMessageContainer .ChatDocumentBlock {
   display: flex;
   flex-direction: column;

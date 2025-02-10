@@ -13,123 +13,76 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const ApiError_1 = __importDefault(require("../error/ApiError"));
-const models_1 = __importDefault(require("../model/models"));
 const userService_1 = __importDefault(require("../service/userService"));
+const userService_2 = __importDefault(require("../service/userService"));
 class UserController {
-    registration(req, res) {
-        return __awaiter(this, void 0, void 0, function* () {
-            try {
-                const userData = yield userService_1.default.registration(req.body, req.files);
-                if (userData instanceof ApiError_1.default)
-                    return res.json(userData);
-                res.cookie('refreshToken', userData.refreshToken, { maxAge: 7 * 24 * 60 * 60 * 1000, httpOnly: true });
-                return res.json(userData);
-            }
-            catch (e) {
-                return res.json(ApiError_1.default.internalServerError('An error occurred while registration'));
-            }
-        });
-    }
-    login(req, res) {
-        return __awaiter(this, void 0, void 0, function* () {
-            try {
-                const userData = yield userService_1.default.login(req.body);
-                if (userData instanceof ApiError_1.default)
-                    return res.json(userData);
-                res.cookie('refreshToken', userData.refreshToken, { maxAge: 7 * 24 * 60 * 60 * 1000, httpOnly: true });
-                return res.json(userData);
-            }
-            catch (e) {
-                return res.json(ApiError_1.default.internalServerError('An error occurred while login'));
-            }
-        });
-    }
-    logout(req, res) {
-        return __awaiter(this, void 0, void 0, function* () {
-            try {
-                const { refreshToken } = req.cookies;
-                const token = yield userService_1.default.logout(refreshToken);
-                res.clearCookie('refreshToken');
-                return res.json(token);
-            }
-            catch (e) {
-                return res.json(ApiError_1.default.internalServerError("An error occurred while logging out"));
-            }
-        });
-    }
-    deleteAccount(req, res) {
-        return __awaiter(this, void 0, void 0, function* () {
-            try {
-                const { refreshToken } = req.cookies;
-                const token = yield userService_1.default.deleteAccount(refreshToken, req.body.user_id);
-                res.clearCookie('refreshToken');
-                return res.json(token);
-            }
-            catch (e) {
-                return res.json(ApiError_1.default.internalServerError("An error occurred while deleting account"));
-            }
-        });
-    }
-    activate(req, res) {
-        return __awaiter(this, void 0, void 0, function* () {
-            try {
-                const link = req.params.link;
-                const user = yield models_1.default.users.findOne({ where: { user_activation_link: link } });
-                if (!user)
-                    return res.json(ApiError_1.default.notFound("User not found")).redirect(process.env.CLIENT_URL);
-                user.user_state = true;
-                yield user.save();
-                return res.redirect(process.env.CLIENT_URL);
-            }
-            catch (e) {
-                return res.json(ApiError_1.default.internalServerError('An error occurred while activating account'));
-            }
-        });
-    }
-    refresh(req, res) {
-        return __awaiter(this, void 0, void 0, function* () {
-            try {
-                const { refreshToken } = req.cookies;
-                const userData = yield userService_1.default.refresh(refreshToken);
-                if (userData instanceof ApiError_1.default)
-                    return res.json(ApiError_1.default.internalServerError('An error occurred while refreshing'));
-                res.cookie('refreshToken', userData.refreshToken, { maxAge: 7 * 24 * 60 * 60 * 1000, httpOnly: true });
-                return res.json(userData);
-            }
-            catch (e) {
-                return res.json(ApiError_1.default.internalServerError("An error occurred while refreshing"));
-            }
-        });
-    }
-    fetchMessengers(req, res) {
+    fetchMessenger(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 if (!req.params)
-                    return res.json(ApiError_1.default.internalServerError('An error occurred while fetching the messengers'));
-                const messengers = yield userService_1.default.fetchMessengers(req.params.user_id);
+                    return res.json(ApiError_1.default.internalServerError('An error occurred while fetching the messenger'));
+                const messengers = yield userService_1.default.fetchMessenger(req.params.user_id);
                 if (messengers instanceof ApiError_1.default)
-                    return res.json(ApiError_1.default.internalServerError('An error occurred while fetching the messengers'));
+                    return res.json(ApiError_1.default.internalServerError('An error occurred while fetching the messenger'));
                 return res.json(messengers);
             }
             catch (e) {
-                return res.json(ApiError_1.default.internalServerError("An error occurred while fetching the messengers"));
+                return res.json(ApiError_1.default.internalServerError("An error occurred while fetching the messenger"));
+            }
+        });
+    }
+    fetchMessengersList(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                if (!req.params)
+                    return res.json(ApiError_1.default.internalServerError('An error occurred while fetching messengers list'));
+                const messengers = yield userService_1.default.fetchMessengersList(req.params.user_id);
+                if (messengers instanceof ApiError_1.default)
+                    return res.json(ApiError_1.default.internalServerError('An error occurred while fetching messengers list'));
+                return res.json(messengers);
+            }
+            catch (e) {
+                return res.json(ApiError_1.default.internalServerError("An error occurred while fetching messengers list"));
             }
         });
     }
     fetchMessages(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
+                const { user_id, messenger_id } = req.query;
+                if (!user_id || !messenger_id || typeof user_id !== 'string' || typeof messenger_id !== 'string')
+                    return res.json(ApiError_1.default.internalServerError('An error occurred while fetching messages'));
+                const messages = yield userService_1.default.fetchMessages(user_id, messenger_id);
+                if (messages instanceof ApiError_1.default)
+                    return res.json(ApiError_1.default.internalServerError('An error occurred while fetching messages'));
+                return res.json(messages);
             }
             catch (e) {
                 return res.json(ApiError_1.default.internalServerError("An error occurred while fetching the messages"));
             }
-            const { user_id, messenger_id } = req.query;
-            if (!user_id || !messenger_id || typeof user_id !== 'string' || typeof messenger_id !== 'string')
-                return res.json(ApiError_1.default.internalServerError('An error occurred while fetching the messages'));
-            const messages = yield userService_1.default.fetchMessages(user_id, messenger_id);
-            if (messages instanceof ApiError_1.default)
-                return res.json(ApiError_1.default.internalServerError('An error occurred while fetching the messages'));
-            return res.json(messages);
+        });
+    }
+    postMessage(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const { user_id, messenger_id, reply_id, message_text, message_type } = req.body;
+                if (!user_id || !messenger_id || !reply_id || !message_text || !message_type)
+                    return res.json(ApiError_1.default.internalServerError('An error occurred while posting the message'));
+                const message = {
+                    user_id: user_id,
+                    messenger_id: messenger_id,
+                    reply_id: reply_id,
+                    message_text: message_text,
+                    message_type: message_type
+                };
+                const data = yield userService_2.default.postMessage(message, req.files);
+                if (data instanceof ApiError_1.default)
+                    return res.json(ApiError_1.default.internalServerError('An error occurred while posting the message'));
+                return true;
+            }
+            catch (e) {
+                return res.json(ApiError_1.default.internalServerError('An error occurred while posting the message'));
+            }
         });
     }
 }

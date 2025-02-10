@@ -20,6 +20,9 @@
   background-color: rgba(33, 33, 33, 0.9);
   backdrop-filter: blur(5px);
 }
+.Wrapper .TopBar h1 {
+  text-transform: capitalize;
+}
 .Wrapper .EntityImageBlock {
   display: flex;
   align-items: end;
@@ -79,6 +82,9 @@
 }
 .Wrapper .InfoList li > div button {
   margin: 0 8px 0 auto;
+}
+.Wrapper .InfoList li > div small {
+  display: block;
 }
 
 /*# sourceMappingURL=style.module.css.map */
