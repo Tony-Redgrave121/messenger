@@ -1,7 +1,7 @@
 import React, {useEffect, useRef, useState} from 'react'
 import style from './style.module.css'
 import './animation.css'
-import InputBlock from "../inputBlock/InputBlock";
+import InputBlock from "../inputBlock/InputBlock"
 import LoadFile from "../loadFile/LoadFile"
 import {
     HiOutlineMagnifyingGlass,
@@ -12,17 +12,17 @@ import {
     HiOutlineLockClosed,
     HiOutlineXMark
 } from "react-icons/hi2"
-import Buttons from "../buttons/Buttons";
-import DropDown from "../dropDown/DropDown";
+import Buttons from "../buttons/Buttons"
+import DropDown from "../dropDown/DropDown"
 import SearchBlock from "../searchBlock/SearchBlock"
 import {CSSTransition} from 'react-transition-group'
 import RightSidebar from "../sidebar/rightSidebar/RightSidebar"
-import Message from "../message/Message";
-import UserService from "../../service/UserService";
-import {useAppSelector} from "../../utils/hooks/useRedux";
-import {useParams} from "react-router-dom";
-import IMessagesResponse from "../../utils/types/IMessagesResponse";
-import IMessengerResponse from "../../utils/types/IMessengerResponse";
+import Message from "../message/Message"
+import UserService from "../../service/UserService"
+import {useAppSelector} from "../../utils/hooks/useRedux"
+import {useParams} from "react-router-dom"
+import IMessagesResponse from "../../utils/types/IMessagesResponse"
+import IMessengerResponse from "../../utils/types/IMessengerResponse"
 
 const list = [
     {
