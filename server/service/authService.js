@@ -64,7 +64,7 @@ class AuthService {
             let userImg = null;
             const user_id = uuid.v4(), user_activation_code = uuid.v4();
             if (user_files && user_files.user_image)
-                userImg = (0, filesUploadingService_1.default)('/users' + user_id, user_files.user_image);
+                userImg = (0, filesUploadingService_1.default)(`users/${user_id}`, user_files.user_image);
             if (userImg instanceof ApiError_1.default || !userImg)
                 return ApiError_1.default.badRequest(`Error with user image creation`);
             const hash_user_password = yield bcrypt_1.default.hash(user_password, 5);

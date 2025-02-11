@@ -60,6 +60,7 @@
 .ChatContainer .MessageBlock {
   position: absolute;
   display: flex;
+  align-items: start;
   flex-direction: column;
   gap: 8px;
   color: white;

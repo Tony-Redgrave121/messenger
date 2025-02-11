@@ -1,4 +1,4 @@
-import React, {useRef, useState} from 'react'
+import React, {useRef} from 'react'
 import style from './style.module.css'
 import FilesState from "../../../utils/types/FilesState";
 import Buttons from "../../buttons/Buttons";
@@ -10,28 +10,40 @@ import MediaBlock from "../../media/mediaBlock/MediaBlock";
 interface IPopupInputBlock {
     setState: React.Dispatch<React.SetStateAction<FilesState>>,
     files: File[],
-    type?: string
+    type?: string,
+    inputText: string,
+    setInputText: React.Dispatch<React.SetStateAction<string>>,
+    handleSubmit: () => void
 }
 
-const PopupInputBlock: React.FC<IPopupInputBlock> = ({setState, files, type}) => {
-    const [inputText, setInputText] = useState('')
+const PopupInputBlock: React.FC<IPopupInputBlock> = ({setState, files, type, inputText, setInputText, handleSubmit}) => {
     const refTextarea = useRef<HTMLTextAreaElement>(null)
+
+    const handleCancel = () => {
+        setState(prev => ({...prev, popup: false}))
+
+        setTimeout(() => setState({
+            files: null,
+            popup: false,
+            type: ''
+        }), 300)
+    }
 
     return (
         <>
             <div className={style.ToolsBlock}>
                 <span>
-                    <Buttons.DefaultButton foo={() => setState(prev => ({...prev, popup: false}))}>
+                    <Buttons.DefaultButton foo={handleCancel}>
                         <HiOutlineXMark/>
                     </Buttons.DefaultButton>
-                    <h1>Send {3} files</h1>
+                    <h1>Send {files.length} files</h1>
                 </span>
                 <Buttons.DefaultButton>
                     <label htmlFor="addNewFile"><HiOutlineDocumentPlus/></label>
-                    {type === 'Document' ? <Upload.Document setState={setState}/> : <Upload.Image setState={setState}/>}
+                    {type === 'document' ? <Upload.Document setState={setState}/> : <Upload.Image setState={setState}/>}
                 </Buttons.DefaultButton>
             </div>
-            {type === 'Document' ?
+            {type === 'document' ?
                 <div className={style.FilesBlock}>
                     {[...files].map(file => (
                         <div key={file.name}>
@@ -43,17 +55,18 @@ const PopupInputBlock: React.FC<IPopupInputBlock> = ({setState, files, type}) =>
                         </div>
                     ))}
                 </div> :
-                <MediaBlock media={[...files].map(file => (
-                    {
-                        message_file_id: file.name,
-                        message_file_name: URL.createObjectURL(file),
-                    }
-                ))} />
+                <MediaBlock.InputBlock media={[...files].map(file => ({
+                    message_file_id: file.name,
+                    message_file_name: URL.createObjectURL(file),
+                }))}/>
             }
 
             <div className={style.SubmitBlock}>
                 <TextareaBlock ref={refTextarea} inputText={inputText} setInputText={setInputText}/>
-                <button>SEND</button>
+                <button onClick={() => {
+                    handleSubmit()
+                    handleCancel()
+                }}>SEND</button>
             </div>
         </>
     )

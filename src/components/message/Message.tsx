@@ -83,7 +83,7 @@ namespace Message {
         }
 
         return (
-            <div className={`${style.ChatMessageContainer} ${message.user_id === user_id && style.Owner}`}>
+            <div className={`${style.ChatMessageContainer} ${message.user_id === user_id ? style.Owner : ''}`}>
                 {message.reply &&
                     <button className={style.ReplyBlock}>
                         <h4>{message.reply.user.user_name}</h4>
@@ -92,7 +92,7 @@ namespace Message {
                 }
                 <div className={style.ChatMessageBlock} onContextMenu={(event) => handleContextMenu(event)}>
                     {(mediaArr && mediaArr.length > 0) &&
-                        <MediaBlock media={mediaArr} setSlider={setAnimationState} setCurrMedia={setCurrMedia}/>
+                        <MediaBlock.Slider media={mediaArr} setSlider={setAnimationState} setCurrMedia={setCurrMedia}/>
                     }
                     {(message.message_files && message.message_type === 'document') &&
                         <div className={style.ChatDocumentBlock}>
@@ -114,7 +114,7 @@ namespace Message {
                     </p>
                     <DropDown list={list} state={contextMenu} setState={setContextMenu} position={position}/>
                 </div>
-                {mediaArr &&
+                {mediaArr && mediaArr.length > 0 &&
                     <Slider animation={{
                         state: animationState,
                         setState: setAnimationState,

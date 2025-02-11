@@ -1,5 +1,6 @@
 import {
     FETCH_MESSAGES,
+    POST_MESSAGE,
 } from "../utils/const/const"
 import $api from '../http/index'
 import {AxiosResponse} from 'axios'
@@ -18,5 +19,9 @@ export default class AuthService {
 
     static async fetchMessages(user_id: string, messenger_id: string): Promise<AxiosResponse<IMessagesResponse[]>> {
         return $api.get<IMessagesResponse[]>(`${FETCH_MESSAGES}?user_id=${user_id}&messenger_id=${messenger_id}`)
+    }
+
+    static async postMessage(message: FormData): Promise<AxiosResponse<IMessagesResponse>> {
+        return $api.post<IMessagesResponse>(POST_MESSAGE, message)
     }
 }

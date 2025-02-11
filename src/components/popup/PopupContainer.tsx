@@ -13,6 +13,16 @@ interface IPopup {
 const PopupContainer: React.FC<IPopup> = ({state, setState, children}) => {
     const refDiv = React.useRef<HTMLDivElement>(null)
 
+    const handleCancel = () => {
+        setState(prev => ({...prev, popup: false}))
+
+        setTimeout(() => setState({
+            files: null,
+            popup: false,
+            type: ''
+        }), 300)
+    }
+
     return (
         <CSSTransition
             in={state}
@@ -21,7 +31,7 @@ const PopupContainer: React.FC<IPopup> = ({state, setState, children}) => {
             classNames='popup-node'
             unmountOnExit
         >
-            <div className={style.PopupContainer} ref={refDiv} onClick={() => setState(prev => ({...prev, popup: false}))}>
+            <div className={style.PopupContainer} ref={refDiv} onClick={handleCancel}>
                 <div onClick={event => event.stopPropagation()}>
                     {children}
                 </div>

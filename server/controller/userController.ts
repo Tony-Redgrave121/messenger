@@ -1,7 +1,6 @@
 import ApiError from "../error/ApiError"
 import {Request, Response} from "express"
 import UserService from "../service/userService"
-import authService from "../service/authService";
 import userService from "../service/userService";
 
 class UserController {
@@ -50,12 +49,12 @@ class UserController {
         try {
             const {user_id, messenger_id, reply_id, message_text, message_type} = req.body
 
-            if (!user_id || !messenger_id || !reply_id || !message_text || !message_type) return res.json(ApiError.internalServerError('An error occurred while posting the message'))
+            if (!user_id || !messenger_id || !message_type) return res.json(ApiError.internalServerError('An error occurred while posting the message'))
 
             const message = {
                 user_id: user_id,
                 messenger_id: messenger_id,
-                reply_id: reply_id,
+                reply_id: reply_id ? reply_id : null,
                 message_text: message_text,
                 message_type: message_type
             }

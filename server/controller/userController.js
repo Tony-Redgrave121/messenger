@@ -66,12 +66,12 @@ class UserController {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const { user_id, messenger_id, reply_id, message_text, message_type } = req.body;
-                if (!user_id || !messenger_id || !reply_id || !message_text || !message_type)
+                if (!user_id || !messenger_id || !message_type)
                     return res.json(ApiError_1.default.internalServerError('An error occurred while posting the message'));
                 const message = {
                     user_id: user_id,
                     messenger_id: messenger_id,
-                    reply_id: reply_id,
+                    reply_id: reply_id ? reply_id : null,
                     message_text: message_text,
                     message_type: message_type
                 };

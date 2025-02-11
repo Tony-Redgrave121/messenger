@@ -17,4 +17,5 @@ router.post(const_1.DELETE_ACCOUNT_ROUTE, authController_1.default.deleteAccount
 router.get(const_1.FETCH_MESSENGER, userController_1.default.fetchMessenger);
 router.get(const_1.FETCH_MESSENGERS_LIST, userController_1.default.fetchMessengersList);
 router.get(const_1.FETCH_MESSAGES, userController_1.default.fetchMessages);
+router.post(const_1.POST_MESSAGE, userController_1.default.postMessage);
 exports.default = router;

@@ -30,7 +30,7 @@ class AuthService {
         let userImg = null
         const user_id = uuid.v4(), user_activation_code = uuid.v4()
 
-        if (user_files && user_files.user_image) userImg = filesUploadingService('/users' + user_id, user_files.user_image)
+        if (user_files && user_files.user_image) userImg = filesUploadingService(`users/${user_id}`, user_files.user_image)
 
         if (userImg instanceof ApiError || !userImg) return ApiError.badRequest(`Error with user image creation`)
 

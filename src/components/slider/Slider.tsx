@@ -122,7 +122,7 @@ const Slider: React.FC<ISlider> = ({animation, media, user}) => {
                         {
                             media.mediaArr.map(media => (
                                 <div key={media.message_file_id} className={style.ImageBlock}>
-                                    <MediaTag media={media} key={media.message_file_id}/>
+                                    <MediaTag.Slider media={media} key={media.message_file_id}/>
                                 </div>
                             ))
                         }

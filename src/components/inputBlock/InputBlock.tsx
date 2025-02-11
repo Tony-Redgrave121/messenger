@@ -16,6 +16,9 @@ import FilesState from "../../utils/types/FilesState";
 import TextareaBlock from "../textareaBlock/textareaBlock";
 import PopupInputBlock from "../popup/popupInputBlock/PopupInputBlock";
 import IMessagesResponse from "../../utils/types/IMessagesResponse";
+import UserService from "../../service/UserService"
+import {useParams} from "react-router-dom";
+import {useAppSelector} from "../../utils/hooks/useRedux";
 
 interface IInputBlock {
     reply: IMessagesResponse | null,
@@ -37,9 +40,8 @@ const InputBlock: React.FC<IInputBlock> = ({reply, setReply}) => {
     })
 
     useEffect(() => {
-        if (filesState.files) {
+        if (filesState.files)
             setFilesState(prev => ({...prev, popup: true}))
-        }
     }, [filesState.files])
 
     const uploadFiles = (event: ChangeEvent<HTMLInputElement>, type: string) => {
@@ -50,8 +52,28 @@ const InputBlock: React.FC<IInputBlock> = ({reply, setReply}) => {
         }))
     }
 
-    const handleSubmit = () => {
+    const {id} = useParams()
+    const user_id = useAppSelector(state => state.user.userId)
 
+    const handleSubmit = async () => {
+        if (filesState.files || inputText) {
+            const message = new FormData()
+            message.append('message_text', inputText)
+            message.append('message_type', filesState.files ? filesState.type : 'message')
+            reply && message.append('reply_id', reply.message_id)
+            message.append('user_id', user_id)
+            message.append('messenger_id', id!)
+            filesState.files && Array.from(filesState.files).forEach((file: File) => message.append('message_files', file))
+
+            setInputText('')
+            setFilesState({
+                files: null,
+                popup: false,
+                type: ''
+            })
+            setReply(null)
+            await UserService.postMessage(message).catch(error => console.log(error))
+        }
     }
 
     const dropDownUpload = [
@@ -59,17 +81,21 @@ const InputBlock: React.FC<IInputBlock> = ({reply, setReply}) => {
             liChildren:
                 <>
                     <label htmlFor="images"><HiOutlineFolderOpen/> Photo or Video</label>
-                    <input name='images' id='images' type="file" accept='image/*, video/*' style={{ display: 'none' }} onChange={(event) => uploadFiles(event, 'Image')} multiple/>
+                    <input name='images' id='images' type="file" accept='image/*, video/*' style={{display: 'none'}}
+                           onChange={(event) => uploadFiles(event, 'media')} multiple/>
                 </>,
-            liFoo: () => {}
+            liFoo: () => {
+            }
         },
         {
             liChildren:
                 <>
                     <label htmlFor="documentInput"><HiOutlineDocument/> Document</label>
-                    <input name='document' id='documentInput' type="file" style={{ display: 'none' }} onChange={(event) => uploadFiles(event, 'Document')} multiple/>
+                    <input name='document' id='documentInput' type="file" style={{display: 'none'}}
+                           onChange={(event) => uploadFiles(event, 'document')} multiple/>
                 </>,
-            liFoo: () => {}
+            liFoo: () => {
+            }
         }
     ]
 
@@ -95,18 +121,18 @@ const InputBlock: React.FC<IInputBlock> = ({reply, setReply}) => {
                     </Buttons.DefaultButton>
                     <TextareaBlock ref={refTextarea} inputText={inputText} setInputText={setInputText}/>
                     <Buttons.DefaultButton foo={() => setUpload(!upload)}>
-                        <HiMiniPaperClip />
+                        <HiMiniPaperClip/>
                         <DropDown list={dropDownUpload} state={upload} setState={setUpload}/>
                     </Buttons.DefaultButton>
                     {filesState.files &&
                         <PopupContainer state={filesState.popup} setState={setFilesState}>
-                            <PopupInputBlock type={filesState.type} files={filesState.files} setState={setFilesState}></PopupInputBlock>
+                            <PopupInputBlock type={filesState.type} files={filesState.files} setState={setFilesState} setInputText={setInputText} inputText={inputText} handleSubmit={handleSubmit}></PopupInputBlock>
                         </PopupContainer>
                     }
                 </div>
             </div>
             <Buttons.InterButton foo={handleSubmit}>
-                <HiOutlinePaperAirplane />
+                <HiOutlinePaperAirplane/>
             </Buttons.InterButton>
         </div>
     )

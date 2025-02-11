@@ -8,10 +8,9 @@ export default function filesUploadingService(folder: string, file: UploadedFile
     try {
         const fileExt = file.name.split('.').pop()!.toLowerCase()
         const resFile = uuid.v4() + "." + fileExt
-        const folderPath = path.resolve(__dirname + "/../src/static", folder)
+        const folderPath = path.join(__dirname + "/../src/static", folder)
 
         if (!fs.existsSync(folderPath)) fs.mkdirSync(folderPath, {recursive: true})
-        else return ApiError.internalServerError('An error occurred while uploading the file')
 
         file.mv(path.resolve(folderPath, resFile))
         return {file: resFile, size: file.size}

@@ -7,4 +7,5 @@ export const DELETE_ACCOUNT_ROUTE = '/delete'
 export const FETCH_MESSENGER = '/messenger/:user_id'
 export const FETCH_MESSENGERS_LIST = '/messengers-list/:user_id'
 export const FETCH_MESSAGES = `/messages/`
+export const POST_MESSAGE = `/message/`
 

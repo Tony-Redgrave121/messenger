@@ -1,6 +1,8 @@
 import ApiError from "../error/ApiError"
 import models from "../model/models"
 import {FileArray} from "express-fileupload";
+import * as uuid from "uuid";
+import filesUploadingService from "./filesUploadingService";
 
 interface IPostMessage {
     user_id: string,
@@ -53,7 +55,7 @@ class UserService {
         if (!user_id) return ApiError.internalServerError("An error occurred while fetching the messages")
 
         const messages = await models.message.findAll({
-            where: {user_id: user_id, messenger_id: messenger_id},
+            where: {messenger_id: messenger_id},
             include: [
                 {model: models.message_file, attributes: ['message_file_id', 'message_file_name', 'message_file_size']},
                 {model: models.users, attributes: ['user_name']},
@@ -64,7 +66,7 @@ class UserService {
                     include: [{model: models.users, attributes: ['user_name']}]
                 }
             ],
-            order: [['message_date', 'DESC']]
+            order: [['message_date', 'ASC']]
         })
 
         if (!messages) return ApiError.internalServerError("An error occurred while fetching the messages")
@@ -73,16 +75,37 @@ class UserService {
     }
 
     async postMessage(message: IPostMessage, files: FileArray | null | undefined) {
+        const message_id = uuid.v4()
 
-        const messenger = await models.messenger.findOne({
-            include: [{
-                model: models.member,
-                where: {user_id: message}
-            }]
+        const messagePost = await models.message.create({
+            message_id: message_id,
+            message_text: message.message_text,
+            message_type: message.message_type,
+            reply_id: message.reply_id,
+            user_id: message.user_id,
+            messenger_id: message.messenger_id,
         })
-        if (!messenger) return ApiError.internalServerError("An error occurred while fetching the messenger")
 
-        return messenger
+        if (files && files.message_files) {
+            const fileArray = Array.isArray(files.message_files) ? files.message_files : [files.message_files]
+
+            for (const file of fileArray) {
+                const message_file_id = uuid.v4()
+
+                const filesPost = filesUploadingService(`messengers/${message.messenger_id}`, file)
+
+                if (filesPost instanceof ApiError || !filesPost) return ApiError.badRequest(`Error with files uploading`)
+
+                await models.message_file.create({
+                    message_file_id: message_file_id,
+                    message_file_name: filesPost.file,
+                    message_file_size: filesPost.size,
+                    message_id: message_id
+                })
+            }
+        }
+
+        return messagePost
     }
 }
 
