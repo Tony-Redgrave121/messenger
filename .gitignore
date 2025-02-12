@@ -16,6 +16,7 @@
 /server/.env
 /server/node_modules
 /server/src/static/
+/server/**/*.js
 
 # misc
 .DS_Store

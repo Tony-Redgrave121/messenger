@@ -30,8 +30,10 @@ interface ISlider {
         currentSlide: { message_file_id: string, message_file_name: string}
     },
     user: {
-        owner: string,
-        date: Date,
+        owner_id: string,
+        owner_image: string,
+        owner_name: string,
+        message_date: Date,
     }
 }
 
@@ -65,10 +67,10 @@ const Slider: React.FC<ISlider> = ({animation, media, user}) => {
             <div className={style.SliderContainer} ref={animation.ref}>
                 <div onClick={event => event.stopPropagation()} className={style.ToolsBlock}>
                     <button>
-                        <LoadFile imagePath='' imageTitle={user.owner}/>
+                        <LoadFile imagePath={user.owner_image ? `users/${user.owner_id}/${user.owner_image}` : ''} imageTitle={user.owner_name}/>
                         <div>
-                            <h4>{user.owner}</h4>
-                            <p>{getDate(user.date)}</p>
+                            <h4>{user.owner_name}</h4>
+                            <p>{getDate(user.message_date)}</p>
                         </div>
                     </button>
                     <span>

@@ -3,6 +3,8 @@ import models from "../model/models"
 import {FileArray} from "express-fileupload";
 import * as uuid from "uuid";
 import filesUploadingService from "./filesUploadingService";
+import path from "path";
+import fs from "fs";
 
 interface IPostMessage {
     user_id: string,
@@ -58,12 +60,12 @@ class UserService {
             where: {messenger_id: messenger_id},
             include: [
                 {model: models.message_file, attributes: ['message_file_id', 'message_file_name', 'message_file_size']},
-                {model: models.users, attributes: ['user_name']},
+                {model: models.users, attributes: ['user_id', 'user_name', 'user_img']},
                 {
                     model: models.message,
                     as: 'reply',
-                    attributes: ['message_text'],
-                    include: [{model: models.users, attributes: ['user_name']}]
+                    attributes: ['message_id', 'message_text'],
+                    include: [{model: models.users, attributes: ['user_id', 'user_name', 'user_img']}]
                 }
             ],
             order: [['message_date', 'ASC']]
@@ -106,6 +108,26 @@ class UserService {
         }
 
         return messagePost
+    }
+
+    async deleteMessage(message_id: string, messenger_id: string) {
+        try {
+            const message_files = await models.message_file.findAll({
+                where: {message_id: message_id},
+                attributes: ['message_file_name'],
+                raw: true
+            }) as unknown as {message_file_name: string}[]
+
+            for (const file of message_files) {
+                const filePath = path.resolve(__dirname + "/../src/static/messengers", messenger_id, file.message_file_name)
+
+               if (fs.existsSync(filePath)) fs.unlinkSync(filePath)
+            }
+
+            await models.message.destroy({where: {message_id: message_id}})
+        } catch (e) {
+            console.log(e)
+        }
     }
 }
 

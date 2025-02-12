@@ -1,10 +1,13 @@
 import {
     ACTIVATION_PAGE,
     DELETE_ACCOUNT_ROUTE,
+    DELETE_MESSAGE,
     FETCH_MESSAGES,
-    FETCH_MESSENGER, FETCH_MESSENGERS_LIST,
+    FETCH_MESSENGER,
+    FETCH_MESSENGERS_LIST,
     LOGIN_ROUTE,
-    LOGOUT_ROUTE, POST_MESSAGE,
+    LOGOUT_ROUTE,
+    POST_MESSAGE,
     REFRESH_ROUTE,
     REGISTRATION_ROUTE,
 } from "../utils/const"
@@ -25,5 +28,6 @@ router.get(FETCH_MESSENGER, UserController.fetchMessenger)
 router.get(FETCH_MESSENGERS_LIST, UserController.fetchMessengersList)
 router.get(FETCH_MESSAGES, UserController.fetchMessages)
 router.post(POST_MESSAGE, UserController.postMessage)
+router.delete(DELETE_MESSAGE, UserController.deleteMessage)
 
 export default router

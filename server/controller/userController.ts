@@ -68,6 +68,18 @@ class UserController {
             return res.json(ApiError.internalServerError('An error occurred while posting the message'))
         }
     }
+
+    async deleteMessage(req: Request, res: Response): Promise<any> {
+        try {
+            const {message_id, messenger_id} = req.query
+
+            if (!message_id || !messenger_id || typeof message_id !== 'string' || typeof messenger_id !== 'string')return res.json(ApiError.internalServerError('An error occurred while deleting the message'))
+
+            await userService.deleteMessage(message_id, messenger_id)
+        } catch (e) {
+            return res.json(ApiError.internalServerError('An error occurred while deleting the message'))
+        }
+    }
 }
 
 export default new UserController()

@@ -130,7 +130,6 @@ const useSlider = (media: IUseSliderProps) => {
     }
 
     const zoomMedia = (value: string) => {
-        console.log(refZoom.current)
         if (refZoom.current) {
             setZoomSize(Number(value))
             refZoom.current.style.transform = `scale(${value}%)`

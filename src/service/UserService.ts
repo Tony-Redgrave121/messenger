@@ -1,4 +1,5 @@
 import {
+    DELETE_MESSAGE,
     FETCH_MESSAGES,
     POST_MESSAGE,
 } from "../utils/const/const"
@@ -6,7 +7,7 @@ import $api from '../http/index'
 import {AxiosResponse} from 'axios'
 import IMessengerResponse from "../utils/types/IMessengerResponse"
 import IMessagesResponse from "../utils/types/IMessagesResponse"
-import IMessengersListResponse from "../utils/types/IMessengersListResponse";
+import IMessengersListResponse from "../utils/types/IMessengersListResponse"
 
 export default class AuthService {
     static async fetchMessenger(user_id: string): Promise<AxiosResponse<IMessengerResponse>> {
@@ -23,5 +24,9 @@ export default class AuthService {
 
     static async postMessage(message: FormData): Promise<AxiosResponse<IMessagesResponse>> {
         return $api.post<IMessagesResponse>(POST_MESSAGE, message)
+    }
+
+    static async deleteMessage(message_id: string, messenger_id: string): Promise<AxiosResponse> {
+        return $api.delete(`${DELETE_MESSAGE}?message_id=${message_id}&messenger_id=${messenger_id}`)
     }
 }

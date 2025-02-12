@@ -56,10 +56,11 @@ const Chat = () => {
     const [inputState, setInputState] = useState(false)
     const [sidebarState, setSidebarState] = useState(false)
     const refSearch = useRef<HTMLDivElement>(null)
+    const refMessageBlock = useRef<HTMLDivElement>(null)
     const refRightSidebar = useRef<HTMLDivElement>(null)
     const [messagesList, setMessagesList] = useState<IMessagesResponse[]>([])
     const [messenger, setMessenger] = useState<IMessengerResponse>()
-    const [reply, setReply] = useState<IMessagesResponse | null>(messagesList[0])
+    const [reply, setReply] = useState<IMessagesResponse | null>(null)
 
     const {id} = useParams()
 
@@ -68,19 +69,14 @@ const Chat = () => {
 
     useEffect(() => {
         const handleMessageList = async () => {
-            try {
-                if (id) {
-                    Promise.all([
-                        UserService.fetchMessages(user.userId, id),
-                        UserService.fetchMessenger(user_id)
-                    ]).then(data => {
-                        setMessagesList(data[0].data)
-                        setMessenger(data[1].data)
-                        setReply(data[0].data[0])
-                    }).catch(error => console.log(error))
-                }
-            } catch (e) {
-                console.log(e)
+            if (id) {
+                Promise.all([
+                    UserService.fetchMessages(user.userId, id),
+                    UserService.fetchMessenger(user_id)
+                ]).then(data => {
+                    setMessagesList(data[0].data)
+                    setMessenger(data[1].data)
+                }).catch(error => console.log(error))
             }
 
             return true
@@ -88,6 +84,10 @@ const Chat = () => {
 
         handleMessageList().catch()
     }, [user.userId, id, user_id])
+
+    useEffect(() => {
+        refMessageBlock.current?.scrollIntoView({ behavior: 'smooth' })
+    }, [messagesList])
 
     return (
         <>
@@ -124,9 +124,10 @@ const Chat = () => {
                         </span>
                         </header>
                         <div className={style.MessageBlock}>
-                            {messagesList.map(message =>
-                                <Message.ChatMessage message={message} key={message.message_id} setReply={setReply} reply={reply}/>
+                            {messagesList.length > 0 && messagesList.map(message =>
+                                <Message.ChatMessage message={message} key={message.message_id} setReply={setReply}/>
                             )}
+                            {messagesList.length > 0 && <div ref={refMessageBlock}/>}
                         </div>
                         <InputBlock setReply={setReply} reply={reply}/>
                     </div>

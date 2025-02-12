@@ -69,6 +69,7 @@
   top: 0;
   max-height: calc(100% - 65px);
   overflow-y: scroll;
+  scroll-behavior: smooth;
   max-width: 700px;
   padding: 64px 8px 8px 8px;
 }

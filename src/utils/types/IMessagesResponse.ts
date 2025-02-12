@@ -14,12 +14,18 @@ export default interface IMessagesResponse {
         }
     ],
     user: {
-        user_name: string
+        user_id: string,
+        user_name: string,
+        user_img: string,
     },
     reply?: {
+        message_id: string,
         message_text: string,
+
         user: {
-            user_name: string
+            user_id: string,
+            user_name: string,
+            user_img: string,
         }
     }
 }
