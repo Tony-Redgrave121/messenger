@@ -55,9 +55,12 @@ const Chat = () => {
     const [settings, setSettings] = useState(false)
     const [inputState, setInputState] = useState(false)
     const [sidebarState, setSidebarState] = useState(false)
+
     const refSearch = useRef<HTMLDivElement>(null)
-    const refMessageBlock = useRef<HTMLDivElement>(null)
+    const refEnd = useRef<HTMLDivElement>(null)
     const refRightSidebar = useRef<HTMLDivElement>(null)
+    const socketRef = useRef<WebSocket | null>(null)
+
     const [messagesList, setMessagesList] = useState<IMessagesResponse[]>([])
     const [messenger, setMessenger] = useState<IMessengerResponse>()
     const [reply, setReply] = useState<IMessagesResponse | null>(null)
@@ -86,8 +89,43 @@ const Chat = () => {
     }, [user.userId, id, user_id])
 
     useEffect(() => {
-        refMessageBlock.current?.scrollIntoView({ behavior: 'smooth' })
+        refEnd.current?.scrollIntoView({behavior: 'smooth'})
     }, [messagesList])
+
+    useEffect(() => {
+        socketRef.current = new WebSocket("ws://localhost:5000")
+        const socket = socketRef.current
+
+        socket.onopen = () => {
+            socket.send(JSON.stringify({
+                messenger_id: id,
+                user_id: user_id,
+                method: 'CONNECTION'
+            }))
+        }
+
+        socket.onmessage = (event) => {
+            let message = JSON.parse(event.data)
+            console.log(message)
+
+            switch (message.method) {
+                case 'CONNECTION':
+                    console.log(`User connected: ${message.user_id}`)
+                    break
+                case 'POST_MESSAGE':
+                    setMessagesList(prev => [...prev, message.data])
+                    break
+                case 'REMOVE_MESSAGE':
+                    setMessagesList(prev => prev.filter(msg => msg.message_id !== message.data))
+                    break
+                default:
+                    console.log(`Unknown message method: ${message.method}`)
+                    break
+            }
+        }
+
+        return () => socket.close()
+    }, [id, user_id])
 
     return (
         <>
@@ -125,11 +163,11 @@ const Chat = () => {
                         </header>
                         <div className={style.MessageBlock}>
                             {messagesList.length > 0 && messagesList.map(message =>
-                                <Message.ChatMessage message={message} key={message.message_id} setReply={setReply}/>
+                                <Message.ChatMessage message={message} key={message.message_id} setReply={setReply} socketRef={socketRef}/>
                             )}
-                            {messagesList.length > 0 && <div ref={refMessageBlock}/>}
+                            <div ref={refEnd}/>
                         </div>
-                        <InputBlock setReply={setReply} reply={reply}/>
+                        <InputBlock setReply={setReply} reply={reply} socketRef={socketRef}/>
                     </div>
                     <RightSidebar entity={messenger} ref={refRightSidebar} state={sidebarState} setState={setSidebarState}/>
                 </>

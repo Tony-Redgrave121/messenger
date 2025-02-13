@@ -1,10 +1,10 @@
 import ApiError from "../error/ApiError"
 import models from "../model/models"
-import {FileArray} from "express-fileupload";
-import * as uuid from "uuid";
-import filesUploadingService from "./filesUploadingService";
-import path from "path";
-import fs from "fs";
+import {FileArray} from "express-fileupload"
+import * as uuid from "uuid"
+import filesUploadingService from "./filesUploadingService"
+import path from "path"
+import fs from "fs"
 
 interface IPostMessage {
     user_id: string,
@@ -12,6 +12,12 @@ interface IPostMessage {
     reply_id: string,
     message_text: string,
     message_type: string
+}
+
+interface IMessageFiles {
+    message_file_id: string,
+    message_file_name: string,
+    message_file_size: number
 }
 
 class UserService {
@@ -78,6 +84,7 @@ class UserService {
 
     async postMessage(message: IPostMessage, files: FileArray | null | undefined) {
         const message_id = uuid.v4()
+        let message_files: IMessageFiles[] = []
 
         const messagePost = await models.message.create({
             message_id: message_id,
@@ -85,7 +92,7 @@ class UserService {
             message_type: message.message_type,
             reply_id: message.reply_id,
             user_id: message.user_id,
-            messenger_id: message.messenger_id,
+            messenger_id: message.messenger_id
         })
 
         if (files && files.message_files) {
@@ -98,16 +105,38 @@ class UserService {
 
                 if (filesPost instanceof ApiError || !filesPost) return ApiError.badRequest(`Error with files uploading`)
 
-                await models.message_file.create({
+                const message_file = await models.message_file.create({
                     message_file_id: message_file_id,
                     message_file_name: filesPost.file,
                     message_file_size: filesPost.size,
                     message_id: message_id
                 })
+
+                message_files.push(message_file.dataValues)
             }
         }
 
-        return messagePost
+        const reply = await models.message.findOne({
+            where: [{message_id: message.reply_id}],
+            include: [{
+                model: models.users,
+                as: 'user',
+                attributes: ['user_id', 'user_name', 'user_img']
+            }],
+            attributes: ['message_id', 'message_text']
+        })
+
+        const user = await models.users.findOne({
+            where: [{user_id: message.user_id}],
+            attributes: ['user_id', 'user_name', 'user_img']
+        })
+
+        return {
+            ...messagePost.dataValues,
+            message_files: message_files,
+            reply: reply,
+            user: user
+        }
     }
 
     async deleteMessage(message_id: string, messenger_id: string) {
@@ -116,12 +145,12 @@ class UserService {
                 where: {message_id: message_id},
                 attributes: ['message_file_name'],
                 raw: true
-            }) as unknown as {message_file_name: string}[]
+            }) as unknown as { message_file_name: string }[]
 
             for (const file of message_files) {
                 const filePath = path.resolve(__dirname + "/../src/static/messengers", messenger_id, file.message_file_name)
 
-               if (fs.existsSync(filePath)) fs.unlinkSync(filePath)
+                if (fs.existsSync(filePath)) fs.unlinkSync(filePath)
             }
 
             await models.message.destroy({where: {message_id: message_id}})

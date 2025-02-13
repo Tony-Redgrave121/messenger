@@ -18,12 +18,33 @@ import {useParams} from "react-router-dom";
 
 interface IChatMessage {
     message: IMessagesResponse,
-    setReply: React.Dispatch<React.SetStateAction<IMessagesResponse | null>>
+    setReply: React.Dispatch<React.SetStateAction<IMessagesResponse | null>>,
+    socketRef: React.RefObject<WebSocket | null>
 }
 
 namespace Message {
-    export const ChatMessage: React.FC<IChatMessage> = ({message, setReply}) => {
+    export const ChatMessage: React.FC<IChatMessage> = ({message, setReply, socketRef}) => {
         const {id} = useParams()
+        const [contextMenu, setContextMenu] = useState(false)
+
+        const handleDelete = async () => {
+            try {
+                if (id) {
+                    const messageDelete = await UserService.deleteMessage(message.message_id, id)
+
+                    if (messageDelete && socketRef.current?.readyState === WebSocket.OPEN) {
+                        socketRef.current.send(JSON.stringify({
+                            messenger_id: id,
+                            user_id: user_id,
+                            method: 'REMOVE_MESSAGE',
+                            data: messageDelete.data
+                        }))
+                    }
+                }
+            } catch (e) {
+                console.error(e)
+            }
+        }
 
         const list = [
             {
@@ -44,22 +65,14 @@ namespace Message {
             {
                 liChildren: <HiOutlineTrash/>,
                 liText: 'Delete',
-                liFoo: async () => {
-                    try {
-                        if (id) {
-                            const messageDelete = await UserService.deleteMessage(message.message_id, id)
-
-                            if (messageDelete.data.message) new Error(messageDelete.data.message)
-                        }
-                    } catch (e) {
-                        console.error(e)
-                    }
+                liFoo: () => {
+                    handleDelete().catch(e => console.error(e))
+                    setContextMenu(false)
                 }
             }
         ]
 
         const [animationState, setAnimationState] = useState(false)
-        const [contextMenu, setContextMenu] = useState(false)
         const [position, setPosition] = useState({x: 0, y: 0})
 
         const [currMedia, setCurrMedia] = useState({
@@ -89,7 +102,7 @@ namespace Message {
             const clientWidth = event.currentTarget.clientWidth, clientHeight = event.currentTarget.clientHeight
 
             if (x + 170 > clientWidth) x = clientWidth - 170
-            if (y + 80 > clientHeight) y = clientHeight - 80
+            if (y + 100 > clientHeight) y = clientHeight - 100
 
             setPosition({x: x, y: y})
             setContextMenu(!contextMenu)

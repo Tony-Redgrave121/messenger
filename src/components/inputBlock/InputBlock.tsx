@@ -23,9 +23,10 @@ import {useAppSelector} from "../../utils/hooks/useRedux";
 interface IInputBlock {
     reply: IMessagesResponse | null,
     setReply: React.Dispatch<React.SetStateAction<IMessagesResponse | null>>
+    socketRef: React.RefObject<WebSocket | null>
 }
 
-const InputBlock: React.FC<IInputBlock> = ({reply, setReply}) => {
+const InputBlock: React.FC<IInputBlock> = ({reply, setReply, socketRef}) => {
     const [inputText, setInputText] = useState('')
     const refTextarea = useRef<HTMLTextAreaElement>(null)
 
@@ -56,7 +57,7 @@ const InputBlock: React.FC<IInputBlock> = ({reply, setReply}) => {
     const user_id = useAppSelector(state => state.user.userId)
 
     const handleSubmit = async () => {
-        if (filesState.files || inputText) {
+        if ((filesState.files || inputText) && socketRef.current) {
             const message = new FormData()
             message.append('message_text', inputText)
             message.append('message_type', filesState.files ? filesState.type : 'message')
@@ -65,14 +66,24 @@ const InputBlock: React.FC<IInputBlock> = ({reply, setReply}) => {
             message.append('messenger_id', id!)
             filesState.files && Array.from(filesState.files).forEach((file: File) => message.append('message_files', file))
 
-            setInputText('')
             setFilesState({
                 files: null,
                 popup: false,
                 type: ''
             })
+            setInputText('')
             setReply(null)
-            await UserService.postMessage(message).catch(error => console.log(error))
+
+            const newMessage = await UserService.postMessage(message).catch(error => console.log(error))
+
+            if (newMessage && socketRef.current?.readyState === WebSocket.OPEN) {
+                socketRef.current.send(JSON.stringify({
+                    messenger_id: id,
+                    user_id: user_id,
+                    method: 'POST_MESSAGE',
+                    data: newMessage.data
+                }))
+            }
         }
     }
 

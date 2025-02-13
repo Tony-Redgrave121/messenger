@@ -5,12 +5,12 @@
   display: flex;
   flex-wrap: wrap;
 
-  img {
+  img, video {
     border: 1px solid #212121;
     height: auto;
     object-fit: cover;
     cursor: pointer;
-    max-height: 350px;
+    max-height: 300px;
     width: 100%;
   }
 

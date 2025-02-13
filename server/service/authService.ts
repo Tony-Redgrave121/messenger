@@ -30,12 +30,14 @@ class AuthService {
         let userImg = null
         const user_id = uuid.v4(), user_activation_code = uuid.v4()
 
+        console.log(user_files)
+
         if (user_files && user_files.user_image) userImg = filesUploadingService(`users/${user_id}`, user_files.user_image)
 
-        if (userImg instanceof ApiError || !userImg) return ApiError.badRequest(`Error with user image creation`)
+        if (userImg instanceof ApiError) return ApiError.badRequest(`Error with user image creation`)
 
         const hash_user_password = await bcrypt.hash(user_password, 5)
-        await models.users.create({user_id: user_id, user_name, user_email, user_password: hash_user_password, user_img: userImg.file, user_activation_code: user_activation_code, user_bio: user_bio})
+        await models.users.create({user_id: user_id, user_name, user_email, user_password: hash_user_password, user_img: userImg ? userImg.file : null, user_activation_code: user_activation_code, user_bio: user_bio})
 
         const tokens = tokenService.generateToken({user_id, user_email, user_name})
         await tokenService.saveToken(user_id, tokens!.refreshToken)
@@ -47,7 +49,7 @@ class AuthService {
             user_name: user_name,
             user_email: user_email,
             user_state: false,
-            user_img: userImg.file,
+            user_img: userImg ? userImg.file : null
         }
     }
 

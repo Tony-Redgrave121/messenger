@@ -2,7 +2,6 @@ import ApiError from "../error/ApiError"
 import {Request, Response} from "express"
 import UserService from "../service/userService"
 import userService from "../service/userService";
-
 class UserController {
     async fetchMessenger(req: Request, res: Response): Promise<any> {
         try {
@@ -63,7 +62,7 @@ class UserController {
 
             if (data instanceof ApiError) return res.json(ApiError.internalServerError('An error occurred while posting the message'))
 
-            return true
+            return res.json(data)
         } catch (e) {
             return res.json(ApiError.internalServerError('An error occurred while posting the message'))
         }
@@ -76,6 +75,8 @@ class UserController {
             if (!message_id || !messenger_id || typeof message_id !== 'string' || typeof messenger_id !== 'string')return res.json(ApiError.internalServerError('An error occurred while deleting the message'))
 
             await userService.deleteMessage(message_id, messenger_id)
+
+            return res.json(message_id)
         } catch (e) {
             return res.json(ApiError.internalServerError('An error occurred while deleting the message'))
         }

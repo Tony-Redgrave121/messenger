@@ -75,7 +75,7 @@ const AuthForm = () => {
         formData.append('user_bio', data.user_bio)
 
         const res = await dispatch(registration({formData: formData})) as any
-
+        console.log(res)
         if (res.payload.message) setErrorForm(res.payload.message)
         else return navigate('/')
     }

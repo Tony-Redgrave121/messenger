@@ -4,12 +4,12 @@
   display: flex;
   flex-wrap: wrap;
 }
-.MediaBlock img {
+.MediaBlock img, .MediaBlock video {
   border: 1px solid #212121;
   height: auto;
   object-fit: cover;
   cursor: pointer;
-  max-height: 350px;
+  max-height: 300px;
   width: 100%;
 }
 .MediaBlock > span {
