@@ -10,7 +10,8 @@ import {
     HiOutlineTrash,
     HiOutlineBellSlash,
     HiOutlineLockClosed,
-    HiOutlineXMark
+    HiOutlineXMark,
+    HiOutlineArrowLeft
 } from "react-icons/hi2"
 import Buttons from "../buttons/Buttons"
 import DropDown from "../dropDown/DropDown"
@@ -19,10 +20,11 @@ import {CSSTransition} from 'react-transition-group'
 import RightSidebar from "../sidebar/rightSidebar/RightSidebar"
 import Message from "../message/Message"
 import UserService from "../../service/UserService"
-import {useAppSelector} from "../../utils/hooks/useRedux"
+import {useAppDispatch, useAppSelector} from "../../utils/hooks/useRedux"
 import {useParams} from "react-router-dom"
 import IMessagesResponse from "../../utils/types/IMessagesResponse"
 import IMessengerResponse from "../../utils/types/IMessengerResponse"
+import {setSidebarLeft} from "../../store/reducers/appReducer";
 
 const list = [
     {
@@ -67,15 +69,16 @@ const Chat = () => {
 
     const {id} = useParams()
 
-    const user_id = useAppSelector(state => state.user.userId)
+    const sidebarLeft = useAppSelector(state => state.app.sidebarLeft)
     const user = useAppSelector(state => state.user)
+    const dispatch = useAppDispatch()
 
     useEffect(() => {
         const handleMessageList = async () => {
             if (id) {
                 Promise.all([
                     UserService.fetchMessages(user.userId, id),
-                    UserService.fetchMessenger(user_id)
+                    UserService.fetchMessenger(user.userId)
                 ]).then(data => {
                     setMessagesList(data[0].data)
                     setMessenger(data[1].data)
@@ -86,7 +89,7 @@ const Chat = () => {
         }
 
         handleMessageList().catch()
-    }, [user.userId, id, user_id])
+    }, [user.userId, id])
 
     useEffect(() => {
         refEnd.current?.scrollIntoView({behavior: 'smooth'})
@@ -99,14 +102,13 @@ const Chat = () => {
         socket.onopen = () => {
             socket.send(JSON.stringify({
                 messenger_id: id,
-                user_id: user_id,
+                user_id: user.userId,
                 method: 'CONNECTION'
             }))
         }
 
         socket.onmessage = (event) => {
             let message = JSON.parse(event.data)
-            console.log(message)
 
             switch (message.method) {
                 case 'CONNECTION':
@@ -125,49 +127,54 @@ const Chat = () => {
         }
 
         return () => socket.close()
-    }, [id, user_id])
+    }, [id, user.userId])
 
     return (
         <>
             {messenger &&
                 <>
-                    <div className={style.ChatContainer}>
-                        <header>
-                            <button className={style.DeskBlock} onClick={() => setSidebarState(true)}>
-                                <LoadFile
-                                    imagePath={messenger ? `messengers/${messenger.messenger_id}/${messenger.messenger_image}` : ''}
-                                    imageTitle={messenger.messenger_name}/>
-                                <div>
-                                    <h3>{messenger.messenger_name}</h3>
-                                    <p>{messenger.messenger_type}</p>
-                                </div>
-                            </button>
-                            <span>
-                            <CSSTransition
-                                in={inputState}
-                                nodeRef={refSearch}
-                                timeout={300}
-                                classNames='search-node'
-                                unmountOnExit
-                            >
-                                <SearchBlock ref={refSearch}/>
-                            </CSSTransition>
-                            <Buttons.DefaultButton foo={() => setInputState(!inputState)}>
-                                {inputState ? <HiOutlineXMark/> : <HiOutlineMagnifyingGlass/>}
-                            </Buttons.DefaultButton>
-                            <Buttons.DefaultButton foo={() => setSettings(!settings)}>
-                                <HiEllipsisVertical/>
-                                <DropDown list={list} state={settings} setState={setSettings}/>
-                            </Buttons.DefaultButton>
-                        </span>
-                        </header>
-                        <div className={style.MessageBlock}>
-                            {messagesList.length > 0 && messagesList.map(message =>
-                                <Message.ChatMessage message={message} key={message.message_id} setReply={setReply} socketRef={socketRef}/>
-                            )}
-                            <div ref={refEnd}/>
+                    <div className={style.Wrapper}>
+                        <div className={style.ChatContainer}>
+                            <header>
+                                <Buttons.DefaultButton foo={() => dispatch(setSidebarLeft(!sidebarLeft))}>
+                                    <HiOutlineArrowLeft/>
+                                </Buttons.DefaultButton>
+                                <button className={style.DeskBlock} onClick={() => setSidebarState(true)}>
+                                    <LoadFile
+                                        imagePath={messenger ? `messengers/${messenger.messenger_id}/${messenger.messenger_image}` : ''}
+                                        imageTitle={messenger.messenger_name}/>
+                                    <div>
+                                        <h3>{messenger.messenger_name}</h3>
+                                        <p>{messenger.messenger_type}</p>
+                                    </div>
+                                </button>
+                                <span>
+                                <CSSTransition
+                                    in={inputState}
+                                    nodeRef={refSearch}
+                                    timeout={300}
+                                    classNames='search-node'
+                                    unmountOnExit
+                                >
+                                    <SearchBlock ref={refSearch}/>
+                                </CSSTransition>
+                                <Buttons.DefaultButton foo={() => setInputState(!inputState)}>
+                                    {inputState ? <HiOutlineXMark/> : <HiOutlineMagnifyingGlass/>}
+                                </Buttons.DefaultButton>
+                                <Buttons.DefaultButton foo={() => setSettings(!settings)}>
+                                    <HiEllipsisVertical/>
+                                    <DropDown list={list} state={settings} setState={setSettings}/>
+                                </Buttons.DefaultButton>
+                            </span>
+                            </header>
+                            <div className={style.MessageBlock}>
+                                {messagesList.length > 0 && messagesList.map(message =>
+                                    <Message.ChatMessage message={message} key={message.message_id} setReply={setReply} socketRef={socketRef}/>
+                                )}
+                                <div ref={refEnd}/>
+                            </div>
+                            <InputBlock setReply={setReply} reply={reply} socketRef={socketRef}/>
                         </div>
-                        <InputBlock setReply={setReply} reply={reply} socketRef={socketRef}/>
                     </div>
                     <RightSidebar entity={messenger} ref={refRightSidebar} state={sidebarState} setState={setSidebarState}/>
                 </>

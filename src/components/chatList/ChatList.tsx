@@ -3,6 +3,7 @@ import ChatBlock from "./chatBlock/ChatBlock";
 import UserService from '../../service/UserService'
 import {useAppSelector} from "../../utils/hooks/useRedux";
 import IMessengersListResponse from "../../utils/types/IMessengersListResponse";
+import style from './style.module.css'
 
 const ChatList = memo(() => {
     const [messengerList, setMessengerList] = useState<IMessengersListResponse[]>()
@@ -25,7 +26,7 @@ const ChatList = memo(() => {
     }, [user_id])
 
     return (
-        <ul>
+        <ul className={style.ChatList}>
             {messengerList &&
                 messengerList.map(chat => <ChatBlock messenger={chat} key={chat.messenger_id}/>)
             }

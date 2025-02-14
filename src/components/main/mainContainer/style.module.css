@@ -7,9 +7,9 @@
   background-repeat: repeat;
   background-size: 280px;
   background-color: black;
-  width: calc(100vw - 420px);
   height: 100vh;
   overflow: hidden;
+  left: 0;
 }
 .MainContainer:after {
   content: "";
@@ -18,6 +18,13 @@
   width: 100%;
   height: 100vh;
   background: rgba(0, 0, 0, 0.1);
+}
+
+@media screen and (max-width: 940px) {
+  .MainContainer {
+    width: 100vw;
+    justify-content: start;
+  }
 }
 
 /*# sourceMappingURL=style.module.css.map */

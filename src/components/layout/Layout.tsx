@@ -1,4 +1,4 @@
-import React, {lazy, Suspense} from 'react'
+import React, {Suspense} from 'react'
 import MainContainer from "../main/mainContainer/MainContainer";
 import {Outlet} from "react-router-dom";
 import style from './style.module.css'

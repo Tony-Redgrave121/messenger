@@ -34,14 +34,12 @@ const RightSidebar: React.FC<IRightSidebar> = ({entity, ref, state, setState}) =
             unmountOnExit
         >
             <SidebarContainer styles={['RightSidebarContainer']} ref={ref}>
-                <div className={style.Wrapper}>
                     <div className={style.TopBar}>
                         <Buttons.DefaultButton foo={() => setState(false)}>
                             <HiOutlineXMark/>
                         </Buttons.DefaultButton>
                         <h1>{entity.messenger_type} info</h1>
-                        <Buttons.DefaultButton foo={() => {
-                        }}>
+                        <Buttons.DefaultButton foo={() => {}}>
                             <HiOutlinePencil/>
                         </Buttons.DefaultButton>
                     </div>
@@ -61,22 +59,22 @@ const RightSidebar: React.FC<IRightSidebar> = ({entity, ref, state, setState}) =
                             </li>
                         }
                         <li>
-                            <div onClick={() => window.navigator.clipboard.writeText(`http://localhost:3000/${entity.messenger_type}/${entity.messenger_id}`)}>
+                            <div
+                                onClick={() => window.navigator.clipboard.writeText(`http://localhost:3000/${entity.messenger_type}/${entity.messenger_id}`)}>
                                 <HiOutlinePaperClip/>
                                 <p>{entity.messenger_id} <br/><small className={style.LiType}>Link</small></p>
                             </div>
                         </li>
                         <li>
                             <div onClick={() => setNotification(!notification)}>
-                                <span>
-                                    <HiOutlineBell/>
-                                    <p>Notifications</p>
-                                </span>
+                                    <span>
+                                        <HiOutlineBell/>
+                                        <p>Notifications</p>
+                                    </span>
                                 <Buttons.SwitchButton state={notification} foo={() => setNotification(!notification)}/>
                             </div>
                         </li>
                     </ul>
-                </div>
             </SidebarContainer>
         </CSSTransition>
     )

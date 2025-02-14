@@ -1,0 +1,26 @@
+.left-sidebar-node-enter {
+    width: 0;
+    opacity: 0;
+}
+
+.left-sidebar-node-enter-active {
+    opacity: 1;
+    width: 100%;
+    transition: opacity .3s ease-in-out, width .3s ease-in-out;
+}
+
+.left-sidebar-node-exit {
+    opacity: 1;
+}
+
+.left-sidebar-node-exit-active {
+    opacity: 0;
+    width: 0;
+    transition: opacity .3s ease-in-out, width .3s ease-in-out;
+}
+
+.left-sidebar-node-exit-done {
+    opacity: 0;
+    width: 0;
+    transition: opacity .3s ease-in-out, width .3s ease-in-out;
+}

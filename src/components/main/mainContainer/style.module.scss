@@ -8,9 +8,9 @@
   background-repeat: repeat;
   background-size: 280px;
   background-color: black;
-  width: calc(100vw - 420px);
   height: 100vh;
   overflow: hidden;
+  left: 0;
 
   &:after {
     content: '';
@@ -20,5 +20,12 @@
     height: 100vh;
     //background: linear-gradient(300deg, rgba(0,0,0,.8) 0%, rgba(70, 0, 140, 0.2) 50%, rgba(70, 0, 0, 0.6) 100%);
     background: rgba(0, 0, 0, 0.1);
+  }
+}
+
+@media screen and (max-width: 940px) {
+  .MainContainer {
+    width: 100vw;
+    justify-content: start;
   }
 }

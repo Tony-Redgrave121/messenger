@@ -9,8 +9,10 @@ interface ISidebarContainer {
 
 const SidebarContainer: React.FC<ISidebarContainer> = ({children, styles, ref}) => {
     return (
-        <aside className={`${style.SidebarContainer} ${styles && styles.map(name => style[name]).join(' ')}`} ref={ref}>
-            {children}
+        <aside className={`${style.SidebarContainer} ${styles && styles.map(name => style[name]).join(' ')} `} ref={ref}>
+            <div className={style.Wrapper}>
+                {children}
+            </div>
         </aside>
     )
 }

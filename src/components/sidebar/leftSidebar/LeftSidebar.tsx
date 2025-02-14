@@ -1,4 +1,4 @@
-import React, {useRef, useState} from 'react'
+import React, {useEffect, useRef, useState} from 'react'
 import {
     HiBars3,
     HiOutlineCog8Tooth,
@@ -13,6 +13,11 @@ import SearchBlock from "../../searchBlock/SearchBlock"
 import ChatList from "../../chatList/ChatList"
 import DropDown from "../../dropDown/DropDown"
 import SidebarContainer from "../SidebarContainer";
+import {useAppDispatch, useAppSelector} from "../../../utils/hooks/useRedux";
+import {CSSTransition} from "react-transition-group"
+import {setSidebarLeft} from "../../../store/reducers/appReducer";
+import debounce from "debounce";
+import './animation.css'
 
 const list = [
     {
@@ -50,18 +55,39 @@ const list = [
 const LeftSidebar = () => {
     const [settings, setSettings] = useState(false)
     const refSearch = useRef<HTMLDivElement>(null)
+    const refSidebar = useRef<HTMLDivElement>(null)
+    const sidebarLeft = useAppSelector(state => state.app.sidebarLeft)
+    const dispatch = useAppDispatch()
+
+    const handleResize = debounce(() => {
+        if (window.innerWidth >= 940) dispatch(setSidebarLeft(true))
+        else dispatch(setSidebarLeft(false))
+    }, 100)
+
+    useEffect(() => {
+        window.addEventListener('resize', handleResize)
+
+        return () => window.removeEventListener('resize', handleResize)
+    }, [dispatch, handleResize])
 
     return (
-        <SidebarContainer>
-            <div className={style.TopBar}>
-                <Buttons.DefaultButton foo={() => setSettings(!settings)}>
-                    <HiBars3/>
-                    <DropDown list={list} state={settings} setState={setSettings}/>
-                </Buttons.DefaultButton>
-                <SearchBlock ref={refSearch}/>
-            </div>
-            <ChatList/>
-        </SidebarContainer>
+        <CSSTransition
+            in={sidebarLeft}
+            nodeRef={refSidebar}
+            timeout={300}
+            classNames='left-sidebar-node'
+        >
+            <SidebarContainer styles={['LeftSidebarContainer']} ref={refSidebar}>
+                    <div className={style.TopBar}>
+                        <Buttons.DefaultButton foo={() => setSettings(!settings)}>
+                            <HiBars3/>
+                            <DropDown list={list} state={settings} setState={setSettings}/>
+                        </Buttons.DefaultButton>
+                        <SearchBlock ref={refSearch}/>
+                    </div>
+                    <ChatList/>
+            </SidebarContainer>
+        </CSSTransition>
     )
 }
 

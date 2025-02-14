@@ -16,9 +16,9 @@ const ChatBlock: React.FC<IChatBlock> = memo(({messenger}) => {
             <div className={style.DescContainer}>
                 <span>
                     <h3>{messenger.messenger_name}</h3>
-                    {messenger.messages[0].message_date && <p>{getDate(messenger.messages[0].message_date)}</p>}
+                    {messenger.messages[0]?.message_date && <p>{getDate(messenger.messages[0].message_date)}</p>}
                 </span>
-                {messenger.messages[0].message_text && <p>{messenger.messages[0].message_text}</p>}
+                {messenger.messages[0]?.message_text && <p>{messenger.messages[0].message_text}</p>}
             </div>
         </Link>
     )

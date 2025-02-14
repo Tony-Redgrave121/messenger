@@ -1,5 +1,13 @@
 @import url("../../utils/styles/base/_normalize.scss");
 
+.Wrapper {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  width: calc(100vw - 420px);
+  min-width: 500px;
+}
+
 .ChatContainer {
   display: flex;
   align-items: center;
@@ -57,6 +65,9 @@
   font-size: 14px;
   color: #a9a9a9;
 }
+.ChatContainer header > :first-child {
+  display: none;
+}
 .ChatContainer .MessageBlock {
   position: absolute;
   display: flex;
@@ -75,6 +86,15 @@
 }
 .ChatContainer > :last-child {
   max-width: 700px;
+}
+
+@media screen and (max-width: 940px) {
+  .Wrapper {
+    width: 100%;
+  }
+  .ChatContainer header > :first-child {
+    display: block;
+  }
 }
 
 /*# sourceMappingURL=style.module.css.map */

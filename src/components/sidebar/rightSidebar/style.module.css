@@ -1,29 +1,24 @@
 @import url("../../../utils/styles/base/_normalize.scss");
 
-.Wrapper {
-  display: flex;
-  align-items: center;
-  flex-direction: column;
-  min-width: 418px;
-}
-.Wrapper .TopBar {
+.TopBar {
   position: absolute;
   z-index: 1;
+  color: white;
+  min-width: 420px;
+  height: 56px;
+  background-color: rgba(33, 33, 33, 0.9);
+  backdrop-filter: blur(5px);
   display: flex;
   justify-content: space-between;
   align-items: center;
-  color: white;
   padding: 8px 8px;
-  width: 100%;
-  height: 56px;
   font-size: 20px;
-  background-color: rgba(33, 33, 33, 0.9);
-  backdrop-filter: blur(5px);
 }
-.Wrapper .TopBar h1 {
+.TopBar h1 {
   text-transform: capitalize;
 }
-.Wrapper .EntityImageBlock {
+
+.EntityImageBlock {
   display: flex;
   align-items: end;
   width: 100%;
@@ -32,27 +27,28 @@
   background-position: center center;
   padding: 8px 16px;
 }
-.Wrapper .EntityImageBlock div {
+.EntityImageBlock div {
   line-height: 1.3;
 }
-.Wrapper .EntityImageBlock div h1 {
+.EntityImageBlock div h1 {
   color: white;
   font-size: 20px;
 }
-.Wrapper .EntityImageBlock div p {
+.EntityImageBlock div p {
   font-size: 14px;
   color: #a9a9a9;
 }
-.Wrapper .InfoList {
+
+.InfoList {
   padding: 8px;
   line-height: 1.5;
   background-color: #212121;
 }
-.Wrapper .InfoList li {
+.InfoList li {
   display: flex;
   width: 100%;
 }
-.Wrapper .InfoList li > div {
+.InfoList li > div {
   cursor: pointer;
   color: white;
   font-size: 16px;
@@ -61,29 +57,29 @@
   border-radius: 10px;
   transition: 0.2s background-color ease-in-out;
 }
-.Wrapper .InfoList li > div, .Wrapper .InfoList li > div span {
+.InfoList li > div, .InfoList li > div span {
   display: flex;
   align-items: center;
   gap: 16px;
 }
-.Wrapper .InfoList li > div .LiType {
+.InfoList li > div .LiType {
   font-size: 14px;
   color: #a9a9a9;
 }
-.Wrapper .InfoList li > div:hover {
+.InfoList li > div:hover {
   background-color: #2b2b2b;
 }
-.Wrapper .InfoList li > div:active {
+.InfoList li > div:active {
   background-color: #323232;
 }
-.Wrapper .InfoList li > div svg {
+.InfoList li > div svg {
   min-width: 28px;
   min-height: 28px;
 }
-.Wrapper .InfoList li > div button {
+.InfoList li > div button {
   margin: 0 8px 0 auto;
 }
-.Wrapper .InfoList li > div small {
+.InfoList li > div small {
   display: block;
 }
 
