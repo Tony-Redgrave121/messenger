@@ -1,0 +1,70 @@
+@use '../../../utils/styles/base/_variables.css' as v;
+@import url("../../../utils/styles/base/_normalize.scss");
+
+.ChatHeader {
+  position: absolute;
+  top: 0;
+  z-index: 2;
+  display: flex;
+  gap: 16px;
+  justify-content: space-between;
+  width: 100%;
+  padding: 6.5px 18px;
+  background: #212121FF;
+  border-bottom: 1px solid #2f2f2f;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+
+  .DeskBlock, > span {
+    display: flex;
+    align-items: center;
+  }
+
+  > span {
+    justify-content: end;
+    flex-grow: 1;
+
+    > :last-child ul {
+      right: 0;
+      top: calc(100% + 13px);
+      transform-origin: top right;
+    }
+  }
+
+  .DeskBlock {
+    line-height: 1.4;
+    gap: 16px;
+
+    div:first-child {
+      width: 42px;
+      height: 42px;
+
+      h1 {
+        font-size: 14px;
+      }
+    }
+
+    h3 {
+      color: white;
+    }
+
+    p {
+      font-size: 14px;
+      color: #a9a9a9;
+    }
+  }
+
+  > :first-child {
+    display: none;
+  }
+}
+
+@media screen and (max-width: 940px) {
+  .ChatHeader {
+    > :first-child {
+      display: block;
+    }
+  }
+}

@@ -60,22 +60,11 @@ const broadcastConnection = (message: IMessage) => {
     })
 }
 
-const handleMessage = (message: IMessage) => {
+const handleMessage = (message: IMessage, method: string) => {
     aWss.clients.forEach((client: any) => {
         if (client.id === message.messenger_id) {
             client.send(JSON.stringify({
-                method: 'POST_MESSAGE',
-                data: message.data
-            }))
-        }
-    })
-}
-
-const handleMessageRemove = (message: IMessage) => {
-    aWss.clients.forEach((client: any) => {
-        if (client.id === message.messenger_id) {
-            client.send(JSON.stringify({
-                method: 'REMOVE_MESSAGE',
+                method: method,
                 data: message.data
             }))
         }
@@ -91,10 +80,10 @@ app.ws('/', (ws) => {
                 connectionHandler(ws, data)
                 break
             case 'POST_MESSAGE':
-                handleMessage(data)
+                handleMessage(data, 'POST_MESSAGE')
                 break
             case 'REMOVE_MESSAGE':
-                handleMessageRemove(data)
+                handleMessage(data, 'REMOVE_MESSAGE')
                 break
         }
     })

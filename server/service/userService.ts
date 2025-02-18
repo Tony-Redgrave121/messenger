@@ -21,13 +21,11 @@ interface IMessageFiles {
 }
 
 class UserService {
-    async fetchMessenger(user_id: string) {
-        if (!user_id) return ApiError.internalServerError("An error occurred while fetching the messenger")
-
+    async fetchMessenger(user_id: string, messenger_id: string) {
         const messenger = await models.messenger.findOne({
             include: [{
                 model: models.member,
-                where: {user_id: user_id}
+                where: {user_id: user_id, messenger_id: messenger_id}
             }]
         })
         if (!messenger) return ApiError.internalServerError("An error occurred while fetching the messenger")

@@ -5,8 +5,10 @@ import userService from "../service/userService";
 class UserController {
     async fetchMessenger(req: Request, res: Response): Promise<any> {
         try {
-            if (!req.params) return res.json(ApiError.internalServerError('An error occurred while fetching the messenger'))
-            const messengers = await UserService.fetchMessenger(req.params.user_id)
+            const {user_id, messenger_id} = req.query
+            if (!user_id || !messenger_id || typeof user_id !== "string" || typeof messenger_id !== "string") return res.json(ApiError.internalServerError('An error occurred while fetching the messenger'))
+
+            const messengers = await UserService.fetchMessenger(user_id, messenger_id)
 
             if (messengers instanceof ApiError) return res.json(ApiError.internalServerError('An error occurred while fetching the messenger'))
 

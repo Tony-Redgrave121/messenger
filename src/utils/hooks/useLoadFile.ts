@@ -13,7 +13,9 @@ const useLoadFile = (imagePath: string | undefined) => {
                     setLoad(true)
                     return true
                 })
-                .catch(error => console.log(error))
+                .catch(error => {
+                    console.log(error)
+                })
         } else setLoad(true)
     }, [imagePath])
 

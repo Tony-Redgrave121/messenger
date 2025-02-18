@@ -12,7 +12,7 @@ interface IChatBlock {
 const ChatBlock: React.FC<IChatBlock> = memo(({messenger}) => {
     return (
         <Link to={`${messenger.messenger_type}/${messenger.messenger_id}`} className={style.ChatContainer}>
-            <LoadFile imagePath={`messengers/${messenger.messenger_id}/${messenger.messenger_image}`} imageTitle={messenger.messenger_name}/>
+            <LoadFile imagePath={messenger.messenger_image ? `messengers/${messenger.messenger_id}/${messenger.messenger_image}` : ''} imageTitle={messenger.messenger_name}/>
             <div className={style.DescContainer}>
                 <span>
                     <h3>{messenger.messenger_name}</h3>
