@@ -9,9 +9,14 @@ const users = sequelize.define("users", {
     user_img: {type: DataTypes.STRING, allowNull: true},
     user_date: {type: DataTypes.DATE, allowNull: true, defaultValue: DataTypes.NOW},
     user_bio: {type: DataTypes.STRING, allowNull: true},
-    user_state: {type: DataTypes.BOOLEAN, defaultValue: false},
-    user_activation_code: {type: DataTypes.STRING, allowNull: false}
 }, {timestamps: false})
+
+const user_code = sequelize.define("user_code", {
+    user_code_id: {type: DataTypes.UUID, primaryKey: true},
+    user_code_email: {type: DataTypes.STRING, allowNull: false},
+    user_code_body: {type: DataTypes.STRING, allowNull: false},
+    user_code_date: {type: DataTypes.DATE, allowNull: false, defaultValue: DataTypes.NOW}
+}, {timestamps: false});
 
 const user_tokens = sequelize.define("user_token", {
     user_token_id: {type: DataTypes.UUID, primaryKey: true},
@@ -70,6 +75,7 @@ message.belongsTo(message, {as: "reply", foreignKey: "reply_id"})
 
 const models = {
     users,
+    user_code,
     user_tokens,
     member,
     messenger,

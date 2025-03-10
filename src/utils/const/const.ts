@@ -1,4 +1,6 @@
 export const LOGIN_ROUTE = '/login'
+export const SEND_CODE_ROUTE = '/send-code'
+export const CONFIRM_EMAIL_ROUTE = '/confirm-email'
 export const LOGOUT_ROUTE = '/logout'
 export const REFRESH_ROUTE = '/refresh'
 export const REGISTRATION_ROUTE = '/registration'

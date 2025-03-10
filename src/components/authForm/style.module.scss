@@ -23,6 +23,7 @@
     }
 
     > div {
+      position: relative;
       flex-direction: column;
       gap: 30px;
       width: 100%;
@@ -56,6 +57,10 @@
         display: flex;
         width: 100%;
         gap: 25px;
+      }
+
+      > small {
+
       }
     }
   }

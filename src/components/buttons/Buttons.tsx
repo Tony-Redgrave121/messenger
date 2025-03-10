@@ -3,7 +3,7 @@ import style from './style.module.css'
 
 interface IDefaultButton {
     children?: React.ReactNode,
-    foo?: () => void
+    foo?: (event?: React.MouseEvent<any>) => void
 }
 
 interface ISwitchButton extends IDefaultButton {

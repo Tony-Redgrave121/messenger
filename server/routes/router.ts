@@ -1,5 +1,6 @@
 import {
     ACTIVATION_PAGE,
+    SEND_CODE_PAGE,
     DELETE_ACCOUNT_ROUTE,
     DELETE_MESSAGE,
     FETCH_MESSAGES,
@@ -21,6 +22,7 @@ router.post(REGISTRATION_ROUTE, AuthController.registration)
 router.post(LOGIN_ROUTE, AuthController.login)
 router.post(LOGOUT_ROUTE, AuthController.logout)
 router.get(REFRESH_ROUTE, AuthController.refresh)
+router.post(SEND_CODE_PAGE, AuthController.sendCode)
 router.get(ACTIVATION_PAGE, AuthController.activate)
 router.post(DELETE_ACCOUNT_ROUTE, AuthController.deleteAccount)
 

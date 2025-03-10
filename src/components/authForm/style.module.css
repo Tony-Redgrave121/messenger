@@ -20,6 +20,7 @@
   display: none;
 }
 .AuthContainer .AuthForm > div {
+  position: relative;
   flex-direction: column;
   gap: 30px;
   width: 100%;

@@ -5,11 +5,12 @@ import * as uuid from "uuid"
 import IUser from "../types/IUser"
 import bcrypt from "bcrypt"
 import filesUploadingService from "./filesUploadingService"
-import mailService from "./mailService"
-import { UploadedFile } from 'express-fileupload'
+import {UploadedFile} from 'express-fileupload'
 import IRegistrationResponse from "../types/IRegistrationResponse";
 import path from "path";
 import * as fs from "fs";
+import getRandomCryptoValue from "../lib/getRandomCryptoValue";
+import mailService from "./mailService";
 
 interface IUserFiles {
     user_image?: UploadedFile
@@ -30,8 +31,6 @@ class AuthService {
         let userImg = null
         const user_id = uuid.v4(), user_activation_code = uuid.v4()
 
-        console.log(user_files)
-
         if (user_files && user_files.user_image) userImg = filesUploadingService(`users/${user_id}`, user_files.user_image)
 
         if (userImg instanceof ApiError) return ApiError.badRequest(`Error with user image creation`)
@@ -41,7 +40,6 @@ class AuthService {
 
         const tokens = tokenService.generateToken({user_id, user_email, user_name})
         await tokenService.saveToken(user_id, tokens!.refreshToken)
-        await mailService.sendMail(user_email, `${process.env.API_URL}/activate/${user_activation_code}`)
 
         return {
             ...tokens,
@@ -53,8 +51,7 @@ class AuthService {
         }
     }
 
-    async login(user_body: { user_email: string, user_password: string }) {
-        const {user_email, user_password} = user_body
+    async login(user_email: string, user_password: string) {
         const user: IUser | null = await models.users.findOne({where: {user_email: user_email}}) as IUser | null
 
         if (!user) return ApiError.notFound("User account not found")
@@ -75,6 +72,15 @@ class AuthService {
         }
     }
 
+    async sendCode(user_code_email: string) {
+        const user_code_body = getRandomCryptoValue(100000, 999999)
+        const user_code_id = uuid.v4()
+
+        await mailService.sendMail(user_code_email, user_code_body)
+
+        return await models.user_code.create({user_code_id, user_code_email, user_code_body})
+    }
+
     async logout(refreshToken: string) {
         return await tokenService.deleteToken(refreshToken)
     }
@@ -83,7 +89,6 @@ class AuthService {
         await models.users.destroy({where: {user_id: user_id}})
 
         const folderPath = path.resolve(__dirname + "/../src/static/users", user_id)
-
         fs.rmSync(folderPath, { recursive: true, force: true })
 
         return await tokenService.deleteToken(refreshToken)

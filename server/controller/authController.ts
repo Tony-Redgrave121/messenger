@@ -20,12 +20,20 @@ class AuthController {
 
     async login(req: Request, res: Response): Promise<any> {
         try {
-            const userData = await authService.login(req.body)
-            if (userData instanceof ApiError) return res.json(userData)
+            const {user_email, user_password} = req.body
 
-            res.cookie('refreshToken', userData.refreshToken, {maxAge: 7 * 24 * 60 * 60 * 1000, httpOnly: true})
+            const isExisting = await models.users.findOne({where: {user_email: user_email}})
 
-            return res.json(userData)
+            if (isExisting) {
+                const userData = await authService.login(user_email, user_password)
+                if (userData instanceof ApiError) return res.json(userData)
+
+                res.cookie('refreshToken', userData.refreshToken, {maxAge: 7 * 24 * 60 * 60 * 1000, httpOnly: true})
+
+                return res.json(userData)
+            }
+
+            return
         } catch (e) {
             return res.json(ApiError.internalServerError('An error occurred while login'))
         }
@@ -52,6 +60,19 @@ class AuthController {
             return res.json(token)
         } catch (e) {
             return res.json(ApiError.internalServerError("An error occurred while deleting account"))
+        }
+    }
+
+    async sendCode(req: Request, res: Response): Promise<any> {
+        try {
+            const email = req.body.email
+
+            if (!email) return res.json(ApiError.internalServerError('An error occurred while sending the email'))
+            const resData = await authService.sendCode(email)
+
+            return res.json(resData)
+        } catch (e) {
+            return res.json(ApiError.internalServerError('An error occurred while activating account'))
         }
     }
 

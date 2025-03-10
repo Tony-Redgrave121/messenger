@@ -4,12 +4,21 @@ import {
     REFRESH_ROUTE,
     REGISTRATION_ROUTE,
     DELETE_ACCOUNT_ROUTE,
+    SEND_CODE_ROUTE, CONFIRM_EMAIL_ROUTE
 } from "../utils/const/const"
 import $api from '../http/index'
 import {AxiosResponse} from 'axios'
 import IAuthResponse from "../utils/types/IAuthResponse"
 
 export default class AuthService {
+    static async sendCode(email: string): Promise<AxiosResponse> {
+        return $api.post(SEND_CODE_ROUTE, {email})
+    }
+
+    static async confirmEmail(code: number): Promise<AxiosResponse> {
+        return $api.post(CONFIRM_EMAIL_ROUTE, {code})
+    }
+
     static async login(formData: FormData): Promise<AxiosResponse<IAuthResponse>> {
         return $api.post<IAuthResponse>(LOGIN_ROUTE, formData)
     }
