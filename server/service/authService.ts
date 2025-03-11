@@ -11,6 +11,7 @@ import path from "path";
 import * as fs from "fs";
 import getRandomCryptoValue from "../lib/getRandomCryptoValue";
 import mailService from "./mailService";
+import {Request, Response} from "express";
 
 interface IUserFiles {
     user_image?: UploadedFile
@@ -79,6 +80,14 @@ class AuthService {
         await mailService.sendMail(user_code_email, user_code_body)
 
         return await models.user_code.create({user_code_id, user_code_email, user_code_body})
+    }
+
+    async confirmEmail(user_code: number, user_email: string) {
+        const resData = await models.user_code.findOne({where: {user_code_email: user_email, user_code_body: user_code}})
+
+        if (!resData) return ApiError.notFound("You entered an incorrect code")
+
+        return resData
     }
 
     async logout(refreshToken: string) {

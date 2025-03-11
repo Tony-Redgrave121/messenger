@@ -2,7 +2,7 @@ import ApiError from "../error/ApiError"
 import models from "../model/models"
 import {Request, Response} from "express"
 import authService from "../service/authService"
-import IUser from "../types/IUser"
+import AuthService from "../service/authService";
 
 class AuthController {
     async registration(req: Request, res: Response): Promise<any> {
@@ -22,6 +22,8 @@ class AuthController {
         try {
             const {user_email, user_password} = req.body
 
+            console.log(user_email, user_password)
+
             const isExisting = await models.users.findOne({where: {user_email: user_email}})
 
             if (isExisting) {
@@ -33,7 +35,7 @@ class AuthController {
                 return res.json(userData)
             }
 
-            return
+            return res.json({registration: true})
         } catch (e) {
             return res.json(ApiError.internalServerError('An error occurred while login'))
         }
@@ -76,16 +78,15 @@ class AuthController {
         }
     }
 
-    async activate(req: Request, res: Response): Promise<any> {
+    async confirmEmail(req: Request, res: Response): Promise<any> {
         try {
-            const link = req.params.link
-            const user: IUser | null = await models.users.findOne({where: {user_activation_link: link}}) as IUser | null
-            if (!user) return res.json(ApiError.notFound("User not found")).redirect(process.env.CLIENT_URL!)
+            const {user_code, user_email} = req.body
 
-            user.user_state = true
-            await user.save()
+            if (!user_code || !user_email) return res.json(ApiError.internalServerError("An error occurred while confirming an email"))
 
-            return res.redirect(process.env.CLIENT_URL!)
+            const resData = await AuthService.confirmEmail(user_code, user_email)
+
+            return res.json(resData)
         } catch (e) {
             return res.json(ApiError.internalServerError('An error occurred while activating account'))
         }

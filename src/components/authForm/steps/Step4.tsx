@@ -1,7 +1,7 @@
 import React, {useState} from 'react'
 import {HiOutlineUserCircle} from "react-icons/hi2"
 import style from "../style.module.css"
-import InputForm from "../inputForm/InputForm"
+import InputForm from "../../inputForm/InputForm"
 import Buttons from "../../buttons/Buttons"
 import IStepProps from '../../../utils/types/IStepProps'
 import {Controller, SubmitHandler} from "react-hook-form";

@@ -1,7 +1,7 @@
 import React from 'react'
 import {HiOutlineEnvelope} from "react-icons/hi2"
 import style from "../style.module.css"
-import InputForm from "../inputForm/InputForm"
+import InputForm from "../../inputForm/InputForm"
 import Buttons from "../../buttons/Buttons"
 import IStepProps from '../../../utils/types/IStepProps'
 import {UseFormTrigger, UseFormWatch} from "react-hook-form";
@@ -11,16 +11,26 @@ import AuthService from "../../../service/AuthService";
 interface IStep2Props extends IStepProps {
     watch: UseFormWatch<IAuthForm>,
     trigger: UseFormTrigger<IAuthForm>
+    setErrorForm: React.Dispatch<React.SetStateAction<string | null>>,
 }
 
-const Step2: React.FC<IStep2Props> = ({errors, register, watch, handlePrev, handleNext, trigger}) => {
-    const handleConfirmation = async () => {
+const Step2: React.FC<IStep2Props> = ({errors, register, watch, handlePrev, handleNext, trigger, setErrorForm}) => {
+    const handleConfirmation = async (event: React.MouseEvent<HTMLButtonElement>) => {
+        event.preventDefault()
+
         try {
             const isValid = await trigger('user_code')
-            const code = watch('user_code')
+            const [user_code, user_email] = watch(['user_code', 'user_email'])
 
-            if (isValid && code) {
-                await AuthService.confirmEmail(code)
+            if (isValid && user_code) {
+                const res = await AuthService.confirmEmail(user_code, user_email)
+                const message = res.data.message
+
+                if (!message) {
+                    setErrorForm('')
+                    handleNext!(event, 'user_code', 1)
+                }
+                else setErrorForm(message)
             }
         } catch (e) {
             console.log(e)
@@ -39,6 +49,7 @@ const Step2: React.FC<IStep2Props> = ({errors, register, watch, handlePrev, hand
                     type="number"
                     id="user_code"
                     placeholder="Code"
+                    max="999999"
                     {...register('user_code', {
                         required: "Code is required",
                         pattern: {
@@ -50,7 +61,7 @@ const Step2: React.FC<IStep2Props> = ({errors, register, watch, handlePrev, hand
             </InputForm>
             <div className={style.ButtonBlock}>
                 <Buttons.FormButton foo={(event) => handlePrev!(event!, 1)}>PREV</Buttons.FormButton>
-                <Buttons.FormButton foo={(event) => handleNext!(event!, 'user_code', 1)}>NEXT</Buttons.FormButton>
+                <Buttons.FormButton foo={(event) => handleConfirmation(event!)}>NEXT</Buttons.FormButton>
             </div>
         </>
     )

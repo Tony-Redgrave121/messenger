@@ -61,7 +61,7 @@ const AuthForm = () => {
                 const res = await dispatch(login({formData: formData})) as any
 
                 if (res.payload.message) return setErrorForm(res.payload.message)
-                else return navigate('/')
+                else if (!res.payload.registration) return navigate('/')
             }
 
             setFormState(false)
@@ -81,7 +81,7 @@ const AuthForm = () => {
         },
         {
             id: 2,
-            component: <Step2 register={register} handleNext={handleNext} errors={errors} watch={watch} handlePrev={handlePrev} trigger={trigger}/>
+            component: <Step2 register={register} handleNext={handleNext} errors={errors} watch={watch} handlePrev={handlePrev} trigger={trigger} setErrorForm={setErrorForm}/>
         },
         {
             id: 3,

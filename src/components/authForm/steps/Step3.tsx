@@ -1,7 +1,7 @@
 import React from 'react'
 import {HiOutlineFingerPrint} from "react-icons/hi2"
 import style from "../style.module.css"
-import InputForm from "../inputForm/InputForm"
+import InputForm from "../../inputForm/InputForm"
 import Buttons from "../../buttons/Buttons"
 import IStepProps from '../../../utils/types/IStepProps'
 

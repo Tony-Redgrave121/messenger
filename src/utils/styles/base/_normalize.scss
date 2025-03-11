@@ -54,6 +54,10 @@ input[text], textarea {
   cursor: text;
 }
 
+input[type="file"] {
+  display: none;
+}
+
 article, aside, details, figcaption, figure,
 footer, header, hgroup, menu, nav, section {
   display: block;

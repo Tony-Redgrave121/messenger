@@ -5,7 +5,8 @@ import {
     HiOutlineBookmark,
     HiOutlineUsers,
     HiOutlineQuestionMarkCircle,
-    HiOutlineBugAnt
+    HiOutlineBugAnt,
+    HiOutlinePencil, HiOutlineMegaphone, HiOutlineUser,
 } from "react-icons/hi2"
 import style from './style.module.css'
 import Buttons from '../../buttons/Buttons'
@@ -18,6 +19,7 @@ import {CSSTransition} from "react-transition-group"
 import {setSidebarLeft} from "../../../store/reducers/appReducer";
 import debounce from "debounce";
 import './animation.css'
+import Messenger from "./messenger/Messenger";
 
 const list = [
     {
@@ -54,6 +56,11 @@ const list = [
 
 const LeftSidebar = () => {
     const [settings, setSettings] = useState(false)
+    const [messenger, setMessenger] = useState(false)
+    const [messengerCreation, setMessengerCreation] = useState({
+        state: false,
+        type: ''
+    })
     const refSearch = useRef<HTMLDivElement>(null)
     const refSidebar = useRef<HTMLDivElement>(null)
     const sidebarLeft = useAppSelector(state => state.app.sidebarLeft)
@@ -70,24 +77,66 @@ const LeftSidebar = () => {
         return () => window.removeEventListener('resize', handleResize)
     }, [dispatch, handleResize])
 
+    useEffect(() => {
+
+    }, [messenger])
+
+    const listMessenger = [
+        {
+            liChildren: <HiOutlineMegaphone />,
+            liText: 'New Channel',
+            liFoo: () => setMessengerCreation(prev => ({
+                state: !prev.state,
+                type: 'channel'
+            }))
+        },
+        {
+            liChildren: <HiOutlineUsers />,
+            liText: 'New Group',
+            liFoo: () => setMessengerCreation(prev => ({
+                state: !prev.state,
+                type: 'group'
+            }))
+        },
+        {
+            liChildren: <HiOutlineUser />,
+            liText: 'New Private Chat',
+            liFoo: () => setMessengerCreation(prev => ({
+                state: !prev.state,
+                type: 'chat'
+            }))
+        }
+    ]
+
     return (
-        <CSSTransition
-            in={sidebarLeft}
-            nodeRef={refSidebar}
-            timeout={300}
-            classNames='left-sidebar-node'
-        >
-            <SidebarContainer styles={['LeftSidebarContainer']} ref={refSidebar}>
-                    <div className={style.TopBar}>
-                        <Buttons.DefaultButton foo={() => setSettings(!settings)}>
-                            <HiBars3/>
-                            <DropDown list={list} state={settings} setState={setSettings}/>
-                        </Buttons.DefaultButton>
-                        <SearchBlock ref={refSearch}/>
-                    </div>
-                    <ChatList/>
-            </SidebarContainer>
-        </CSSTransition>
+        <>
+            <CSSTransition
+                in={sidebarLeft}
+                nodeRef={refSidebar}
+                timeout={300}
+                classNames='left-sidebar-node'
+                unmountOnExit
+            >
+                <SidebarContainer styles={['LeftSidebarContainer']} ref={refSidebar}>
+                        <div className={style.TopBar}>
+                            <Buttons.DefaultButton foo={() => setSettings(!settings)}>
+                                <HiBars3/>
+                                <DropDown list={list} state={settings} setState={setSettings}/>
+                            </Buttons.DefaultButton>
+                            <SearchBlock ref={refSearch}/>
+                        </div>
+                        <ChatList/>
+                        <span className={style.CreateButton}>
+                            <Buttons.InterButton foo={() => setMessenger(!messenger)}>
+                                <HiOutlinePencil />
+                                <DropDown list={listMessenger} state={messenger} setState={setMessenger}/>
+                            </Buttons.InterButton>
+                        </span>
+                    <Messenger messengerCreation={messengerCreation} setMessengerCreation={setMessengerCreation}/>
+
+                </SidebarContainer>
+            </CSSTransition>
+        </>
     )
 }
 

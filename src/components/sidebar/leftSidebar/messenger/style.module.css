@@ -1,0 +1,40 @@
+@import url("../../../../utils/styles/base/_normalize.scss");
+
+.TopBar {
+  display: flex;
+  align-items: center;
+  padding: 8px 8px;
+  width: 100%;
+  height: 56px;
+}
+.TopBar h1 {
+  color: white;
+  font-size: 20px;
+  padding-left: 24px;
+}
+
+.MessengerForm {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+.MessengerForm .FileBlock {
+  display: flex;
+  justify-content: center;
+}
+.MessengerForm .FileBlock div {
+  background-color: #98989A;
+  border-radius: 50%;
+}
+.MessengerForm .FileBlock svg, .MessengerForm .FileBlock img {
+  color: white;
+  height: 160px;
+  width: 160px;
+  cursor: pointer;
+}
+.MessengerForm .FileBlock img {
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+/*# sourceMappingURL=style.module.css.map */

@@ -15,8 +15,8 @@ export default class AuthService {
         return $api.post(SEND_CODE_ROUTE, {email})
     }
 
-    static async confirmEmail(code: number): Promise<AxiosResponse> {
-        return $api.post(CONFIRM_EMAIL_ROUTE, {code})
+    static async confirmEmail(user_code: number, user_email: string): Promise<AxiosResponse> {
+        return $api.post(CONFIRM_EMAIL_ROUTE, {user_code, user_email})
     }
 
     static async login(formData: FormData): Promise<AxiosResponse<IAuthResponse>> {
