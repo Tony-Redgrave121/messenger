@@ -9,6 +9,11 @@ const users = sequelize.define("users", {
     user_img: {type: DataTypes.STRING, allowNull: true},
     user_date: {type: DataTypes.DATE, allowNull: true, defaultValue: DataTypes.NOW},
     user_bio: {type: DataTypes.STRING, allowNull: true},
+    user_last_seen: {type: DataTypes.DATE, allowNull: false, defaultValue: DataTypes.NOW},
+}, {timestamps: false})
+
+const contacts = sequelize.define("contacts", {
+    contact_id: {type: DataTypes.UUID, primaryKey: true},
 }, {timestamps: false})
 
 const user_code = sequelize.define("user_code", {
@@ -55,6 +60,12 @@ const message_file = sequelize.define("message_file", {
 
 users.hasMany(user_tokens, {foreignKey: {name: 'user_id', allowNull: false}, onDelete: 'CASCADE', onUpdate: 'CASCADE'})
 user_tokens.belongsTo(users, {foreignKey: 'user_id'})
+
+users.hasMany(contacts, {foreignKey: {name: 'owner_id', allowNull: false}, onDelete: 'CASCADE', onUpdate: 'CASCADE'})
+contacts.belongsTo(users, {foreignKey: 'owner_id'})
+
+users.hasMany(contacts, {foreignKey: {name: 'contact_id', allowNull: false}, onDelete: 'CASCADE', onUpdate: 'CASCADE'})
+contacts.belongsTo(users, {foreignKey: 'contact_id'})
 
 users.hasMany(member, {foreignKey: {name: 'user_id', allowNull: false}, onDelete: 'CASCADE', onUpdate: 'CASCADE'})
 member.belongsTo(users, {foreignKey: 'user_id'})

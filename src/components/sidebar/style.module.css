@@ -10,6 +10,7 @@
   height: 100vh;
   background-color: #212121;
   border-right: 1px solid #2f2f2f;
+  overflow: hidden;
 }
 .SidebarContainer .Wrapper {
   min-width: 420px;
@@ -34,6 +35,10 @@
   position: absolute;
   top: 0;
   left: 0;
+  background-color: #181818;
+}
+.LeftSidebarContainerSettings .Wrapper {
+  background-color: #212121;
 }
 
 @media screen and (max-width: 1280px) {

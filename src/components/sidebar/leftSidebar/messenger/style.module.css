@@ -3,7 +3,7 @@
 .TopBar {
   display: flex;
   align-items: center;
-  padding: 8px 8px;
+  padding: 8px;
   width: 100%;
   height: 56px;
 }
@@ -14,27 +14,50 @@
 }
 
 .MessengerForm {
+  position: relative;
+  gap: 24px;
+  padding: 16px 8px;
+}
+.MessengerForm, .MessengerForm .ContactsContainer {
   display: flex;
   flex-direction: column;
-  gap: 24px;
 }
 .MessengerForm .FileBlock {
   display: flex;
   justify-content: center;
 }
-.MessengerForm .FileBlock div {
-  background-color: #98989A;
-  border-radius: 50%;
-}
-.MessengerForm .FileBlock svg, .MessengerForm .FileBlock img {
-  color: white;
-  height: 160px;
-  width: 160px;
+.MessengerForm .FileBlock > label {
+  display: flex;
   cursor: pointer;
 }
+.MessengerForm .FileBlock div {
+  display: flex;
+  background-color: #181818;
+  border-radius: 50%;
+  padding: 25px;
+}
+.MessengerForm .FileBlock div > svg {
+  color: white;
+  height: 70px;
+  width: 70px;
+}
 .MessengerForm .FileBlock img {
+  width: 120px;
+  height: 120px;
   border-radius: 50%;
   object-fit: cover;
+}
+.MessengerForm > p {
+  position: absolute;
+  bottom: -24px;
+  left: 0;
+  padding: 0 8px;
+  color: #747474;
+  font-size: 14px;
+}
+.MessengerForm .ContactsContainer > :first-child {
+  height: 42px;
+  margin-bottom: 16px;
 }
 
 /*# sourceMappingURL=style.module.css.map */

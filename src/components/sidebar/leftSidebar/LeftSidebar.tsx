@@ -133,7 +133,6 @@ const LeftSidebar = () => {
                             </Buttons.InterButton>
                         </span>
                     <Messenger messengerCreation={messengerCreation} setMessengerCreation={setMessengerCreation}/>
-
                 </SidebarContainer>
             </CSSTransition>
         </>
