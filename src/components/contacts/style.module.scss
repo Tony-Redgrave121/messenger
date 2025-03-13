@@ -4,14 +4,15 @@
 .ContactBlock {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 18px;
   padding: 4px 16px;
   cursor: pointer;
   border-radius: 10px;
 
-  > :first-child {
+  > span > * {
     width: 42px;
     height: 42px;
+
     h1 {
       font-size: 16px;
     }

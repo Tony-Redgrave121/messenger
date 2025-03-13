@@ -34,12 +34,12 @@
   display: flex;
   background-color: #181818;
   border-radius: 50%;
-  padding: 25px;
+  padding: 35px;
 }
 .MessengerForm .FileBlock div > svg {
   color: white;
-  height: 70px;
-  width: 70px;
+  height: 50px;
+  width: 50px;
 }
 .MessengerForm .FileBlock img {
   width: 120px;

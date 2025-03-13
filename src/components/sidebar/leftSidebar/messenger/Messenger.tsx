@@ -14,7 +14,7 @@ import InputForm from "../../../inputForm/InputForm";
 import {Controller, SubmitHandler, useForm} from "react-hook-form";
 import {useNavigate} from "react-router-dom";
 import IMessenger from "../../../../utils/types/IMessenger";
-import Contacts from "../../../contacts/Contacts";
+import Contacts from "../../../contacts/Contact";
 import SearchBlock from "../../../searchBlock/SearchBlock";
 
 interface IMessengerProps {
@@ -139,7 +139,11 @@ const Messenger: React.FC<IMessengerProps> = ({messengerCreation, setMessengerCr
                     </InputForm>
                     <div className={style.ContactsContainer}>
                         <SearchBlock ref={refSearchBlock}/>
-                        {ContactsList.map((contact) => <Contacts contact={contact} key={contact.contact_id}/>)}
+                        {ContactsList.map((contact) =>
+                            <Contacts contact={contact} key={contact.contact_id} foo={() => {}}>
+                                <Buttons.Checkbox/>
+                            </Contacts>
+                        )}
                     </div>
                     <p>You can provide an optional description for your channel.</p>
                     {errorForm && <small>{errorForm}</small>}

@@ -40,6 +40,11 @@ namespace Buttons {
             <button className={style.FormButton} onClick={foo} type={type}>{children}</button>
         )
     }
+    export const Checkbox: React.FC<IDefaultButton> = ({foo}) => {
+        return (
+            <input type="checkbox" onClick={foo} className={style.Checkbox}/>
+        )
+    }
 }
 
 export default Buttons
