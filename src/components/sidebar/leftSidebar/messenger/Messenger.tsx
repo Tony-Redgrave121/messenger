@@ -1,4 +1,4 @@
-import React, {useRef, useState} from 'react'
+import React, {useEffect, useRef, useState} from 'react'
 import SidebarContainer from "../../SidebarContainer";
 import {CSSTransition} from "react-transition-group";
 import '../animation.css'
@@ -14,8 +14,8 @@ import InputForm from "../../../inputForm/InputForm";
 import {Controller, SubmitHandler, useForm} from "react-hook-form";
 import {useNavigate} from "react-router-dom";
 import IMessenger from "../../../../utils/types/IMessenger";
-import Contacts from "../../../contacts/Contact";
-import SearchBlock from "../../../searchBlock/SearchBlock";
+import AddContacts from "../../../contacts/AddContacts/AddContacts";
+import IContact from "../../../../utils/types/IContact";
 
 interface IMessengerProps {
     messengerCreation: {
@@ -53,11 +53,11 @@ const ContactsList = [
 
 const Messenger: React.FC<IMessengerProps> = ({messengerCreation, setMessengerCreation}) => {
     const [errorForm, setErrorForm] = useState<string | null>(null)
+    const [members, setMembers] = useState<IContact[]>([])
     const [picture, setPicture] = useState<File | null>(null)
 
     const refSidebar = useRef(null)
     const refForm = useRef(null)
-    const refSearchBlock = useRef(null)
     const navigate = useNavigate()
 
     const handleImageChange = (file: FileList | null, onChange: (value: File) => void) => {
@@ -137,14 +137,7 @@ const Messenger: React.FC<IMessengerProps> = ({messengerCreation, setMessengerCr
                     <InputForm errors={errors} field={"user_email"}>
                         <input type='text' id="messenger_desc" placeholder="Description (optional)" {...register('messenger_desc')}></input>
                     </InputForm>
-                    <div className={style.ContactsContainer}>
-                        <SearchBlock ref={refSearchBlock}/>
-                        {ContactsList.map((contact) =>
-                            <Contacts contact={contact} key={contact.contact_id} foo={() => {}}>
-                                <Buttons.Checkbox/>
-                            </Contacts>
-                        )}
-                    </div>
+                    <AddContacts members={members} contacts={ContactsList} setMembers={setMembers}/>
                     <p>You can provide an optional description for your channel.</p>
                     {errorForm && <small>{errorForm}</small>}
                 </form>

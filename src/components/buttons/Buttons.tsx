@@ -14,6 +14,11 @@ interface IFormButton extends IDefaultButton {
     type?: "button" | "submit" | "reset" | undefined
 }
 
+interface ICheckbox {
+    children?: React.ReactNode,
+    foo?: (event?: React.ChangeEvent<any>) => void
+}
+
 namespace Buttons {
     export const DefaultButton: React.FC<IDefaultButton> = ({children, foo}) => {
         return (
@@ -40,9 +45,12 @@ namespace Buttons {
             <button className={style.FormButton} onClick={foo} type={type}>{children}</button>
         )
     }
-    export const Checkbox: React.FC<IDefaultButton> = ({foo}) => {
+    export const Checkbox: React.FC<ICheckbox> = ({foo, children}) => {
         return (
-            <input type="checkbox" onClick={foo} className={style.Checkbox}/>
+            <label className={style.CheckboxContainer}>
+                <input type="checkbox" onChange={foo}/>
+                {children}
+            </label>
         )
     }
 }

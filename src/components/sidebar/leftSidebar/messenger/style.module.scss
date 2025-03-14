@@ -16,14 +16,11 @@
 }
 
 .MessengerForm {
+  display: flex;
+  flex-direction: column;
   position: relative;
   gap: 24px;
   padding: 16px 8px;
-
-  &, .ContactsContainer {
-    display: flex;
-    flex-direction: column;
-  }
 
   .FileBlock {
     display: flex;
@@ -62,12 +59,5 @@
     padding: 0 8px;
     color: #747474;
     font-size: 14px;
-  }
-
-  .ContactsContainer {
-    > :first-child {
-      height: 42px;
-      margin-bottom: 16px;
-    }
   }
 }

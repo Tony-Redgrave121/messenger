@@ -123,7 +123,7 @@ const LeftSidebar = () => {
                                 <HiBars3/>
                                 <DropDown list={list} state={settings} setState={setSettings}/>
                             </Buttons.DefaultButton>
-                            <SearchBlock ref={refSearch}/>
+                            <SearchBlock ref={refSearch} foo={() => {}}/>
                         </div>
                         <ChatList/>
                         <span className={style.CreateButton}>

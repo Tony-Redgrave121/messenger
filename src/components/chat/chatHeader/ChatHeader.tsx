@@ -81,7 +81,7 @@ const ChatHeader: React.FC<IChatHeader> = memo(({messenger, setSidebarState}) =>
                     classNames='search-node'
                     unmountOnExit
                 >
-                    <SearchBlock ref={refSearch}/>
+                    <SearchBlock ref={refSearch} foo={() => {}}/>
                 </CSSTransition>
                 <Buttons.DefaultButton foo={() => setInputState(!inputState)}>
                     {inputState ? <HiOutlineXMark/> : <HiOutlineMagnifyingGlass/>}
