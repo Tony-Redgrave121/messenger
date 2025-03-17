@@ -137,7 +137,7 @@ const Messenger: React.FC<IMessengerProps> = ({messengerCreation, setMessengerCr
                     <InputForm errors={errors} field={"user_email"}>
                         <input type='text' id="messenger_desc" placeholder="Description (optional)" {...register('messenger_desc')}></input>
                     </InputForm>
-                    <AddContacts members={members} contacts={ContactsList} setMembers={setMembers}/>
+                    {members && <AddContacts members={members} contacts={ContactsList} setMembers={setMembers}/>}
                     <p>You can provide an optional description for your channel.</p>
                     {errorForm && <small>{errorForm}</small>}
                 </form>

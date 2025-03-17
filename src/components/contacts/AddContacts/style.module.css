@@ -35,7 +35,7 @@
   flex-wrap: wrap;
   gap: 8px;
 }
-.ContactsContainer .MemberContainer > span {
+.ContactsContainer .MemberContainer .RemoveMemberButton {
   display: flex;
   align-items: center;
   gap: 8px;
@@ -48,15 +48,18 @@
   padding-right: 12px;
   cursor: pointer;
 }
-.ContactsContainer .MemberContainer > span h4 {
+.ContactsContainer .MemberContainer .RemoveMemberButton h4 {
   font-weight: 500;
 }
-.ContactsContainer .MemberContainer > span img, .ContactsContainer .MemberContainer > span div {
+.ContactsContainer .MemberContainer .RemoveMemberButton img, .ContactsContainer .MemberContainer .RemoveMemberButton div {
   width: 32px;
   height: 32px;
 }
-.ContactsContainer .MemberContainer > span img h1, .ContactsContainer .MemberContainer > span div h1 {
+.ContactsContainer .MemberContainer .RemoveMemberButton img h1, .ContactsContainer .MemberContainer .RemoveMemberButton div h1 {
   font-size: 14px;
+}
+.ContactsContainer .MemberContainer .RemoveMemberButton:hover {
+  background-color: #322525;
 }
 
 /*# sourceMappingURL=style.module.css.map */

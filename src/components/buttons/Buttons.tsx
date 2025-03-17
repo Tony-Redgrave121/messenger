@@ -16,7 +16,8 @@ interface IFormButton extends IDefaultButton {
 
 interface ICheckbox {
     children?: React.ReactNode,
-    foo?: (event?: React.ChangeEvent<any>) => void
+    foo?: (event?: React.ChangeEvent<any>) => void,
+    state: boolean
 }
 
 namespace Buttons {
@@ -45,10 +46,10 @@ namespace Buttons {
             <button className={style.FormButton} onClick={foo} type={type}>{children}</button>
         )
     }
-    export const Checkbox: React.FC<ICheckbox> = ({foo, children}) => {
+    export const Checkbox: React.FC<ICheckbox> = ({foo, children, state}) => {
         return (
             <label className={style.CheckboxContainer}>
-                <input type="checkbox" onChange={foo}/>
+                <input type="checkbox" onChange={foo} checked={state}/>
                 {children}
             </label>
         )
