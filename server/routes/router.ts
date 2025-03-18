@@ -11,10 +11,12 @@ import {
     POST_MESSAGE,
     REFRESH_ROUTE,
     REGISTRATION_ROUTE,
+    GET_CONTACTS
 } from "../utils/const"
 import express from "express"
 import UserController from "../controller/userController"
 import AuthController from "../controller/authController"
+import MessengerController from "../controller/messengerController";
 
 const router = express.Router()
 
@@ -32,5 +34,7 @@ router.get(FETCH_MESSENGERS_LIST, UserController.fetchMessengersList)
 router.get(FETCH_MESSAGES, UserController.fetchMessages)
 router.post(POST_MESSAGE, UserController.postMessage)
 router.delete(DELETE_MESSAGE, UserController.deleteMessage)
+
+router.get(GET_CONTACTS, MessengerController.fetchContacts)
 
 export default router

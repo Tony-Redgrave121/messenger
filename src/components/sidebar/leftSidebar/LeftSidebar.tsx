@@ -83,7 +83,7 @@ const LeftSidebar = () => {
 
     const listMessenger = [
         {
-            liChildren: <HiOutlineMegaphone />,
+            liChildren: <HiOutlineMegaphone/>,
             liText: 'New Channel',
             liFoo: () => setMessengerCreation(prev => ({
                 state: !prev.state,
@@ -91,7 +91,7 @@ const LeftSidebar = () => {
             }))
         },
         {
-            liChildren: <HiOutlineUsers />,
+            liChildren: <HiOutlineUsers/>,
             liText: 'New Group',
             liFoo: () => setMessengerCreation(prev => ({
                 state: !prev.state,
@@ -99,7 +99,7 @@ const LeftSidebar = () => {
             }))
         },
         {
-            liChildren: <HiOutlineUser />,
+            liChildren: <HiOutlineUser/>,
             liText: 'New Private Chat',
             liFoo: () => setMessengerCreation(prev => ({
                 state: !prev.state,
@@ -118,21 +118,21 @@ const LeftSidebar = () => {
                 unmountOnExit
             >
                 <SidebarContainer styles={['LeftSidebarContainer']} ref={refSidebar}>
-                        <div className={style.TopBar}>
-                            <Buttons.DefaultButton foo={() => setSettings(!settings)}>
-                                <HiBars3/>
-                                <DropDown list={list} state={settings} setState={setSettings}/>
-                            </Buttons.DefaultButton>
-                            <SearchBlock ref={refSearch} foo={() => {}}/>
-                        </div>
-                        <ChatList/>
-                        <span className={style.CreateButton}>
-                            <Buttons.InterButton foo={() => setMessenger(!messenger)}>
-                                <HiOutlinePencil />
-                                <DropDown list={listMessenger} state={messenger} setState={setMessenger}/>
-                            </Buttons.InterButton>
-                        </span>
-                    <Messenger messengerCreation={messengerCreation} setMessengerCreation={setMessengerCreation}/>
+                    <div className={style.TopBar}>
+                        <Buttons.DefaultButton foo={() => setSettings(!settings)}>
+                            <HiBars3/>
+                            <DropDown list={list} state={settings} setState={setSettings}/>
+                        </Buttons.DefaultButton>
+                        <SearchBlock ref={refSearch} foo={() => {}}/>
+                    </div>
+                    <ChatList/>
+                    <span className={style.CreateButton}>
+                        <Buttons.InterButton foo={() => setMessenger(!messenger)}>
+                            <HiOutlinePencil/>
+                            <DropDown list={listMessenger} state={messenger} setState={setMessenger}/>
+                        </Buttons.InterButton>
+                    </span>
+                    {messengerCreation.type && <Messenger messengerCreation={messengerCreation} setMessengerCreation={setMessengerCreation}/>}
                 </SidebarContainer>
             </CSSTransition>
         </>

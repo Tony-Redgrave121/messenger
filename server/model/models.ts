@@ -13,7 +13,8 @@ const users = sequelize.define("users", {
 }, {timestamps: false})
 
 const contacts = sequelize.define("contacts", {
-    contact_id: {type: DataTypes.UUID, primaryKey: true},
+    contact_id: { type: DataTypes.UUID, allowNull: false, primaryKey: true },
+    user_id: { type: DataTypes.UUID, allowNull: false },
 }, {timestamps: false})
 
 const user_code = sequelize.define("user_code", {
@@ -64,8 +65,7 @@ user_tokens.belongsTo(users, {foreignKey: 'user_id'})
 users.hasMany(contacts, {foreignKey: {name: 'owner_id', allowNull: false}, onDelete: 'CASCADE', onUpdate: 'CASCADE'})
 contacts.belongsTo(users, {foreignKey: 'owner_id'})
 
-users.hasMany(contacts, {foreignKey: {name: 'contact_id', allowNull: false}, onDelete: 'CASCADE', onUpdate: 'CASCADE'})
-contacts.belongsTo(users, {foreignKey: 'contact_id'})
+contacts.belongsTo(users, { foreignKey: 'user_id'})
 
 users.hasMany(member, {foreignKey: {name: 'user_id', allowNull: false}, onDelete: 'CASCADE', onUpdate: 'CASCADE'})
 member.belongsTo(users, {foreignKey: 'user_id'})
@@ -91,7 +91,8 @@ const models = {
     member,
     messenger,
     message,
-    message_file
+    message_file,
+    contacts
 }
 
 export default models

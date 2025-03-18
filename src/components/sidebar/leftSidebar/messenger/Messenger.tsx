@@ -16,6 +16,8 @@ import {useNavigate} from "react-router-dom";
 import IMessenger from "../../../../utils/types/IMessenger";
 import AddContacts from "../../../contacts/AddContacts/AddContacts";
 import IContact from "../../../../utils/types/IContact";
+import messengerService from "../../../../service/MessengerService"
+import {useAppSelector} from "../../../../utils/hooks/useRedux";
 
 interface IMessengerProps {
     messengerCreation: {
@@ -36,29 +38,30 @@ const InitialValues: IMessenger = {
     messenger_members: [],
 }
 
-const ContactsList = [
-    {
-        contact_id: '1',
-        contact_name: 'Володя',
-        contact_image: '',
-        contact_last_seen: new Date(),
-    },
-    {
-        contact_id: '2',
-        contact_name: 'Duna',
-        contact_image: '',
-        contact_last_seen: new Date(),
-    },
-]
-
 const Messenger: React.FC<IMessengerProps> = ({messengerCreation, setMessengerCreation}) => {
     const [errorForm, setErrorForm] = useState<string | null>(null)
     const [members, setMembers] = useState<IContact[]>([])
     const [picture, setPicture] = useState<File | null>(null)
+    const [contacts, setContacts] = useState<IContact[]>([])
 
     const refSidebar = useRef(null)
     const refForm = useRef(null)
     const navigate = useNavigate()
+    const userId = useAppSelector(state => state.user.userId)
+
+    useEffect(() => {
+        const getContacts = async () => {
+            try {
+                const contacts = await messengerService.getContacts(userId)
+                console.log(contacts.data)
+                setContacts(contacts.data)
+            } catch (e) {
+                console.log(e)
+            }
+        }
+
+        getContacts()
+    }, [userId])
 
     const handleImageChange = (file: FileList | null, onChange: (value: File) => void) => {
         if (file) {
@@ -71,8 +74,6 @@ const Messenger: React.FC<IMessengerProps> = ({messengerCreation, setMessengerCr
         register,
         handleSubmit,
         formState: {errors},
-        trigger,
-        watch,
         control
     } = useForm({defaultValues: InitialValues})
 
@@ -137,7 +138,7 @@ const Messenger: React.FC<IMessengerProps> = ({messengerCreation, setMessengerCr
                     <InputForm errors={errors} field={"user_email"}>
                         <input type='text' id="messenger_desc" placeholder="Description (optional)" {...register('messenger_desc')}></input>
                     </InputForm>
-                    {members && <AddContacts members={members} contacts={ContactsList} setMembers={setMembers}/>}
+                    {(members && contacts.length > 0) && <AddContacts members={members} contacts={contacts} setMembers={setMembers}/>}
                     <p>You can provide an optional description for your channel.</p>
                     {errorForm && <small>{errorForm}</small>}
                 </form>

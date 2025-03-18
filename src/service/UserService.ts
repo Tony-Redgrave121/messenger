@@ -9,7 +9,7 @@ import IMessengerResponse from "../utils/types/IMessengerResponse"
 import IMessagesResponse from "../utils/types/IMessagesResponse"
 import IMessengersListResponse from "../utils/types/IMessengersListResponse"
 
-export default class AuthService {
+export default class UserService {
     static async fetchMessenger(user_id: string, messenger_id: string): Promise<AxiosResponse<IMessengerResponse>> {
         return $api.get<IMessengerResponse>(`/messenger/?user_id=${user_id}&messenger_id=${messenger_id}`)
     }

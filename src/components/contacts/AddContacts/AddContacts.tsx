@@ -26,7 +26,7 @@ const AddContacts: React.FC<ICheckboxContactProps> = ({members, contacts, setMem
 
     const searchDebounce = useMemo(() =>
         debounce((query: string) => (
-            setFilteredContacts(contacts.filter(el => el.contact_name.toLowerCase().includes(query)))
+            setFilteredContacts(contacts.filter(el => el.user_name.toLowerCase().includes(query)))
         ), 200), [contacts]
     )
 
@@ -41,16 +41,16 @@ const AddContacts: React.FC<ICheckboxContactProps> = ({members, contacts, setMem
         <div className={style.ContactsContainer}>
             <div className={style.MemberContainer}>
                 {members.map(contact =>
-                    <button key={contact.contact_id} className={style.RemoveMemberButton} onClick={() => handleAddMember(contact)}>
-                        <LoadFile imagePath={contact.contact_image ? `users/${contact.contact_id}/${contact.contact_image}` : ''} imageTitle={contact.contact_name}/>
-                        <h4>{contact.contact_name}</h4>
+                    <button key={contact.user_id} className={style.RemoveMemberButton} onClick={() => handleAddMember(contact)}>
+                        <LoadFile imagePath={contact.user_img ? `users/${contact.user_id}/${contact.user_img}` : ''} imageTitle={contact.user_name}/>
+                        <h4>{contact.user_name}</h4>
                     </button>
                 )}
                 <input type="text" placeholder="Add people..." onChange={handleInput}/>
             </div>
             {filteredContacts.length > 0 ?
                 filteredContacts.map((contact) =>
-                    <Buttons.Checkbox key={contact.contact_id} foo={() => handleAddMember(contact)} state={members.includes(contact)}>
+                    <Buttons.Checkbox key={contact.user_id} foo={() => handleAddMember(contact)} state={members.includes(contact)}>
                         <Contact contact={contact}/>
                     </Buttons.Checkbox>
                 ) :
