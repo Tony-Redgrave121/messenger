@@ -43,11 +43,29 @@ const Messenger: React.FC<IMessengerProps> = ({messengerCreation, setMessengerCr
     const [members, setMembers] = useState<IContact[]>([])
     const [picture, setPicture] = useState<File | null>(null)
     const [contacts, setContacts] = useState<IContact[]>([])
+    const [animationState, setAnimationState] = useState(false)
 
     const refSidebar = useRef(null)
     const refForm = useRef(null)
     const navigate = useNavigate()
     const userId = useAppSelector(state => state.user.userId)
+
+    useEffect(() => {
+        let timer = null
+
+        if (!messengerCreation.state) {
+            timer = setTimeout(() => setMessengerCreation(prev => ({
+                ...prev,
+                type: ''
+            })), 300)
+        }
+
+        setAnimationState(messengerCreation.state)
+        
+        return () => {
+            timer && clearTimeout(timer)
+        }
+    }, [messengerCreation.state, setMessengerCreation])
 
     useEffect(() => {
         const getContacts = async () => {
@@ -100,7 +118,7 @@ const Messenger: React.FC<IMessengerProps> = ({messengerCreation, setMessengerCr
 
     return (
         <CSSTransition
-            in={messengerCreation.state}
+            in={animationState}
             nodeRef={refSidebar}
             timeout={300}
             classNames='left-sidebar-node'
@@ -108,10 +126,10 @@ const Messenger: React.FC<IMessengerProps> = ({messengerCreation, setMessengerCr
         >
             <SidebarContainer styles={['LeftSidebarContainer', 'LeftSidebarContainerSettings']} ref={refSidebar}>
                 <div className={style.TopBar}>
-                    <Buttons.DefaultButton foo={() => setMessengerCreation({
-                        type: '',
+                    <Buttons.DefaultButton foo={() => setMessengerCreation(prev => ({
+                        ...prev,
                         state: false,
-                    })}>
+                    }))}>
                         <HiOutlineArrowLeft/>
                     </Buttons.DefaultButton>
                     <h1>New Channel</h1>
@@ -122,7 +140,8 @@ const Messenger: React.FC<IMessengerProps> = ({messengerCreation, setMessengerCr
                             control={control}
                             name="messenger_image"
                             render={({field: {onChange}}) => (
-                                <input type="file" accept="image/png, image/jpeg" id='messenger_img' onChange={(event) => handleImageChange(event.currentTarget.files, onChange)}/>
+                                <input type="file" accept="image/png, image/jpeg" id='messenger_img'
+                                       onChange={(event) => handleImageChange(event.currentTarget.files, onChange)}/>
                             )}
                         />
                         <label htmlFor="messenger_img">
@@ -133,12 +152,15 @@ const Messenger: React.FC<IMessengerProps> = ({messengerCreation, setMessengerCr
                         </label>
                     </div>
                     <InputForm errors={errors} field={"user_email"}>
-                        <input type='text' id="messenger_name" placeholder="Channel name" {...register('messenger_name', fieldOptions.messenger_name)}></input>
+                        <input type='text' id="messenger_name"
+                               placeholder="Channel name" {...register('messenger_name', fieldOptions.messenger_name)}></input>
                     </InputForm>
                     <InputForm errors={errors} field={"user_email"}>
-                        <input type='text' id="messenger_desc" placeholder="Description (optional)" {...register('messenger_desc')}></input>
+                        <input type='text' id="messenger_desc"
+                               placeholder="Description (optional)" {...register('messenger_desc')}></input>
                     </InputForm>
-                    {(members && contacts.length > 0) && <AddContacts members={members} contacts={contacts} setMembers={setMembers}/>}
+                    {(members && contacts.length > 0) &&
+                        <AddContacts members={members} contacts={contacts} setMembers={setMembers}/>}
                     <p>You can provide an optional description for your channel.</p>
                     {errorForm && <small>{errorForm}</small>}
                 </form>
