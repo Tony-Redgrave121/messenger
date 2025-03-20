@@ -18,6 +18,7 @@ import AddContacts from "../../../contacts/AddContacts/AddContacts";
 import IContact from "../../../../utils/types/IContact";
 import messengerService from "../../../../service/MessengerService"
 import {useAppSelector} from "../../../../utils/hooks/useRedux";
+import axios from "axios";
 
 interface IMessengerProps {
     messengerCreation: {
@@ -51,7 +52,7 @@ const Messenger: React.FC<IMessengerProps> = ({messengerCreation, setMessengerCr
     const userId = useAppSelector(state => state.user.userId)
 
     useEffect(() => {
-        let timer = null
+        let timer: NodeJS.Timeout | null = null
 
         if (!messengerCreation.state) {
             timer = setTimeout(() => setMessengerCreation(prev => ({
@@ -68,17 +69,19 @@ const Messenger: React.FC<IMessengerProps> = ({messengerCreation, setMessengerCr
     }, [messengerCreation.state, setMessengerCreation])
 
     useEffect(() => {
+        const controller = new AbortController()
+
         const getContacts = async () => {
-            try {
-                const contacts = await messengerService.getContacts(userId)
-                console.log(contacts.data)
-                setContacts(contacts.data)
-            } catch (e) {
-                console.log(e)
-            }
+            const contacts = await messengerService.getContacts(userId, controller.signal) as any
+            const payload = contacts.payload
+
+            if (payload && payload.message) return setErrorForm(payload.message)
+            setContacts(contacts.data)
         }
 
-        getContacts()
+        getContacts().catch(error => console.log(error))
+
+        return () => controller.abort()
     }, [userId])
 
     const handleImageChange = (file: FileList | null, onChange: (value: File) => void) => {
@@ -97,7 +100,7 @@ const Messenger: React.FC<IMessengerProps> = ({messengerCreation, setMessengerCr
 
     const fieldOptions = {
         messenger_name: {
-            required: "Email is required"
+            required: `${messengerCreation.type} name is required`
         }
     }
 
@@ -107,13 +110,14 @@ const Messenger: React.FC<IMessengerProps> = ({messengerCreation, setMessengerCr
         formData.append('messenger_name', data.messenger_name)
         formData.append('messenger_image', data.messenger_image as File)
         formData.append('messenger_desc', data.messenger_desc)
-        formData.append('messenger_type', data.messenger_type)
+        formData.append('messenger_type', messengerCreation.type)
         formData.append('messenger_members', JSON.stringify(data.messenger_members))
 
         // const res = await
         //
         // if (res.payload.message) setErrorForm(res.payload.message)
         // else return navigate('/')
+
     }
 
     return (
@@ -140,8 +144,7 @@ const Messenger: React.FC<IMessengerProps> = ({messengerCreation, setMessengerCr
                             control={control}
                             name="messenger_image"
                             render={({field: {onChange}}) => (
-                                <input type="file" accept="image/png, image/jpeg" id='messenger_img'
-                                       onChange={(event) => handleImageChange(event.currentTarget.files, onChange)}/>
+                                <input type="file" accept="image/png, image/jpeg" id='messenger_img' onChange={(event) => handleImageChange(event.currentTarget.files, onChange)}/>
                             )}
                         />
                         <label htmlFor="messenger_img">
@@ -151,13 +154,11 @@ const Messenger: React.FC<IMessengerProps> = ({messengerCreation, setMessengerCr
                             }
                         </label>
                     </div>
-                    <InputForm errors={errors} field={"user_email"}>
-                        <input type='text' id="messenger_name"
-                               placeholder="Channel name" {...register('messenger_name', fieldOptions.messenger_name)}></input>
+                    <InputForm errors={errors} field={"messenger_name"}>
+                        <input type='text' id="messenger_name" placeholder="Channel name" {...register('messenger_name', fieldOptions.messenger_name)}></input>
                     </InputForm>
-                    <InputForm errors={errors} field={"user_email"}>
-                        <input type='text' id="messenger_desc"
-                               placeholder="Description (optional)" {...register('messenger_desc')}></input>
+                    <InputForm errors={errors} field={"messenger_desc"}>
+                        <input type='text' id="messenger_desc" placeholder="Description (optional)" {...register('messenger_desc')}></input>
                     </InputForm>
                     {(members && contacts.length > 0) &&
                         <AddContacts members={members} contacts={contacts} setMembers={setMembers}/>}
@@ -165,7 +166,7 @@ const Messenger: React.FC<IMessengerProps> = ({messengerCreation, setMessengerCr
                     {errorForm && <small>{errorForm}</small>}
                 </form>
                 <span className={styleSidebar.CreateButton}>
-                    <Buttons.InterButton foo={() => handleSubmit(handleCreation)}>
+                    <Buttons.InterButton foo={handleSubmit(handleCreation)}>
                         <HiOutlineArrowRight/>
                     </Buttons.InterButton>
                 </span>

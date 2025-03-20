@@ -10,19 +10,15 @@ const ChatList = memo(() => {
     const user_id = useAppSelector(state => state.user.userId)
 
     useEffect(() => {
-        const handleMessengerList = async () => {
-            try {
-                await UserService.fetchMessengersList(user_id)
-                    .then(data => setMessengerList(data.data))
-                    .catch(error => console.log(error))
-            } catch (e) {
-                console.log(e)
-            }
+        const constructor = new AbortController()
 
-            return true
+        const handleMessengerList = async () => {
+            const messengers = await UserService.fetchMessengersList(user_id, constructor.signal)
+
+            setMessengerList(messengers.data)
         }
 
-        handleMessengerList().catch()
+        handleMessengerList().catch(error => console.log(error))
     }, [user_id])
 
     return (

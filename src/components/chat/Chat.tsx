@@ -24,25 +24,30 @@ const Chat = () => {
     const user = useAppSelector(state => state.user)
 
     useEffect(() => {
+        if (!id) return
+
+        const controller = new AbortController()
+        const signal = controller.signal
+
         const handleMessageList = async () => {
-            if (id) {
-                setMessagesList([])
+            setMessagesList([])
 
-                try {
-                    const [messages, messenger] = await Promise.all([
-                        UserService.fetchMessages(user.userId, id),
-                        UserService.fetchMessenger(user.userId, id)
-                    ])
+            try {
+                const [messages, messenger] = await Promise.all([
+                    UserService.fetchMessages(user.userId, id, signal),
+                    UserService.fetchMessenger(user.userId, id, signal)
+                ])
 
-                    setMessagesList(messages.data)
-                    setMessenger(messenger.data)
-                } catch (error) {
-                    console.log(error)
-                }
+                setMessagesList(messages.data)
+                setMessenger(messenger.data)
+            } catch (error) {
+                console.log(error)
             }
         }
 
-        handleMessageList()
+        handleMessageList().catch(error => console.log(error))
+
+        return () => controller.abort()
     }, [user.userId, id])
 
     useEffect(() => {
@@ -66,7 +71,6 @@ const Chat = () => {
 
             switch (message.method) {
                 case 'CONNECTION':
-                    console.log(`User connected: ${message.user_id}`)
                     break
                 case 'POST_MESSAGE':
                     setMessagesList(prev => [...prev, message.data])
@@ -75,7 +79,6 @@ const Chat = () => {
                     setMessagesList(prev => prev.filter(msg => msg.message_id !== message.data))
                     break
                 default:
-                    console.log(`Unknown message method: ${message.method}`)
                     break
             }
         }

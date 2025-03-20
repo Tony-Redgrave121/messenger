@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from 'react'
+import React, {useCallback, useEffect, useRef, useState} from 'react'
 import style from "./style.module.css"
 import Slider from "../slider/Slider";
 import MediaBlock from "../media/mediaBlock/MediaBlock";
@@ -26,25 +26,21 @@ namespace Message {
     export const ChatMessage: React.FC<IChatMessage> = ({message, setReply, socketRef}) => {
         const {id} = useParams()
         const [contextMenu, setContextMenu] = useState(false)
+        const user_id = useAppSelector(state => state.user.userId)
 
-        const handleDelete = async () => {
-            try {
-                if (id) {
-                    const messageDelete = await UserService.deleteMessage(message.message_id, id)
+        const handleDelete = useCallback(async () => {
+            if (!id) return
+            const messageDelete = await UserService.deleteMessage(message.message_id, id)
 
-                    if (messageDelete && socketRef.current?.readyState === WebSocket.OPEN) {
-                        socketRef.current.send(JSON.stringify({
-                            messenger_id: id,
-                            user_id: user_id,
-                            method: 'REMOVE_MESSAGE',
-                            data: messageDelete.data
-                        }))
-                    }
-                }
-            } catch (e) {
-                console.error(e)
+            if (messageDelete && socketRef.current?.readyState === WebSocket.OPEN) {
+                socketRef.current.send(JSON.stringify({
+                    messenger_id: id,
+                    user_id: user_id,
+                    method: 'REMOVE_MESSAGE',
+                    data: messageDelete.data
+                }))
             }
-        }
+        }, [id, message.message_id, socketRef, user_id])
 
         const list = [
             {
@@ -92,7 +88,6 @@ namespace Message {
             }
         }, [message.message_files, message.message_type])
 
-        const user_id = useAppSelector(state => state.user.userId)
 
         const handleContextMenu = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
             event.preventDefault()

@@ -17,7 +17,7 @@
   display: flex;
   flex-direction: column;
   position: relative;
-  gap: 24px;
+  gap: 30px;
   padding: 16px 8px;
 }
 .MessengerForm .FileBlock {

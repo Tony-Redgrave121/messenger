@@ -77,10 +77,6 @@ const LeftSidebar = () => {
         return () => window.removeEventListener('resize', handleResize)
     }, [dispatch, handleResize])
 
-    useEffect(() => {
-
-    }, [messenger])
-
     const listMessenger = [
         {
             liChildren: <HiOutlineMegaphone/>,

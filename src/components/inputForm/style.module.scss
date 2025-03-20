@@ -37,4 +37,9 @@ small {
   bottom: -25px;
   color: #ca0000;
   font-size: 14px;
+  line-height: 1.5;
+
+  &::first-letter {
+    text-transform: capitalize;
+  }
 }

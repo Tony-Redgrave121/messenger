@@ -59,9 +59,10 @@ const AuthForm = () => {
                 formData.append('user_password', watch('user_password'))
 
                 const res = await dispatch(login({formData: formData})) as any
+                const payload = res.payload
 
-                if (res.payload.message) return setErrorForm(res.payload.message)
-                else if (!res.payload.registration) return navigate('/')
+                if (payload.message) return setErrorForm(payload.message)
+                else if (!payload.registration) return navigate('/')
             }
 
             setFormState(false)
@@ -70,8 +71,6 @@ const AuthForm = () => {
                 setFormState(true)
             }, 300)
         }
-
-        return true
     }
 
     const steps = [

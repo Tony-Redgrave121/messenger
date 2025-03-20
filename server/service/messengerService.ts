@@ -1,4 +1,5 @@
 import models from "../model/models"
+import ApiError from "../error/ApiError";
 
 interface IContacts {
     user: {
@@ -19,6 +20,8 @@ class MessengerService {
             }],
             attributes: []
         }) as unknown as IContacts[]
+
+        if (!contacts) return ApiError.internalServerError("No contacts found")
 
         return contacts.map(contact => contact.user)
     }

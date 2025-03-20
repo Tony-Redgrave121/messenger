@@ -9,8 +9,8 @@ import IMessagesResponse from "../utils/types/IMessagesResponse"
 import IContact from "../utils/types/IContact";
 
 export default class MessengerService {
-    static async getContacts(id: string): Promise<AxiosResponse<IContact[]>> {
-        return $api.get<IContact[]>(`${GET_CONTACTS}/${id}`)
+    static async getContacts(id: string, signal: AbortSignal): Promise<AxiosResponse<IContact[]>> {
+        return $api.get<IContact[]>(`${GET_CONTACTS}/${id}`, {signal})
     }
     static async postMessenger(messenger: FormData): Promise<AxiosResponse<IMessagesResponse>> {
         return $api.post<IMessagesResponse>(POST_MESSENGER, messenger)
