@@ -18,7 +18,6 @@ import AddContacts from "../../../contacts/AddContacts/AddContacts";
 import IContact from "../../../../utils/types/IContact";
 import messengerService from "../../../../service/MessengerService"
 import {useAppSelector} from "../../../../utils/hooks/useRedux";
-import axios from "axios";
 
 interface IMessengerProps {
     messengerCreation: {

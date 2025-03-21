@@ -17,7 +17,7 @@ const TextareaBlock: React.FC<ITextareaBlock> = ({inputText, setInputText, ref})
     }, [inputText, ref])
 
     return (
-        <textarea maxLength={850} rows={1} placeholder="Message" ref={ref} onChange={event => setInputText(event.target.value)} value={inputText}/>
+        <textarea maxLength={850} rows={1} placeholder="Message" ref={ref} onChange={event => setInputText(event.target.value)}/>
     )
 }
 

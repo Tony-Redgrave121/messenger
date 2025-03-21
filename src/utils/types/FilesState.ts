@@ -1,5 +1,7 @@
+import IFileObject from "./IFileObject"
+
 export default interface FilesState {
-    files: File[] | null,
+    files: IFileObject[] | null,
     popup: boolean,
     type: string
 }

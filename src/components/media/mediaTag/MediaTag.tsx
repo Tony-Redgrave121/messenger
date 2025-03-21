@@ -1,6 +1,8 @@
-import React from 'react'
+import React, {useEffect, useRef, useState} from 'react'
 import useLoadFile from "../../../utils/hooks/useLoadFile";
 import {useParams} from "react-router-dom";
+import style from './style.module.css'
+import IFileObject from "../../../utils/types/IFileObject";
 
 interface IMedia {
     message_file_id: string,
@@ -14,6 +16,10 @@ interface IMediaTag {
         message_file_id: string,
         message_file_name: string
     }>>
+}
+
+interface IInputBlockProps {
+    media: IFileObject
 }
 
 // const isPicture = ['png', 'jpg', 'jpeg', 'webp']
@@ -53,19 +59,47 @@ namespace MediaTag {
         )
     }
 
-    export const InputBlock: React.FC<{media: IMedia}> = ({media}) => {
-        const geTag = () => {
-            const ext = getExt(media.message_file_id)
+    export const InputBlock: React.FC<IInputBlockProps> = ({media}) => {
+        const [preview, setPreview] = useState<string | null>(null)
+        const MAX_WIDTH = 300
 
-            if (isVideo.includes(ext))
-                return <video src={media.message_file_name} key={media.message_file_id} id={media.message_file_id}></video>
-            else
-                return <img src={media.message_file_name} alt="media" key={media.message_file_id} id={media.message_file_id}/>
-        }
+        useEffect(() => {
+            if (!media.url) return
+            const ext = getExt(media.name)
+
+            if (isVideo.includes(ext)) setPreview(media.url)
+            else {
+                const image = new Image()
+                image.src = media.url
+
+                image.onload = () => {
+                    const ratio = image.width / image.height
+                    const width = Math.min(image.width, MAX_WIDTH)
+                    const height = width / ratio
+
+                    const canvas = document.createElement('canvas')
+                    const ctx = canvas.getContext('2d')
+                    if (!ctx) return
+
+                    ctx.drawImage(image, 0, 0, width, height)
+                    setPreview(canvas.toDataURL('image/jpeg'))
+                }
+            }
+        }, [media])
 
         return (
             <>
-                {media.message_file_name ? geTag() : <div/>}
+                {(media.url && preview) ?
+                    (
+                        isVideo.includes(getExt(media.name)) ?
+                            <video src={preview} controls/>
+                            :
+                            <img src={preview} alt="media"/>
+                    ) :
+                    (
+                        <div className={style.ShadowBlock}/>
+                    )
+                }
             </>
         )
     }

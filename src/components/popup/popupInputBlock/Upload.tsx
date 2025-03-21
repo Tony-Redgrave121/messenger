@@ -1,5 +1,6 @@
 import React from 'react'
 import FilesState from "../../../utils/types/FilesState";
+import getFileObject from "../../../utils/logic/getFileObject";
 
 interface IUpload {
     setState: React.Dispatch<React.SetStateAction<FilesState>>
@@ -14,7 +15,7 @@ namespace Upload {
 
             return {
                 ...prev,
-                files: [...existingFiles, ...uniqueFiles]
+                files: [...existingFiles, ...getFileObject(uniqueFiles)]
             }
         })
     }

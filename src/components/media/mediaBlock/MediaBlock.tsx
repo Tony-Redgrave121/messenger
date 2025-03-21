@@ -1,15 +1,17 @@
 import React, {memo} from 'react'
 import style from "./style.module.css"
 import MediaTag from "../mediaTag/MediaTag"
+import IFileObject from "../../../utils/types/IFileObject";
 
 interface IMedia {
+    media: IFileObject[]
+}
+
+interface IMediaBlock {
     media: Array<{
         message_file_id: string,
         message_file_name: string
-    }>
-}
-
-interface IMediaBlock extends IMedia {
+    }>,
     setSlider?: (state: boolean) => void,
     setCurrMedia?: React.Dispatch<React.SetStateAction<{
         message_file_id: string,
@@ -32,9 +34,9 @@ namespace MediaBlock {
     export const InputBlock: React.FC<IMedia> = memo(({media}) => {
         return (
             <div className={style.MediaBlock}>
-                <MediaTag.InputBlock media={media[0]} key={media[0].message_file_id}/>
+                <MediaTag.InputBlock media={media[0]} key={media[0].url}/>
                 <span>
-                    {media.slice(1).map(media => <MediaTag.InputBlock media={media} key={media.message_file_id}/>)}
+                    {media.slice(1).map(media => <MediaTag.InputBlock media={media} key={media.url}/>)}
                 </span>
             </div>
         )

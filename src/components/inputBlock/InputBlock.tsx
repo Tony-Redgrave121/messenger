@@ -19,6 +19,7 @@ import IMessagesResponse from "../../utils/types/IMessagesResponse";
 import UserService from "../../service/UserService"
 import {useParams} from "react-router-dom";
 import {useAppSelector} from "../../utils/hooks/useRedux";
+import getFileObject from "../../utils/logic/getFileObject";
 
 interface IInputBlock {
     reply: IMessagesResponse | null,
@@ -39,6 +40,7 @@ const InputBlock: React.FC<IInputBlock> = ({reply, setReply, socketRef}) => {
         popup: false,
         type: ''
     })
+    const filesRef = useRef<File[]>(null)
 
     useEffect(() => {
         if (filesState.files)
@@ -46,11 +48,17 @@ const InputBlock: React.FC<IInputBlock> = ({reply, setReply, socketRef}) => {
     }, [filesState.files])
 
     const uploadFiles = (event: ChangeEvent<HTMLInputElement>, type: string) => {
-        setFilesState(prev => ({
-            ...prev,
-            type: type,
-            files: Array.from(event.target.files || [])
-        }))
+        if (filesRef) {
+            filesRef.current = Array.from(event.target.files ? event.target.files : [])
+
+            const files = getFileObject(event.target.files)
+
+            setFilesState(prev => ({
+                ...prev,
+                type: type,
+                files: files
+            }))
+        }
     }
 
     const {id} = useParams()
@@ -64,7 +72,11 @@ const InputBlock: React.FC<IInputBlock> = ({reply, setReply, socketRef}) => {
             reply && message.append('reply_id', reply.message_id)
             message.append('user_id', user_id)
             message.append('messenger_id', id!)
-            filesState.files && Array.from(filesState.files).forEach((file: File) => message.append('message_files', file))
+
+            if (filesRef && filesRef.current) {
+                filesRef.current.forEach((file: File) => message.append('message_files', file))
+                filesRef.current = null
+            }
 
             setFilesState({
                 files: null,

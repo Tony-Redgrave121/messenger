@@ -1,0 +1,17 @@
+@use '../../../utils/styles/base/_variables.css' as v;
+@import url("../../../utils/styles/base/_normalize.scss");
+
+.ShadowBlock {
+  min-height: 100px;
+  width: 100%;
+  background: linear-gradient(120deg,#0001 33%, #0F0F0F54 50%,#0001 66%) #282828;
+  animation: skeleton 1.5s infinite linear;
+  background-size: 200% 100%;
+
+  @keyframes skeleton {
+    to {
+      background-position-x: -200%;
+    }
+  }
+}
+

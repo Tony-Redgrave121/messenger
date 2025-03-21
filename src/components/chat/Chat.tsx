@@ -55,6 +55,8 @@ const Chat = () => {
     }, [messagesList])
 
     useEffect(() => {
+        if (socketRef.current) socketRef.current.close()
+
         socketRef.current = new WebSocket("ws://localhost:5000")
         const socket = socketRef.current
 
@@ -81,6 +83,10 @@ const Chat = () => {
                 default:
                     break
             }
+        }
+
+        socket.onerror = (error) => {
+            console.error("WebSocket Error:", error)
         }
 
         return () => socket.close()

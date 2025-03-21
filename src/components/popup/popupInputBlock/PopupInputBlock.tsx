@@ -6,10 +6,11 @@ import {HiOutlineDocumentPlus, HiOutlineDocumentText, HiOutlineXMark} from "reac
 import TextareaBlock from "../../textareaBlock/textareaBlock";
 import Upload from "./Upload";
 import MediaBlock from "../../media/mediaBlock/MediaBlock";
+import IFileObject from "../../../utils/types/IFileObject";
 
 interface IPopupInputBlock {
     setState: React.Dispatch<React.SetStateAction<FilesState>>,
-    files: File[],
+    files: IFileObject[],
     type?: string,
     inputText: string,
     setInputText: React.Dispatch<React.SetStateAction<string>>,
@@ -55,12 +56,8 @@ const PopupInputBlock: React.FC<IPopupInputBlock> = ({setState, files, type, inp
                         </div>
                     ))}
                 </div> :
-                <MediaBlock.InputBlock media={[...files].map(file => ({
-                    message_file_id: file.name,
-                    message_file_name: URL.createObjectURL(file),
-                }))}/>
+                <MediaBlock.InputBlock media={files}/>
             }
-
             <div className={style.SubmitBlock}>
                 <TextareaBlock ref={refTextarea} inputText={inputText} setInputText={setInputText}/>
                 <button onClick={() => {

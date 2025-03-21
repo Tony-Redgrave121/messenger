@@ -1,0 +1,16 @@
+@import url("../../../utils/styles/base/_normalize.scss");
+
+.ShadowBlock {
+  min-height: 100px;
+  width: 100%;
+  background: linear-gradient(120deg, rgba(0, 0, 0, 0.0666666667) 33%, rgba(15, 15, 15, 0.3294117647) 50%, rgba(0, 0, 0, 0.0666666667) 66%) #282828;
+  animation: skeleton 1.5s infinite linear;
+  background-size: 200% 100%;
+}
+@keyframes skeleton {
+  to {
+    background-position-x: -200%;
+  }
+}
+
+/*# sourceMappingURL=style.module.css.map */
