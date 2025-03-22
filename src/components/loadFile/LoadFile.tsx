@@ -12,6 +12,8 @@ const LoadFile: React.FC<ILoadImage> = ({imagePath, imageTitle}) => {
     const {load, image} = useLoadFile(imagePath)
 
     const createImage = (title: string) => {
+        if (!title) return null
+
         const words = title.split(' ')
         const n = words.length
         const charF = words[0][0], charL = words[n - 1][0]

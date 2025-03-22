@@ -15,6 +15,7 @@ import DropDown from "../dropDown/DropDown";
 import DocumentBlock from "./documentBlock/DocumentBlock";
 import UserService from "../../service/UserService";
 import {useParams} from "react-router-dom";
+import IMessageFile from "../../utils/types/IMessageFile";
 
 interface IChatMessage {
     message: IMessagesResponse,
@@ -76,10 +77,7 @@ namespace Message {
             message_file_name: ''
         })
         const refSlider = useRef<HTMLDivElement>(null)
-        const [mediaArr, setMediaArr] = useState<{
-            message_file_id: string,
-            message_file_name: string
-        }[] | undefined>()
+        const [mediaArr, setMediaArr] = useState<IMessageFile[] | undefined>()
 
         useEffect(() => {
             if (message.message_files && message.message_type === 'media') {

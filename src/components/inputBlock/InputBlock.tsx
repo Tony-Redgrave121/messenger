@@ -12,7 +12,7 @@ import style from './style.module.css'
 import DropDown from "../dropDown/DropDown"
 import useEmojis from "./useEmojis"
 import PopupContainer from "../popup/PopupContainer";
-import FilesState from "../../utils/types/FilesState";
+import IFilesState from "../../utils/types/IFilesState";
 import TextareaBlock from "../textareaBlock/textareaBlock";
 import PopupInputBlock from "../popup/popupInputBlock/PopupInputBlock";
 import IMessagesResponse from "../../utils/types/IMessagesResponse";
@@ -35,7 +35,7 @@ const InputBlock: React.FC<IInputBlock> = ({reply, setReply, socketRef}) => {
     const emojis = useEmojis(refTextarea, setInputText)
 
     const [upload, setUpload] = useState(false)
-    const [filesState, setFilesState] = useState<FilesState>({
+    const [filesState, setFilesState] = useState<IFilesState>({
         files: null,
         popup: false,
         type: ''

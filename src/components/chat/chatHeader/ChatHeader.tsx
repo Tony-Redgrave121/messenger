@@ -41,7 +41,7 @@ const list = [
     },
     {
         liChildren: <HiOutlineTrash/>,
-        liText: 'Delete ChatHeader',
+        liText: 'Delete Chat',
         liFoo: () => {
         }
     }

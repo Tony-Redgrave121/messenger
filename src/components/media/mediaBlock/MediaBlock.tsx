@@ -2,21 +2,16 @@ import React, {memo} from 'react'
 import style from "./style.module.css"
 import MediaTag from "../mediaTag/MediaTag"
 import IFileObject from "../../../utils/types/IFileObject";
+import IMessageFile from "../../../utils/types/IMessageFile";
 
 interface IMedia {
     media: IFileObject[]
 }
 
 interface IMediaBlock {
-    media: Array<{
-        message_file_id: string,
-        message_file_name: string
-    }>,
+    media: IMessageFile[],
     setSlider?: (state: boolean) => void,
-    setCurrMedia?: React.Dispatch<React.SetStateAction<{
-        message_file_id: string,
-        message_file_name: string
-    }>>,
+    setCurrMedia?: React.Dispatch<React.SetStateAction<IMessageFile>>,
 }
 
 namespace MediaBlock {

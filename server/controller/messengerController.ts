@@ -3,7 +3,7 @@ import {Request, Response} from "express"
 import MessengerService from "../service/messengerService";
 
 class MessengerController {
-    async fetchContacts(req: Request, res: Response): Promise<any> {
+    async getContacts(req: Request, res: Response): Promise<any> {
         try {
             const {id} = req.params
 
@@ -12,8 +12,25 @@ class MessengerController {
 
             return res.json(contacts)
         } catch (e) {
-            return res.json(ApiError.internalServerError("An error occurred while fetching a contacts"))
+            return res.json(ApiError.internalServerError("An error occurred while fetching contacts"))
         }
+    }
+
+    async postMessenger(req: Request, res: Response): Promise<any> {
+        try {
+
+        } catch (e) {
+            return res.json(ApiError.internalServerError("An error occurred while posting the messenger"))
+        }
+
+        const {user_id, messenger_name, messenger_desc, messenger_type, messenger_members} = req.body
+
+        // if (!user_id || !messenger_name || !messenger_image || !messenger_desc || !messenger_type)
+        //     return res.json(ApiError.internalServerError('An error occurred while posting the messenger'))
+
+        const messenger = await MessengerService.postMessenger(user_id, messenger_name, messenger_desc, messenger_type, messenger_members, req.files)
+
+        return res.json(messenger)
     }
 }
 

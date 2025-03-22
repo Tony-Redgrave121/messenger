@@ -35,6 +35,7 @@ router.get(FETCH_MESSAGES, UserController.fetchMessages)
 router.post(POST_MESSAGE, UserController.postMessage)
 router.delete(DELETE_MESSAGE, UserController.deleteMessage)
 
-router.get(GET_CONTACTS, MessengerController.fetchContacts)
+router.get(GET_CONTACTS, MessengerController.getContacts)
+router.post(FETCH_MESSENGER, MessengerController.postMessenger)
 
 export default router

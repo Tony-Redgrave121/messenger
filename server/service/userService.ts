@@ -28,6 +28,7 @@ class UserService {
                 where: {user_id: user_id, messenger_id: messenger_id}
             }]
         })
+
         if (!messenger) return ApiError.internalServerError("An error occurred while fetching the messenger")
 
         return messenger
@@ -99,9 +100,8 @@ class UserService {
             for (const file of fileArray) {
                 const message_file_id = uuid.v4()
 
-                const filesPost = filesUploadingService(`messengers/${message.messenger_id}`, file)
-
-                if (filesPost instanceof ApiError || !filesPost) return ApiError.badRequest(`Error with files uploading`)
+                const filesPost = await filesUploadingService(`messengers/${message.messenger_id}`, file, message.message_type)
+                if (!filesPost || filesPost instanceof ApiError) return ApiError.badRequest(`Error with files uploading`)
 
                 const message_file = await models.message_file.create({
                     message_file_id: message_file_id,

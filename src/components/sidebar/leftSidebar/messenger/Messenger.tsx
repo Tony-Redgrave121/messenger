@@ -106,17 +106,26 @@ const Messenger: React.FC<IMessengerProps> = ({messengerCreation, setMessengerCr
     const handleCreation: SubmitHandler<IMessenger> = async (data) => {
         const formData = new FormData()
 
+        formData.append('user_id', userId)
         formData.append('messenger_name', data.messenger_name)
         formData.append('messenger_image', data.messenger_image as File)
         formData.append('messenger_desc', data.messenger_desc)
         formData.append('messenger_type', messengerCreation.type)
-        formData.append('messenger_members', JSON.stringify(data.messenger_members))
 
-        // const res = await
-        //
-        // if (res.payload.message) setErrorForm(res.payload.message)
-        // else return navigate('/')
+        console.log(members)
 
+        if (members) members.map(member => formData.append('messenger_members', member.user_id))
+        const res = await messengerService.postMessenger(formData) as any
+
+        if (res.data.message) setErrorForm(res.data.message)
+        else {
+            navigate('/')
+
+            return setMessengerCreation({
+                type: '',
+                state: false
+            })
+        }
     }
 
     return (

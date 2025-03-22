@@ -1,21 +1,14 @@
-import React, {useEffect, useRef, useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import useLoadFile from "../../../utils/hooks/useLoadFile";
 import {useParams} from "react-router-dom";
 import style from './style.module.css'
 import IFileObject from "../../../utils/types/IFileObject";
-
-interface IMedia {
-    message_file_id: string,
-    message_file_name: string
-}
+import IMessageFile from "../../../utils/types/IMessageFile";
 
 interface IMediaTag {
-    media: IMedia
+    media: IMessageFile
     setSlider?: (state: boolean) => void,
-    setCurrMedia?: React.Dispatch<React.SetStateAction<{
-        message_file_id: string,
-        message_file_name: string
-    }>>
+    setCurrMedia?: React.Dispatch<React.SetStateAction<IMessageFile>>
 }
 
 interface IInputBlockProps {
@@ -61,7 +54,7 @@ namespace MediaTag {
 
     export const InputBlock: React.FC<IInputBlockProps> = ({media}) => {
         const [preview, setPreview] = useState<string | null>(null)
-        const MAX_WIDTH = 300
+        const MAX_WIDTH = 700
 
         useEffect(() => {
             if (!media.url) return
@@ -81,8 +74,11 @@ namespace MediaTag {
                     const ctx = canvas.getContext('2d')
                     if (!ctx) return
 
+                    canvas.width = width
+                    canvas.height = height
+
                     ctx.drawImage(image, 0, 0, width, height)
-                    setPreview(canvas.toDataURL('image/jpeg'))
+                    setPreview(canvas.toDataURL('image/jpeg', .7))
                 }
             }
         }, [media])

@@ -1,13 +1,13 @@
 import React from 'react'
-import FilesState from "../../../utils/types/FilesState";
+import IFilesState from "../../../utils/types/IFilesState";
 import getFileObject from "../../../utils/logic/getFileObject";
 
 interface IUpload {
-    setState: React.Dispatch<React.SetStateAction<FilesState>>
+    setState: React.Dispatch<React.SetStateAction<IFilesState>>
 }
 
 namespace Upload {
-    const uploadFiles = (newFiles: FileList, setState: React.Dispatch<React.SetStateAction<FilesState>>) => {
+    const uploadFiles = (newFiles: FileList, setState: React.Dispatch<React.SetStateAction<IFilesState>>) => {
         setState(prev => {
             const existingFiles = prev.files || []
             const filesSet = new Set(existingFiles.map(file => file.name))

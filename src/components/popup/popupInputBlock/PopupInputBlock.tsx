@@ -1,6 +1,6 @@
 import React, {useRef} from 'react'
 import style from './style.module.css'
-import FilesState from "../../../utils/types/FilesState";
+import IFilesState from "../../../utils/types/IFilesState";
 import Buttons from "../../buttons/Buttons";
 import {HiOutlineDocumentPlus, HiOutlineDocumentText, HiOutlineXMark} from "react-icons/hi2";
 import TextareaBlock from "../../textareaBlock/textareaBlock";
@@ -9,7 +9,7 @@ import MediaBlock from "../../media/mediaBlock/MediaBlock";
 import IFileObject from "../../../utils/types/IFileObject";
 
 interface IPopupInputBlock {
-    setState: React.Dispatch<React.SetStateAction<FilesState>>,
+    setState: React.Dispatch<React.SetStateAction<IFilesState>>,
     files: IFileObject[],
     type?: string,
     inputText: string,

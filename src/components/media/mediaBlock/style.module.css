@@ -5,7 +5,7 @@
   flex-wrap: wrap;
 }
 .MediaBlock img, .MediaBlock video {
-  border: 1px solid #212121;
+  border: 2px solid #212121;
   height: auto;
   object-fit: cover;
   cursor: pointer;

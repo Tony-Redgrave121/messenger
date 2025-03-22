@@ -5,7 +5,7 @@ import RightSidebar from "../sidebar/rightSidebar/RightSidebar"
 import Message from "../message/Message"
 import UserService from "../../service/UserService"
 import {useAppSelector} from "../../utils/hooks/useRedux"
-import {useParams} from "react-router-dom"
+import {useNavigate, useParams} from "react-router-dom"
 import IMessagesResponse from "../../utils/types/IMessagesResponse"
 import IMessengerResponse from "../../utils/types/IMessengerResponse"
 import ChatHeader from "./chatHeader/ChatHeader"
@@ -23,6 +23,8 @@ const Chat = () => {
     const {id} = useParams()
     const user = useAppSelector(state => state.user)
 
+    const navigate = useNavigate()
+
     useEffect(() => {
         if (!id) return
 
@@ -33,13 +35,15 @@ const Chat = () => {
             setMessagesList([])
 
             try {
-                const [messages, messenger] = await Promise.all([
-                    UserService.fetchMessages(user.userId, id, signal),
-                    UserService.fetchMessenger(user.userId, id, signal)
+                const [messenger, messages] = await Promise.all([
+                    UserService.fetchMessenger(user.userId, id, signal),
+                    UserService.fetchMessages(user.userId, id, signal)
                 ])
+                const error = messenger.data as any
+                if (error.message) navigate('/')
 
-                setMessagesList(messages.data)
                 setMessenger(messenger.data)
+                setMessagesList(messages.data)
             } catch (error) {
                 console.log(error)
             }
@@ -48,7 +52,7 @@ const Chat = () => {
         handleMessageList().catch(error => console.log(error))
 
         return () => controller.abort()
-    }, [user.userId, id])
+    }, [user.userId, id, navigate])
 
     useEffect(() => {
         refEnd.current?.scrollIntoView({behavior: 'smooth'})
