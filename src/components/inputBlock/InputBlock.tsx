@@ -83,7 +83,10 @@ const InputBlock: React.FC<IInputBlock> = ({reply, setReply, socketRef}) => {
                 popup: false,
                 type: ''
             })
+
             setInputText('')
+            if (refTextarea && refTextarea.current) refTextarea.current.value = ''
+
             setReply(null)
 
             const newMessage = await UserService.postMessage(message).catch(error => console.log(error))

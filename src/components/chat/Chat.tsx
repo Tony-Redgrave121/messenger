@@ -7,24 +7,29 @@ import UserService from "../../service/UserService"
 import {useAppSelector} from "../../utils/hooks/useRedux"
 import {useNavigate, useParams} from "react-router-dom"
 import IMessagesResponse from "../../utils/types/IMessagesResponse"
-import IMessengerResponse from "../../utils/types/IMessengerResponse"
 import ChatHeader from "./chatHeader/ChatHeader"
+import {useWebSocket} from "../../utils/hooks/useWebSocket";
+import IMessengerResponse from "../../utils/types/IMessengerResponse";
 
 const Chat = () => {
     const [sidebarState, setSidebarState] = useState(false)
-    const [messagesList, setMessagesList] = useState<IMessagesResponse[]>([])
-    const [messenger, setMessenger] = useState<IMessengerResponse>()
     const [reply, setReply] = useState<IMessagesResponse | null>(null)
-
+    const [messenger, setMessenger] = useState<IMessengerResponse>()
+    
     const refEnd = useRef<HTMLDivElement>(null)
     const refRightSidebar = useRef<HTMLDivElement>(null)
-    const socketRef = useRef<WebSocket | null>(null)
 
     const {id} = useParams()
     const user = useAppSelector(state => state.user)
 
     const navigate = useNavigate()
-
+    
+    const {
+        socketRef,
+        messagesList,
+        setMessagesList,
+    } = useWebSocket()
+    
     useEffect(() => {
         if (!id) return
 
@@ -52,49 +57,11 @@ const Chat = () => {
         handleMessageList().catch(error => console.log(error))
 
         return () => controller.abort()
-    }, [user.userId, id, navigate])
+    }, [user.userId, id, navigate, setMessagesList])
 
     useEffect(() => {
         refEnd.current?.scrollIntoView({behavior: 'smooth'})
     }, [messagesList])
-
-    useEffect(() => {
-        if (socketRef.current) socketRef.current.close()
-
-        socketRef.current = new WebSocket("ws://localhost:5000")
-        const socket = socketRef.current
-
-        socket.onopen = () => {
-            socket.send(JSON.stringify({
-                messenger_id: id,
-                user_id: user.userId,
-                method: 'CONNECTION'
-            }))
-        }
-
-        socket.onmessage = (event) => {
-            let message = JSON.parse(event.data)
-
-            switch (message.method) {
-                case 'CONNECTION':
-                    break
-                case 'POST_MESSAGE':
-                    setMessagesList(prev => [...prev, message.data])
-                    break
-                case 'REMOVE_MESSAGE':
-                    setMessagesList(prev => prev.filter(msg => msg.message_id !== message.data))
-                    break
-                default:
-                    break
-            }
-        }
-
-        socket.onerror = (error) => {
-            console.error("WebSocket Error:", error)
-        }
-
-        return () => socket.close()
-    }, [id, user.userId])
 
     return (
         <>

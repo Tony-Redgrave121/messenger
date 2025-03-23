@@ -82,6 +82,9 @@ app.ws('/', (ws) => {
             case 'POST_MESSAGE':
                 handleMessage(data, 'POST_MESSAGE')
                 break
+            case 'GET_MESSENGERS':
+
+                break
             case 'REMOVE_MESSAGE':
                 handleMessage(data, 'REMOVE_MESSAGE')
                 break

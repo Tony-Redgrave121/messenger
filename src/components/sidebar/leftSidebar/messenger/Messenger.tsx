@@ -18,6 +18,7 @@ import AddContacts from "../../../contacts/AddContacts/AddContacts";
 import IContact from "../../../../utils/types/IContact";
 import messengerService from "../../../../service/MessengerService"
 import {useAppSelector} from "../../../../utils/hooks/useRedux";
+import {useWebSocket} from "../../../../utils/hooks/useWebSocket";
 
 interface IMessengerProps {
     messengerCreation: {
@@ -103,6 +104,10 @@ const Messenger: React.FC<IMessengerProps> = ({messengerCreation, setMessengerCr
         }
     }
 
+    const {
+        socketRef
+    } = useWebSocket()
+
     const handleCreation: SubmitHandler<IMessenger> = async (data) => {
         const formData = new FormData()
 
@@ -112,14 +117,21 @@ const Messenger: React.FC<IMessengerProps> = ({messengerCreation, setMessengerCr
         formData.append('messenger_desc', data.messenger_desc)
         formData.append('messenger_type', messengerCreation.type)
 
-        console.log(members)
-
         if (members) members.map(member => formData.append('messenger_members', member.user_id))
         const res = await messengerService.postMessenger(formData) as any
 
         if (res.data.message) setErrorForm(res.data.message)
         else {
             navigate('/')
+
+            // if (res.data && socketRef.current?.readyState === WebSocket.OPEN) {
+            //     socketRef.current.send(JSON.stringify({
+            //         messenger_id: id,
+            //         user_id: user_id,
+            //         method: 'GET_MESSENGERS',
+            //         data: res.data
+            //     }))
+            // }
 
             return setMessengerCreation({
                 type: '',
