@@ -8,7 +8,7 @@ import {useAppSelector} from "../../utils/hooks/useRedux"
 import {useNavigate, useParams} from "react-router-dom"
 import IMessagesResponse from "../../utils/types/IMessagesResponse"
 import ChatHeader from "./chatHeader/ChatHeader"
-import {useWebSocket} from "../../utils/hooks/useWebSocket";
+import {useMessageWS} from "../../utils/hooks/useMessageWS";
 import IMessengerResponse from "../../utils/types/IMessengerResponse";
 
 const Chat = () => {
@@ -28,7 +28,7 @@ const Chat = () => {
         socketRef,
         messagesList,
         setMessagesList,
-    } = useWebSocket()
+    } = useMessageWS()
     
     useEffect(() => {
         if (!id) return

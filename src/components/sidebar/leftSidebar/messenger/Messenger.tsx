@@ -17,8 +17,9 @@ import IMessenger from "../../../../utils/types/IMessenger";
 import AddContacts from "../../../contacts/AddContacts/AddContacts";
 import IContact from "../../../../utils/types/IContact";
 import messengerService from "../../../../service/MessengerService"
-import {useAppSelector} from "../../../../utils/hooks/useRedux";
-import {useWebSocket} from "../../../../utils/hooks/useWebSocket";
+import {useAppDispatch, useAppSelector} from "../../../../utils/hooks/useRedux";
+import {useMessengerWS} from "../../../../utils/hooks/useMessengerWS";
+import {setMessengersList} from "../../../../store/reducers/appReducer";
 
 interface IMessengerProps {
     messengerCreation: {
@@ -104,9 +105,8 @@ const Messenger: React.FC<IMessengerProps> = ({messengerCreation, setMessengerCr
         }
     }
 
-    const {
-        socketRef
-    } = useWebSocket()
+    const socketRef = useMessengerWS()
+    const dispatch = useAppDispatch()
 
     const handleCreation: SubmitHandler<IMessenger> = async (data) => {
         const formData = new FormData()
@@ -124,19 +124,21 @@ const Messenger: React.FC<IMessengerProps> = ({messengerCreation, setMessengerCr
         else {
             navigate('/')
 
-            // if (res.data && socketRef.current?.readyState === WebSocket.OPEN) {
-            //     socketRef.current.send(JSON.stringify({
-            //         messenger_id: id,
-            //         user_id: user_id,
-            //         method: 'GET_MESSENGERS',
-            //         data: res.data
-            //     }))
-            // }
+            if (res.data && socketRef.current?.readyState === WebSocket.OPEN) {
+                socketRef.current.send(JSON.stringify({
+                    user_id: userId,
+                    method: 'GET_MESSENGERS',
+                    data: res.data
+                }))
+            }
 
-            return setMessengerCreation({
-                type: '',
-                state: false
-            })
+            setAnimationState(false)
+            dispatch(setMessengersList(res.data))
+
+            return setMessengerCreation(prev => ({
+                ...prev,
+                state: false,
+            }))
         }
     }
 

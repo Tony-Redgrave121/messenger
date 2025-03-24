@@ -74,7 +74,12 @@ class MessengerService {
         }
 
         return {
-            messenger_image: messenger_image?.file,
+            messenger_id: messenger_id,
+            messenger_name: messenger_name,
+            messenger_image: messenger_image ? messenger_image.file : null,
+            messenger_type: messenger_type,
+            messenger_members: messenger_members,
+            messages: []
         }
     }
 }

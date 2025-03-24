@@ -10,7 +10,8 @@ import cookieParser from "cookie-parser"
 import helmet from 'helmet'
 import compression from 'compression'
 import expressWs from "express-ws"
-import IMessagesResponse from "../types/IMessagesResponse";
+import chatHandlerWS from "../middleware/chatHandlerWS";
+import liveUpdatesHandlerWS from "../middleware/liveUpdatesHandlerWS";
 
 dotenv.config({path: "./.env"})
 const PORT = Number(process.env.SERVER_PORT)
@@ -40,57 +41,8 @@ app.use(cookieParser())
 app.use(router)
 app.use(errorHandler)
 
-interface IMessage {
-    messenger_id: string,
-    user_id: string,
-    method: string,
-    data: IMessagesResponse
-}
-
-const connectionHandler = (ws: any, message: IMessage) => {
-    ws.id = message.messenger_id
-    broadcastConnection(message)
-}
-
-const broadcastConnection = (message: IMessage) => {
-    aWss.clients.forEach((client: any) => {
-        if (client.id === message.messenger_id) {
-            client.send(JSON.stringify(message))
-        }
-    })
-}
-
-const handleMessage = (message: IMessage, method: string) => {
-    aWss.clients.forEach((client: any) => {
-        if (client.id === message.messenger_id) {
-            client.send(JSON.stringify({
-                method: method,
-                data: message.data
-            }))
-        }
-    })
-}
-
-app.ws('/', (ws) => {
-    ws.on('message', (message: Buffer) => {
-        const data = JSON.parse(message.toString())
-
-        switch (data.method) {
-            case 'CONNECTION':
-                connectionHandler(ws, data)
-                break
-            case 'POST_MESSAGE':
-                handleMessage(data, 'POST_MESSAGE')
-                break
-            case 'GET_MESSENGERS':
-
-                break
-            case 'REMOVE_MESSAGE':
-                handleMessage(data, 'REMOVE_MESSAGE')
-                break
-        }
-    })
-})
+app.ws("/chat", chatHandlerWS(aWss))
+app.ws("/live-updates", liveUpdatesHandlerWS(aWss))
 
 const startServer = async () => {
     await sequelize.authenticate()

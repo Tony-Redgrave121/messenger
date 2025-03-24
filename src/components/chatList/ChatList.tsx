@@ -3,32 +3,41 @@ import ChatBlock from "./chatBlock/ChatBlock";
 import UserService from '../../service/UserService'
 import {useAppSelector} from "../../utils/hooks/useRedux";
 import style from './style.module.css'
-import {useWebSocket} from "../../utils/hooks/useWebSocket";
+import {useMessengerWS} from "../../utils/hooks/useMessengerWS";
+import IMessengersListResponse from "../../utils/types/IMessengersListResponse";
 
 const ChatList = memo(() => {
     const user_id = useAppSelector(state => state.user.userId)
-    const {
-        socketRef,
-        messengerList,
-        setMessengerList,
-    } = useWebSocket()
-    
+    const newMessenger = useAppSelector(state => state.app.newMessenger)
+
+    const [messengersList, setMessengersList] = useState<IMessengersListResponse[]>([])
+    useMessengerWS()
+
     useEffect(() => {
         const constructor = new AbortController()
 
         const handleMessengerList = async () => {
             const messengers = await UserService.fetchMessengersList(user_id, constructor.signal)
 
-            setMessengerList(messengers.data)
+            setMessengersList(messengers.data)
         }
 
         handleMessengerList().catch(error => console.log(error))
-    }, [setMessengerList, user_id])
+    }, [user_id])
+
+    useEffect(() => {
+        if (newMessenger) {
+            setMessengersList(prev => {
+                const exists = prev.find(messenger => messenger.messenger_id === newMessenger.messenger_id)
+                return exists ? prev : [...prev, newMessenger]
+            })
+        }
+    }, [newMessenger])
 
     return (
         <ul className={style.ChatList}>
-            {messengerList.length > 0 &&
-                messengerList.map(chat => <ChatBlock messenger={chat} key={chat.messenger_id}/>)
+            {messengersList.length > 0 &&
+                messengersList.map(chat => <ChatBlock messenger={chat} key={chat.messenger_id}/>)
             }
         </ul>
     )
