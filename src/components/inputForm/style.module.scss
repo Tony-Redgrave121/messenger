@@ -24,6 +24,10 @@
       color: white;
       box-shadow: 0 0 0 2px white;
     }
+
+    &::placeholder {
+      text-transform: capitalize;
+    }
   }
 
   textarea {

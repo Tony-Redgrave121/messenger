@@ -18,7 +18,6 @@ import AddContacts from "../../../contacts/AddContacts/AddContacts";
 import IContact from "../../../../utils/types/IContact";
 import messengerService from "../../../../service/MessengerService"
 import {useAppDispatch, useAppSelector} from "../../../../utils/hooks/useRedux";
-import {useMessengerWS} from "../../../../utils/hooks/useMessengerWS";
 import {setMessengersList} from "../../../../store/reducers/appReducer";
 
 interface IMessengerProps {
@@ -29,7 +28,8 @@ interface IMessengerProps {
     setMessengerCreation: React.Dispatch<React.SetStateAction<{
         state: boolean,
         type: string
-    }>>
+    }>>,
+    socketRef: React.RefObject<WebSocket | null>
 }
 
 const InitialValues: IMessenger = {
@@ -40,7 +40,7 @@ const InitialValues: IMessenger = {
     messenger_members: [],
 }
 
-const Messenger: React.FC<IMessengerProps> = ({messengerCreation, setMessengerCreation}) => {
+const Messenger: React.FC<IMessengerProps> = ({messengerCreation, setMessengerCreation, socketRef}) => {
     const [errorForm, setErrorForm] = useState<string | null>(null)
     const [members, setMembers] = useState<IContact[]>([])
     const [picture, setPicture] = useState<File | null>(null)
@@ -105,7 +105,6 @@ const Messenger: React.FC<IMessengerProps> = ({messengerCreation, setMessengerCr
         }
     }
 
-    const socketRef = useMessengerWS()
     const dispatch = useAppDispatch()
 
     const handleCreation: SubmitHandler<IMessenger> = async (data) => {
@@ -158,7 +157,7 @@ const Messenger: React.FC<IMessengerProps> = ({messengerCreation, setMessengerCr
                     }))}>
                         <HiOutlineArrowLeft/>
                     </Buttons.DefaultButton>
-                    <h1>New Channel</h1>
+                    <h1>New {messengerCreation.type}</h1>
                 </div>
                 <form noValidate className={style.MessengerForm} ref={refForm}>
                     <div className={style.FileBlock}>
@@ -177,11 +176,13 @@ const Messenger: React.FC<IMessengerProps> = ({messengerCreation, setMessengerCr
                         </label>
                     </div>
                     <InputForm errors={errors} field={"messenger_name"}>
-                        <input type='text' id="messenger_name" placeholder="Channel name" {...register('messenger_name', fieldOptions.messenger_name)}></input>
+                        <input type='text' id="messenger_name" placeholder={`${messengerCreation.type} name`} {...register('messenger_name', fieldOptions.messenger_name)}></input>
                     </InputForm>
-                    <InputForm errors={errors} field={"messenger_desc"}>
-                        <input type='text' id="messenger_desc" placeholder="Description (optional)" {...register('messenger_desc')}></input>
-                    </InputForm>
+                    {messengerCreation.type === "channel" &&
+                        <InputForm errors={errors} field={"messenger_desc"}>
+                            <input type='text' id="messenger_desc" placeholder="Description (optional)" {...register('messenger_desc')}></input>
+                        </InputForm>
+                    }
                     {(members && contacts.length > 0) &&
                         <AddContacts members={members} contacts={contacts} setMembers={setMembers}/>}
                     <p>You can provide an optional description for your channel.</p>

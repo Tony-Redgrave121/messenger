@@ -14,12 +14,13 @@ const liveUpdatesHandlerWS = (aWss: WebSocketServer) => {
 
     const connectionUpdateHandler = (ws: UserWebSocket, config: IUpdateConfig) => {
         ws.user_id = config.user_id
-
         broadcastUpdate(config)
     }
 
     const broadcastUpdate = (config: IUpdateConfig) => {
         aWss.clients.forEach((client: UserWebSocket) => {
+            if (!client.user_id) return
+
             if (client.user_id === config.user_id) {
                 client.send(JSON.stringify(config))
             }
@@ -54,7 +55,6 @@ const liveUpdatesHandlerWS = (aWss: WebSocketServer) => {
         })
 
         ws.on('error', (err) => console.error('WebSocket помилка:', err));
-
     }
 }
 

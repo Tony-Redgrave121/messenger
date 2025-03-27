@@ -1,9 +1,9 @@
 import {createSlice} from "@reduxjs/toolkit"
-import IMessengersListResponse from "../../utils/types/IMessengersListResponse";
+import IMessengersListResponse from "../../utils/types/IMessengersListResponse"
 
 interface IAppState {
     sidebarLeft: boolean,
-    newMessenger: IMessengersListResponse | null
+    newMessenger: IMessengersListResponse[] | null
 }
 
 const initialState: IAppState = {
@@ -20,7 +20,7 @@ const appSlice = createSlice({
         },
         setMessengersList(state, action) {
             state.newMessenger = action.payload
-        },
+        }
     }
 })
 

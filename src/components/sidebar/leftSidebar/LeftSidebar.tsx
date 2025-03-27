@@ -20,6 +20,7 @@ import {setSidebarLeft} from "../../../store/reducers/appReducer";
 import debounce from "debounce";
 import './animation.css'
 import Messenger from "./messenger/Messenger";
+import {useMessengerWS} from "../../../utils/hooks/useMessengerWS";
 
 const list = [
     {
@@ -104,6 +105,8 @@ const LeftSidebar = () => {
         }
     ]
 
+    const socketRef = useMessengerWS()
+
     return (
         <>
             <CSSTransition
@@ -121,14 +124,14 @@ const LeftSidebar = () => {
                         </Buttons.DefaultButton>
                         <SearchBlock ref={refSearch} foo={() => {}}/>
                     </div>
-                    <ChatList/>
+                    <ChatList />
                     <span className={style.CreateButton}>
                         <Buttons.InterButton foo={() => setMessenger(!messenger)}>
                             <HiOutlinePencil/>
                             <DropDown list={listMessenger} state={messenger} setState={setMessenger}/>
                         </Buttons.InterButton>
                     </span>
-                    {messengerCreation.type && <Messenger messengerCreation={messengerCreation} setMessengerCreation={setMessengerCreation}/>}
+                    {messengerCreation.type && <Messenger messengerCreation={messengerCreation} setMessengerCreation={setMessengerCreation} socketRef={socketRef}/>}
                 </SidebarContainer>
             </CSSTransition>
         </>

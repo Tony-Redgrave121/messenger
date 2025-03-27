@@ -21,6 +21,9 @@
   color: white;
   box-shadow: 0 0 0 2px white;
 }
+.InputBlock input::placeholder, .InputBlock textarea::placeholder {
+  text-transform: capitalize;
+}
 .InputBlock textarea {
   word-wrap: break-word;
   word-break: break-all;

@@ -1,17 +1,15 @@
 import React, {memo, useEffect, useState} from 'react'
-import ChatBlock from "./chatBlock/ChatBlock";
+import ChatBlock from "./chatBlock/ChatBlock"
 import UserService from '../../service/UserService'
-import {useAppSelector} from "../../utils/hooks/useRedux";
+import {useAppSelector} from "../../utils/hooks/useRedux"
 import style from './style.module.css'
-import {useMessengerWS} from "../../utils/hooks/useMessengerWS";
-import IMessengersListResponse from "../../utils/types/IMessengersListResponse";
+import IMessengersListResponse from "../../utils/types/IMessengersListResponse"
 
 const ChatList = memo(() => {
     const user_id = useAppSelector(state => state.user.userId)
     const newMessenger = useAppSelector(state => state.app.newMessenger)
 
     const [messengersList, setMessengersList] = useState<IMessengersListResponse[]>([])
-    useMessengerWS()
 
     useEffect(() => {
         const constructor = new AbortController()
@@ -26,10 +24,17 @@ const ChatList = memo(() => {
     }, [user_id])
 
     useEffect(() => {
-        if (newMessenger) {
+        if (newMessenger?.length) {
             setMessengersList(prev => {
-                const exists = prev.find(messenger => messenger.messenger_id === newMessenger.messenger_id)
-                return exists ? prev : [...prev, newMessenger]
+                const updatedList = [...prev]
+
+                newMessenger.forEach(messenger => {
+                    const exists = prev.some(prevMessenger => prevMessenger.messenger_id === messenger.messenger_id)
+
+                    if (!exists) updatedList.push(messenger)
+                })
+
+                return updatedList
             })
         }
     }, [newMessenger])
