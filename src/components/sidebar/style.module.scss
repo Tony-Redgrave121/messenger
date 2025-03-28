@@ -9,7 +9,7 @@
   max-width: 420px;
   width: 100%;
   height: 100vh;
-  background-color: #212121;
+  background-color: #212121FF;
   border-right: 1px solid #2f2f2f;
   overflow: hidden;
 
@@ -31,7 +31,12 @@
 
 .LeftSidebarContainer {
   .Wrapper {
-    padding: 0 8px;
+    padding: 0 8px 8px 8px;
+
+    hr {
+      border: none;
+      border-top: 1px solid #2f2f2f;
+    }
   }
 }
 

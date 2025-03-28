@@ -54,6 +54,11 @@ namespace Buttons {
             </label>
         )
     }
+    export const ContactButton: React.FC<IDefaultButton> = ({children, foo}) => {
+        return (
+            <button className={style.ContactButton} onClick={foo}>{children}</button>
+        )
+    }
 }
 
 export default Buttons

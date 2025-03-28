@@ -19,7 +19,8 @@ const appSlice = createSlice({
             state.sidebarLeft = action.payload
         },
         setMessengersList(state, action) {
-            state.newMessenger = action.payload
+            if (Array.isArray(action.payload)) state.newMessenger = action.payload
+            else state.newMessenger = [action.payload]
         }
     }
 })

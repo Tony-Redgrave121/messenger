@@ -88,13 +88,20 @@
   background-color: #282828;
 }
 
+.ContactButton, .CheckboxContainer {
+  padding: 4px 16px;
+  border-radius: 10px;
+  transition: 0.2s background-color ease-in-out;
+}
+.ContactButton:hover, .CheckboxContainer:hover {
+  background-color: #2b2b2b;
+}
+
 .CheckboxContainer {
   display: flex;
   align-items: center;
   gap: 18px;
-  padding: 4px 16px;
   cursor: pointer;
-  border-radius: 10px;
 }
 .CheckboxContainer > input {
   height: 16px;
@@ -115,9 +122,6 @@
   margin: 0 0 1.2px 5px;
   border-bottom: 2.5px solid #212121;
   border-right: 2.5px solid #212121;
-}
-.CheckboxContainer:hover {
-  background-color: #2b2b2b;
 }
 
 /*# sourceMappingURL=style.module.css.map */

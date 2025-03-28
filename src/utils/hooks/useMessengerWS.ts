@@ -8,8 +8,12 @@ export const useMessengerWS = () => {
     const dispatch = useAppDispatch()
 
     useEffect(() => {
+        if (socketRef.current && socketRef.current.readyState === WebSocket.OPEN) socketRef.current.close()
+
         socketRef.current = new WebSocket("ws://localhost:5000/live-updates")
         const socket = socketRef.current
+
+        if (!socket) return
 
         socket.onopen = () => {
             socket.send(JSON.stringify({
@@ -20,7 +24,6 @@ export const useMessengerWS = () => {
 
         socket.onmessage = (event) => {
             let message = JSON.parse(event.data)
-            console.log(message)
 
             switch (message.method) {
                 case 'CONNECTION':

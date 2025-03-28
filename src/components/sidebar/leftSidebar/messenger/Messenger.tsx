@@ -19,6 +19,9 @@ import IContact from "../../../../utils/types/IContact";
 import messengerService from "../../../../service/MessengerService"
 import {useAppDispatch, useAppSelector} from "../../../../utils/hooks/useRedux";
 import {setMessengersList} from "../../../../store/reducers/appReducer";
+import useGetContacts from "../../../../utils/hooks/useGetContacts"
+import SearchBlock from "../../../searchBlock/SearchBlock";
+import ContactList from "../../../contactList/ContactList";
 
 interface IMessengerProps {
     messengerCreation: {
@@ -44,8 +47,8 @@ const Messenger: React.FC<IMessengerProps> = ({messengerCreation, setMessengerCr
     const [errorForm, setErrorForm] = useState<string | null>(null)
     const [members, setMembers] = useState<IContact[]>([])
     const [picture, setPicture] = useState<File | null>(null)
-    const [contacts, setContacts] = useState<IContact[]>([])
     const [animationState, setAnimationState] = useState(false)
+    const {contacts} = useGetContacts()
 
     const refSidebar = useRef(null)
     const refForm = useRef(null)
@@ -68,22 +71,6 @@ const Messenger: React.FC<IMessengerProps> = ({messengerCreation, setMessengerCr
             timer && clearTimeout(timer)
         }
     }, [messengerCreation.state, setMessengerCreation])
-
-    useEffect(() => {
-        const controller = new AbortController()
-
-        const getContacts = async () => {
-            const contacts = await messengerService.getContacts(userId, controller.signal) as any
-            const payload = contacts.payload
-
-            if (payload && payload.message) return setErrorForm(payload.message)
-            setContacts(contacts.data)
-        }
-
-        getContacts().catch(error => console.log(error))
-
-        return () => controller.abort()
-    }, [userId])
 
     const handleImageChange = (file: FileList | null, onChange: (value: File) => void) => {
         if (file) {
@@ -141,6 +128,8 @@ const Messenger: React.FC<IMessengerProps> = ({messengerCreation, setMessengerCr
         }
     }
 
+    const searchRef = useRef(null)
+
     return (
         <CSSTransition
             in={animationState}
@@ -159,40 +148,51 @@ const Messenger: React.FC<IMessengerProps> = ({messengerCreation, setMessengerCr
                     </Buttons.DefaultButton>
                     <h1>New {messengerCreation.type}</h1>
                 </div>
-                <form noValidate className={style.MessengerForm} ref={refForm}>
-                    <div className={style.FileBlock}>
-                        <Controller
-                            control={control}
-                            name="messenger_image"
-                            render={({field: {onChange}}) => (
-                                <input type="file" accept="image/png, image/jpeg" id='messenger_img' onChange={(event) => handleImageChange(event.currentTarget.files, onChange)}/>
-                            )}
-                        />
-                        <label htmlFor="messenger_img">
-                            {picture ?
-                                <img src={URL.createObjectURL(picture)} alt={messengerCreation.type}/> :
-                                <div><HiOutlinePhoto/></div>
-                            }
-                        </label>
-                    </div>
-                    <InputForm errors={errors} field={"messenger_name"}>
-                        <input type='text' id="messenger_name" placeholder={`${messengerCreation.type} name`} {...register('messenger_name', fieldOptions.messenger_name)}></input>
-                    </InputForm>
-                    {messengerCreation.type === "channel" &&
-                        <InputForm errors={errors} field={"messenger_desc"}>
-                            <input type='text' id="messenger_desc" placeholder="Description (optional)" {...register('messenger_desc')}></input>
+                {messengerCreation.type !== "chat" ?
+                    <form noValidate className={style.MessengerForm} ref={refForm}>
+                        <div className={style.FileBlock}>
+                            <Controller
+                                control={control}
+                                name="messenger_image"
+                                render={({field: {onChange}}) => (
+                                    <input type="file" accept="image/png, image/jpeg" id='messenger_img' onChange={(event) => handleImageChange(event.currentTarget.files, onChange)}/>
+                                )}
+                            />
+                            <label htmlFor="messenger_img">
+                                {picture ?
+                                    <img src={URL.createObjectURL(picture)} alt={messengerCreation.type}/> :
+                                    <div><HiOutlinePhoto/></div>
+                                }
+                            </label>
+                        </div>
+                        <InputForm errors={errors} field={"messenger_name"}>
+                            <input type='text' id="messenger_name" placeholder={`${messengerCreation.type} name`} {...register('messenger_name', fieldOptions.messenger_name)}></input>
                         </InputForm>
-                    }
-                    {(members && contacts.length > 0) &&
-                        <AddContacts members={members} contacts={contacts} setMembers={setMembers}/>}
-                    <p>You can provide an optional description for your channel.</p>
-                    {errorForm && <small>{errorForm}</small>}
-                </form>
-                <span className={styleSidebar.CreateButton}>
-                    <Buttons.InterButton foo={handleSubmit(handleCreation)}>
-                        <HiOutlineArrowRight/>
-                    </Buttons.InterButton>
-                </span>
+                        {messengerCreation.type === "channel" &&
+                            <InputForm errors={errors} field={"messenger_desc"}>
+                                <input type='text' id="messenger_desc" placeholder="Description (optional)" {...register('messenger_desc')}></input>
+                            </InputForm>
+                        }
+                        {(members && contacts.length > 0) &&
+                            <AddContacts members={members} contacts={contacts} setMembers={setMembers}/>}
+                        {messengerCreation.type === "channel" &&
+                            <p>You can provide an optional description for your channel.</p>
+                        }
+                        {errorForm && <small>{errorForm}</small>}
+                    </form>
+                    :
+                    <>
+                        <SearchBlock foo={() => {}} ref={searchRef}/>
+                        <ContactList />
+                    </>
+                }
+                {messengerCreation.type !== "chat" &&
+                    <span className={styleSidebar.CreateButton}>
+                        <Buttons.InterButton foo={handleSubmit(handleCreation)}>
+                            <HiOutlineArrowRight/>
+                        </Buttons.InterButton>
+                    </span>
+                }
             </SidebarContainer>
         </CSSTransition>
     )

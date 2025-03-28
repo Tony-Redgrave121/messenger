@@ -11,9 +11,7 @@ export const useMessageWS = () => {
     const {id} = useParams()
 
     useEffect(() => {
-        if (socketRef.current && socketRef.current.readyState === WebSocket.OPEN) {
-            socketRef.current.close()
-        }
+        if (socketRef.current && socketRef.current.readyState === WebSocket.OPEN) socketRef.current.close()
 
         socketRef.current = new WebSocket("ws://localhost:5000/chat")
         const socket = socketRef.current

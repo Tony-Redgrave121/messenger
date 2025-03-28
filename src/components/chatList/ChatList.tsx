@@ -24,7 +24,7 @@ const ChatList = memo(() => {
     }, [user_id])
 
     useEffect(() => {
-        if (newMessenger?.length) {
+        if (newMessenger) {
             setMessengersList(prev => {
                 const updatedList = [...prev]
 

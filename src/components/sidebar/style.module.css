@@ -28,7 +28,11 @@
 }
 
 .LeftSidebarContainer .Wrapper {
-  padding: 0 8px;
+  padding: 0 8px 8px 8px;
+}
+.LeftSidebarContainer .Wrapper hr {
+  border: none;
+  border-top: 1px solid #2f2f2f;
 }
 
 .LeftSidebarContainerSettings {

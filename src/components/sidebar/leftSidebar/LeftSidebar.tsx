@@ -16,11 +16,12 @@ import DropDown from "../../dropDown/DropDown"
 import SidebarContainer from "../SidebarContainer";
 import {useAppDispatch, useAppSelector} from "../../../utils/hooks/useRedux";
 import {CSSTransition} from "react-transition-group"
-import {setSidebarLeft} from "../../../store/reducers/appReducer";
+import {setSidebarLeft} from "../../../store/reducers/appReducer"
 import debounce from "debounce";
 import './animation.css'
 import Messenger from "./messenger/Messenger";
 import {useMessengerWS} from "../../../utils/hooks/useMessengerWS";
+import ContactList from "../../contactList/ContactList";
 
 const list = [
     {
@@ -66,6 +67,7 @@ const LeftSidebar = () => {
     const refSidebar = useRef<HTMLDivElement>(null)
     const sidebarLeft = useAppSelector(state => state.app.sidebarLeft)
     const dispatch = useAppDispatch()
+    const socketRef = useMessengerWS()
 
     const handleResize = debounce(() => {
         if (window.innerWidth >= 940) dispatch(setSidebarLeft(true))
@@ -105,8 +107,6 @@ const LeftSidebar = () => {
         }
     ]
 
-    const socketRef = useMessengerWS()
-
     return (
         <>
             <CSSTransition
@@ -125,13 +125,15 @@ const LeftSidebar = () => {
                         <SearchBlock ref={refSearch} foo={() => {}}/>
                     </div>
                     <ChatList />
+                    <hr/>
+                    <ContactList />
                     <span className={style.CreateButton}>
                         <Buttons.InterButton foo={() => setMessenger(!messenger)}>
                             <HiOutlinePencil/>
                             <DropDown list={listMessenger} state={messenger} setState={setMessenger}/>
                         </Buttons.InterButton>
                     </span>
-                    {messengerCreation.type && <Messenger messengerCreation={messengerCreation} setMessengerCreation={setMessengerCreation} socketRef={socketRef}/>}
+                    {(messengerCreation.type && socketRef) && <Messenger messengerCreation={messengerCreation} setMessengerCreation={setMessengerCreation} socketRef={socketRef}/>}
                 </SidebarContainer>
             </CSSTransition>
         </>

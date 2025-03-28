@@ -1,0 +1,13 @@
+@import url("../../utils/styles/base/_normalize.scss");
+
+.ContactListContainer {
+  display: flex;
+  flex-direction: column;
+}
+.ContactListContainer > p {
+  color: white;
+  line-height: 1.5;
+  padding: 8px 16px;
+}
+
+/*# sourceMappingURL=style.module.css.map */
