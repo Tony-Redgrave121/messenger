@@ -1,12 +1,14 @@
 import React from 'react'
 import style from './style.module.css'
-import Contact from "../contacts/Contact";
-import useGetContacts from "../../utils/hooks/useGetContacts";
-import Buttons from "../buttons/Buttons";
+import Contact from "../contacts/Contact"
+import Buttons from "../buttons/Buttons"
+import IContact from "../../utils/types/IContact"
 
-const ContactList = () => {
-    const {contacts} = useGetContacts()
+interface ContactListProps {
+    contacts: IContact[]
+}
 
+const ContactList: React.FC<ContactListProps> = ({contacts}) => {
     return (
         <section className={style.ContactListContainer}>
             <p>Contacts</p>

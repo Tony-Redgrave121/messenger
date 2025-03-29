@@ -22,6 +22,7 @@ import './animation.css'
 import Messenger from "./messenger/Messenger";
 import {useMessengerWS} from "../../../utils/hooks/useMessengerWS";
 import ContactList from "../../contactList/ContactList";
+import useGetContacts from "../../../utils/hooks/useGetContacts";
 
 const list = [
     {
@@ -68,6 +69,7 @@ const LeftSidebar = () => {
     const sidebarLeft = useAppSelector(state => state.app.sidebarLeft)
     const dispatch = useAppDispatch()
     const socketRef = useMessengerWS()
+    const {contacts} = useGetContacts()
 
     const handleResize = debounce(() => {
         if (window.innerWidth >= 940) dispatch(setSidebarLeft(true))
@@ -124,9 +126,9 @@ const LeftSidebar = () => {
                         </Buttons.DefaultButton>
                         <SearchBlock ref={refSearch} foo={() => {}}/>
                     </div>
-                    <ChatList />
+                    <ChatList/>
                     <hr/>
-                    <ContactList />
+                    <ContactList contacts={contacts}/>
                     <span className={style.CreateButton}>
                         <Buttons.InterButton foo={() => setMessenger(!messenger)}>
                             <HiOutlinePencil/>

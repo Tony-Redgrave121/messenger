@@ -1,11 +1,11 @@
-import React, {useMemo, useState} from 'react'
+import React from 'react'
 import Buttons from "../../buttons/Buttons";
 import Contact from "../Contact";
 import IContact from "../../../utils/types/IContact";
 import style from "./style.module.css";
 import {HiMagnifyingGlass} from "react-icons/hi2";
-import debounce from "debounce";
 import LoadFile from "../../loadFile/LoadFile";
+import useSearch from "../../../utils/hooks/useSearch";
 
 interface ICheckboxContactProps {
     members: IContact[],
@@ -14,27 +14,13 @@ interface ICheckboxContactProps {
 }
 
 const AddContacts: React.FC<ICheckboxContactProps> = ({members, contacts, setMembers}) => {
-    const [filteredContacts, setFilteredContacts] = useState<IContact[]>(contacts)
-    const [filter, setFilter] = useState('')
+    const {filteredContacts, handleInput, filter} = useSearch(contacts)
 
     const handleAddMember = (contact: IContact) => {
         setMembers((prev) => {
             if (prev.includes(contact)) return [...prev.filter(el => el !== contact)]
             else return [...prev, contact]
         })
-    }
-
-    const searchDebounce = useMemo(() =>
-        debounce((query: string) => (
-            setFilteredContacts(contacts.filter(el => el.user_name.toLowerCase().includes(query)))
-        ), 200), [contacts]
-    )
-
-    const handleInput = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const query = event.currentTarget.value.toLowerCase()
-        setFilter(query)
-
-        searchDebounce(query)
     }
 
     return (

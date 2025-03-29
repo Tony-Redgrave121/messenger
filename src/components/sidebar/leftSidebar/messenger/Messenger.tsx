@@ -22,6 +22,7 @@ import {setMessengersList} from "../../../../store/reducers/appReducer";
 import useGetContacts from "../../../../utils/hooks/useGetContacts"
 import SearchBlock from "../../../searchBlock/SearchBlock";
 import ContactList from "../../../contactList/ContactList";
+import useSearch from "../../../../utils/hooks/useSearch";
 
 interface IMessengerProps {
     messengerCreation: {
@@ -49,11 +50,14 @@ const Messenger: React.FC<IMessengerProps> = ({messengerCreation, setMessengerCr
     const [picture, setPicture] = useState<File | null>(null)
     const [animationState, setAnimationState] = useState(false)
     const {contacts} = useGetContacts()
+    const {filteredContacts, handleInput} = useSearch(contacts)
 
     const refSidebar = useRef(null)
     const refForm = useRef(null)
     const navigate = useNavigate()
     const userId = useAppSelector(state => state.user.userId)
+    const searchRef = useRef<HTMLInputElement>(null)
+    const dispatch = useAppDispatch()
 
     useEffect(() => {
         let timer: NodeJS.Timeout | null = null
@@ -92,8 +96,6 @@ const Messenger: React.FC<IMessengerProps> = ({messengerCreation, setMessengerCr
         }
     }
 
-    const dispatch = useAppDispatch()
-
     const handleCreation: SubmitHandler<IMessenger> = async (data) => {
         const formData = new FormData()
 
@@ -127,8 +129,6 @@ const Messenger: React.FC<IMessengerProps> = ({messengerCreation, setMessengerCr
             }))
         }
     }
-
-    const searchRef = useRef(null)
 
     return (
         <CSSTransition
@@ -182,8 +182,8 @@ const Messenger: React.FC<IMessengerProps> = ({messengerCreation, setMessengerCr
                     </form>
                     :
                     <>
-                        <SearchBlock foo={() => {}} ref={searchRef}/>
-                        <ContactList />
+                        <SearchBlock foo={handleInput} ref={searchRef}/>
+                        {filteredContacts.length > 0 && <ContactList contacts={filteredContacts}/>}
                     </>
                 }
                 {messengerCreation.type !== "chat" &&
