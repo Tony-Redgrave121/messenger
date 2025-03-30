@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from 'react'
+import React, {Dispatch, RefObject, SetStateAction, useEffect, useRef, useState} from 'react'
 import SidebarContainer from "../../SidebarContainer";
 import {CSSTransition} from "react-transition-group";
 import '../animation.css'
@@ -29,11 +29,11 @@ interface IMessengerProps {
         state: boolean,
         type: string
     },
-    setMessengerCreation: React.Dispatch<React.SetStateAction<{
+    setMessengerCreation: Dispatch<SetStateAction<{
         state: boolean,
         type: string
     }>>,
-    socketRef: React.RefObject<WebSocket | null>
+    socketRef: RefObject<WebSocket | null>
 }
 
 const InitialValues: IMessenger = {

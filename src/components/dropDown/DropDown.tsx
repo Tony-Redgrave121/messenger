@@ -47,7 +47,7 @@ const DropDown: React.FC<IDropDown> = ({list, state, setState, styles, position}
                     list.map((item, index) =>
                         <li key={index} onClick={item.liFoo}>
                             {item.liChildren}
-                            {item.liText && <h4>{item.liText}</h4>}
+                            {item.liText && <p>{item.liText}</p>}
                         </li>
                     )
                 }

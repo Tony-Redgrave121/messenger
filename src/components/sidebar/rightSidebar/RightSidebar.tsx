@@ -13,7 +13,8 @@ import SidebarContainer from "../SidebarContainer"
 import {CSSTransition} from 'react-transition-group'
 import IMessengerResponse from "../../../utils/types/IMessengerResponse";
 import useLoadFile from "../../../utils/hooks/useLoadFile";
-import LoadFile from "../../loadFile/LoadFile";
+import ImageBlock from "../imageBlock/ImageBlock";
+import TopBar from "../topBar/TopBar";
 
 interface IRightSidebar {
     entity: IMessengerResponse,
@@ -35,7 +36,7 @@ const RightSidebar: React.FC<IRightSidebar> = ({entity, ref, state, setState}) =
             unmountOnExit
         >
             <SidebarContainer styles={['RightSidebarContainer']} ref={ref}>
-                <div className={style.TopBar}>
+                <TopBar>
                     <Buttons.DefaultButton foo={() => setState(false)}>
                         <HiOutlineXMark/>
                     </Buttons.DefaultButton>
@@ -43,46 +44,34 @@ const RightSidebar: React.FC<IRightSidebar> = ({entity, ref, state, setState}) =
                     <Buttons.DefaultButton foo={() => {}}>
                         <HiOutlinePencil/>
                     </Buttons.DefaultButton>
-                </div>
-                {image ?
-                    <div className={style.EntityImageBlock} style={{backgroundImage: `url('${image}')`}}>
-                        <div className={style.TitleBlock}>
-                            <h1>{entity.messenger_name}</h1>
-                            <p>{entity.messenger_type}</p>
-                        </div>
-                    </div> :
-                    <div className={style.EntityIconBlock}>
-                        <LoadFile imagePath={''} imageTitle={entity.messenger_name}/>
-                        <div className={style.TitleBlock}>
-                            <h1>{entity.messenger_name}</h1>
-                            <p>{entity.messenger_type}</p>
-                        </div>
-                    </div>
-                }
+                </TopBar>
+                <ImageBlock image={image} info={{
+                    name: entity.messenger_name,
+                    type: entity.messenger_type
+                }}/>
                 <ul className={style.InfoList}>
-                {entity.messenger_desc &&
+                    {entity.messenger_desc &&
                         <li>
-                            <div onClick={() => window.navigator.clipboard.writeText(entity.messenger_desc!)}>
+                            <button onClick={() => window.navigator.clipboard.writeText(entity.messenger_desc!)}>
                                 <HiOutlineExclamationCircle/>
                                 <p>{entity.messenger_desc}<small className={style.LiType}>Bio</small></p>
-                            </div>
+                            </button>
                         </li>
                     }
                     <li>
-                        <div
-                            onClick={() => window.navigator.clipboard.writeText(`http://localhost:3000/${entity.messenger_type}/${entity.messenger_id}`)}>
+                        <button onClick={() => window.navigator.clipboard.writeText(`http://localhost:3000/${entity.messenger_type}/${entity.messenger_id}`)}>
                             <HiOutlinePaperClip/>
                             <p>{entity.messenger_id} <br/><small className={style.LiType}>Link</small></p>
-                        </div>
+                        </button>
                     </li>
                     <li>
-                        <div onClick={() => setNotification(!notification)}>
+                        <button onClick={() => setNotification(!notification)}>
                             <span>
                                 <HiOutlineBell/>
                                 <p>Notifications</p>
                             </span>
                             <Buttons.SwitchButton state={notification} foo={() => setNotification(!notification)}/>
-                        </div>
+                        </button>
                     </li>
                 </ul>
             </SidebarContainer>

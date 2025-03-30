@@ -6,6 +6,7 @@ interface IUsersState {
     userName: string,
     userEmail: string,
     userState: boolean,
+    userBio: string,
     userImg: string | null,
     isAuth: boolean,
     isLoading: boolean,
@@ -16,6 +17,7 @@ const initialState: IUsersState = {
     userName: '',
     userEmail: '',
     userState: false,
+    userBio: '',
     userImg: null,
     isAuth: false,
     isLoading: true,
@@ -98,6 +100,7 @@ const updateState = (state: any, action: any) => {
         state.userName = action.payload.user_name
         state.userEmail = action.payload.user_email
         state.userState = action.payload.user_state
+        state.userBio = action.payload.user_bio
         state.userImg = action.payload.user_img
         state.isAuth = true
     }
@@ -109,6 +112,7 @@ const dropState = (state: any) => {
     state.userName = ""
     state.userEmail = ""
     state.userState = false
+    state.userBio = ""
     state.userImg = ""
 }
 

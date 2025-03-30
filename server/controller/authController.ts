@@ -21,9 +21,6 @@ class AuthController {
     async login(req: Request, res: Response): Promise<any> {
         try {
             const {user_email, user_password} = req.body
-
-            console.log(user_email, user_password)
-
             const isExisting = await models.users.findOne({where: {user_email: user_email}})
 
             if (isExisting) {

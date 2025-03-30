@@ -13,6 +13,7 @@
   overflow: hidden;
 }
 .SidebarContainer .Wrapper {
+  overflow-y: auto;
   min-width: 420px;
 }
 
@@ -27,9 +28,6 @@
   overflow-x: hidden;
 }
 
-.LeftSidebarContainer .Wrapper {
-  padding: 0 8px 8px 8px;
-}
 .LeftSidebarContainer .Wrapper hr {
   border: none;
   border-top: 1px solid #2f2f2f;

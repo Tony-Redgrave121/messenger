@@ -33,7 +33,7 @@ namespace Buttons {
     }
     export const SwitchButton: React.FC<ISwitchButton> = ({foo, state}) => {
         return (
-            <button className={`${style.SwitchButton} ${state && style.SwitchButtonOn}`} onClick={foo}></button>
+            <div className={`${style.SwitchButton} ${state && style.SwitchButtonOn}`} onClick={foo}></div>
         )
     }
     export const WhiteButton: React.FC<IDefaultButton> = ({foo, children, ...props}) => {

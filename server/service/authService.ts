@@ -20,6 +20,7 @@ interface IRegistrationResponseExtend extends IRegistrationResponse {
     user_id: string
     user_email: string
     user_state: boolean
+    user_bio?: string
 }
 
 class AuthService {
@@ -47,6 +48,7 @@ class AuthService {
             user_name: user_name,
             user_email: user_email,
             user_state: false,
+            user_bio: user_bio,
             user_img: userImg ? userImg.file : null
         }
     }
@@ -68,6 +70,7 @@ class AuthService {
             user_name: user.user_name,
             user_email: user.user_email,
             user_state: user.user_state,
+            user_bio: user.user_bio,
             user_img: user.user_img,
         }
     }
@@ -123,6 +126,7 @@ class AuthService {
             user_name: user.user_name,
             user_email: user.user_email,
             user_state: user.user_state,
+            user_bio: user.user_bio,
             user_img: user.user_img,
         }
     }

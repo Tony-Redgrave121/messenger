@@ -38,9 +38,12 @@
   gap: 20px;
   cursor: pointer;
 }
-.DropDownContainer li svg {
+.DropDownContainer li > div, .DropDownContainer li svg {
   width: 24px;
   height: 24px;
+}
+.DropDownContainer li > div {
+  box-shadow: 0 0 0 2px rgba(33, 33, 33, 0.8);
 }
 .DropDownContainer li:hover {
   background-color: rgba(66, 66, 66, 0.5);
