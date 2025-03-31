@@ -43,7 +43,8 @@
   height: 24px;
 }
 .DropDownContainer li > div {
-  box-shadow: 0 0 0 2px rgba(33, 33, 33, 0.8);
+  border: 2px solid rgba(0, 0, 0, 0);
+  outline: 3px solid rgba(33, 33, 33, 0.8);
 }
 .DropDownContainer li:hover {
   background-color: rgba(66, 66, 66, 0.5);

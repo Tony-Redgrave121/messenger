@@ -1,4 +1,4 @@
-import React, {useRef} from 'react'
+import React, {RefObject, useRef} from 'react'
 import style from './style.module.css'
 import IFilesState from "../../../utils/types/IFilesState";
 import Buttons from "../../buttons/Buttons";
@@ -14,10 +14,11 @@ interface IPopupInputBlock {
     type?: string,
     inputText: string,
     setInputText: React.Dispatch<React.SetStateAction<string>>,
-    handleSubmit: () => void
+    handleSubmit: () => void,
+    filesRef: RefObject<File[] | null>
 }
 
-const PopupInputBlock: React.FC<IPopupInputBlock> = ({setState, files, type, inputText, setInputText, handleSubmit}) => {
+const PopupInputBlock: React.FC<IPopupInputBlock> = ({setState, files, type, inputText, setInputText, handleSubmit, filesRef}) => {
     const refTextarea = useRef<HTMLTextAreaElement>(null)
 
     const handleCancel = () => {
@@ -41,7 +42,7 @@ const PopupInputBlock: React.FC<IPopupInputBlock> = ({setState, files, type, inp
                 </span>
                 <Buttons.DefaultButton>
                     <label htmlFor="addNewFile"><HiOutlineDocumentPlus/></label>
-                    {type === 'document' ? <Upload.Document setState={setState}/> : <Upload.Image setState={setState}/>}
+                    {type === 'document' ? <Upload.Document setState={setState} filesRef={filesRef}/> : <Upload.Image setState={setState} filesRef={filesRef}/>}
                 </Buttons.DefaultButton>
             </div>
             {type === 'document' ?

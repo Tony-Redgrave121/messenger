@@ -61,7 +61,7 @@ const RightSidebar: React.FC<IRightSidebar> = ({entity, ref, state, setState}) =
                     <li>
                         <button onClick={() => window.navigator.clipboard.writeText(`http://localhost:3000/${entity.messenger_type}/${entity.messenger_id}`)}>
                             <HiOutlinePaperClip/>
-                            <p>{entity.messenger_id} <br/><small className={style.LiType}>Link</small></p>
+                            <p>{entity.messenger_id}<br/><small className={style.LiType}>Link</small></p>
                         </button>
                     </li>
                     <li>

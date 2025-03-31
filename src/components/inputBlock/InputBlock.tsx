@@ -43,8 +43,7 @@ const InputBlock: React.FC<IInputBlock> = ({reply, setReply, socketRef}) => {
     const filesRef = useRef<File[]>(null)
 
     useEffect(() => {
-        if (filesState.files)
-            setFilesState(prev => ({...prev, popup: true}))
+        if (filesState.files) setFilesState(prev => ({...prev, popup: true}))
     }, [filesState.files])
 
     const uploadFiles = (event: ChangeEvent<HTMLInputElement>, type: string) => {
@@ -106,8 +105,8 @@ const InputBlock: React.FC<IInputBlock> = ({reply, setReply, socketRef}) => {
         {
             liChildren:
                 <>
-                    <label htmlFor="images"><HiOutlineFolderOpen/> Photo or Video</label>
-                    <input name='images' id='images' type="file" accept='image/*, video/*' style={{display: 'none'}}
+                    <label htmlFor="media"><HiOutlineFolderOpen/> Photo or Video</label>
+                    <input name='media' id='media' type="file" accept='image/*, video/*' style={{display: 'none'}}
                            onChange={(event) => uploadFiles(event, 'media')} multiple/>
                 </>,
             liFoo: () => {
@@ -152,7 +151,7 @@ const InputBlock: React.FC<IInputBlock> = ({reply, setReply, socketRef}) => {
                     </Buttons.DefaultButton>
                     {filesState.files &&
                         <PopupContainer state={filesState.popup} setState={setFilesState}>
-                            <PopupInputBlock type={filesState.type} files={filesState.files} setState={setFilesState} setInputText={setInputText} inputText={inputText} handleSubmit={handleSubmit}></PopupInputBlock>
+                            <PopupInputBlock type={filesState.type} files={filesState.files} setState={setFilesState} setInputText={setInputText} inputText={inputText} handleSubmit={handleSubmit} filesRef={filesRef}/>
                         </PopupContainer>
                     }
                 </div>

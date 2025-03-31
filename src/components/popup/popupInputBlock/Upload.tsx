@@ -1,17 +1,20 @@
-import React from 'react'
+import React, {Dispatch, RefObject, SetStateAction} from 'react'
 import IFilesState from "../../../utils/types/IFilesState";
 import getFileObject from "../../../utils/logic/getFileObject";
 
 interface IUpload {
-    setState: React.Dispatch<React.SetStateAction<IFilesState>>
+    setState: React.Dispatch<React.SetStateAction<IFilesState>>,
+    filesRef: RefObject<File[] | null>
 }
 
 namespace Upload {
-    const uploadFiles = (newFiles: FileList, setState: React.Dispatch<React.SetStateAction<IFilesState>>) => {
+    const uploadFiles = (newFiles: FileList, setState: Dispatch<SetStateAction<IFilesState>>, filesRef: RefObject<File[] | null>) => {
         setState(prev => {
             const existingFiles = prev.files || []
             const filesSet = new Set(existingFiles.map(file => file.name))
             const uniqueFiles = Array.from(newFiles).filter(file => !filesSet.has(file.name))
+
+            filesRef.current = Array.from(newFiles ? newFiles : [])
 
             return {
                 ...prev,
@@ -20,17 +23,17 @@ namespace Upload {
         })
     }
 
-    export const Image: React.FC<IUpload> = ({setState}) => {
+    export const Image: React.FC<IUpload> = ({setState, filesRef}) => {
         return (
             <input name='addNewFile' id='addNewFile' type="file" accept='image/*, video/*' style={{display: 'none'}}
-                   onChange={(event) => event.target.files && uploadFiles(event.target.files, setState)} multiple/>
+                   onChange={(event) => event.target.files && uploadFiles(event.target.files, setState, filesRef)} multiple/>
         )
     }
 
-    export const Document: React.FC<IUpload> = ({setState}) => {
+    export const Document: React.FC<IUpload> = ({setState, filesRef}) => {
         return (
             <input name='addNewFile' id='addNewFile' type="file" style={{display: 'none'}}
-                   onChange={(event) => event.target.files && uploadFiles(event.target.files, setState)} multiple/>
+                   onChange={(event) => event.target.files && uploadFiles(event.target.files, setState, filesRef)} multiple/>
         )
     }
 }
