@@ -4,6 +4,7 @@ import {useParams} from "react-router-dom";
 import style from './style.module.css'
 import IFileObject from "../../../utils/types/IFileObject";
 import IMessageFile from "../../../utils/types/IMessageFile";
+import Player from "../../player/Player";
 
 interface IMediaTag {
     media: IMessageFile
@@ -40,7 +41,7 @@ namespace MediaTag {
             }
 
             if (isVideo.includes(ext))
-                return <video src={image} key={media.message_file_id} id={media.message_file_id} onClick={(event) => handleClick(event)}></video>
+                return <video src={image} key={media.message_file_id} id={media.message_file_id} onClick={(event) => handleClick(event)} controls></video>
             else
                 return <img src={image} alt="media" key={media.message_file_id} id={media.message_file_id} onClick={(event) => handleClick(event)} draggable={'false'}/>
         }

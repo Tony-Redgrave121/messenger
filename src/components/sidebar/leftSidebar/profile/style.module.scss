@@ -1,0 +1,8 @@
+@use '../../../../utils/styles/base/_variables.css' as v;
+@import url("../../../../utils/styles/base/_normalize.scss");
+
+.ProfileInfoList {
+  li button svg {
+    color: #a9a9a9;
+  }
+}

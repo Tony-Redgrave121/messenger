@@ -3,6 +3,7 @@ import SidebarContainer from "../../SidebarContainer";
 import {CSSTransition} from "react-transition-group";
 import '../animation.css'
 import style from "../../rightSidebar/style.module.css";
+import profileStyle from "./style.module.css";
 import ImageBlock from "../../imageBlock/ImageBlock";
 import useLoadFile from "../../../../utils/hooks/useLoadFile";
 import {useAppSelector} from "../../../../utils/hooks/useRedux";
@@ -11,7 +12,11 @@ import {
     HiOutlinePencil,
     HiOutlineXMark,
     HiOutlineArrowRightOnRectangle,
-    HiOutlineExclamationCircle, HiOutlinePaperClip, HiOutlineBell, HiOutlineServerStack, HiOutlineLockClosed
+    HiOutlineExclamationCircle,
+    HiOutlinePaperClip,
+    HiOutlineBell,
+    HiOutlineServerStack,
+    HiOutlineLockClosed, HiOutlineQuestionMarkCircle,
 } from "react-icons/hi2";
 import TopBar from "../../topBar/TopBar";
 
@@ -81,7 +86,7 @@ const Profile: FC<IProfileProps> = ({state, setState, refSidebar}) => {
                     name: userName,
                     type: "online"
                 }}/>
-                <ul className={style.InfoList}>
+                <ul className={`${style.InfoList} ${profileStyle.ProfileInfoList}`}>
                     <li>
                         <button onClick={() => window.navigator.clipboard.writeText(userName)}>
                             <HiOutlineExclamationCircle/>
@@ -89,7 +94,8 @@ const Profile: FC<IProfileProps> = ({state, setState, refSidebar}) => {
                         </button>
                     </li>
                     <li>
-                        <button onClick={() => window.navigator.clipboard.writeText(`http://localhost:3000/chat/${userId}`)}>
+                        <button
+                            onClick={() => window.navigator.clipboard.writeText(`http://localhost:3000/chat/${userId}`)}>
                             <HiOutlinePaperClip/>
                             <p>{userId}<small className={style.LiType}>Link</small></p>
                         </button>
@@ -105,7 +111,7 @@ const Profile: FC<IProfileProps> = ({state, setState, refSidebar}) => {
                     }
                 </ul>
                 <hr/>
-                <ul className={style.InfoList}>
+                <ul className={`${style.InfoList} ${profileStyle.ProfileInfoList}`}>
                     <li>
                         <button onClick={() => {
                         }}>
@@ -125,6 +131,16 @@ const Profile: FC<IProfileProps> = ({state, setState, refSidebar}) => {
                         }}>
                             <HiOutlineLockClosed/>
                             <p>Privacy and Security</p>
+                        </button>
+                    </li>
+                </ul>
+                <hr/>
+                <ul className={`${style.InfoList} ${profileStyle.ProfileInfoList}`}>
+                    <li>
+                        <button onClick={() => {
+                        }}>
+                            <HiOutlineQuestionMarkCircle/>
+                            <p>CrowCaw Features</p>
                         </button>
                     </li>
                 </ul>

@@ -14,7 +14,7 @@ namespace Upload {
             const filesSet = new Set(existingFiles.map(file => file.name))
             const uniqueFiles = Array.from(newFiles).filter(file => !filesSet.has(file.name))
 
-            filesRef.current = Array.from(newFiles ? newFiles : [])
+            filesRef.current = [...filesRef.current!, ...Array.from(newFiles).filter(file => !filesSet.has(file.name))]
 
             return {
                 ...prev,

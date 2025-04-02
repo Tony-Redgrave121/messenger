@@ -1,0 +1,7 @@
+@import url("../../../../utils/styles/base/_normalize.scss");
+
+.ProfileInfoList li button svg {
+  color: #a9a9a9;
+}
+
+/*# sourceMappingURL=style.module.css.map */

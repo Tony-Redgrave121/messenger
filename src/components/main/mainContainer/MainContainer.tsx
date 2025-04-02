@@ -1,6 +1,6 @@
 import React from 'react'
 import style from './style.module.css'
-import img from './backgrounds/little-stars.png'
+import img from './backgrounds/background.webp'
 
 interface IMainContainer {
     children?: React.ReactNode
