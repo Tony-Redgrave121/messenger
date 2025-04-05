@@ -41,7 +41,7 @@ namespace MediaTag {
             }
 
             if (isVideo.includes(ext))
-                return <video src={image} key={media.message_file_id} id={media.message_file_id} onClick={(event) => handleClick(event)} controls></video>
+                return <Player key={media.message_file_id} id={media.message_file_id} src={image}/>
             else
                 return <img src={image} alt="media" key={media.message_file_id} id={media.message_file_id} onClick={(event) => handleClick(event)} draggable={'false'}/>
         }

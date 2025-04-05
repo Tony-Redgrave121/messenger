@@ -1,0 +1,17 @@
+@import url("../../utils/styles/base/_normalize.scss");
+
+.VideoPlayer {
+  position: relative;
+}
+.VideoPlayer .PlayButton {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+.VideoPlayer .PlayButton svg {
+  width: 60px;
+  height: 60px;
+}
+
+/*# sourceMappingURL=style.module.css.map */
