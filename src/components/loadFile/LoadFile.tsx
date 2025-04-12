@@ -1,6 +1,6 @@
 import React, {useRef} from 'react'
 import style from './style.module.css'
-import useLoadFile from "../../utils/hooks/useLoadFile"
+import useLoadFile from "@hooks/useLoadFile"
 
 interface ILoadImage {
     imagePath?: string,

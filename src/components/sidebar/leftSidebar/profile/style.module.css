@@ -1,4 +1,4 @@
-@import url("../../../../utils/styles/base/_normalize.scss");
+@import url("../../../../styles/base/_normalize.scss");
 
 .ProfileInfoList li button svg {
   color: #a9a9a9;

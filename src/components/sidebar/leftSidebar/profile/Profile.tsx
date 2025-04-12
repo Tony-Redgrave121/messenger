@@ -5,9 +5,9 @@ import '../animation.css'
 import style from "../../rightSidebar/style.module.css";
 import profileStyle from "./style.module.css";
 import ImageBlock from "../../imageBlock/ImageBlock";
-import useLoadFile from "../../../../utils/hooks/useLoadFile";
-import {useAppSelector} from "../../../../utils/hooks/useRedux";
-import Buttons from "../../../buttons/Buttons";
+import useLoadFile from "@hooks/useLoadFile";
+import {useAppSelector} from "@hooks/useRedux";
+import {Buttons} from "@components/buttons";
 import {
     HiOutlinePencil,
     HiOutlineXMark,

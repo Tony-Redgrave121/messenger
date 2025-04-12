@@ -3,8 +3,8 @@ import style from './style.module.css'
 import {CSSTransition} from 'react-transition-group'
 import './animation.css'
 import LoadFile from "../loadFile/LoadFile";
-import {getDate} from "../../utils/logic/getDate";
-import Button from "../buttons/Buttons";
+import {getDate} from "@utils/logic/getDate";
+import {Buttons} from "@components/buttons";
 import {
     HiOutlineTrash,
     HiOutlineShare,
@@ -74,49 +74,49 @@ const Slider: React.FC<ISlider> = ({animation, media, user}) => {
                         </div>
                     </button>
                     <span>
-                        <Button.WhiteButton foo={() => deleteMedia()}>
+                        <Buttons.WhiteButton foo={() => deleteMedia()}>
                             <HiOutlineTrash/>
-                        </Button.WhiteButton>
-                        <Button.WhiteButton foo={() => shareMedia()}>
+                        </Buttons.WhiteButton>
+                        <Buttons.WhiteButton foo={() => shareMedia()}>
                             <HiOutlineShare/>
-                        </Button.WhiteButton>
-                        <Button.WhiteButton foo={() => downloadMedia()}>
+                        </Buttons.WhiteButton>
+                        <Buttons.WhiteButton foo={() => downloadMedia()}>
                             <HiOutlineDocumentArrowDown/>
-                        </Button.WhiteButton>
-                        <Button.WhiteButton foo={() => {
+                        </Buttons.WhiteButton>
+                        <Buttons.WhiteButton foo={() => {
                             setZoomState(!zoomState)
                             zoomMedia(zoomState ? '100' : '125')
                         }}>
                             {zoomState ? <HiMagnifyingGlassMinus/> : <HiMagnifyingGlassPlus/>}
-                        </Button.WhiteButton>
-                        <Button.WhiteButton foo={() => animation.setState(false)}>
+                        </Buttons.WhiteButton>
+                        <Buttons.WhiteButton foo={() => animation.setState(false)}>
                             <HiOutlineXMark/>
-                        </Button.WhiteButton>
+                        </Buttons.WhiteButton>
                     </span>
                 </div>
                 {(!zoomState && slide.slideNumber > 0) &&
                     <span className={style.LeftArrow}>
-                        <Button.WhiteButton foo={() => swipeSlide(false)}>
+                        <Buttons.WhiteButton foo={() => swipeSlide(false)}>
                             <HiOutlineChevronLeft/>
-                        </Button.WhiteButton>
+                        </Buttons.WhiteButton>
                     </span>
                 }
                 {(!zoomState && slide.slideNumber < media.mediaArr.length - 1) &&
                     <span className={style.RightArrow}>
-                        <Button.WhiteButton foo={() => swipeSlide(true)}>
+                        <Buttons.WhiteButton foo={() => swipeSlide(true)}>
                             <HiOutlineChevronRight/>
-                        </Button.WhiteButton>
+                        </Buttons.WhiteButton>
                     </span>
                 }
                 {zoomState &&
                     <span className={style.Zoom}>
-                        <Button.WhiteButton foo={() => handleZoom(true)}>
+                        <Buttons.WhiteButton foo={() => handleZoom(true)}>
                             <HiMagnifyingGlassMinus/>
-                        </Button.WhiteButton>
+                        </Buttons.WhiteButton>
                         <input type="range" min={100} max={200} value={zoomSize} onChange={(event) => zoomMedia(event.target.value)}/>
-                        <Button.WhiteButton foo={() => handleZoom(false)}>
+                        <Buttons.WhiteButton foo={() => handleZoom(false)}>
                             <HiMagnifyingGlassPlus/>
-                        </Button.WhiteButton>
+                        </Buttons.WhiteButton>
                     </span>
                 }
                 <div className={style.Slider} onClick={() => animation.setState(false)}>

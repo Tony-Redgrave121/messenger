@@ -4,7 +4,7 @@ import {CSSTransition} from "react-transition-group";
 import '../animation.css'
 import style from "./style.module.css";
 import styleSidebar from "../style.module.css";
-import Buttons from "../../../buttons/Buttons";
+import {Buttons} from "@components/buttons";
 import {
     HiOutlineArrowLeft,
     HiOutlineArrowRight,
@@ -13,16 +13,15 @@ import {
 import InputForm from "../../../inputForm/InputForm";
 import {Controller, SubmitHandler, useForm} from "react-hook-form";
 import {useNavigate} from "react-router-dom";
-import IMessenger from "../../../../utils/types/IMessenger";
-import AddContacts from "../../../contacts/AddContacts/AddContacts";
-import IContact from "../../../../utils/types/IContact";
+import IMessenger from "../../../../types/IMessenger";
+import IContact from "../../../../types/IContact";
 import messengerService from "../../../../service/MessengerService"
-import {useAppDispatch, useAppSelector} from "../../../../utils/hooks/useRedux";
-import {setMessengersList} from "../../../../store/reducers/appReducer";
-import useGetContacts from "../../../../utils/hooks/useGetContacts"
-import SearchBlock from "../../../searchBlock/SearchBlock";
-import ContactList from "../../../contactList/ContactList";
-import useSearch from "../../../../utils/hooks/useSearch";
+import {useAppDispatch, useAppSelector} from "@hooks/useRedux";
+import {setMessengersList} from "@store/reducers/appReducer";
+import useGetContacts from "@hooks/useGetContacts"
+import SearchBlock from "@components/searchBlock/SearchBlock";
+import {ContactList, AddContacts} from "@components/contacts/index";
+import useSearch from "@hooks/useSearch";
 
 interface IMessengerProps {
     messengerCreation: {

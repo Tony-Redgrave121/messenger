@@ -1,9 +1,9 @@
 import React, {useEffect, useState} from 'react'
-import useLoadFile from "../../../utils/hooks/useLoadFile";
+import useLoadFile from "@hooks/useLoadFile";
 import {useParams} from "react-router-dom";
 import style from './style.module.css'
-import IFileObject from "../../../utils/types/IFileObject";
-import IMessageFile from "../../../utils/types/IMessageFile";
+import IFileObject from "../../../types/IFileObject";
+import IMessageFile from "../../../types/IMessageFile";
 import Player from "../../player/Player";
 
 interface IMediaTag {
@@ -34,14 +34,14 @@ namespace MediaTag {
         const geTag = () => {
             const ext = getExt(media.message_file_name)
 
-            const handleClick = (event: React.MouseEvent<HTMLVideoElement | HTMLImageElement>) => {
+            const handleClick = (event: React.MouseEvent<HTMLElement | HTMLImageElement>) => {
                 event.stopPropagation()
                 setCurrMedia && setCurrMedia(media)
                 setSlider && setSlider(true)
             }
 
             if (isVideo.includes(ext))
-                return <Player key={media.message_file_id} id={media.message_file_id} src={image}/>
+                return <Player key={media.message_file_id} id={media.message_file_id} src={image} foo={(event) => handleClick(event)}/>
             else
                 return <img src={image} alt="media" key={media.message_file_id} id={media.message_file_id} onClick={(event) => handleClick(event)} draggable={'false'}/>
         }

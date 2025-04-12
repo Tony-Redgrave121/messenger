@@ -1,5 +1,5 @@
 import {useEffect, useRef} from "react";
-import {useAppDispatch, useAppSelector} from "./useRedux";
+import {useAppDispatch, useAppSelector} from "@hooks/useRedux";
 import {setMessengersList} from "../../store/reducers/appReducer";
 
 export const useMessengerWS = () => {

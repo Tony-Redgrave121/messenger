@@ -3,11 +3,11 @@ import {
     FETCH_MESSAGES,
     POST_MESSAGE,
 } from "../utils/const/const"
-import $api from '../http/index'
+import $api from '@utils/http/index'
 import {AxiosResponse} from 'axios'
-import IMessengerResponse from "../utils/types/IMessengerResponse"
-import IMessagesResponse from "../utils/types/IMessagesResponse"
-import IMessengersListResponse from "../utils/types/IMessengersListResponse"
+import IMessengerResponse from "../types/IMessengerResponse"
+import IMessagesResponse from "../types/IMessagesResponse"
+import IMessengersListResponse from "../types/IMessengersListResponse"
 
 export default class UserService {
     static async fetchMessenger(user_id: string, messenger_id: string, signal: AbortSignal): Promise<AxiosResponse<IMessengerResponse>> {

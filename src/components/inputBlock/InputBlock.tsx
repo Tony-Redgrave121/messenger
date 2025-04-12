@@ -7,18 +7,18 @@ import {
     HiOutlineFolderOpen,
     HiOutlineArrowUturnLeft, HiOutlineXMark
 } from "react-icons/hi2"
-import Buttons from '../buttons/Buttons'
+import {Buttons} from '@components/buttons'
 import style from './style.module.css'
-import DropDown from "../dropDown/DropDown"
+import {DropDown} from "../dropDown"
 import useEmojis from "./useEmojis"
 import PopupContainer from "../popup/PopupContainer";
-import IFilesState from "../../utils/types/IFilesState";
+import IFilesState from "../../types/IFilesState";
 import TextareaBlock from "../textareaBlock/textareaBlock";
 import PopupInputBlock from "../popup/popupInputBlock/PopupInputBlock";
-import IMessagesResponse from "../../utils/types/IMessagesResponse";
+import IMessagesResponse from "../../types/IMessagesResponse";
 import UserService from "../../service/UserService"
 import {useParams} from "react-router-dom";
-import {useAppSelector} from "../../utils/hooks/useRedux";
+import {useAppSelector} from "@hooks/useRedux";
 import getFileObject from "../../utils/logic/getFileObject";
 
 interface IInputBlock {

@@ -1,9 +1,9 @@
 import React, {memo, useEffect, useState} from 'react'
-import ChatBlock from "./chatBlock/ChatBlock"
+import {ChatBlock} from "./"
 import UserService from '../../service/UserService'
-import {useAppSelector} from "../../utils/hooks/useRedux"
+import {useAppSelector} from "@hooks/useRedux"
 import style from './style.module.css'
-import IMessengersListResponse from "../../utils/types/IMessengersListResponse"
+import IMessengersListResponse from "../../types/IMessengersListResponse"
 
 const ChatList = memo(() => {
     const user_id = useAppSelector(state => state.user.userId)

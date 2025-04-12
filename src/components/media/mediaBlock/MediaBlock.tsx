@@ -1,8 +1,8 @@
 import React, {memo} from 'react'
 import style from "./style.module.css"
 import MediaTag from "../mediaTag/MediaTag"
-import IFileObject from "../../../utils/types/IFileObject";
-import IMessageFile from "../../../utils/types/IMessageFile";
+import IFileObject from "../../../types/IFileObject";
+import IMessageFile from "../../../types/IMessageFile";
 
 interface IMedia {
     media: IFileObject[]

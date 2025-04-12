@@ -1,14 +1,16 @@
 import {createSlice} from "@reduxjs/toolkit"
-import IMessengersListResponse from "../../utils/types/IMessengersListResponse"
+import IMessengersListResponse from "../../types/IMessengersListResponse"
 
 interface IAppState {
     sidebarLeft: boolean,
-    newMessenger: IMessengersListResponse[] | null
+    newMessenger: IMessengersListResponse[] | null,
+    currVideo: string,
 }
 
 const initialState: IAppState = {
     sidebarLeft: true,
-    newMessenger: null
+    newMessenger: null,
+    currVideo: '',
 }
 
 const appSlice = createSlice({
@@ -21,6 +23,9 @@ const appSlice = createSlice({
         setMessengersList(state, action) {
             if (Array.isArray(action.payload)) state.newMessenger = action.payload
             else state.newMessenger = [action.payload]
+        },
+        setCurrVideo(state, action) {
+            state.currVideo = action.payload
         }
     }
 })
@@ -28,5 +33,6 @@ const appSlice = createSlice({
 export default appSlice.reducer
 export const {
     setSidebarLeft,
-    setMessengersList
+    setMessengersList,
+    setCurrVideo,
 } = appSlice.actions

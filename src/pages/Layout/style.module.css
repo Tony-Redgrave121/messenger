@@ -1,0 +1,12 @@
+@import url("../../styles/base/_normalize.scss");
+.LayoutContainer {
+  display: flex;
+  justify-content: center;
+}
+.LayoutContainer .Layout {
+  display: flex;
+  max-width: 1680px;
+  width: 100%;
+}
+
+/*# sourceMappingURL=style.module.css.map */

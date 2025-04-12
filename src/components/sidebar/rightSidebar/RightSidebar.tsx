@@ -8,11 +8,11 @@ import {
 } from "react-icons/hi2"
 import style from './style.module.css'
 import './animation.css'
-import Buttons from '../../buttons/Buttons'
+import {Buttons} from '@components/buttons'
 import SidebarContainer from "../SidebarContainer"
 import {CSSTransition} from 'react-transition-group'
-import IMessengerResponse from "../../../utils/types/IMessengerResponse";
-import useLoadFile from "../../../utils/hooks/useLoadFile";
+import IMessengerResponse from "../../../types/IMessengerResponse";
+import useLoadFile from "@hooks/useLoadFile";
 import ImageBlock from "../imageBlock/ImageBlock";
 import TopBar from "../topBar/TopBar";
 

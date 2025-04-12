@@ -1,10 +1,10 @@
 import React, {lazy} from 'react'
 import {Navigate, Route, Routes} from "react-router-dom"
-import Layout from "../components/layout/Layout"
+import Layout from "../pages/Layout/Layout"
 import UserRoutes from "./UserRoutes"
-import {useAppSelector} from "../utils/hooks/useRedux";
+import {useAppSelector} from "@hooks/useRedux";
 
-const AuthForm = lazy(() => import('../components/authForm/AuthForm'))
+const AuthForm = lazy(() => import('../pages/Auth/AuthForm'))
 
 const AppRouter = () => {
     const isAuth = useAppSelector(state => state.user.isAuth)

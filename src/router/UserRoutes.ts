@@ -1,4 +1,4 @@
-import Chat from "../components/chat/Chat";
+import Chat from "../pages/Chat/Chat";
 
 const UserRoutes = [
     {

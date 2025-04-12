@@ -1,14 +1,24 @@
-@use '../../utils/styles/base/_variables.css' as v;
-@import url("../../utils/styles/base/_normalize.scss");
+@use '../../styles/base/_variables.css' as v;
+@import url("../../styles/base/_normalize.scss");
 
 .VideoPlayer {
   position: relative;
 
+  video {
+    min-width: 100%;
+    min-height: 100%;
+  }
+
+  &, .PlayButton {
+    display: flex;
+  }
+
   .PlayButton {
     position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
 
     svg {
       width: 60px;

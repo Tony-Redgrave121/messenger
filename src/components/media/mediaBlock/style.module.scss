@@ -1,11 +1,11 @@
-@use '../../../utils/styles/base/_variables.css' as v;
-@import url("../../../utils/styles/base/_normalize.scss");
+@use '../../../styles/base/_variables.css' as v;
+@import url("../../../styles/base/_normalize.scss");
 
 .MediaBlock {
   display: flex;
   flex-wrap: wrap;
 
-  img, video {
+  img, section {
     border: 2px solid #212121;
     height: auto;
     object-fit: cover;

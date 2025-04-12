@@ -1,5 +1,5 @@
 import React, {Dispatch, RefObject, SetStateAction} from 'react'
-import IFilesState from "../../../utils/types/IFilesState";
+import IFilesState from "../../../types/IFilesState";
 import getFileObject from "../../../utils/logic/getFileObject";
 
 interface IUpload {

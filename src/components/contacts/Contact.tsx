@@ -1,6 +1,6 @@
 import React from 'react';
 import style from './style.module.css';
-import IContact from "../../utils/types/IContact";
+import IContact from "../../types/IContact";
 import {getDate} from "../../utils/logic/getDate";
 import LoadFile from "../loadFile/LoadFile";
 

@@ -3,7 +3,7 @@ import LoadFile from "../../loadFile/LoadFile";
 import style from './style.module.css'
 import {Link} from "react-router-dom";
 import {getDate} from "../../../utils/logic/getDate";
-import IMessengersListResponse from "../../../utils/types/IMessengersListResponse";
+import IMessengersListResponse from "../../../types/IMessengersListResponse";
 
 interface IChatBlock {
     messenger: IMessengersListResponse

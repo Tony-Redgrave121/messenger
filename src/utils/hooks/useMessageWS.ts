@@ -1,6 +1,6 @@
 import {useEffect, useRef, useState} from "react";
-import {useAppSelector} from "./useRedux";
-import IMessagesResponse from "../types/IMessagesResponse";
+import {useAppSelector} from "@hooks/useRedux";
+import IMessagesResponse from "../../types/IMessagesResponse";
 import {useParams} from "react-router-dom";
 
 export const useMessageWS = () => {

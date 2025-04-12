@@ -1,7 +1,7 @@
 import React from 'react'
 import style from "./style.module.css"
 import {HiOutlineDocumentText} from "react-icons/hi2"
-import useLoadFile from "../../../utils/hooks/useLoadFile"
+import useLoadFile from "@hooks/useLoadFile"
 import {useParams} from "react-router-dom"
 
 interface IDocumentBlock {
