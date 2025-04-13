@@ -1,7 +1,7 @@
 import React, {useEffect} from 'react'
 
 interface ITextareaBlock {
-    inputText: string, 
+    inputText: string,
     setInputText: (text: string) => void,
     ref: React.RefObject<HTMLTextAreaElement | null>
 }
@@ -10,7 +10,7 @@ const TextareaBlock: React.FC<ITextareaBlock> = ({inputText, setInputText, ref})
     useEffect(() => {
         const curr = ref.current
         if (!curr || !curr.parentElement) return
-        
+
         curr.style.height = "auto"
         curr.style.height = curr.scrollHeight + "px"
         curr.parentElement.style.height = Number(curr.scrollHeight) + 10 + "px"

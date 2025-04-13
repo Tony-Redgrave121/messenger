@@ -6,11 +6,8 @@ import {useNavigate} from 'react-router-dom'
 import {useAppDispatch} from "@hooks/useRedux";
 import {CSSTransition} from "react-transition-group"
 import './animation.css'
-import Step1 from "./steps/Step1";
-import Step2 from "./steps/Step2";
-import Step3 from "./steps/Step3";
-import Step4 from "./steps/Step4";
-import IAuthForm from "../../types/IAuthForm";
+import {Step1, Step2, Step3, Step4} from "./";
+import {IAuthForm} from "@appTypes";
 
 const InitialValues: IAuthForm = {
     user_email: '',

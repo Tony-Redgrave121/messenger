@@ -1,10 +1,10 @@
 import React from 'react'
 import {Buttons} from "@components/buttons";
-import {Contact} from "../index";
-import IContact from "../../../types/IContact";
+import {Contact} from "../";
+import {IContact} from "@appTypes";
 import style from "./style.module.css";
 import {HiMagnifyingGlass} from "react-icons/hi2";
-import LoadFile from "../../loadFile/LoadFile";
+import {LoadFile} from "@components/loadFile";
 import useSearch from "@hooks/useSearch";
 
 interface ICheckboxContactProps {

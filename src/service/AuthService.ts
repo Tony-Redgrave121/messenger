@@ -5,10 +5,10 @@ import {
     REGISTRATION_ROUTE,
     DELETE_ACCOUNT_ROUTE,
     SEND_CODE_ROUTE, CONFIRM_EMAIL_ROUTE
-} from "../utils/const/const"
+} from "@utils/const/const"
 import $api from '@utils/http/index'
 import {AxiosResponse} from 'axios'
-import IAuthResponse from "../types/IAuthResponse"
+import {IAuthResponse} from "@appTypes"
 
 export default class AuthService {
     static async sendCode(email: string): Promise<AxiosResponse> {

@@ -1,7 +1,7 @@
 import React, {memo, useRef, useState} from 'react'
 import style from './style.module.css'
 import '../animation.css'
-import LoadFile from "@components/loadFile/LoadFile"
+import {LoadFile} from "@components/loadFile";
 import {
     HiOutlineMagnifyingGlass,
     HiEllipsisVertical,
@@ -13,11 +13,11 @@ import {
     HiOutlineArrowLeft
 } from "react-icons/hi2"
 import {Buttons} from "@components/buttons"
-import DropDown from "@components/dropDown/DropDown"
-import SearchBlock from "@components/searchBlock/SearchBlock"
+import {DropDown} from "@components/dropDown"
+import {SearchBlock} from "@components/searchBlock"
 import {CSSTransition} from 'react-transition-group'
 import {useAppDispatch, useAppSelector} from "@hooks/useRedux"
-import IMessengerResponse from "../../../types/IMessengerResponse"
+import {IMessengerResponse} from "@appTypes"
 import {setSidebarLeft} from "@store/reducers/appReducer";
 
 const list = [

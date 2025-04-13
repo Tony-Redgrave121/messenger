@@ -1,10 +1,10 @@
 import React, {Dispatch, FC, RefObject, SetStateAction, useEffect, useState} from 'react'
-import SidebarContainer from "../../SidebarContainer";
+import {SidebarContainer} from "@components/sidebar";
 import {CSSTransition} from "react-transition-group";
 import '../animation.css'
 import style from "../../rightSidebar/style.module.css";
 import profileStyle from "./style.module.css";
-import ImageBlock from "../../imageBlock/ImageBlock";
+import {ImageBlock} from "@components/sidebar";
 import useLoadFile from "@hooks/useLoadFile";
 import {useAppSelector} from "@hooks/useRedux";
 import {Buttons} from "@components/buttons";
@@ -16,9 +16,9 @@ import {
     HiOutlinePaperClip,
     HiOutlineBell,
     HiOutlineServerStack,
-    HiOutlineLockClosed, HiOutlineQuestionMarkCircle,
+    HiOutlineLockClosed, HiOutlineQuestionMarkCircle, HiOutlineUser,
 } from "react-icons/hi2";
-import TopBar from "../../topBar/TopBar";
+import {TopBar} from "@components/sidebar";
 
 interface IProfileProps {
     state: {
@@ -89,7 +89,7 @@ const Profile: FC<IProfileProps> = ({state, setState, refSidebar}) => {
                 <ul className={`${style.InfoList} ${profileStyle.ProfileInfoList}`}>
                     <li>
                         <button onClick={() => window.navigator.clipboard.writeText(userName)}>
-                            <HiOutlineExclamationCircle/>
+                            <HiOutlineUser/>
                             <p>{userName}<small className={style.LiType}>Username</small></p>
                         </button>
                     </li>

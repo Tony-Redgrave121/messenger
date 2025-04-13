@@ -1,11 +1,10 @@
 import React, {useState} from 'react'
 import {HiOutlineUserCircle} from "react-icons/hi2"
 import style from "../style.module.css"
-import InputForm from "@components/inputForm/InputForm"
+import {InputForm} from "@components/inputForm"
 import {Buttons} from "@components/buttons"
-import IStepProps from '../../../types/IStepProps'
+import {IStepProps, IAuthForm} from '@appTypes'
 import {Controller, SubmitHandler} from "react-hook-form";
-import IAuthForm from "../../../types/IAuthForm";
 import {registration} from "@store/reducers/userReducer";
 import {useNavigate} from "react-router-dom";
 import {useAppDispatch} from "@hooks/useRedux";

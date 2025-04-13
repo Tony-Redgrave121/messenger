@@ -1,9 +1,9 @@
 import React, {memo} from 'react';
-import LoadFile from "../../loadFile/LoadFile";
+import {LoadFile} from "@components/loadFile";
 import style from './style.module.css'
 import {Link} from "react-router-dom";
-import {getDate} from "../../../utils/logic/getDate";
-import IMessengersListResponse from "../../../types/IMessengersListResponse";
+import {getDate} from "@utils/logic/getDate";
+import {IMessengersListResponse} from "@appTypes";
 
 interface IChatBlock {
     messenger: IMessengersListResponse

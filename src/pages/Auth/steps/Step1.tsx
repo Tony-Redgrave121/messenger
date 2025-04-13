@@ -1,11 +1,10 @@
 import React from 'react'
 import {HiOutlineChatBubbleLeftRight} from "react-icons/hi2"
 import style from "../style.module.css"
-import InputForm from "@components/inputForm/InputForm"
+import {InputForm} from "@components/inputForm"
 import {Buttons} from "@components/buttons"
-import IStepProps from '../../../types/IStepProps'
+import {IStepProps, IAuthForm} from '@appTypes'
 import AuthService from '../../../service/AuthService'
-import IAuthForm from "../../../types/IAuthForm";
 import {UseFormTrigger, UseFormWatch} from "react-hook-form";
 
 interface IStep3Props extends IStepProps {

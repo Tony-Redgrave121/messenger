@@ -2,7 +2,7 @@ import React, {useRef} from 'react'
 import style from './style.module.css'
 import {CSSTransition} from 'react-transition-group'
 import './animation.css'
-import LoadFile from "../loadFile/LoadFile";
+import {LoadFile} from "@components/loadFile/";
 import {getDate} from "@utils/logic/getDate";
 import {Buttons} from "@components/buttons";
 import {
@@ -16,7 +16,7 @@ import {
     HiOutlineChevronRight,
 } from "react-icons/hi2";
 import useSlider from "../../utils/hooks/useSlider";
-import MediaTag from "../media/mediaTag/MediaTag";
+import {MediaTag} from "@components/media";
 
 interface ISlider {
     animation: {

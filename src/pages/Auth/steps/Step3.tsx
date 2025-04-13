@@ -1,9 +1,9 @@
 import React from 'react'
 import {HiOutlineFingerPrint} from "react-icons/hi2"
 import style from "../style.module.css"
-import InputForm from "@components/inputForm/InputForm"
+import {InputForm} from "@components/inputForm"
 import {Buttons} from "@components/buttons"
-import IStepProps from '../../../types/IStepProps'
+import {IStepProps} from '@appTypes'
 
 const Step3: React.FC<IStepProps> = ({errors, register, handlePrev, handleNext}) => {
     return (

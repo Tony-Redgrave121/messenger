@@ -9,12 +9,12 @@ import {
 import style from './style.module.css'
 import './animation.css'
 import {Buttons} from '@components/buttons'
-import SidebarContainer from "../SidebarContainer"
+import {SidebarContainer} from "../"
 import {CSSTransition} from 'react-transition-group'
-import IMessengerResponse from "../../../types/IMessengerResponse";
+import {IMessengerResponse} from "@appTypes";
 import useLoadFile from "@hooks/useLoadFile";
-import ImageBlock from "../imageBlock/ImageBlock";
-import TopBar from "../topBar/TopBar";
+import {ImageBlock} from "@components/sidebar";
+import {TopBar} from "../";
 
 interface IRightSidebar {
     entity: IMessengerResponse,

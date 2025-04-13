@@ -1,6 +1,6 @@
 import React from 'react'
 import style from "./style.module.css"
-import LoadFile from "../../loadFile/LoadFile"
+import {LoadFile} from "@components/loadFile";
 
 interface IImageBlockProps {
     image: string,

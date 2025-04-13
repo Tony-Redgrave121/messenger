@@ -1,12 +1,11 @@
 import React, {RefObject, useRef} from 'react'
 import style from './style.module.css'
-import IFilesState from "../../../types/IFilesState";
+import {IFilesState, IFileObject} from "@appTypes";
 import {Buttons} from "@components/buttons";
 import {HiOutlineDocumentPlus, HiOutlineDocumentText, HiOutlineXMark} from "react-icons/hi2";
-import TextareaBlock from "../../textareaBlock/textareaBlock";
+import {TextareaBlock} from "@components/textareaBlock";
 import Upload from "./Upload";
-import MediaBlock from "../../media/mediaBlock/MediaBlock";
-import IFileObject from "../../../types/IFileObject";
+import {MediaBlock} from "@components/media";
 
 interface IPopupInputBlock {
     setState: React.Dispatch<React.SetStateAction<IFilesState>>,

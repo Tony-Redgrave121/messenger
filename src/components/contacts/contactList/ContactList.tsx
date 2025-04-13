@@ -1,8 +1,8 @@
 import React from 'react'
 import style from './style.module.css'
-import Contact from "../Contact"
+import {Contact} from "../"
 import {Buttons} from "@components/buttons"
-import IContact from "../../../types/IContact"
+import {IContact} from "@appTypes"
 
 interface ContactListProps {
     contacts: IContact[]

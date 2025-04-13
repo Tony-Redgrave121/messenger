@@ -12,7 +12,7 @@ import {
     HiOutlineUser,
     HiOutlineUsers
 } from "react-icons/hi2";
-import LoadFile from "../../loadFile/LoadFile";
+import {LoadFile} from "@components/loadFile";
 
 const useLeftSidebarLogic = () => {
     const [settings, setSettings] = useState(false)

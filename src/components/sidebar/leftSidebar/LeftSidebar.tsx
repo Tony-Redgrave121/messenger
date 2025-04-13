@@ -2,16 +2,16 @@ import React from 'react'
 import {HiBars3, HiOutlinePencil} from "react-icons/hi2"
 import style from './style.module.css'
 import {Buttons} from '@components/buttons'
-import SearchBlock from "@components/searchBlock/SearchBlock"
+import {SearchBlock} from "@components/searchBlock"
 import {ChatList} from "@components/chatList"
 import {DropDown} from "@components/dropDown"
-import SidebarContainer from "../SidebarContainer";
+import {SidebarContainer} from "../";
 import {CSSTransition} from "react-transition-group"
 import './animation.css'
 import Messenger from "./messenger/Messenger";
 import {ContactList} from "@components/contacts";
 import Profile from "./profile/Profile";
-import useLeftSidebarLogic from "./useLeftSidebarLogic"
+import useLeftSidebarLogic from "@utils/hooks/useLeftSidebarLogic"
 
 const LeftSidebar = () => {
     const {

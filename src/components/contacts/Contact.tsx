@@ -1,8 +1,8 @@
 import React from 'react';
 import style from './style.module.css';
-import IContact from "../../types/IContact";
-import {getDate} from "../../utils/logic/getDate";
-import LoadFile from "../loadFile/LoadFile";
+import {IContact} from "@appTypes";
+import {getDate} from "@utils/logic/getDate";
+import {LoadFile} from "../loadFile";
 
 interface IContactsProps {
     contact: IContact,

@@ -1,6 +1,6 @@
 import React, {useEffect, useMemo, useState} from "react";
 import debounce from "debounce";
-import IContact from "../types/IContact";
+import {IContact} from "@appTypes";
 
 const useSearch = (contacts: IContact[]) => {
     const [filteredContacts, setFilteredContacts] = useState<IContact[]>([])

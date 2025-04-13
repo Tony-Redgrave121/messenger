@@ -1,5 +1,5 @@
 import {createSlice} from "@reduxjs/toolkit"
-import IMessengersListResponse from "../../types/IMessengersListResponse"
+import {IMessengersListResponse} from "@appTypes"
 
 interface IAppState {
     sidebarLeft: boolean,

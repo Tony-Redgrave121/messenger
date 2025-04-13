@@ -1,7 +1,7 @@
 import {useEffect, useState} from "react"
 import messengerService from "../service/MessengerService"
 import {useAppSelector} from "@hooks/useRedux"
-import IContact from "../types/IContact";
+import {IContact} from "@appTypes";
 
 const useGetContacts = () => {
     const userId = useAppSelector(state => state.user.userId)

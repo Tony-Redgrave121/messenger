@@ -2,11 +2,10 @@ import {
     POST_MESSENGER,
     GET_CONTACTS,
 
-} from "../utils/const/const"
+} from "@utils/const/const"
 import $api from '@utils/http/index'
 import {AxiosResponse} from 'axios'
-import IContact from "../types/IContact";
-import IMessengerResponse from "../types/IMessengerResponse";
+import {IContact, IMessengerResponse} from "@appTypes";
 
 export default class MessengerService {
     static async getContacts(id: string, signal: AbortSignal): Promise<AxiosResponse<IContact[]>> {

@@ -1,15 +1,14 @@
 import React, {useEffect, useRef, useState} from 'react'
 import style from './style.module.css'
-import InputBlock from "@components/inputBlock/InputBlock"
-import RightSidebar from "@components/sidebar/rightSidebar/RightSidebar"
-import Message from "@components/message/Message"
+import {InputBlock} from "@components/inputBlock"
+import {RightSidebar} from "@components/sidebar"
+import {Message} from "@components/message"
 import UserService from "../../service/UserService"
 import {useAppSelector} from "@hooks/useRedux"
 import {useNavigate, useParams} from "react-router-dom"
-import IMessagesResponse from "../../types/IMessagesResponse"
+import {IMessagesResponse, IMessengerResponse} from "@appTypes"
 import ChatHeader from "./chatHeader/ChatHeader"
 import {useMessageWS} from "@utils/hooks/useMessageWS";
-import IMessengerResponse from "../../types/IMessengerResponse";
 
 const Chat = () => {
     const [sidebarState, setSidebarState] = useState(false)

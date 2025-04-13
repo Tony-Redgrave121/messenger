@@ -2,12 +2,10 @@ import {
     DELETE_MESSAGE,
     FETCH_MESSAGES,
     POST_MESSAGE,
-} from "../utils/const/const"
+} from "@utils/const/const"
 import $api from '@utils/http/index'
 import {AxiosResponse} from 'axios'
-import IMessengerResponse from "../types/IMessengerResponse"
-import IMessagesResponse from "../types/IMessagesResponse"
-import IMessengersListResponse from "../types/IMessengersListResponse"
+import {IMessengerResponse, IMessagesResponse, IMessengersListResponse} from "@appTypes"
 
 export default class UserService {
     static async fetchMessenger(user_id: string, messenger_id: string, signal: AbortSignal): Promise<AxiosResponse<IMessengerResponse>> {

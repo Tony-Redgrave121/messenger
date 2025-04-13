@@ -3,7 +3,7 @@ import {ChatBlock} from "./"
 import UserService from '../../service/UserService'
 import {useAppSelector} from "@hooks/useRedux"
 import style from './style.module.css'
-import IMessengersListResponse from "../../types/IMessengersListResponse"
+import {IMessengersListResponse} from "@appTypes"
 
 const ChatList = memo(() => {
     const user_id = useAppSelector(state => state.user.userId)

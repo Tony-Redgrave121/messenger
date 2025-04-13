@@ -2,9 +2,8 @@ import React, {useEffect, useState} from 'react'
 import useLoadFile from "@hooks/useLoadFile";
 import {useParams} from "react-router-dom";
 import style from './style.module.css'
-import IFileObject from "../../../types/IFileObject";
-import IMessageFile from "../../../types/IMessageFile";
-import Player from "../../player/Player";
+import {IFileObject, IMessageFile} from "@appTypes";
+import {Player} from "@components/player";
 
 interface IMediaTag {
     media: IMessageFile

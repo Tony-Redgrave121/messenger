@@ -2,7 +2,7 @@ import React, {Suspense} from 'react'
 import MainContainer from "./mainContainer/MainContainer";
 import {Outlet} from "react-router-dom";
 import style from './style.module.css'
-import LeftSidebar from "@components/sidebar/leftSidebar/LeftSidebar";
+import {LeftSidebar} from "@components/sidebar";
 
 const Layout = () => {
     return (

@@ -1,11 +1,10 @@
 import React from 'react'
 import {HiOutlineEnvelope} from "react-icons/hi2"
 import style from "../style.module.css"
-import InputForm from "@components/inputForm/InputForm"
+import {InputForm} from "@components/inputForm"
 import {Buttons} from "@components/buttons"
-import IStepProps from '../../../types/IStepProps'
 import {UseFormTrigger, UseFormWatch} from "react-hook-form";
-import IAuthForm from "../../../types/IAuthForm";
+import {IAuthForm, IStepProps} from "@appTypes";
 import AuthService from "../../../service/AuthService";
 
 interface IStep2Props extends IStepProps {

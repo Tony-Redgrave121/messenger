@@ -1,7 +1,7 @@
 import React, {useCallback, useEffect, useRef, useState} from 'react'
 import style from "./style.module.css"
-import Slider from "@components/slider/Slider";
-import MediaBlock from "../media/mediaBlock/MediaBlock";
+import {Slider} from "@components/slider";
+import {MediaBlock} from "@components/media";
 import {getTime} from "@utils/logic/getDate";
 import {
     HiOutlineArrowUturnLeft,
@@ -9,13 +9,12 @@ import {
     HiOutlineDocumentArrowDown,
     HiOutlineTrash
 } from "react-icons/hi2"
-import IMessagesResponse from "../../types/IMessagesResponse";
+import {IMessagesResponse, IMessageFile} from "@appTypes";
 import {useAppSelector} from "@hooks/useRedux";
 import {DropDown} from "../dropDown";
-import DocumentBlock from "./documentBlock/DocumentBlock";
+import {DocumentBlock} from "@components/message";
 import UserService from "../../service/UserService";
 import {useParams} from "react-router-dom";
-import IMessageFile from "../../types/IMessageFile";
 
 interface IChatMessage {
     message: IMessagesResponse,

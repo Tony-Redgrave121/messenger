@@ -1,5 +1,5 @@
 import React, {Dispatch, RefObject, SetStateAction, useEffect, useRef, useState} from 'react'
-import SidebarContainer from "../../SidebarContainer";
+import {SidebarContainer} from "@components/sidebar";
 import {CSSTransition} from "react-transition-group";
 import '../animation.css'
 import style from "./style.module.css";
@@ -10,17 +10,16 @@ import {
     HiOutlineArrowRight,
     HiOutlinePhoto
 } from "react-icons/hi2";
-import InputForm from "../../../inputForm/InputForm";
+import {InputForm} from "@components/inputForm";
 import {Controller, SubmitHandler, useForm} from "react-hook-form";
 import {useNavigate} from "react-router-dom";
-import IMessenger from "../../../../types/IMessenger";
-import IContact from "../../../../types/IContact";
+import {IMessenger, IContact} from "@appTypes";
 import messengerService from "../../../../service/MessengerService"
 import {useAppDispatch, useAppSelector} from "@hooks/useRedux";
 import {setMessengersList} from "@store/reducers/appReducer";
 import useGetContacts from "@hooks/useGetContacts"
-import SearchBlock from "@components/searchBlock/SearchBlock";
-import {ContactList, AddContacts} from "@components/contacts/index";
+import {SearchBlock} from "@components/searchBlock"
+import {ContactList, AddContacts} from "@components/contacts";
 import useSearch from "@hooks/useSearch";
 
 interface IMessengerProps {

@@ -11,11 +11,10 @@ import {Buttons} from '@components/buttons'
 import style from './style.module.css'
 import {DropDown} from "../dropDown"
 import useEmojis from "./useEmojis"
-import PopupContainer from "../popup/PopupContainer";
-import IFilesState from "../../types/IFilesState";
-import TextareaBlock from "../textareaBlock/textareaBlock";
-import PopupInputBlock from "../popup/popupInputBlock/PopupInputBlock";
-import IMessagesResponse from "../../types/IMessagesResponse";
+import {PopupContainer} from "@components/popup";
+import {IFilesState, IMessagesResponse} from "@appTypes"
+import {TextareaBlock} from "@components/textareaBlock";
+import {PopupInputBlock} from "@components/popup";
 import UserService from "../../service/UserService"
 import {useParams} from "react-router-dom";
 import {useAppSelector} from "@hooks/useRedux";
