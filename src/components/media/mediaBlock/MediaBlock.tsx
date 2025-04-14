@@ -1,4 +1,4 @@
-import React, {memo} from 'react'
+import React, {memo, Dispatch, SetStateAction, FC} from 'react'
 import style from "./style.module.css"
 import {MediaTag} from "@components/media";
 import {IFileObject, IMessageFile} from "@appTypes";
@@ -10,11 +10,11 @@ interface IMedia {
 interface IMediaBlock {
     media: IMessageFile[],
     setSlider?: (state: boolean) => void,
-    setCurrMedia?: React.Dispatch<React.SetStateAction<IMessageFile>>,
+    setCurrMedia?: Dispatch<SetStateAction<IMessageFile>>,
 }
 
 namespace MediaBlock {
-    export const Slider: React.FC<IMediaBlock> = memo(({media, setSlider, setCurrMedia}) => {
+    export const Slider: FC<IMediaBlock> = memo(({media, setSlider, setCurrMedia}) => {
         return (
             <div className={style.MediaBlock}>
                 <MediaTag.Slider media={media[0]} setSlider={setSlider} setCurrMedia={setCurrMedia} key={media[0].message_file_id}/>

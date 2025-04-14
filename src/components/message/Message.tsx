@@ -22,6 +22,12 @@ interface IChatMessage {
     socketRef: React.RefObject<WebSocket | null>
 }
 
+const initialCurrMedia = {
+    message_file_id: '',
+    message_file_name: '',
+    message_file_size: 0
+}
+
 namespace Message {
     export const ChatMessage: React.FC<IChatMessage> = ({message, setReply, socketRef}) => {
         const {id} = useParams()
@@ -71,10 +77,7 @@ namespace Message {
         const [animationState, setAnimationState] = useState(false)
         const [position, setPosition] = useState({x: 0, y: 0})
 
-        const [currMedia, setCurrMedia] = useState({
-            message_file_id: '',
-            message_file_name: ''
-        })
+        const [currMedia, setCurrMedia] = useState(initialCurrMedia)
         const refSlider = useRef<HTMLDivElement>(null)
         const [mediaArr, setMediaArr] = useState<IMessageFile[] | undefined>()
 

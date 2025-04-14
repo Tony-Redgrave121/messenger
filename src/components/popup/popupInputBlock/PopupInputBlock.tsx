@@ -1,4 +1,4 @@
-import React, {RefObject, useRef} from 'react'
+import React, {Dispatch, FC, RefObject, SetStateAction, useRef} from 'react'
 import style from './style.module.css'
 import {IFilesState, IFileObject} from "@appTypes";
 import {Buttons} from "@components/buttons";
@@ -8,16 +8,16 @@ import Upload from "./Upload";
 import {MediaBlock} from "@components/media";
 
 interface IPopupInputBlock {
-    setState: React.Dispatch<React.SetStateAction<IFilesState>>,
+    setState: Dispatch<SetStateAction<IFilesState>>,
     files: IFileObject[],
     type?: string,
     inputText: string,
-    setInputText: React.Dispatch<React.SetStateAction<string>>,
+    setInputText: Dispatch<SetStateAction<string>>,
     handleSubmit: () => void,
     filesRef: RefObject<File[] | null>
 }
 
-const PopupInputBlock: React.FC<IPopupInputBlock> = ({setState, files, type, inputText, setInputText, handleSubmit, filesRef}) => {
+const PopupInputBlock: FC<IPopupInputBlock> = ({setState, files, type, inputText, setInputText, handleSubmit, filesRef}) => {
     const refTextarea = useRef<HTMLTextAreaElement>(null)
 
     const handleCancel = () => {

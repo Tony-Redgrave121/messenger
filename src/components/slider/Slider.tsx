@@ -1,4 +1,4 @@
-import React, {useRef} from 'react'
+import React, {Dispatch, RefObject, SetStateAction, useRef} from 'react'
 import style from './style.module.css'
 import {CSSTransition} from 'react-transition-group'
 import './animation.css'
@@ -15,19 +15,20 @@ import {
     HiOutlineChevronLeft,
     HiOutlineChevronRight,
 } from "react-icons/hi2";
-import useSlider from "../../utils/hooks/useSlider";
+import useSlider from "@utils/hooks/useSlider/useSlider";
 import {MediaTag} from "@components/media";
+import {IMessageFile} from "@appTypes";
 
 interface ISlider {
     animation: {
         state: boolean,
-        setState: React.Dispatch<React.SetStateAction<boolean>>,
-        ref: React.RefObject<HTMLDivElement | null>
+        setState: Dispatch<SetStateAction<boolean>>,
+        ref: RefObject<HTMLDivElement | null>
     },
     media: {
-        mediaArr: { message_file_id: string, message_file_name: string }[],
-        setMediaArr: React.Dispatch<React.SetStateAction<{ message_file_id: string, message_file_name: string; }[] | undefined>>,
-        currentSlide: { message_file_id: string, message_file_name: string}
+        mediaArr: IMessageFile[],
+        setMediaArr: Dispatch<SetStateAction<IMessageFile[] | undefined>>,
+        currentSlide: IMessageFile
     },
     user: {
         owner_id: string,
@@ -40,12 +41,22 @@ interface ISlider {
 const Slider: React.FC<ISlider> = ({animation, media, user}) => {
     const refSwipe = useRef<HTMLDivElement | null>(null)
 
-    const {downloadMedia, deleteMedia, swipeSlide, zoomMedia, setZoomState, zoomState, shareMedia, slide, zoomSize} = useSlider({
+    const {
+        downloadMedia,
+        deleteMedia,
+        swipeSlide,
+        zoomMedia,
+        setZoomState,
+        zoomState,
+        shareMedia,
+        slide,
+        zoomSize
+    } = useSlider({
         mediaArr: media.mediaArr,
         setMediaArr: media.setMediaArr,
         currentSlide: media.currentSlide,
-        animationState: animation.state,
         setAnimationState: animation.setState,
+        animationState: animation.state,
         refSwipe,
     })
 

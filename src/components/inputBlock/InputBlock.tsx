@@ -1,4 +1,4 @@
-import React, {ChangeEvent, useEffect, useRef, useState} from 'react'
+import React, {ChangeEvent, Dispatch, FC, RefObject, SetStateAction, useEffect, useRef, useState} from 'react'
 import {
     HiOutlineFaceSmile,
     HiMiniPaperClip,
@@ -22,11 +22,11 @@ import getFileObject from "../../utils/logic/getFileObject";
 
 interface IInputBlock {
     reply: IMessagesResponse | null,
-    setReply: React.Dispatch<React.SetStateAction<IMessagesResponse | null>>
-    socketRef: React.RefObject<WebSocket | null>
+    setReply: Dispatch<SetStateAction<IMessagesResponse | null>>
+    socketRef: RefObject<WebSocket | null>
 }
 
-const InputBlock: React.FC<IInputBlock> = ({reply, setReply, socketRef}) => {
+const InputBlock: FC<IInputBlock> = ({reply, setReply, socketRef}) => {
     const [inputText, setInputText] = useState('')
     const refTextarea = useRef<HTMLTextAreaElement>(null)
 
