@@ -1,6 +1,6 @@
 import React, {useRef} from 'react'
 import style from './style.module.css'
-import useLoadFile from "@hooks/useLoadFile"
+import useLoadBlob from "@hooks/useLoadBlob"
 
 interface ILoadImage {
     imagePath?: string,
@@ -9,7 +9,7 @@ interface ILoadImage {
 
 const LoadFile: React.FC<ILoadImage> = ({imagePath, imageTitle}) => {
     const refImageContainer = useRef<HTMLDivElement>(null)
-    const {load, image} = useLoadFile(imagePath)
+    const {load, image} = useLoadBlob(imagePath)
 
     const createImage = (title: string) => {
         if (!title) return null

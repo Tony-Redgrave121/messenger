@@ -12,7 +12,7 @@ import {Buttons} from '@components/buttons'
 import {SidebarContainer} from "../"
 import {CSSTransition} from 'react-transition-group'
 import {IMessengerResponse} from "@appTypes";
-import useLoadFile from "@hooks/useLoadFile";
+import useLoadBlob from "@hooks/useLoadBlob";
 import {ImageBlock} from "@components/sidebar";
 import {TopBar} from "../";
 
@@ -25,7 +25,7 @@ interface IRightSidebar {
 
 const RightSidebar: React.FC<IRightSidebar> = ({entity, ref, state, setState}) => {
     const [notification, setNotification] = React.useState(false)
-    const {image} = useLoadFile(entity.messenger_image ? `messengers/${entity.messenger_id}/${entity.messenger_image}` : '')
+    const {image} = useLoadBlob(entity.messenger_image ? `messengers/${entity.messenger_id}/${entity.messenger_image}` : '')
 
     return (
         <CSSTransition

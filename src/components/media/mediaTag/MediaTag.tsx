@@ -1,14 +1,20 @@
-import React, {useEffect, useState} from 'react'
-import useLoadFile from "@hooks/useLoadFile";
+import React, {Dispatch, FC, SetStateAction} from 'react'
+import useLoadBlob from "@hooks/useLoadBlob";
 import {useParams} from "react-router-dom";
 import style from './style.module.css'
 import {IFileObject, IMessageFile} from "@appTypes";
 import {Player} from "@components/player";
+import getExt from "@utils/logic/getExt";
+import useShortMedia from "@hooks/useShortMedia";
 
-interface IMediaTag {
+interface ISliderProps {
     media: IMessageFile
-    setSlider?: (state: boolean) => void,
-    setCurrMedia?: React.Dispatch<React.SetStateAction<IMessageFile>>
+}
+
+interface IMessageMediaProps extends ISliderProps {
+    media: IMessageFile
+    setSlider: (state: boolean) => void,
+    setCurrMedia: Dispatch<SetStateAction<IMessageFile>>
 }
 
 interface IInputBlockProps {
@@ -19,88 +25,57 @@ interface IInputBlockProps {
 const isVideo = ['mp4', 'webm']
 
 namespace MediaTag {
-    const getExt = (name: string) => {
-        const type = name.split('.')
-
-        return type[type.length - 1].toLowerCase()
-    }
-
-    export const Slider: React.FC<IMediaTag> = ({media, setSlider, setCurrMedia}) => {
+    export const Slider: FC<ISliderProps> = ({media}) => {
         const {id} = useParams()
-
-        let {load, image} = useLoadFile(`messengers/${id}/${media.message_file_name}`)
+        let {load, image} = useLoadBlob(`messengers/${id}/${media.message_file_name}`)
 
         const geTag = () => {
             const ext = getExt(media.message_file_name)
 
-            const handleClick = (event: React.MouseEvent<HTMLElement | HTMLImageElement>) => {
-                event.stopPropagation()
-                setCurrMedia && setCurrMedia(media)
-                setSlider && setSlider(true)
-            }
-
             if (isVideo.includes(ext))
-                return <Player key={media.message_file_id} id={media.message_file_id} src={image} foo={(event) => handleClick(event)}/>
+                return <Player key={media.message_file_id} id={media.message_file_id} src={image}/>
             else
-                return <img src={image} alt="media" key={media.message_file_id} id={media.message_file_id} onClick={(event) => handleClick(event)} draggable={'false'}/>
+                return <img src={image} alt="media" key={media.message_file_id} id={media.message_file_id} draggable={'false'}/>
         }
 
         return (
             <>
-                {(load && image) ? geTag() : <div/>}
+                {(load && image) ? geTag() : <div className={`${style.ShadowBlock} ${style.MinBlock}`}/>}
+            </>
+        )
+    }
+
+    export const MessageMedia: FC<IMessageMediaProps> = ({media, setSlider, setCurrMedia}) => {
+        const {id} = useParams()
+        let {load, image} = useLoadBlob(`messengers/${id}/${media.message_file_name}`)
+
+        const fileObj = {
+            url: image,
+            name: media.message_file_name,
+            size: media.message_file_size,
+        }
+
+        const {preview} = useShortMedia(fileObj)
+
+        const handleClick = (event: React.MouseEvent<HTMLElement | HTMLImageElement>) => {
+            event.stopPropagation()
+            setCurrMedia(media)
+            setSlider(true)
+        }
+
+        return (
+            <>
+                {(load && preview) ?
+                    <img src={preview} alt="media" onClick={handleClick}/>
+                    :
+                    <div className={`${style.ShadowBlock} ${style.MinBlock}`}/>
+                }
             </>
         )
     }
 
     export const InputBlock: React.FC<IInputBlockProps> = ({media}) => {
-        const [preview, setPreview] = useState<string | null>(null)
-        const MAX_WIDTH = 700
-
-        useEffect(() => {
-            if (!media.url) return
-            const ext = getExt(media.name)
-
-            const canvas = document.createElement('canvas')
-            const ctx = canvas.getContext('2d')
-            if (!ctx) return
-
-            const handlePreview = (media: HTMLImageElement | HTMLVideoElement, canvas: HTMLCanvasElement, width: number, ratio: number) => {
-                const height = width / ratio
-
-                canvas.width = width
-                canvas.height = height
-
-                ctx.drawImage(media, 0, 0, width, height)
-                setPreview(canvas.toDataURL('image/jpeg', .7))
-            }
-
-            if (isVideo.includes(ext)) {
-                const video = document.createElement('video')
-                video.src = media.url
-                video.playsInline = true
-
-                video.onloadedmetadata = () => {
-                    video.currentTime = 0
-                }
-
-                video.onseeked  = () => {
-                    const ratio = video.videoWidth / video.videoHeight
-                    const width = Math.min(video.videoWidth, MAX_WIDTH)
-
-                    handlePreview(video, canvas, width, ratio)
-                }
-            } else {
-                const image = new Image()
-                image.src = media.url
-
-                image.onload = () => {
-                    const ratio = image.width / image.height
-                    const width = Math.min(image.width, MAX_WIDTH)
-
-                    handlePreview(image, canvas, width, ratio)
-                }
-            }
-        }, [media])
+        const {preview} = useShortMedia(media)
 
         return (
             <>

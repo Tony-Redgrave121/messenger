@@ -1,5 +1,10 @@
 @import url("../../../styles/base/_normalize.scss");
 
+.MinBlock {
+  min-width: 180px;
+  height: 125px;
+}
+
 .ShadowBlock {
   min-height: 100px;
   width: 100%;

@@ -9,17 +9,17 @@ interface IMedia {
 
 interface IMediaBlock {
     media: IMessageFile[],
-    setSlider?: (state: boolean) => void,
-    setCurrMedia?: Dispatch<SetStateAction<IMessageFile>>,
+    setSlider: (state: boolean) => void,
+    setCurrMedia: Dispatch<SetStateAction<IMessageFile>>,
 }
 
 namespace MediaBlock {
-    export const Slider: FC<IMediaBlock> = memo(({media, setSlider, setCurrMedia}) => {
+    export const MessageMedia: FC<IMediaBlock> = memo(({media, setSlider, setCurrMedia}) => {
         return (
             <div className={style.MediaBlock}>
-                <MediaTag.Slider media={media[0]} setSlider={setSlider} setCurrMedia={setCurrMedia} key={media[0].message_file_id}/>
+                <MediaTag.MessageMedia media={media[0]} setSlider={setSlider} setCurrMedia={setCurrMedia} key={media[0].message_file_id}/>
                 <span>
-                    {media.slice(1).map(media => <MediaTag.Slider media={media} setSlider={setSlider} setCurrMedia={setCurrMedia} key={media.message_file_id}/>)}
+                    {media.slice(1).map(media => <MediaTag.MessageMedia media={media} setSlider={setSlider} setCurrMedia={setCurrMedia} key={media.message_file_id}/>)}
                 </span>
             </div>
         )

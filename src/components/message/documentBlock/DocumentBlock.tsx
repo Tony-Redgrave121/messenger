@@ -1,7 +1,7 @@
 import React from 'react'
 import style from "./style.module.css"
 import {HiOutlineDocumentText} from "react-icons/hi2"
-import useLoadFile from "@hooks/useLoadFile"
+import useLoadBlob from "@hooks/useLoadBlob"
 import {useParams} from "react-router-dom"
 
 interface IDocumentBlock {
@@ -14,7 +14,7 @@ interface IDocumentBlock {
 
 const DocumentBlock: React.FC<IDocumentBlock> = ({doc}) => {
     const {id} = useParams()
-    const {image} = useLoadFile(`messengers/${id}/${doc.message_file_name}`)
+    const {image} = useLoadBlob(`messengers/${id}/${doc.message_file_name}`)
 
     return (
         <a download={doc.message_file_name} href={image} className={style.DocumentBlock}>

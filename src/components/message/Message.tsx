@@ -113,7 +113,7 @@ namespace Message {
                 }
                 <div className={style.ChatMessageBlock} onContextMenu={(event) => handleContextMenu(event)}>
                     {(mediaArr && mediaArr.length > 0) &&
-                        <MediaBlock.Slider media={mediaArr} setSlider={setAnimationState} setCurrMedia={setCurrMedia}/>
+                        <MediaBlock.MessageMedia media={mediaArr} setSlider={setAnimationState} setCurrMedia={setCurrMedia}/>
                     }
                     {(message.message_files && message.message_type === 'document') &&
                         <div className={style.ChatDocumentBlock}>

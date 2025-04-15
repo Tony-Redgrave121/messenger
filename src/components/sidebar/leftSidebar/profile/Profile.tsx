@@ -5,7 +5,7 @@ import '../animation.css'
 import style from "../../rightSidebar/style.module.css";
 import profileStyle from "./style.module.css";
 import {ImageBlock} from "@components/sidebar";
-import useLoadFile from "@hooks/useLoadFile";
+import useLoadBlob from "@hooks/useLoadBlob";
 import {useAppSelector} from "@hooks/useRedux";
 import {Buttons} from "@components/buttons";
 import {
@@ -35,7 +35,7 @@ interface IProfileProps {
 const Profile: FC<IProfileProps> = ({state, setState, refSidebar}) => {
     const [animation, setAnimation] = useState(false)
     const {userImg, userName, userId, userBio} = useAppSelector(state => state.user)
-    const {image} = useLoadFile(userImg ? `users/${userId}/${userImg}` : '')
+    const {image} = useLoadBlob(userImg ? `users/${userId}/${userImg}` : '')
 
     useEffect(() => {
         let timer: NodeJS.Timeout | null = null
