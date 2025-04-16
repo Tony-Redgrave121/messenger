@@ -2,6 +2,7 @@ import {useEffect, useState} from "react"
 import useZoom from "./useZoom"
 import {IUseSliderProps} from "@appTypes";
 import useSwipe from "@utils/hooks/useSlider/useSwipe";
+import getExt from "@utils/logic/getExt";
 
 const initialCurrMedia = {
     message_file_id: '',
@@ -51,16 +52,15 @@ const useSlider = (media: IUseSliderProps) => {
     }
 
     const downloadMedia = () => {
-        const regex = new RegExp('\\/([^/.]+)\\.', 'i')
-        const name = slide.currentSlide.message_file_name.match(regex)
-        const ext = slide.currentSlide.message_file_name.split('.').pop()
+        const name = slide.currentSlide.message_file_name
+        const ext = getExt(slide.currentSlide.message_file_name)
 
         if (!name || !ext) return null
 
         const link = document.createElement('a')
 
         link.href = slide.currentSlide.message_file_name
-        link.download = `${name[1]}.${ext}`
+        link.download = `${name}.${ext}`
         document.body.appendChild(link)
         link.click()
         document.body.removeChild(link)

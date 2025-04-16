@@ -88,7 +88,6 @@ namespace Message {
             }
         }, [message.message_files, message.message_type])
 
-
         const handleContextMenu = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
             event.preventDefault()
             const parent = event.currentTarget.getBoundingClientRect()

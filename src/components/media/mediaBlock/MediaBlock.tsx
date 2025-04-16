@@ -7,14 +7,14 @@ interface IMedia {
     media: IFileObject[]
 }
 
-interface IMediaBlock {
+interface IMessageMediaProps {
     media: IMessageFile[],
     setSlider: (state: boolean) => void,
     setCurrMedia: Dispatch<SetStateAction<IMessageFile>>,
 }
 
 namespace MediaBlock {
-    export const MessageMedia: FC<IMediaBlock> = memo(({media, setSlider, setCurrMedia}) => {
+    export const MessageMedia: FC<IMessageMediaProps> = memo(({media, setSlider, setCurrMedia}) => {
         return (
             <div className={style.MediaBlock}>
                 <MediaTag.MessageMedia media={media[0]} setSlider={setSlider} setCurrMedia={setCurrMedia} key={media[0].message_file_id}/>
@@ -25,7 +25,7 @@ namespace MediaBlock {
         )
     })
 
-    export const InputBlock: React.FC<IMedia> = memo(({media}) => {
+    export const InputBlock: FC<IMedia> = memo(({media}) => {
         return (
             <div className={style.MediaBlock}>
                 <MediaTag.InputBlock media={media[0]} key={media[0].url}/>

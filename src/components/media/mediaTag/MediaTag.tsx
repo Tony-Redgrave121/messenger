@@ -29,13 +29,17 @@ namespace MediaTag {
         const {id} = useParams()
         let {load, image} = useLoadBlob(`messengers/${id}/${media.message_file_name}`)
 
+        const handlePropagation = (event: React.MouseEvent<HTMLElement>) => {
+            event.stopPropagation()
+        }
+
         const geTag = () => {
             const ext = getExt(media.message_file_name)
 
             if (isVideo.includes(ext))
-                return <Player key={media.message_file_id} id={media.message_file_id} src={image}/>
+                return <Player key={media.message_file_id} id={media.message_file_id} src={image} foo={handlePropagation}/>
             else
-                return <img src={image} alt="media" key={media.message_file_id} id={media.message_file_id} draggable={'false'}/>
+                return <img src={image} alt="media" key={media.message_file_id} id={media.message_file_id} draggable={'false'} onClick={handlePropagation}/>
         }
 
         return (

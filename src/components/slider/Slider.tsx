@@ -1,4 +1,4 @@
-import React, {Dispatch, RefObject, SetStateAction, useRef} from 'react'
+import React, {Dispatch, FC, RefObject, SetStateAction, useRef} from 'react'
 import style from './style.module.css'
 import {CSSTransition} from 'react-transition-group'
 import './animation.css'
@@ -38,7 +38,7 @@ interface ISlider {
     }
 }
 
-const Slider: React.FC<ISlider> = ({animation, media, user}) => {
+const Slider: FC<ISlider> = ({animation, media, user}) => {
     const refSwipe = useRef<HTMLDivElement | null>(null)
 
     const {
