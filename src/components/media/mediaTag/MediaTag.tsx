@@ -2,7 +2,7 @@ import React, {Dispatch, FC, SetStateAction} from 'react'
 import useLoadBlob from "@hooks/useLoadBlob";
 import {useParams} from "react-router-dom";
 import style from './style.module.css'
-import {IFileObject, IMessageFile} from "@appTypes";
+import {IAnimationState, IFileObject, IMessageFile} from "@appTypes";
 import {Player} from "@components/player";
 import getExt from "@utils/logic/getExt";
 import useShortMedia from "@hooks/useShortMedia";
@@ -13,7 +13,7 @@ interface ISliderProps {
 
 interface IMessageMediaProps extends ISliderProps {
     media: IMessageFile
-    setSlider: (state: boolean) => void,
+    setSlider: Dispatch<SetStateAction<IAnimationState>>,
     setCurrMedia: Dispatch<SetStateAction<IMessageFile>>
 }
 
@@ -64,7 +64,10 @@ namespace MediaTag {
         const handleClick = (event: React.MouseEvent<HTMLElement | HTMLImageElement>) => {
             event.stopPropagation()
             setCurrMedia(media)
-            setSlider(true)
+            setSlider({
+                state: true,
+                mounted: true
+            })
         }
 
         return (

@@ -1,4 +1,4 @@
-import React, {Dispatch, FC, RefObject, SetStateAction, useRef} from 'react'
+import React, {Dispatch, FC, RefObject, SetStateAction, useRef, useState} from 'react'
 import style from './style.module.css'
 import {CSSTransition} from 'react-transition-group'
 import './animation.css'
@@ -17,17 +17,18 @@ import {
 } from "react-icons/hi2";
 import useSlider from "@utils/hooks/useSlider/useSlider";
 import {MediaTag} from "@components/media";
-import {IMessageFile} from "@appTypes";
+import {IAnimationState, IMessageFile} from "@appTypes";
+import useAnimation from "@hooks/useAnimation";
 
 interface ISlider {
     animation: {
         state: boolean,
-        setState: Dispatch<SetStateAction<boolean>>,
+        setState: Dispatch<SetStateAction<IAnimationState>>,
         ref: RefObject<HTMLDivElement | null>
     },
     media: {
         mediaArr: IMessageFile[],
-        setMediaArr: Dispatch<SetStateAction<IMessageFile[] | undefined>>,
+        setMediaArr: Dispatch<SetStateAction<IMessageFile[]>>,
         currentSlide: IMessageFile
     },
     user: {
@@ -40,6 +41,7 @@ interface ISlider {
 
 const Slider: FC<ISlider> = ({animation, media, user}) => {
     const refSwipe = useRef<HTMLDivElement | null>(null)
+    const [animationState, setAnimationState] = useState(false)
 
     const {
         downloadMedia,
@@ -55,10 +57,12 @@ const Slider: FC<ISlider> = ({animation, media, user}) => {
         mediaArr: media.mediaArr,
         setMediaArr: media.setMediaArr,
         currentSlide: media.currentSlide,
-        setAnimationState: animation.setState,
-        animationState: animation.state,
+        setAnimationState: setAnimationState,
+        animationState: animationState,
         refSwipe,
     })
+
+    useAnimation(animation.state, setAnimationState, animation.setState)
 
     const handleZoom = (side: boolean) => {
         const newZoom = side ? zoomSize - 20 : zoomSize + 20
@@ -69,7 +73,7 @@ const Slider: FC<ISlider> = ({animation, media, user}) => {
 
     return (
         <CSSTransition
-            in={animation.state}
+            in={animationState}
             nodeRef={animation.ref}
             timeout={300}
             classNames='slider-node'
@@ -100,7 +104,10 @@ const Slider: FC<ISlider> = ({animation, media, user}) => {
                         }}>
                             {zoomState ? <HiMagnifyingGlassMinus/> : <HiMagnifyingGlassPlus/>}
                         </Buttons.WhiteButton>
-                        <Buttons.WhiteButton foo={() => animation.setState(false)}>
+                        <Buttons.WhiteButton foo={() => animation.setState(prev => ({
+                            ...prev,
+                            state: false
+                        }))}>
                             <HiOutlineXMark/>
                         </Buttons.WhiteButton>
                     </span>
@@ -130,7 +137,10 @@ const Slider: FC<ISlider> = ({animation, media, user}) => {
                         </Buttons.WhiteButton>
                     </span>
                 }
-                <div className={style.Slider} onClick={() => animation.setState(false)}>
+                <div className={style.Slider} onClick={() => animation.setState(prev => ({
+                    ...prev,
+                    state: false
+                }))}>
                     <div className={style.Swipe} ref={refSwipe}>
                         {
                             media.mediaArr.map(media => (

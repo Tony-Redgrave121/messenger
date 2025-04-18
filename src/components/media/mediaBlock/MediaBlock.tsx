@@ -1,7 +1,7 @@
 import React, {memo, Dispatch, SetStateAction, FC} from 'react'
 import style from "./style.module.css"
 import {MediaTag} from "@components/media";
-import {IFileObject, IMessageFile} from "@appTypes";
+import {IAnimationState, IFileObject, IMessageFile} from "@appTypes";
 
 interface IMedia {
     media: IFileObject[]
@@ -9,7 +9,7 @@ interface IMedia {
 
 interface IMessageMediaProps {
     media: IMessageFile[],
-    setSlider: (state: boolean) => void,
+    setSlider: Dispatch<SetStateAction<IAnimationState>>,
     setCurrMedia: Dispatch<SetStateAction<IMessageFile>>,
 }
 

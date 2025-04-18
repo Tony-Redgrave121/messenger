@@ -3,6 +3,8 @@ import useZoom from "./useZoom"
 import {IUseSliderProps} from "@appTypes";
 import useSwipe from "@utils/hooks/useSlider/useSwipe";
 import getExt from "@utils/logic/getExt";
+import useLoadBlob from "@hooks/useLoadBlob";
+import {useParams} from "react-router-dom";
 
 const initialCurrMedia = {
     message_file_id: '',
@@ -18,6 +20,9 @@ const useSlider = (media: IUseSliderProps) => {
     const [zoomState, setZoomState] = useState(false)
     const {setZoomSize, zoomSize, refZoom} = useZoom()
     const {handlePosition} = useSwipe(media, refZoom, slide, setSlide)
+    const {id} = useParams()
+
+    // let {load, image} = useLoadBlob(`messengers/${id}/${slide.currentSlide.message_file_name}`)
 
     useEffect(() => {
         setZoomState(false)
@@ -56,10 +61,9 @@ const useSlider = (media: IUseSliderProps) => {
         const ext = getExt(slide.currentSlide.message_file_name)
 
         if (!name || !ext) return null
-
         const link = document.createElement('a')
 
-        link.href = slide.currentSlide.message_file_name
+        // link.href = image
         link.download = `${name}.${ext}`
         document.body.appendChild(link)
         link.click()

@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useRef, useState} from 'react'
+import React, {Dispatch, FC, RefObject, SetStateAction, useCallback, useEffect, useRef, useState} from 'react'
 import style from "./style.module.css"
 import {Slider} from "@components/slider";
 import {MediaBlock} from "@components/media";
@@ -18,8 +18,8 @@ import {useParams} from "react-router-dom";
 
 interface IChatMessage {
     message: IMessagesResponse,
-    setReply: React.Dispatch<React.SetStateAction<IMessagesResponse | null>>,
-    socketRef: React.RefObject<WebSocket | null>
+    setReply: Dispatch<SetStateAction<IMessagesResponse | null>>,
+    socketRef: RefObject<WebSocket | null>
 }
 
 const initialCurrMedia = {
@@ -29,10 +29,18 @@ const initialCurrMedia = {
 }
 
 namespace Message {
-    export const ChatMessage: React.FC<IChatMessage> = ({message, setReply, socketRef}) => {
+    export const ChatMessage: FC<IChatMessage> = ({message, setReply, socketRef}) => {
         const {id} = useParams()
         const [contextMenu, setContextMenu] = useState(false)
+        const [position, setPosition] = useState({x: 0, y: 0})
+        const [currMedia, setCurrMedia] = useState(initialCurrMedia)
+        const refSlider = useRef<HTMLDivElement>(null)
+        const [mediaArr, setMediaArr] = useState<IMessageFile[]>([])
         const user_id = useAppSelector(state => state.user.userId)
+        const [slider, setSlider] = useState({
+            state: false,
+            mounted: false
+        })
 
         const handleDelete = useCallback(async () => {
             if (!id) return
@@ -74,13 +82,6 @@ namespace Message {
             }
         ]
 
-        const [animationState, setAnimationState] = useState(false)
-        const [position, setPosition] = useState({x: 0, y: 0})
-
-        const [currMedia, setCurrMedia] = useState(initialCurrMedia)
-        const refSlider = useRef<HTMLDivElement>(null)
-        const [mediaArr, setMediaArr] = useState<IMessageFile[] | undefined>()
-
         useEffect(() => {
             if (message.message_files && message.message_type === 'media') {
                 setMediaArr(message.message_files)
@@ -112,7 +113,7 @@ namespace Message {
                 }
                 <div className={style.ChatMessageBlock} onContextMenu={(event) => handleContextMenu(event)}>
                     {(mediaArr && mediaArr.length > 0) &&
-                        <MediaBlock.MessageMedia media={mediaArr} setSlider={setAnimationState} setCurrMedia={setCurrMedia}/>
+                        <MediaBlock.MessageMedia media={mediaArr} setSlider={setSlider} setCurrMedia={setCurrMedia}/>
                     }
                     {(message.message_files && message.message_type === 'document') &&
                         <div className={style.ChatDocumentBlock}>
@@ -125,10 +126,10 @@ namespace Message {
                     </p>
                     <DropDown list={list} state={contextMenu} setState={setContextMenu} position={position}/>
                 </div>
-                {mediaArr && mediaArr.length > 0 &&
+                {slider.mounted && mediaArr &&
                     <Slider animation={{
-                        state: animationState,
-                        setState: setAnimationState,
+                        state: slider.state,
+                        setState: setSlider,
                         ref: refSlider
                     }} media={{
                         mediaArr: mediaArr,

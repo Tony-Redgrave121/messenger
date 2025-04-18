@@ -1,4 +1,4 @@
-import React, {Dispatch, FC, RefObject, SetStateAction, useEffect, useState} from 'react'
+import React, {Dispatch, FC, RefObject, SetStateAction, useState} from 'react'
 import {SidebarContainer} from "@components/sidebar";
 import {CSSTransition} from "react-transition-group";
 import '../animation.css'
@@ -19,16 +19,12 @@ import {
     HiOutlineLockClosed, HiOutlineQuestionMarkCircle, HiOutlineUser,
 } from "react-icons/hi2";
 import {TopBar} from "@components/sidebar";
+import useAnimation from "@hooks/useAnimation";
+import {IAnimationState} from "@appTypes";
 
 interface IProfileProps {
-    state: {
-        state: boolean,
-        mounted: boolean
-    },
-    setState: Dispatch<SetStateAction<{
-        state: boolean,
-        mounted: boolean
-    }>>,
+    state: IAnimationState,
+    setState: Dispatch<SetStateAction<IAnimationState>>,
     refSidebar: RefObject<HTMLDivElement | null>,
 }
 
@@ -37,21 +33,8 @@ const Profile: FC<IProfileProps> = ({state, setState, refSidebar}) => {
     const {userImg, userName, userId, userBio} = useAppSelector(state => state.user)
     const {image} = useLoadBlob(userImg ? `users/${userId}/${userImg}` : '')
 
-    useEffect(() => {
-        let timer: NodeJS.Timeout | null = null
+    useAnimation(state.state, setAnimation, setState)
 
-        if (!state.state) timer = setTimeout(() => setState(prev => ({
-            ...prev,
-            mounted: false
-        })), 300)
-
-        setAnimation(state.state)
-            
-        return () => {
-            timer && clearTimeout(timer)
-        }
-    }, [setState, state])
-    
     return (
         <CSSTransition
             in={animation}
