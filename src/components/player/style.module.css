@@ -1,25 +1,12 @@
 @import url("../../styles/base/_normalize.scss");
 
 .VideoPlayer {
+  display: flex;
   position: relative;
 }
 .VideoPlayer video {
   min-width: 100%;
   min-height: 100%;
-}
-.VideoPlayer, .VideoPlayer .PlayButton {
-  display: flex;
-}
-.VideoPlayer .PlayButton {
-  position: absolute;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  height: 100%;
-}
-.VideoPlayer .PlayButton svg {
-  width: 60px;
-  height: 60px;
 }
 
 /*# sourceMappingURL=style.module.css.map */

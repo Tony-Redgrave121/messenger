@@ -124,4 +124,17 @@
   border-right: 2.5px solid #212121;
 }
 
+.PlayButton {
+  display: flex;
+  position: absolute;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}
+.PlayButton svg {
+  width: initial;
+  height: 20%;
+}
+
 /*# sourceMappingURL=style.module.css.map */

@@ -6,6 +6,14 @@
   height: 125px;
 }
 
+.MediaBlock {
+  display: flex;
+  position: relative;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
 .ShadowBlock {
   min-height: 100px;
   width: 100%;

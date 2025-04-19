@@ -8,7 +8,6 @@
   border: 2px solid #212121;
   height: auto;
   object-fit: cover;
-  cursor: pointer;
   max-height: 300px;
   width: 100%;
 }

@@ -6,6 +6,7 @@ import {IAnimationState, IFileObject, IMessageFile} from "@appTypes";
 import {Player} from "@components/player";
 import getExt from "@utils/logic/getExt";
 import useShortMedia from "@hooks/useShortMedia";
+import Buttons from "@components/buttons/Buttons";
 
 interface ISliderProps {
     media: IMessageFile
@@ -52,6 +53,7 @@ namespace MediaTag {
     export const MessageMedia: FC<IMessageMediaProps> = ({media, setSlider, setCurrMedia}) => {
         const {id} = useParams()
         let {load, image} = useLoadBlob(`messengers/${id}/${media.message_file_name}`)
+        const ext = getExt(media.message_file_name)
 
         const fileObj = {
             url: image,
@@ -73,7 +75,10 @@ namespace MediaTag {
         return (
             <>
                 {(load && preview) ?
-                    <img src={preview} alt="media" onClick={handleClick}/>
+                    <div className={style.MediaBlock} onClick={handleClick}>
+                        <img src={preview} alt="media"/>
+                        {isVideo.includes(ext) && <Buttons.PlayButton pause={true}/>}
+                    </div>
                     :
                     <div className={`${style.ShadowBlock} ${style.MinBlock}`}/>
                 }

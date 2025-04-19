@@ -1,8 +1,8 @@
 import React, {FC, useEffect, useRef, useState} from 'react'
 import style from './style.module.css'
-import { HiPlay } from "react-icons/hi2";
 import {useAppDispatch, useAppSelector} from "@hooks/useRedux";
 import {setCurrVideo} from "@store/reducers/appReducer"
+import Buttons from "../buttons/Buttons";
 
 interface IPlayerProps {
     src: string,
@@ -36,9 +36,7 @@ const Player: FC<IPlayerProps> = ({src, id, foo}) => {
     return (
         <section className={style.VideoPlayer} onClick={event => foo && foo(event)}>
             <video src={src} id={id} ref={videoRef}/>
-            <button onClick={handlePlay} className={style.PlayButton}>
-                {pause && <HiPlay/>}
-            </button>
+            <Buttons.PlayButton handlePlay={handlePlay} pause={pause}/>
         </section>
     )
 }
