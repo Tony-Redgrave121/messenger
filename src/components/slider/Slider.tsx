@@ -19,6 +19,7 @@ import useSlider from "@utils/hooks/useSlider/useSlider";
 import {MediaTag} from "@components/media";
 import {IAnimationState, IMessageFile} from "@appTypes";
 import useAnimation from "@hooks/useAnimation";
+import Inputs from "@components/inputs/Inputs";
 
 interface ISlider {
     animation: {
@@ -131,7 +132,7 @@ const Slider: FC<ISlider> = ({animation, media, user}) => {
                         <Buttons.WhiteButton foo={() => handleZoom(true)}>
                             <HiMagnifyingGlassMinus/>
                         </Buttons.WhiteButton>
-                        <input type="range" min={100} max={200} value={zoomSize} onChange={(event) => zoomMedia(event.target.value)}/>
+                        <Inputs.RangeInput min={100} max={200} value={zoomSize} foo={zoomMedia}/>
                         <Buttons.WhiteButton foo={() => handleZoom(false)}>
                             <HiMagnifyingGlassPlus/>
                         </Buttons.WhiteButton>

@@ -74,32 +74,6 @@
   background-color: rgba(0, 0, 0, 0.4);
   transform: translate(-50%, -50%);
 }
-.SliderContainer .Zoom input {
-  width: 180px;
-  cursor: pointer;
-}
-.SliderContainer .Zoom input::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  background: #a8a8a8;
-  height: 12px;
-  width: 12px;
-  border-radius: 50%;
-  transition: 0.2s all ease-in-out;
-  margin-top: -5px;
-}
-.SliderContainer .Zoom input::-webkit-slider-thumb:hover {
-  transform: scale(110%);
-  background-color: white;
-}
-.SliderContainer .Zoom input::-webkit-slider-runnable-track {
-  height: 2px;
-  border-radius: 5px;
-  background-color: #a8a8a8;
-  transition: 0.2s background-color ease-in-out;
-}
-.SliderContainer .Zoom input::-webkit-slider-runnable-track:hover {
-  background-color: white;
-}
 .SliderContainer .Slider {
   position: absolute;
   top: 0;

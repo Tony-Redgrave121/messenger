@@ -1,0 +1,37 @@
+@use '../../styles/base/_variables.css' as v;
+@import url("../../styles/base/_normalize.scss");
+
+.RangeInput {
+  width: 180px;
+  cursor: pointer;
+
+  &::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    background: #a8a8a8;
+    height: 12px;
+    width: 12px;
+    border-radius: 50%;
+    transition: .2s all ease-in-out;
+    margin-top: -5px;
+
+    &:hover {
+      transform: scale(110%);
+      background-color: white;
+    }
+  }
+
+  &::-webkit-slider-runnable-track {
+    height: 2px;
+    border-radius: 5px;
+    background-color: #a8a8a8;
+    transition: .2s background-color ease-in-out;
+
+    &:hover {
+      background-color: white;
+    }
+  }
+}
+
+.WideInput {
+  width: 100%;
+}

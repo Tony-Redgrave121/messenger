@@ -1,0 +1,34 @@
+@import url("../../styles/base/_normalize.scss");
+
+.RangeInput {
+  width: 180px;
+  cursor: pointer;
+}
+.RangeInput::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  background: #a8a8a8;
+  height: 12px;
+  width: 12px;
+  border-radius: 50%;
+  transition: 0.2s all ease-in-out;
+  margin-top: -5px;
+}
+.RangeInput::-webkit-slider-thumb:hover {
+  transform: scale(110%);
+  background-color: white;
+}
+.RangeInput::-webkit-slider-runnable-track {
+  height: 2px;
+  border-radius: 5px;
+  background-color: #a8a8a8;
+  transition: 0.2s background-color ease-in-out;
+}
+.RangeInput::-webkit-slider-runnable-track:hover {
+  background-color: white;
+}
+
+.WideInput {
+  width: 100%;
+}
+
+/*# sourceMappingURL=style.module.css.map */

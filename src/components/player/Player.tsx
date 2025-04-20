@@ -3,6 +3,7 @@ import style from './style.module.css'
 import {useAppDispatch, useAppSelector} from "@hooks/useRedux";
 import {setCurrVideo} from "@store/reducers/appReducer"
 import Buttons from "../buttons/Buttons";
+import Inputs from "../inputs/Inputs";
 
 interface IPlayerProps {
     src: string,
@@ -12,13 +13,14 @@ interface IPlayerProps {
 
 const Player: FC<IPlayerProps> = ({src, id, foo}) => {
     const [pause, setPause] = useState(true)
+    const [time, setTime] = useState('0')
     const videoRef = useRef<HTMLVideoElement | null>(null)
     const currVideo = useAppSelector(state => state.app.currVideo)
     const dispatch = useAppDispatch()
 
     useEffect(() => {
-        setPause(true)
-    }, [currVideo])
+        if (currVideo !== id) setPause(true)
+    }, [currVideo, id])
 
     const handlePlay = () => {
         if (!videoRef || !videoRef.current) return
@@ -37,6 +39,10 @@ const Player: FC<IPlayerProps> = ({src, id, foo}) => {
         <section className={style.VideoPlayer} onClick={event => foo && foo(event)}>
             <video src={src} id={id} ref={videoRef}/>
             <Buttons.PlayButton handlePlay={handlePlay} pause={pause}/>
+            <div className={style.BottomBar}>
+                <Inputs.RangeInput min={100} max={200} value={time} foo={setTime}/>
+                <Buttons.PlayButton handlePlay={handlePlay} pause={pause}/>
+            </div>
         </section>
     )
 }
