@@ -1,6 +1,10 @@
 import React, {ChangeEvent, FC, ReactNode} from 'react'
 import style from './style.module.css'
-import {HiPlay} from "react-icons/hi2"
+import {
+    HiMiniSpeakerWave,
+    HiMiniSpeakerXMark
+} from "react-icons/hi2"
+import {useAppSelector} from "@hooks/useRedux";
 
 interface IDefaultButton {
     children?: ReactNode,
@@ -21,9 +25,14 @@ interface ICheckbox {
     state: boolean
 }
 
-interface IPlayButton {
-    handlePlay?: () => void,
-    pause: boolean
+interface IVolumeButton {
+    handleVolume?: () => void,
+}
+
+interface IPlayerButton {
+    foo?: () => void,
+    children: ReactNode,
+    className?: string
 }
 
 namespace Buttons {
@@ -65,10 +74,19 @@ namespace Buttons {
             <button className={style.ContactButton} onClick={foo}>{children}</button>
         )
     }
-    export const PlayButton: FC<IPlayButton> = ({handlePlay, pause}) => {
+    export const PlayerButton: FC<IPlayerButton> = ({foo, children, className}) => {
         return (
-            <button onClick={handlePlay} className={style.PlayButton}>
-                {pause && <HiPlay/>}
+            <button onClick={foo} className={className && style[className]}>
+                {children}
+            </button>
+        )
+    }
+    export const VolumeButton: FC<IVolumeButton> = ({handleVolume}) => {
+        const volume = useAppSelector(state => state.slider.volume)
+
+        return (
+            <button onClick={handleVolume} className={style.PlayButtonMini}>
+                {Number.parseInt(volume) > 0 ? <HiMiniSpeakerWave/> : <HiMiniSpeakerXMark/>}
             </button>
         )
     }

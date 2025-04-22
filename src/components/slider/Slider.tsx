@@ -20,6 +20,8 @@ import {MediaTag} from "@components/media";
 import {IAnimationState, IMessageFile} from "@appTypes";
 import useAnimation from "@hooks/useAnimation";
 import Inputs from "@components/inputs/Inputs";
+import {useAppDispatch, useAppSelector} from "@hooks/useRedux";
+import {setZoom} from "@store/reducers/sliderReducer";
 
 interface ISlider {
     animation: {
@@ -43,14 +45,14 @@ interface ISlider {
 const Slider: FC<ISlider> = ({animation, media, user}) => {
     const refSwipe = useRef<HTMLDivElement | null>(null)
     const [animationState, setAnimationState] = useState(false)
+    const dispatch = useAppDispatch()
+    const zoom = useAppSelector(state => state.slider.zoom)
 
     const {
         downloadMedia,
         deleteMedia,
         swipeSlide,
         zoomMedia,
-        setZoomState,
-        zoomState,
         shareMedia,
         slide,
         zoomSize
@@ -100,10 +102,10 @@ const Slider: FC<ISlider> = ({animation, media, user}) => {
                             <HiOutlineDocumentArrowDown/>
                         </Buttons.WhiteButton>
                         <Buttons.WhiteButton foo={() => {
-                            setZoomState(!zoomState)
-                            zoomMedia(zoomState ? '100' : '125')
+                            dispatch(setZoom(!zoom))
+                            zoomMedia(zoom ? '100' : '125')
                         }}>
-                            {zoomState ? <HiMagnifyingGlassMinus/> : <HiMagnifyingGlassPlus/>}
+                            {zoom ? <HiMagnifyingGlassMinus/> : <HiMagnifyingGlassPlus/>}
                         </Buttons.WhiteButton>
                         <Buttons.WhiteButton foo={() => animation.setState(prev => ({
                             ...prev,
@@ -113,21 +115,21 @@ const Slider: FC<ISlider> = ({animation, media, user}) => {
                         </Buttons.WhiteButton>
                     </span>
                 </div>
-                {(!zoomState && slide.slideNumber > 0) &&
+                {(!zoom && slide.slideNumber > 0) &&
                     <span className={style.LeftArrow}>
                         <Buttons.WhiteButton foo={() => swipeSlide(false)}>
                             <HiOutlineChevronLeft/>
                         </Buttons.WhiteButton>
                     </span>
                 }
-                {(!zoomState && slide.slideNumber < media.mediaArr.length - 1) &&
+                {(!zoom && slide.slideNumber < media.mediaArr.length - 1) &&
                     <span className={style.RightArrow}>
                         <Buttons.WhiteButton foo={() => swipeSlide(true)}>
                             <HiOutlineChevronRight/>
                         </Buttons.WhiteButton>
                     </span>
                 }
-                {zoomState &&
+                {zoom &&
                     <span className={style.Zoom}>
                         <Buttons.WhiteButton foo={() => handleZoom(true)}>
                             <HiMagnifyingGlassMinus/>

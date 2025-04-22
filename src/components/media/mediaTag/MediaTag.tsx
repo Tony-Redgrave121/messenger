@@ -7,6 +7,7 @@ import {Player} from "@components/player";
 import getExt from "@utils/logic/getExt";
 import useShortMedia from "@hooks/useShortMedia";
 import Buttons from "@components/buttons/Buttons";
+import {HiPlay} from "react-icons/hi2";
 
 interface ISliderProps {
     media: IMessageFile
@@ -77,7 +78,11 @@ namespace MediaTag {
                 {(load && preview) ?
                     <div className={style.MediaBlock} onClick={handleClick}>
                         <img src={preview} alt="media"/>
-                        {isVideo.includes(ext) && <Buttons.PlayButton pause={true}/>}
+                        {isVideo.includes(ext) &&
+                            <Buttons.PlayerButton className='PlayButton'>
+                                <HiPlay/>
+                            </Buttons.PlayerButton>
+                        }
                     </div>
                     :
                     <div className={`${style.ShadowBlock} ${style.MinBlock}`}/>

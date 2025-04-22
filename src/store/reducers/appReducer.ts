@@ -3,14 +3,12 @@ import {IMessengersListResponse} from "@appTypes"
 
 interface IAppState {
     sidebarLeft: boolean,
-    newMessenger: IMessengersListResponse[] | null,
-    currVideo: string,
+    newMessenger: IMessengersListResponse[] | null
 }
 
 const initialState: IAppState = {
     sidebarLeft: true,
-    newMessenger: null,
-    currVideo: '',
+    newMessenger: null
 }
 
 const appSlice = createSlice({
@@ -23,9 +21,6 @@ const appSlice = createSlice({
         setMessengersList(state, action) {
             if (Array.isArray(action.payload)) state.newMessenger = action.payload
             else state.newMessenger = [action.payload]
-        },
-        setCurrVideo(state, action) {
-            state.currVideo = action.payload
         }
     }
 })
@@ -33,6 +28,5 @@ const appSlice = createSlice({
 export default appSlice.reducer
 export const {
     setSidebarLeft,
-    setMessengersList,
-    setCurrVideo,
+    setMessengersList
 } = appSlice.actions

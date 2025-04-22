@@ -34,4 +34,27 @@
 
 .WideInput {
   width: 100%;
+
+  &::-webkit-slider-thumb {
+    background: white;
+  }
+
+  &::-webkit-slider-thumb {
+    height: 14px;
+    width: 14px;
+    margin-top: -5.5px;
+  }
+
+  &::-webkit-slider-runnable-track {
+    height: 3px;
+    background-color: white;
+  }
+}
+
+.VolumeBlock {
+  display: flex;
+
+  input {
+    width: 50px;
+  }
 }

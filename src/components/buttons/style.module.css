@@ -137,4 +137,17 @@
   height: 20%;
 }
 
+.PlayButtonMini {
+  display: flex;
+  position: unset;
+  border-radius: 50%;
+}
+.PlayButtonMini svg {
+  width: 24px;
+  height: 24px;
+}
+.PlayButtonMini:hover {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
 /*# sourceMappingURL=style.module.css.map */

@@ -5,6 +5,8 @@ import useSwipe from "@utils/hooks/useSlider/useSwipe";
 import getExt from "@utils/logic/getExt";
 import useLoadBlob from "@hooks/useLoadBlob";
 import {useParams} from "react-router-dom";
+import {useAppDispatch} from "@hooks/useRedux";
+import {setZoom} from "@store/reducers/sliderReducer";
 
 const initialCurrMedia = {
     message_file_id: '',
@@ -13,11 +15,11 @@ const initialCurrMedia = {
 }
 
 const useSlider = (media: IUseSliderProps) => {
+    const dispatch = useAppDispatch()
     const [slide, setSlide] = useState({
         slideNumber: 0,
         currentSlide: initialCurrMedia,
     })
-    const [zoomState, setZoomState] = useState(false)
     const {setZoomSize, zoomSize, refZoom} = useZoom()
     const {handlePosition} = useSwipe(media, refZoom, slide, setSlide)
     const {id} = useParams()
@@ -25,8 +27,8 @@ const useSlider = (media: IUseSliderProps) => {
     // let {load, image} = useLoadBlob(`messengers/${id}/${slide.currentSlide.message_file_name}`)
 
     useEffect(() => {
-        setZoomState(false)
-    }, [media.animationState])
+        dispatch(setZoom(false))
+    }, [dispatch, media.animationState])
 
     const swipeSlide = (side: boolean) => {
         setSlide(prev => {
@@ -74,7 +76,7 @@ const useSlider = (media: IUseSliderProps) => {
         if (refZoom.current) {
             setZoomSize(Number(value))
             refZoom.current.style.transform = `scale(${value}%)`
-            if (refZoom.current.style.transform === 'scale(1)') setZoomState(false)
+            if (refZoom.current.style.transform === 'scale(1)') dispatch(setZoom(false))
         }
     }
 
@@ -87,8 +89,6 @@ const useSlider = (media: IUseSliderProps) => {
         deleteMedia,
         downloadMedia,
         zoomMedia,
-        zoomState,
-        setZoomState,
         shareMedia,
         slide,
         zoomSize
