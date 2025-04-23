@@ -86,7 +86,7 @@ namespace Buttons {
 
         return (
             <button onClick={handleVolume} className={style.PlayButtonMini}>
-                {Number.parseInt(volume) > 0 ? <HiMiniSpeakerWave/> : <HiMiniSpeakerXMark/>}
+                {volume > 0 ? <HiMiniSpeakerWave/> : <HiMiniSpeakerXMark/>}
             </button>
         )
     }

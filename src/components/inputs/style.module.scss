@@ -1,9 +1,9 @@
 @use '../../styles/base/_variables.css' as v;
 @import url("../../styles/base/_normalize.scss");
 
-.RangeInput {
-  width: 180px;
+.RangeInput, .WideInput {
   cursor: pointer;
+  border-radius: 5px;
 
   &::-webkit-slider-thumb {
     -webkit-appearance: none;
@@ -21,6 +21,14 @@
   }
 
   &::-webkit-slider-runnable-track {
+    border-radius: 5px;
+  }
+}
+
+.RangeInput {
+  width: 180px;
+
+  &::-webkit-slider-runnable-track {
     height: 2px;
     border-radius: 5px;
     background-color: #a8a8a8;
@@ -34,27 +42,31 @@
 
 .WideInput {
   width: 100%;
-
-  &::-webkit-slider-thumb {
-    background: white;
-  }
+  background-color: #a8a8a8;
+  background-image: linear-gradient(#ffff, #ffff);
+  background-size: 0;
+  background-repeat: no-repeat;
+  height: 3px;
 
   &::-webkit-slider-thumb {
     height: 14px;
     width: 14px;
     margin-top: -5.5px;
+    background: white;
   }
 
   &::-webkit-slider-runnable-track {
     height: 3px;
-    background-color: white;
+    background-color: unset;
   }
 }
 
 .VolumeBlock {
   display: flex;
+  align-items: center;
 
   input {
+    max-width: 50px;
     width: 50px;
   }
 }

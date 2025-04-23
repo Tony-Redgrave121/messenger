@@ -3,13 +3,13 @@ import {createSlice} from "@reduxjs/toolkit"
 interface IAppState {
     currVideo: string,
     zoom: boolean,
-    volume: string,
+    volume: number,
 }
 
 const initialState: IAppState = {
     currVideo: '',
     zoom: false,
-    volume: '80'
+    volume: 80
 }
 
 const appSlice = createSlice({

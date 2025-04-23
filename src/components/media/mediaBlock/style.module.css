@@ -2,6 +2,7 @@
 
 .MediaBlock {
   display: flex;
+  justify-content: center;
   flex-wrap: wrap;
 }
 .MediaBlock img, .MediaBlock section {

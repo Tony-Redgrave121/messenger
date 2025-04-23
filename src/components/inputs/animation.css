@@ -1,0 +1,26 @@
+.volume-input-node-enter {
+    max-width: 0!important;
+    opacity: 0;
+}
+
+.volume-input-node-enter-active {
+    opacity: 1;
+    max-width: 50px!important;
+    transition: opacity .3s ease-in-out, max-width .3s ease-in-out;
+}
+
+.volume-input-node-exit {
+    opacity: 1;
+}
+
+.volume-input-node-exit-active {
+    opacity: 0;
+    max-width: 0!important;
+    transition: opacity .3s ease-in-out, max-width .3s ease-in-out;
+}
+
+.volume-input-node-exit-done {
+    opacity: 0;
+    max-width: 0!important;
+    transition: opacity .3s ease-in-out, max-width .3s ease-in-out;
+}

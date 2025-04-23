@@ -70,8 +70,8 @@ const Slider: FC<ISlider> = ({animation, media, user}) => {
     const handleZoom = (side: boolean) => {
         const newZoom = side ? zoomSize - 20 : zoomSize + 20
 
-        if (newZoom >= 100 && newZoom <= 200) zoomMedia(newZoom.toString())
-        else side ? zoomMedia('100') : zoomMedia('200')
+        if (newZoom >= 100 && newZoom <= 200) zoomMedia(newZoom)
+        else side ? zoomMedia(100) : zoomMedia(200)
     }
 
     return (
@@ -103,7 +103,7 @@ const Slider: FC<ISlider> = ({animation, media, user}) => {
                         </Buttons.WhiteButton>
                         <Buttons.WhiteButton foo={() => {
                             dispatch(setZoom(!zoom))
-                            zoomMedia(zoom ? '100' : '125')
+                            zoomMedia(zoom ? 100 : 125)
                         }}>
                             {zoom ? <HiMagnifyingGlassMinus/> : <HiMagnifyingGlassPlus/>}
                         </Buttons.WhiteButton>
@@ -134,7 +134,7 @@ const Slider: FC<ISlider> = ({animation, media, user}) => {
                         <Buttons.WhiteButton foo={() => handleZoom(true)}>
                             <HiMagnifyingGlassMinus/>
                         </Buttons.WhiteButton>
-                        <Inputs.RangeInput min={100} max={200} value={zoomSize} foo={zoomMedia}/>
+                        <Inputs.RangeInput min={100} max={200} value={zoomSize} foo={zoomMedia} classNames={['RangeInput']}/>
                         <Buttons.WhiteButton foo={() => handleZoom(false)}>
                             <HiMagnifyingGlassPlus/>
                         </Buttons.WhiteButton>

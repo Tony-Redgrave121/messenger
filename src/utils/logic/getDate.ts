@@ -20,3 +20,10 @@ export const getTime = (date: string | Date) => {
     const newDate = new Date(date)
     return `${zeroPad(newDate.getHours())}:${zeroPad(newDate.getMinutes())}`
 }
+
+export const getVideoTime = (time: number) => {
+    const minutes = Math.floor(time / 60)
+    const seconds = Math.floor(time % 60)
+
+    return `${minutes}:${zeroPad(seconds)}`
+}

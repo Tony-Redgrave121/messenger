@@ -1,10 +1,11 @@
-import React, {FC, useEffect, useRef, useState} from 'react'
+import React, {FC, useEffect, useMemo, useRef, useState} from 'react'
 import style from './style.module.css'
 import {useAppDispatch, useAppSelector} from "@hooks/useRedux";
 import {setCurrVideo} from "@store/reducers/sliderReducer"
 import Buttons from "../buttons/Buttons";
 import Inputs from "../inputs/Inputs";
-import {HiArrowsPointingOut, HiMiniPause, HiPlay} from "react-icons/hi2";
+import {HiArrowsPointingIn, HiArrowsPointingOut, HiMiniPause, HiPlay} from "react-icons/hi2";
+import {getVideoTime} from "@utils/logic/getDate";
 
 interface IPlayerProps {
     src: string,
@@ -14,8 +15,11 @@ interface IPlayerProps {
 
 const Player: FC<IPlayerProps> = ({src, id, foo}) => {
     const [pause, setPause] = useState(true)
-    const [time, setTime] = useState('0')
+    const [fullScreen, setFullScreen] = useState(true)
+    const [time, setTime] = useState(0)
+    const [duration, setDuration] = useState(0)
     const videoRef = useRef<HTMLVideoElement | null>(null)
+    const playerRef = useRef<HTMLElement | null>(null)
     const {currVideo, zoom} = useAppSelector(state => state.slider)
     const dispatch = useAppDispatch()
 
@@ -36,8 +40,61 @@ const Player: FC<IPlayerProps> = ({src, id, foo}) => {
         }
     }
 
+    const handleFullscreen = () => {
+        const curr = playerRef.current
+        if (!curr) return
+
+        if (!document.fullscreenElement) curr.requestFullscreen()
+        else document.exitFullscreen()
+    }
+
+    useEffect(() => {
+        const curr = playerRef.current
+        if (!curr) return
+
+        const handleFullscreen = () => setFullScreen(prev => !prev)
+
+        curr.addEventListener('fullscreenchange', handleFullscreen)
+        return () => curr.removeEventListener('fullscreenchange', handleFullscreen)
+    }, [])
+
+    useEffect(() => {
+        const curr = videoRef.current
+        if (!curr) return
+
+        curr.onloadedmetadata = () => {
+            const currDuration = curr.duration
+            setDuration(currDuration)
+        }
+    }, [videoRef])
+
+    useEffect(() => {
+        const curr = videoRef.current
+        if (!curr) return
+
+        const updateTime = () => {
+            setTime(curr.currentTime)
+        }
+
+        const repeatVideo = () => {
+            setTime(0)
+            curr.play()
+        }
+
+        curr.addEventListener('timeupdate', updateTime)
+        curr.addEventListener('ended', repeatVideo)
+
+        return () => {
+            curr.removeEventListener('timeupdate', updateTime)
+            curr.removeEventListener('ended', repeatVideo)
+        }
+    }, [])
+
+    const formattedTime = useMemo(() => getVideoTime(time), [time])
+    const getDuration = useMemo(() => getVideoTime(duration), [duration])
+
     return (
-        <section className={style.VideoPlayer} onClick={event => foo && foo(event)}>
+        <section className={style.VideoPlayer} onClick={event => foo && foo(event)} ref={playerRef}>
             <video src={src} id={id} ref={videoRef}/>
             {!zoom &&
                 <>
@@ -45,22 +102,22 @@ const Player: FC<IPlayerProps> = ({src, id, foo}) => {
                         {pause && <HiPlay/>}
                     </Buttons.PlayerButton>
                     <div className={style.BottomBar}>
-                        <Inputs.RangeInput min={0} max={100} value={time} foo={setTime} className='WideInput'/>
+                        <Inputs.TimeInput mediaRef={videoRef} time={time} setTime={setTime} duration={duration}/>
                         <div className={style.ControlBar}>
                             <div>
                                 <Buttons.PlayerButton foo={handlePlay} className='PlayButtonMini'>
                                     {pause ? <HiPlay/> : <HiMiniPause/>}
                                 </Buttons.PlayerButton>
-                                <Inputs.VolumeInput/>
+                                <Inputs.VolumeInput mediaRef={videoRef}/>
                                 <span className={style.TimeBlock}>
-                                    <time>0:00</time>
+                                    <time>{(time && duration) ? formattedTime : '0:00'}</time>
                                     <p>/</p>
-                                    <time>0:18</time>
+                                    <time>{duration ? getDuration : '0:00'}</time>
                                 </span>
                             </div>
                             <div>
-                                <Buttons.PlayerButton className='PlayButtonMini'>
-                                    <HiArrowsPointingOut/>
+                                <Buttons.PlayerButton className='PlayButtonMini' foo={handleFullscreen}>
+                                    {fullScreen ? <HiArrowsPointingOut/> : <HiArrowsPointingIn/>}
                                 </Buttons.PlayerButton>
                             </div>
                         </div>

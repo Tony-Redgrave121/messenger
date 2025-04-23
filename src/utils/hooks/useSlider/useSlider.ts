@@ -72,7 +72,7 @@ const useSlider = (media: IUseSliderProps) => {
         document.body.removeChild(link)
     }
 
-    const zoomMedia = (value: string) => {
+    const zoomMedia = (value: number) => {
         if (refZoom.current) {
             setZoomSize(Number(value))
             refZoom.current.style.transform = `scale(${value}%)`
