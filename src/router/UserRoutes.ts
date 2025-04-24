@@ -12,7 +12,7 @@ const UserRoutes = [
     {
         path: "channel/:id",
         Component: Chat
-    },
+    }
 ]
 
 export default UserRoutes

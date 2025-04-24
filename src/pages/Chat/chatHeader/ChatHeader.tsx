@@ -1,4 +1,4 @@
-import React, {memo, useRef, useState} from 'react'
+import React, {FC, memo, useRef, useState} from 'react'
 import style from './style.module.css'
 import '../animation.css'
 import {LoadFile} from "@components/loadFile";
@@ -52,7 +52,7 @@ interface IChatHeader {
     setSidebarState: (state: boolean) => void
 }
 
-const ChatHeader: React.FC<IChatHeader> = memo(({messenger, setSidebarState}) => {
+const ChatHeader: FC<IChatHeader> = memo(({messenger, setSidebarState}) => {
     const [settings, setSettings] = useState(false)
     const [inputState, setInputState] = useState(false)
 
@@ -70,7 +70,7 @@ const ChatHeader: React.FC<IChatHeader> = memo(({messenger, setSidebarState}) =>
                 <LoadFile imagePath={messenger.messenger_image ? `messengers/${messenger.messenger_id}/${messenger.messenger_image}` : ''} imageTitle={messenger.messenger_name} key={messenger.messenger_id}/>
                 <div>
                     <h3>{messenger.messenger_name}</h3>
-                    <p>{messenger.messenger_type}</p>
+                    <p>{messenger.members_count} subscribers</p>
                 </div>
             </button>
             <span>

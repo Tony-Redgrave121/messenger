@@ -51,7 +51,7 @@ class MessengerService {
 
         if (messenger instanceof ApiError) return ApiError.badRequest(`Error with messenger creation`)
 
-        const member = await models.member.create({
+        const member = await models.members.create({
             member_id: uuid.v4(),
             member_status: "moderator",
             user_id,
@@ -64,7 +64,7 @@ class MessengerService {
             if (!Array.isArray(messenger_members)) messenger_members = [messenger_members]
 
             for (const user_id of messenger_members) {
-                await models.member.create({
+                await models.members.create({
                     member_id: uuid.v4(),
                     member_status: "user",
                     user_id: user_id,

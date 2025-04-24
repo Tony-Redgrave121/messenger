@@ -10,7 +10,7 @@ const imageTypes = ['jpg', 'jpeg', 'png', 'webp']
 export default async function filesUploadingService(folder: string, file: UploadedFile, type: string) {
     try {
         const fileExt = file.name.split('.').pop()!.toLowerCase()
-        const fileName = uuid.v4() + "." + fileExt
+        const fileName = `${uuid.v4()}.${file.name}`
         const folderPath = path.join(__dirname + "/../src/static", folder)
         const outputPath = path.resolve(folderPath, fileName)
 

@@ -57,7 +57,7 @@ namespace Inputs {
         }, [duration, time])
 
         return (
-            <input min={0} max={duration} value={time} type="range" onChange={changeMediaTime} className={style.WideInput} ref={inputRef}/>
+            <input min={0} max={duration} value={time} type="range" step="0.1" onChange={changeMediaTime} className={style.WideInput} ref={inputRef}/>
         )
     }
     export const VolumeInput: FC<IMediaInput> = ({mediaRef}) => {
@@ -68,13 +68,11 @@ namespace Inputs {
 
         const handleOnChange = (event: ChangeEvent<HTMLInputElement>) => {
             const value = Number.parseFloat(event.target.value)
-
             dispatch(setVolume(value))
         }
 
         const handleVolume = () => {
             const value = !volume ? 100 : 0
-
             dispatch(setVolume(value))
         }
 

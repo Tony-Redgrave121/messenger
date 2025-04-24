@@ -3,6 +3,7 @@ import style from "./style.module.css"
 import {HiOutlineDocumentText} from "react-icons/hi2"
 import useLoadBlob from "@hooks/useLoadBlob"
 import {useParams} from "react-router-dom"
+import getFileName from "@utils/logic/getFileName";
 
 interface IDocumentBlock {
     doc: {
@@ -17,10 +18,10 @@ const DocumentBlock: React.FC<IDocumentBlock> = ({doc}) => {
     const {image} = useLoadBlob(`messengers/${id}/${doc.message_file_name}`)
 
     return (
-        <a download={doc.message_file_name} href={image} className={style.DocumentBlock}>
+        <a download={getFileName(doc.message_file_name)} href={image} className={style.DocumentBlock}>
             <HiOutlineDocumentText/>
             <div>
-                <h4>{doc.message_file_name}</h4>
+                <h4>{getFileName(doc.message_file_name)}</h4>
                 <p>{(doc.message_file_size / 1048576).toFixed(2)} MB &#183;</p>
             </div>
         </a>

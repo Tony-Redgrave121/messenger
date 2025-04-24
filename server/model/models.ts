@@ -30,7 +30,7 @@ const user_tokens = sequelize.define("user_token", {
     user_token_date: {type: DataTypes.DATE, allowNull: false, defaultValue: DataTypes.NOW},
 }, {timestamps: false})
 
-const member = sequelize.define("member", {
+const members = sequelize.define("member", {
     member_id: {type: DataTypes.UUID, primaryKey: true},
     member_date: {type: DataTypes.DATE, allowNull: false, defaultValue: DataTypes.NOW},
     member_status: {type: DataTypes.STRING, allowNull: false},
@@ -67,11 +67,13 @@ contacts.belongsTo(users, {foreignKey: 'owner_id'})
 
 contacts.belongsTo(users, { foreignKey: 'user_id'})
 
-users.hasMany(member, {foreignKey: {name: 'user_id', allowNull: false}, onDelete: 'CASCADE', onUpdate: 'CASCADE'})
-member.belongsTo(users, {foreignKey: 'user_id'})
+users.hasMany(members, {foreignKey: {name: 'user_id', allowNull: false}, onDelete: 'CASCADE', onUpdate: 'CASCADE'})
+members.belongsTo(users, {foreignKey: 'user_id'})
 
-messenger.hasMany(member, {foreignKey: {name: 'messenger_id', allowNull: false}, onDelete: 'CASCADE', onUpdate: 'CASCADE'})
-member.belongsTo(messenger, {foreignKey: 'messenger_id'})
+messenger.hasMany(members, {foreignKey: {name: 'messenger_id', allowNull: false}, onDelete: 'CASCADE', onUpdate: 'CASCADE'})
+members.belongsTo(messenger, {foreignKey: 'messenger_id'})
+
+messenger.hasMany(members, {foreignKey: 'messenger_id', as: 'user_member'})
 
 users.hasMany(message, {foreignKey: {name: 'user_id', allowNull: false}, onDelete: 'CASCADE', onUpdate: 'CASCADE'})
 message.belongsTo(users, {foreignKey: 'user_id'})
@@ -88,7 +90,7 @@ const models = {
     users,
     user_code,
     user_tokens,
-    member,
+    members,
     messenger,
     message,
     message_file,

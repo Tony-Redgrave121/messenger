@@ -20,7 +20,7 @@ const useLoadBlob = (imagePath: string | undefined) => {
                 setImage(objectUrl)
             })
             .catch(error => {
-                console.log(error)
+                if (error.name !== 'AbortError') console.log(error)
             })
             .finally(() => setLoad(true))
 

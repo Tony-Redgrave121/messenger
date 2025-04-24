@@ -7,6 +7,7 @@ import useLoadBlob from "@hooks/useLoadBlob";
 import {useParams} from "react-router-dom";
 import {useAppDispatch} from "@hooks/useRedux";
 import {setZoom} from "@store/reducers/sliderReducer";
+import getFileName from "@utils/logic/getFileName";
 
 const initialCurrMedia = {
     message_file_id: '',
@@ -24,7 +25,7 @@ const useSlider = (media: IUseSliderProps) => {
     const {handlePosition} = useSwipe(media, refZoom, slide, setSlide)
     const {id} = useParams()
 
-    // let {load, image} = useLoadBlob(`messengers/${id}/${slide.currentSlide.message_file_name}`)
+    let {load, image} = useLoadBlob(`messengers/${id}/${slide.currentSlide.message_file_name}`)
 
     useEffect(() => {
         dispatch(setZoom(false))
@@ -59,14 +60,14 @@ const useSlider = (media: IUseSliderProps) => {
     }
 
     const downloadMedia = () => {
-        const name = slide.currentSlide.message_file_name
+        const name = getFileName(slide.currentSlide.message_file_name)
         const ext = getExt(slide.currentSlide.message_file_name)
 
-        if (!name || !ext) return null
+        if (!name || !ext || !load) return
         const link = document.createElement('a')
 
-        // link.href = image
-        link.download = `${name}.${ext}`
+        link.href = image
+        link.download = name
         document.body.appendChild(link)
         link.click()
         document.body.removeChild(link)

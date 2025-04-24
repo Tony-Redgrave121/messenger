@@ -20,7 +20,6 @@ const Chat = () => {
 
     const {id} = useParams()
     const user = useAppSelector(state => state.user)
-
     const navigate = useNavigate()
     
     const {

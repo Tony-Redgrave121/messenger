@@ -5,6 +5,7 @@ import * as uuid from "uuid"
 import filesUploadingService from "./filesUploadingService"
 import path from "path"
 import fs from "fs"
+import {Sequelize} from "sequelize";
 
 interface IPostMessage {
     user_id: string,
@@ -23,10 +24,23 @@ interface IMessageFiles {
 class UserService {
     async fetchMessenger(user_id: string, messenger_id: string) {
         const messenger = await models.messenger.findOne({
-            include: [{
-                model: models.member,
-                where: {user_id: user_id, messenger_id: messenger_id}
-            }]
+            include: [
+                {
+                    model: models.members,
+                    attributes: []
+                },
+                {
+                    model: models.members,
+                    as: "user_member",
+                    where: {user_id: user_id}
+                }
+            ],
+            attributes: {
+                include: [[Sequelize.fn("COUNT", Sequelize.col("members.member_id")), "members_count"]]
+            },
+
+            where: {messenger_id: messenger_id},
+            group: ['messenger.messenger_id', 'user_member.member_id']
         })
 
         if (!messenger) return ApiError.internalServerError("An error occurred while fetching the messenger")
@@ -40,7 +54,7 @@ class UserService {
         const messengersList = await models.messenger.findAll({
             include: [
                 {
-                    model: models.member,
+                    model: models.members,
                     where: {user_id: user_id},
                     attributes: []
                 },

@@ -8,13 +8,13 @@
 .MediaBlock {
   display: flex;
   position: relative;
-  align-items: center;
-  justify-content: center;
   cursor: pointer;
+  width: 100%;
+  max-height: 275px;
 }
 
 .ShadowBlock {
-  min-height: 100px;
+  min-height: 137.5px;
   width: 100%;
   background: linear-gradient(120deg, rgba(0, 0, 0, 0.0666666667) 33%, rgba(15, 15, 15, 0.3294117647) 50%, rgba(0, 0, 0, 0.0666666667) 66%) #282828;
   animation: skeleton 1.5s infinite linear;

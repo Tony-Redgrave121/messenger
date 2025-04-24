@@ -47,7 +47,8 @@
   background-size: 0;
   background-repeat: no-repeat;
   height: 3px;
-
+  -webkit-appearance: none;
+  
   &::-webkit-slider-thumb {
     height: 14px;
     width: 14px;

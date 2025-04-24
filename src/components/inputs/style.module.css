@@ -41,6 +41,7 @@
   background-size: 0;
   background-repeat: no-repeat;
   height: 3px;
+  -webkit-appearance: none;
 }
 .WideInput::-webkit-slider-thumb {
   height: 14px;
