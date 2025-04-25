@@ -27,14 +27,9 @@
       color: white;
       line-height: 1.5;
 
-      svg, img {
+      svg {
         height: 160px;
         width: 160px;
-      }
-
-      img {
-        border-radius: 50%;
-        object-fit: cover;
       }
 
       .TitleBlock {

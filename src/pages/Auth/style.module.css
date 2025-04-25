@@ -25,13 +25,9 @@
   color: white;
   line-height: 1.5;
 }
-.AuthContainer .AuthForm > div svg, .AuthContainer .AuthForm > div img {
+.AuthContainer .AuthForm > div svg {
   height: 160px;
   width: 160px;
-}
-.AuthContainer .AuthForm > div img {
-  border-radius: 50%;
-  object-fit: cover;
 }
 .AuthContainer .AuthForm > div .TitleBlock {
   text-align: center;

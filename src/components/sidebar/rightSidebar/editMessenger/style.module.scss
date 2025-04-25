@@ -1,0 +1,25 @@
+@use '../../../../styles/base/_variables.css' as v;
+@import url("../../../../styles/base/_normalize.scss");
+
+.FormContainer {
+  gap: 16px;
+
+  &, .Form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .Form {
+    gap: 24px;
+    padding: 56px 16px 0 16px;
+    width: 100%;
+  }
+
+  label {
+    img, svg {
+      height: 120px;
+      width: 120px;
+    }
+  }
+}

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useRef, useState} from 'react'
 import {
     HiOutlinePencil,
     HiOutlineXMark,
@@ -15,6 +15,7 @@ import {IMessengerResponse} from "@appTypes";
 import useLoadBlob from "@hooks/useLoadBlob";
 import {ImageBlock} from "@components/sidebar";
 import {TopBar} from "../";
+import EditMessenger from "@components/sidebar/rightSidebar/editMessenger/EditMessenger";
 
 interface IRightSidebar {
     entity: IMessengerResponse,
@@ -24,8 +25,14 @@ interface IRightSidebar {
 }
 
 const RightSidebar: React.FC<IRightSidebar> = ({entity, ref, state, setState}) => {
-    const [notification, setNotification] = React.useState(false)
+    const [notification, setNotification] = useState(false)
     const {image} = useLoadBlob(entity.messenger_image ? `messengers/${entity.messenger_id}/${entity.messenger_image}` : '')
+
+    const [editMessenger, setEditMessenger] = useState({
+        state: false,
+        mounted: false
+    })
+    const refEditMessenger = useRef<HTMLDivElement>(null)
 
     return (
         <CSSTransition
@@ -40,8 +47,11 @@ const RightSidebar: React.FC<IRightSidebar> = ({entity, ref, state, setState}) =
                     <Buttons.DefaultButton foo={() => setState(false)}>
                         <HiOutlineXMark/>
                     </Buttons.DefaultButton>
-                    <h1>{entity.messenger_type} info</h1>
-                    <Buttons.DefaultButton foo={() => {}}>
+                    <p>{entity.messenger_type} info</p>
+                    <Buttons.DefaultButton foo={() => setEditMessenger({
+                        state: true,
+                        mounted: true
+                    })}>
                         <HiOutlinePencil/>
                     </Buttons.DefaultButton>
                 </TopBar>
@@ -52,28 +62,23 @@ const RightSidebar: React.FC<IRightSidebar> = ({entity, ref, state, setState}) =
                 <ul className={style.InfoList}>
                     {entity.messenger_desc &&
                         <li>
-                            <button onClick={() => window.navigator.clipboard.writeText(entity.messenger_desc!)}>
+                            <Buttons.SettingButton foo={() => window.navigator.clipboard.writeText(entity.messenger_desc!)} text={entity.messenger_desc} desc={'Bio'}>
                                 <HiOutlineExclamationCircle/>
-                                <p>{entity.messenger_desc}<small className={style.LiType}>Bio</small></p>
-                            </button>
+                            </Buttons.SettingButton>
                         </li>
                     }
                     <li>
-                        <button onClick={() => window.navigator.clipboard.writeText(`http://localhost:3000/${entity.messenger_type}/${entity.messenger_id}`)}>
+                        <Buttons.SettingButton foo={() => window.navigator.clipboard.writeText(`http://localhost:3000/${entity.messenger_type}/${entity.messenger_id}`)} text={entity.messenger_id} desc={'Link'}>
                             <HiOutlinePaperClip/>
-                            <p>{entity.messenger_id}<br/><small className={style.LiType}>Link</small></p>
-                        </button>
+                        </Buttons.SettingButton>
                     </li>
                     <li>
-                        <button onClick={() => setNotification(!notification)}>
-                            <span>
-                                <HiOutlineBell/>
-                                <p>Notifications</p>
-                            </span>
-                            <Buttons.SwitchButton state={notification} foo={() => setNotification(!notification)}/>
-                        </button>
+                        <Buttons.SwitchSettingButton text={'Notifications'} foo={() => setNotification(!notification)} state={notification}>
+                            <HiOutlineBell/>
+                        </Buttons.SwitchSettingButton>
                     </li>
                 </ul>
+                {editMessenger.mounted && <EditMessenger setState={setEditMessenger} state={editMessenger} refSidebar={refEditMessenger}/>}
             </SidebarContainer>
         </CSSTransition>
     )

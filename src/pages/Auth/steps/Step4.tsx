@@ -1,14 +1,14 @@
 import React, {useState} from 'react'
-import {HiOutlineUserCircle} from "react-icons/hi2"
 import style from "../style.module.css"
 import {InputForm} from "@components/inputForm"
 import {Buttons} from "@components/buttons"
 import {IStepProps, IAuthForm} from '@appTypes'
-import {Controller, SubmitHandler} from "react-hook-form";
+import { SubmitHandler} from "react-hook-form";
 import {registration} from "@store/reducers/userReducer";
 import {useNavigate} from "react-router-dom";
 import {useAppDispatch} from "@hooks/useRedux";
 import { Control, UseFormHandleSubmit } from "react-hook-form";
+import InputFile from "@components/inputForm/inputImage/InputFile";
 
 interface IStep4Props extends IStepProps {
     handleSubmit: UseFormHandleSubmit<IAuthForm>,
@@ -45,18 +45,7 @@ const Step4: React.FC<IStep4Props> = ({errors, register, handlePrev, handleSubmi
 
     return (
         <>
-            <div className={style.FileBlock}>
-                <Controller
-                    control={control}
-                    name="user_image"
-                    render={({field: {onChange}}) => <input type="file" accept="image/png, image/jpeg" id='user_image' onChange={(event) => handleImageChange(event.currentTarget.files, onChange)}/>}
-                />
-                <label htmlFor="user_image">
-                    {picture ?
-                        <img src={URL.createObjectURL(picture)} alt="profile"/> : <HiOutlineUserCircle/>
-                    }
-                </label>
-            </div>
+            <InputFile name="user_image" control={control} handleImageChange={handleImageChange} picture={picture}/>
             <div className={style.TitleBlock}>
                 <h1>Create Your Profile</h1>
                 <p>Please enter the data to create your profile.</p>

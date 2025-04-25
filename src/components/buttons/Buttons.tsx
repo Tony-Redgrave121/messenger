@@ -2,7 +2,7 @@ import React, {ChangeEvent, FC, ReactNode} from 'react'
 import style from './style.module.css'
 import {
     HiMiniSpeakerWave,
-    HiMiniSpeakerXMark
+    HiMiniSpeakerXMark,
 } from "react-icons/hi2"
 import {useAppSelector} from "@hooks/useRedux";
 
@@ -33,6 +33,20 @@ interface IPlayerButton {
     foo?: () => void,
     children: ReactNode,
     className?: string
+}
+
+interface ISettingButton {
+    foo?: () => void,
+    children: ReactNode,
+    text: string,
+    desc?: string
+}
+
+interface ISwitchSettingButton {
+    foo?: () => void,
+    children: ReactNode,
+    text: string,
+    state: boolean
 }
 
 namespace Buttons {
@@ -87,6 +101,25 @@ namespace Buttons {
         return (
             <button onClick={handleVolume} className={style.PlayButtonMini}>
                 {volume > 0 ? <HiMiniSpeakerWave/> : <HiMiniSpeakerXMark/>}
+            </button>
+        )
+    }
+    export const SettingButton: FC<ISettingButton> = ({foo, children, text, desc}) => {
+        return (
+            <button onClick={foo} className={style.SettingButton}>
+                {children}
+                <p>{text} {desc && <small>{desc}</small>}</p>
+            </button>
+        )
+    }
+    export const SwitchSettingButton: FC<ISwitchSettingButton> = ({foo, children, text, state}) => {
+        return (
+            <button onClick={foo} className={style.SettingButton}>
+                <span>
+                    {children}
+                    <p>{text}</p>
+                </span>
+                <Buttons.SwitchButton state={state} foo={foo}/>
             </button>
         )
     }

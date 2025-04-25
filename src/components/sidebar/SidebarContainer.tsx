@@ -1,5 +1,6 @@
 import React from 'react'
 import style from './style.module.css'
+import {getStyles} from "@utils/logic/getStyles";
 
 interface ISidebarContainer {
     ref?: React.RefObject<HTMLDivElement | null>
@@ -9,7 +10,7 @@ interface ISidebarContainer {
 
 const SidebarContainer: React.FC<ISidebarContainer> = ({children, styles, ref}) => {
     return (
-        <aside className={`${style.SidebarContainer} ${styles && styles.map(name => style[name]).join(' ')} `} ref={ref}>
+        <aside className={`${style.SidebarContainer} ${styles && getStyles(styles, style)} `} ref={ref}>
             <div className={style.Wrapper}>
                 {children}
             </div>

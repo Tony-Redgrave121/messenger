@@ -1,0 +1,21 @@
+@import url("../../../../styles/base/_normalize.scss");
+
+.FormContainer {
+  gap: 16px;
+}
+.FormContainer, .FormContainer .Form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.FormContainer .Form {
+  gap: 24px;
+  padding: 56px 16px 0 16px;
+  width: 100%;
+}
+.FormContainer label img, .FormContainer label svg {
+  height: 120px;
+  width: 120px;
+}
+
+/*# sourceMappingURL=style.module.css.map */

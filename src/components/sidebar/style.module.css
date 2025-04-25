@@ -28,19 +28,25 @@
   overflow-x: hidden;
 }
 
-.LeftSidebarContainer .Wrapper hr {
+.LeftSidebarContainer .Wrapper hr, .RightSidebarContainer .Wrapper hr {
+  width: 100%;
   border: none;
   border-top: 1px solid #2f2f2f;
 }
 
-.LeftSidebarContainerSettings {
+.LeftSidebarContainerSettings, .RightSidebarContainerEdit {
   position: absolute;
   top: 0;
   left: 0;
   background-color: #181818;
 }
-.LeftSidebarContainerSettings .Wrapper {
+.LeftSidebarContainerSettings .Wrapper, .RightSidebarContainerEdit .Wrapper {
   background-color: #212121;
+}
+
+.RightSidebarContainerEdit {
+  left: unset;
+  right: 0;
 }
 
 @media screen and (max-width: 1280px) {

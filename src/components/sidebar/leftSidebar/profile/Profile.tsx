@@ -10,13 +10,15 @@ import {useAppSelector} from "@hooks/useRedux";
 import {Buttons} from "@components/buttons";
 import {
     HiOutlinePencil,
-    HiOutlineXMark,
     HiOutlineArrowRightOnRectangle,
     HiOutlineExclamationCircle,
     HiOutlinePaperClip,
     HiOutlineBell,
     HiOutlineServerStack,
-    HiOutlineLockClosed, HiOutlineQuestionMarkCircle, HiOutlineUser,
+    HiOutlineLockClosed,
+    HiOutlineQuestionMarkCircle,
+    HiOutlineUser,
+    HiOutlineArrowLeft,
 } from "react-icons/hi2";
 import {TopBar} from "@components/sidebar";
 import useAnimation from "@hooks/useAnimation";
@@ -50,9 +52,9 @@ const Profile: FC<IProfileProps> = ({state, setState, refSidebar}) => {
                             ...prev,
                             state: false
                         }))}>
-                            <HiOutlineXMark/>
+                            <HiOutlineArrowLeft/>
                         </Buttons.DefaultButton>
-                        <h1>Settings</h1>
+                        <p>Settings</p>
                     </span>
                     <span>
                         <Buttons.DefaultButton foo={() => {
@@ -71,60 +73,47 @@ const Profile: FC<IProfileProps> = ({state, setState, refSidebar}) => {
                 }}/>
                 <ul className={`${style.InfoList} ${profileStyle.ProfileInfoList}`}>
                     <li>
-                        <button onClick={() => window.navigator.clipboard.writeText(userName)}>
+                        <Buttons.SettingButton foo={() => window.navigator.clipboard.writeText(userName)} text={userName} desc={'Username'}>
                             <HiOutlineUser/>
-                            <p>{userName}<small className={style.LiType}>Username</small></p>
-                        </button>
+                        </Buttons.SettingButton>
                     </li>
                     <li>
-                        <button
-                            onClick={() => window.navigator.clipboard.writeText(`http://localhost:3000/chat/${userId}`)}>
+                        <Buttons.SettingButton foo={() => window.navigator.clipboard.writeText(`http://localhost:3000/chat/${userId}`)} text={userId} desc={'Link'}>
                             <HiOutlinePaperClip/>
-                            <p>{userId}<small className={style.LiType}>Link</small></p>
-                        </button>
+                        </Buttons.SettingButton>
                     </li>
                     {userBio &&
                         <li>
-                            <button
-                                onClick={() => window.navigator.clipboard.writeText(userBio)}>
+                            <Buttons.SettingButton foo={() => window.navigator.clipboard.writeText(userBio)} text={userBio} desc={'Bio'}>
                                 <HiOutlineExclamationCircle/>
-                                <p>{userBio}<small className={style.LiType}>Bio</small></p>
-                            </button>
+                            </Buttons.SettingButton>
                         </li>
                     }
                 </ul>
                 <hr/>
                 <ul className={`${style.InfoList} ${profileStyle.ProfileInfoList}`}>
                     <li>
-                        <button onClick={() => {
-                        }}>
+                        <Buttons.SettingButton foo={() => {}} text={'Notifications and Sounds'}>
                             <HiOutlineBell/>
-                            <p>Notifications and Sounds</p>
-                        </button>
+                        </Buttons.SettingButton>
                     </li>
                     <li>
-                        <button onClick={() => {
-                        }}>
+                        <Buttons.SettingButton foo={() => {}} text={'Data and Storage'}>
                             <HiOutlineServerStack/>
-                            <p>Data and Storage</p>
-                        </button>
+                        </Buttons.SettingButton>
                     </li>
                     <li>
-                        <button onClick={() => {
-                        }}>
+                        <Buttons.SettingButton foo={() => {}} text={'Privacy and Security'}>
                             <HiOutlineLockClosed/>
-                            <p>Privacy and Security</p>
-                        </button>
+                        </Buttons.SettingButton>
                     </li>
                 </ul>
                 <hr/>
                 <ul className={`${style.InfoList} ${profileStyle.ProfileInfoList}`}>
                     <li>
-                        <button onClick={() => {
-                        }}>
+                        <Buttons.SettingButton foo={() => {}} text={'CrowCaw Features'}>
                             <HiOutlineQuestionMarkCircle/>
-                            <p>CrowCaw Features</p>
-                        </button>
+                        </Buttons.SettingButton>
                     </li>
                 </ul>
             </SidebarContainer>
