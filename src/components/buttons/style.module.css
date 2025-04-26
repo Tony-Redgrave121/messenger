@@ -152,10 +152,11 @@
 
 .SettingButton {
   cursor: pointer;
+  line-height: 1.5;
   color: white;
   font-size: 16px;
-  width: 100%;
-  padding: 8px;
+  width: calc(100% - 32px);
+  padding: 8px 16px;
   border-radius: 10px;
   transition: 0.2s background-color ease-in-out;
 }
@@ -171,8 +172,9 @@
   background-color: #323232;
 }
 .SettingButton svg {
-  min-width: 28px;
-  min-height: 28px;
+  min-width: 26px;
+  min-height: 26px;
+  color: #aaaaaa;
 }
 .SettingButton div {
   margin: 0 8px 0 auto;
@@ -184,6 +186,13 @@
   line-height: 1.3;
   font-size: 14px;
   color: #a9a9a9;
+}
+
+.SettingButtonRed, .SettingButtonRed svg {
+  color: #fd5859;
+}
+.SettingButtonRed:hover {
+  background-color: #322525;
 }
 
 /*# sourceMappingURL=style.module.css.map */

@@ -39,7 +39,8 @@ interface ISettingButton {
     foo?: () => void,
     children: ReactNode,
     text: string,
-    desc?: string
+    desc?: string,
+    isRed?: boolean
 }
 
 interface ISwitchSettingButton {
@@ -104,9 +105,9 @@ namespace Buttons {
             </button>
         )
     }
-    export const SettingButton: FC<ISettingButton> = ({foo, children, text, desc}) => {
+    export const SettingButton: FC<ISettingButton> = ({foo, children, text, desc, isRed}) => {
         return (
-            <button onClick={foo} className={style.SettingButton}>
+            <button onClick={foo} className={`${style.SettingButton} ${isRed && style.SettingButtonRed}`} >
                 {children}
                 <p>{text} {desc && <small>{desc}</small>}</p>
             </button>

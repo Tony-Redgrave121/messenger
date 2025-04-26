@@ -1,17 +1,17 @@
 @import url("../../../../styles/base/_normalize.scss");
 
-.FormContainer {
-  gap: 16px;
-}
-.FormContainer, .FormContainer .Form {
+.FormContainer, .FormContainer .Form, .FormContainer .TopForm {
   display: flex;
   flex-direction: column;
   align-items: center;
+  width: 100%;
+}
+.FormContainer .TopForm {
+  padding: 56px 24px 16px;
+  gap: 24px;
 }
 .FormContainer .Form {
-  gap: 24px;
-  padding: 56px 16px 0 16px;
-  width: 100%;
+  padding: 8px;
 }
 .FormContainer label img, .FormContainer label svg {
   height: 120px;

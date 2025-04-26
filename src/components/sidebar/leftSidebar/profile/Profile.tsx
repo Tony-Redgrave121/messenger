@@ -23,6 +23,7 @@ import {
 import {TopBar} from "@components/sidebar";
 import useAnimation from "@hooks/useAnimation";
 import {IAnimationState} from "@appTypes";
+import Caption from "@components/caption/Caption";
 
 interface IProfileProps {
     state: IAnimationState,
@@ -73,49 +74,58 @@ const Profile: FC<IProfileProps> = ({state, setState, refSidebar}) => {
                 }}/>
                 <ul className={`${style.InfoList} ${profileStyle.ProfileInfoList}`}>
                     <li>
-                        <Buttons.SettingButton foo={() => window.navigator.clipboard.writeText(userName)} text={userName} desc={'Username'}>
+                        <Buttons.SettingButton foo={() => window.navigator.clipboard.writeText(userName)}
+                                               text={userName} desc={'Username'}>
                             <HiOutlineUser/>
                         </Buttons.SettingButton>
                     </li>
                     <li>
-                        <Buttons.SettingButton foo={() => window.navigator.clipboard.writeText(`http://localhost:3000/chat/${userId}`)} text={userId} desc={'Link'}>
+                        <Buttons.SettingButton
+                            foo={() => window.navigator.clipboard.writeText(`http://localhost:3000/chat/${userId}`)}
+                            text={userId} desc={'Link'}>
                             <HiOutlinePaperClip/>
                         </Buttons.SettingButton>
                     </li>
                     {userBio &&
                         <li>
-                            <Buttons.SettingButton foo={() => window.navigator.clipboard.writeText(userBio)} text={userBio} desc={'Bio'}>
+                            <Buttons.SettingButton foo={() => window.navigator.clipboard.writeText(userBio)}
+                                                   text={userBio} desc={'Bio'}>
                                 <HiOutlineExclamationCircle/>
                             </Buttons.SettingButton>
                         </li>
                     }
                 </ul>
-                <hr/>
+                <Caption/>
                 <ul className={`${style.InfoList} ${profileStyle.ProfileInfoList}`}>
                     <li>
-                        <Buttons.SettingButton foo={() => {}} text={'Notifications and Sounds'}>
+                        <Buttons.SettingButton foo={() => {
+                        }} text={'Notifications and Sounds'}>
                             <HiOutlineBell/>
                         </Buttons.SettingButton>
                     </li>
                     <li>
-                        <Buttons.SettingButton foo={() => {}} text={'Data and Storage'}>
+                        <Buttons.SettingButton foo={() => {
+                        }} text={'Data and Storage'}>
                             <HiOutlineServerStack/>
                         </Buttons.SettingButton>
                     </li>
                     <li>
-                        <Buttons.SettingButton foo={() => {}} text={'Privacy and Security'}>
+                        <Buttons.SettingButton foo={() => {
+                        }} text={'Privacy and Security'}>
                             <HiOutlineLockClosed/>
                         </Buttons.SettingButton>
                     </li>
                 </ul>
-                <hr/>
+                <Caption/>
                 <ul className={`${style.InfoList} ${profileStyle.ProfileInfoList}`}>
                     <li>
-                        <Buttons.SettingButton foo={() => {}} text={'CrowCaw Features'}>
+                        <Buttons.SettingButton foo={() => {
+                        }} text={'CrowCaw Features'}>
                             <HiOutlineQuestionMarkCircle/>
                         </Buttons.SettingButton>
                     </li>
                 </ul>
+                <Caption/>
             </SidebarContainer>
         </CSSTransition>
     )

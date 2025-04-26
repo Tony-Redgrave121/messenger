@@ -82,6 +82,53 @@ class MessengerService {
             messages: []
         }
     }
+
+    async fetchMessengerSettings(messenger_id: string) {
+        const messengerSettings = await models.messenger_settings.findAll({
+            where: {messenger_id: messenger_id},
+            include: [{
+                model: models.messenger_reactions,
+                include: [{
+                    model: models.reactions,
+                    attributes: ['reaction_code']
+                }],
+                attributes: []
+            }],
+            attributes: ['messenger_setting_type']
+        })
+
+        const messengerData = await models.messenger.findAll({
+            include: [
+                {
+                    model: models.removed_users,
+                    attributes: ['user_id'],
+                },
+                {
+                    model: models.members,
+                },
+                {
+                    model: models.members,
+                    as: 'moderators',
+                    where: {member_status: "moderator"},
+                }
+            ],
+            where: {messenger_id: messenger_id},
+            attributes: [],
+        })
+
+        if (!messengerSettings || !messengerData) return ApiError.internalServerError("No messenger settings found")
+
+        const setting = messengerSettings[0].dataValues
+        const data = messengerData[0].dataValues
+
+        return {
+            messenger_setting_type: setting.messenger_setting_type,
+            reactions: setting.messenger_reactions,
+            removed_users: data.dataValues.removed_users,
+            members: data.dataValues.members,
+            moderators: data.dataValues.moderators,
+        }
+    }
 }
 
 export default new MessengerService()

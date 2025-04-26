@@ -2,18 +2,21 @@
 @import url("../../../../styles/base/_normalize.scss");
 
 .FormContainer {
-  gap: 16px;
-
-  &, .Form {
+  &, .Form, .TopForm {
     display: flex;
     flex-direction: column;
     align-items: center;
+    width: 100%;
+
+  }
+
+  .TopForm {
+    padding: 56px 24px 16px;
+    gap: 24px;
   }
 
   .Form {
-    gap: 24px;
-    padding: 56px 16px 0 16px;
-    width: 100%;
+    padding: 8px;
   }
 
   label {

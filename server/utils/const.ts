@@ -11,3 +11,4 @@ export const FETCH_MESSAGES = `/messages/`
 export const POST_MESSAGE = `/message/`
 export const DELETE_MESSAGE = '/message-delete/'
 export const GET_CONTACTS = '/contacts/:id'
+export const GET_MESSENGER_SETTINGS = '/messenger-settings/:messenger_id'

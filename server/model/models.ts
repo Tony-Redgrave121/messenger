@@ -45,6 +45,24 @@ const messenger = sequelize.define("messenger", {
     messenger_type: {type: DataTypes.STRING, allowNull: false, defaultValue: 'chat'},
 }, {timestamps: false})
 
+const messenger_settings = sequelize.define("messenger_settings", {
+    messenger_setting_id: {type: DataTypes.UUID, primaryKey: true},
+    messenger_setting_type: {type: DataTypes.STRING, allowNull: false, defaultValue: "private"}
+}, {timestamps: false})
+
+const messenger_reactions = sequelize.define("messenger_reactions", {
+    messenger_reaction_id: {type: DataTypes.UUID, primaryKey: true},
+}, {timestamps: false})
+
+const reactions = sequelize.define("reactions", {
+    reaction_id: {type: DataTypes.UUID, primaryKey: true},
+    reaction_code: {type: DataTypes.STRING, allowNull: false}
+}, {timestamps: false})
+
+const removed_users = sequelize.define("removed_users", {
+    removed_user_id: {type: DataTypes.UUID, primaryKey: true},
+}, {timestamps: false})
+
 const message = sequelize.define("message", {
     message_id: {type: DataTypes.UUID, primaryKey: true},
     message_text: {type: DataTypes.STRING, allowNull: true},
@@ -86,12 +104,33 @@ message.belongsTo(messenger, {foreignKey: 'messenger_id'})
 
 message.belongsTo(message, {as: "reply", foreignKey: "reply_id"})
 
+messenger.hasOne(messenger_settings, {foreignKey: {name: 'messenger_id', allowNull: false}, onDelete: 'CASCADE', onUpdate: 'CASCADE'})
+messenger_settings.belongsTo(messenger, {foreignKey: 'messenger_id'})
+
+messenger_settings.hasMany(messenger_reactions, {foreignKey: {name: 'messenger_setting_id', allowNull: false}, onDelete: 'CASCADE', onUpdate: 'CASCADE'})
+messenger_reactions.belongsTo(messenger_settings, {foreignKey: 'messenger_setting_id'})
+
+reactions.hasMany(messenger_reactions, {foreignKey: {name: 'reaction_id', allowNull: false}, onDelete: 'CASCADE', onUpdate: 'CASCADE'})
+messenger_reactions.belongsTo(reactions, {foreignKey: 'reaction_id'})
+
+users.hasMany(removed_users, {foreignKey: {name: 'user_id', allowNull: false}, onDelete: 'CASCADE', onUpdate: 'CASCADE'})
+removed_users.belongsTo(users, {foreignKey: 'user_id'})
+
+messenger.hasMany(removed_users, {foreignKey: {name: 'messenger_id', allowNull: false}, onDelete: 'CASCADE', onUpdate: 'CASCADE'})
+removed_users.belongsTo(messenger, {foreignKey: 'messenger_id'})
+
+messenger.hasMany(members, {foreignKey: 'messenger_id', as: 'moderators'})
+
 const models = {
     users,
     user_code,
     user_tokens,
     members,
     messenger,
+    messenger_settings,
+    messenger_reactions,
+    reactions,
+    removed_users,
     message,
     message_file,
     contacts

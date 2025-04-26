@@ -1,14 +1,22 @@
-import React, {Dispatch, FC, RefObject, SetStateAction, useRef, useState} from 'react'
+import React, {Dispatch, FC, RefObject, SetStateAction, useEffect, useRef, useState} from 'react'
 import {SidebarContainer, TopBar} from "@components/sidebar";
 import {CSSTransition} from "react-transition-group";
 import useAnimation from "@hooks/useAnimation";
 import {IAnimationState, IEditMessengerForm} from "@appTypes";
 import {Buttons} from "@components/buttons";
-import {HiOutlineArrowLeft, HiOutlineBell} from "react-icons/hi2";
+import {
+    HiOutlineArrowLeft, HiOutlineHeart, HiOutlineLockClosed,
+    HiOutlineShieldCheck, HiOutlineTrash,
+    HiOutlineUserMinus,
+    HiOutlineUsers
+} from "react-icons/hi2";
 import {useForm} from "react-hook-form";
 import {InputForm} from "@components/inputForm";
 import style from "./style.module.css";
 import InputFile from "@components/inputForm/inputImage/InputFile";
+import Caption from "@components/caption/Caption";
+import messengerService from "../../../../service/MessengerService";
+import {data, useParams} from "react-router-dom";
 
 interface IEditMessengerProps {
     state: IAnimationState,
@@ -30,6 +38,23 @@ const EditMessenger: FC<IEditMessengerProps> = ({state, setState, refSidebar}) =
     const refForm = useRef<HTMLDivElement>(null)
     const [picture, setPicture] = useState<File | null>(null)
     const [settings, setSettings] = useState({})
+
+    const {id} = useParams()
+
+    useEffect(() => {
+        if (!id) return
+
+        const  getSettings = async () => {
+            messengerService.getMessengerSettings(id)
+                .then(res => res.data)
+                .then(data => setSettings(data))
+                .catch(e => console.log(e))
+        }
+
+        getSettings().catch(e => console.log(e))
+    }, [id])
+
+    console.log(settings)
 
     const handleImageChange = (file: FileList | null, onChange: (value: File) => void) => {
         if (file) {
@@ -68,8 +93,9 @@ const EditMessenger: FC<IEditMessengerProps> = ({state, setState, refSidebar}) =
                     </span>
                 </TopBar>
                 <div className={style.FormContainer} ref={refForm}>
-                    <div className={style.Form}>
-                        <InputFile name="messenger_image" control={control} handleImageChange={handleImageChange} picture={picture}/>
+                    <div className={style.TopForm}>
+                        <InputFile name="messenger_image" control={control} handleImageChange={handleImageChange}
+                                   picture={picture}/>
                         <InputForm errors={errors} field="messenger_name">
                             <input
                                 type="text"
@@ -89,12 +115,46 @@ const EditMessenger: FC<IEditMessengerProps> = ({state, setState, refSidebar}) =
                             />
                         </InputForm>
                     </div>
-                    <hr/>
+                    <Caption>
+                        You can provide an optional description for your channel.
+                    </Caption>
                     <div className={style.Form}>
-                        {/*<Buttons.SwitchSettingButton text={'Notifications'} foo={() => setSettings(!settings)} state={settings}>*/}
-                        {/*    <HiOutlineBell/>*/}
-                        {/*</Buttons.SwitchSettingButton>*/}
+                        <Buttons.SettingButton foo={() => {
+                        }} text={'Channel Type'} desc={'Private'}>
+                            <HiOutlineLockClosed/>
+                        </Buttons.SettingButton>
+                        <Buttons.SettingButton foo={() => {
+                        }} text={'Reactions'} desc={'Disabled'}>
+                            <HiOutlineHeart/>
+                        </Buttons.SettingButton>
                     </div>
+                    <Caption>
+                        Add a channel chat for comments.
+                    </Caption>
+                    <div className={style.Form}>
+                        <Buttons.SettingButton foo={() => {
+                        }} text={'Moderators'} desc={'1'}>
+                            <HiOutlineShieldCheck/>
+                        </Buttons.SettingButton>
+                        <Buttons.SettingButton foo={() => {
+                        }} text={'Subscribers'} desc={'2'}>
+                            <HiOutlineUsers/>
+                        </Buttons.SettingButton>
+                        <Buttons.SettingButton foo={() => {
+                        }} text={'Removed users'} desc={'No removed users'}>
+                            <HiOutlineUserMinus/>
+                        </Buttons.SettingButton>
+                    </div>
+                    <Caption>
+                        You can control access to the channel.
+                    </Caption>
+                    <div className={style.Form}>
+                        <Buttons.SettingButton foo={() => {
+                        }} text={'Delete Channel'} isRed>
+                            <HiOutlineTrash/>
+                        </Buttons.SettingButton>
+                    </div>
+                    <Caption/>
                 </div>
             </SidebarContainer>
         </CSSTransition>

@@ -15,20 +15,33 @@ class MessengerController {
             return res.json(ApiError.internalServerError("An error occurred while fetching contacts"))
         }
     }
-
     async postMessenger(req: Request, res: Response): Promise<any> {
         try {
+            const {user_id, messenger_name, messenger_desc, messenger_type, messenger_members} = req.body
 
+            if (!user_id || !messenger_name || !messenger_type)
+                return res.json(ApiError.internalServerError('An error occurred while posting the messenger'))
+
+            const messenger = await MessengerService.postMessenger(user_id, messenger_name, messenger_desc, messenger_type, messenger_members, req.files)
+
+            return res.json(messenger)
         } catch (e) {
             return res.json(ApiError.internalServerError("An error occurred while posting the messenger"))
         }
+    }
+    async getMessengerSettings(req: Request, res: Response): Promise<any> {
+        try {
 
-        const {user_id, messenger_name, messenger_desc, messenger_type, messenger_members} = req.body
+        } catch (e) {
+            return res.json(ApiError.internalServerError("An error occurred while fetching the messenger settings"))
+        }
 
-        // if (!user_id || !messenger_name || !messenger_image || !messenger_desc || !messenger_type)
-        //     return res.json(ApiError.internalServerError('An error occurred while posting the messenger'))
+        const {messenger_id} = req.params
 
-        const messenger = await MessengerService.postMessenger(user_id, messenger_name, messenger_desc, messenger_type, messenger_members, req.files)
+        if (!messenger_id)
+            return res.json(ApiError.internalServerError('An error occurred while fetching the messenger settings'))
+
+        const messenger = await MessengerService.fetchMessengerSettings(messenger_id)
 
         return res.json(messenger)
     }

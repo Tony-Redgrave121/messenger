@@ -12,6 +12,7 @@ import Messenger from "./messenger/Messenger";
 import {ContactList} from "@components/contacts";
 import Profile from "./profile/Profile";
 import useLeftSidebarLogic from "@utils/hooks/useLeftSidebarLogic"
+import Caption from "@components/caption/Caption";
 
 const LeftSidebar = () => {
     const {
@@ -51,7 +52,7 @@ const LeftSidebar = () => {
                         <SearchBlock ref={refSearch} foo={() => {}}/>
                     </div>
                     <ChatList/>
-                    <hr/>
+                    <Caption/>
                     <ContactList contacts={contacts}/>
                     <span className={style.CreateButton}>
                         <Buttons.InterButton foo={() => setMessenger(!messenger)}>

@@ -30,16 +30,6 @@
   overflow-x: hidden;
 }
 
-.LeftSidebarContainer, .RightSidebarContainer {
-  .Wrapper {
-    hr {
-      width: 100%;
-      border: none;
-      border-top: 1px solid #2f2f2f;
-    }
-  }
-}
-
 .LeftSidebarContainerSettings, .RightSidebarContainerEdit {
   position: absolute;
   top: 0;
