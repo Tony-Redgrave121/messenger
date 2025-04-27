@@ -12,7 +12,7 @@ interface IDefaultButton {
 }
 
 interface ISwitchButton extends IDefaultButton {
-    state: boolean,
+    state: boolean | number,
 }
 
 interface IFormButton extends IDefaultButton {
@@ -38,16 +38,16 @@ interface IPlayerButton {
 interface ISettingButton {
     foo?: () => void,
     children: ReactNode,
-    text: string,
-    desc?: string,
+    text: string | number,
+    desc?: string | number,
     isRed?: boolean
 }
 
 interface ISwitchSettingButton {
     foo?: () => void,
-    children: ReactNode,
+    children?: ReactNode,
     text: string,
-    state: boolean
+    state: boolean | number
 }
 
 namespace Buttons {
@@ -109,7 +109,7 @@ namespace Buttons {
         return (
             <button onClick={foo} className={`${style.SettingButton} ${isRed && style.SettingButtonRed}`} >
                 {children}
-                <p>{text} {desc && <small>{desc}</small>}</p>
+                <p>{text} {desc?.toString && <small>{desc}</small>}</p>
             </button>
         )
     }

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {FC} from 'react'
 import style from "./style.module.css"
 import {LoadFile} from "@components/loadFile";
 
@@ -10,7 +10,7 @@ interface IImageBlockProps {
     }
 }
 
-const ImageBlock: React.FC<IImageBlockProps> = ({image, info}) => {
+const ImageBlock: FC<IImageBlockProps> = ({image, info}) => {
     return (
         <>
             {image ?
@@ -21,7 +21,7 @@ const ImageBlock: React.FC<IImageBlockProps> = ({image, info}) => {
                     </div>
                 </div>
                 :
-                <div className={style.ImageBlock}>
+                <div className={`${style.ImageBlock} ${style.FullImage}`}>
                     <LoadFile imagePath={''} imageTitle={info.name}/>
                     <div className={style.TitleBlock}>
                         <h1>{info.name}</h1>

@@ -9,7 +9,8 @@ module.exports = {
             "@utils": path.resolve(__dirname, "src/utils"),
             "@assets": path.resolve(__dirname, "src/assets"),
             "@store": path.resolve(__dirname, "src/store"),
-            "@appTypes": path.resolve(__dirname, "src/appTypes")
+            "@appTypes": path.resolve(__dirname, "src/appTypes"),
+            "@service": path.resolve(__dirname, "src/service"),
         }
     }
 }

@@ -56,7 +56,8 @@ const messenger_reactions = sequelize.define("messenger_reactions", {
 
 const reactions = sequelize.define("reactions", {
     reaction_id: {type: DataTypes.UUID, primaryKey: true},
-    reaction_code: {type: DataTypes.STRING, allowNull: false}
+    reaction_code: {type: DataTypes.STRING, allowNull: false},
+    reaction_name: {type: DataTypes.STRING, allowNull: false},
 }, {timestamps: false})
 
 const removed_users = sequelize.define("removed_users", {

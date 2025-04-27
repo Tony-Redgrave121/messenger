@@ -29,6 +29,7 @@
       "@assets/*": ["assets/*"],
       "@store/*": ["store/*"],
       "@appTypes": ["appTypes"],
+      "@service/*": ["service/*"],
     }
   },
   "include": [

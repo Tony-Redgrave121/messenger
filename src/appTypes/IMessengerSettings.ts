@@ -1,11 +1,14 @@
+import IMember from "./IMember";
+import {IReaction} from "./index";
+
 export default interface IMessengerSettings {
-    message_setting_type: string,
-    messenger_reactions: {
-        reaction_id: string,
-        reaction_code: string
-    }[],
-    removed_users: {
-        removed_user_id: string,
-        user_id: string
-    }
+    messenger_setting_type: string,
+    reactions: IReaction[],
+    reactions_count: number,
+    removed_users: { user_id: string }[],
+    members: IMember[],
+    moderators: IMember[],
+    messenger_name: string,
+    messenger_desc: string,
+    messenger_image: string | null,
 }

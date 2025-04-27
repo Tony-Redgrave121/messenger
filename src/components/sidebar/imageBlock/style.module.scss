@@ -24,3 +24,24 @@
     }
   }
 }
+
+.FullImage {
+  height: auto;
+  padding: 80px 8px 24px;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+
+  & > :first-child {
+    h1 {
+      font-size: 32px;
+    }
+
+    width: 120px;
+    height: 120px;
+  }
+
+  h1, p {
+    text-align: center;
+  }
+}

@@ -1,4 +1,4 @@
-import React, {useRef, useState} from 'react'
+import {FC, RefObject, useRef, useState} from 'react'
 import {
     HiOutlinePencil,
     HiOutlineXMark,
@@ -19,12 +19,12 @@ import EditMessenger from "@components/sidebar/rightSidebar/editMessenger/EditMe
 
 interface IRightSidebar {
     entity: IMessengerResponse,
-    ref: React.RefObject<HTMLDivElement | null>,
+    ref: RefObject<HTMLDivElement | null>,
     state: boolean,
     setState: (state: boolean) => void
 }
 
-const RightSidebar: React.FC<IRightSidebar> = ({entity, ref, state, setState}) => {
+const RightSidebar: FC<IRightSidebar> = ({entity, ref, state, setState}) => {
     const [notification, setNotification] = useState(false)
     const {image} = useLoadBlob(entity.messenger_image ? `messengers/${entity.messenger_id}/${entity.messenger_image}` : '')
 
@@ -78,7 +78,7 @@ const RightSidebar: React.FC<IRightSidebar> = ({entity, ref, state, setState}) =
                         </Buttons.SwitchSettingButton>
                     </li>
                 </ul>
-                {editMessenger.mounted && <EditMessenger setState={setEditMessenger} state={editMessenger} refSidebar={refEditMessenger}/>}
+                {editMessenger.mounted && <EditMessenger setState={setEditMessenger} refSidebar={refEditMessenger}/>}
             </SidebarContainer>
         </CSSTransition>
     )

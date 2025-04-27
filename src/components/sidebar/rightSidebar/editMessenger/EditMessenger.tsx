@@ -2,7 +2,7 @@ import React, {Dispatch, FC, RefObject, SetStateAction, useEffect, useRef, useSt
 import {SidebarContainer, TopBar} from "@components/sidebar";
 import {CSSTransition} from "react-transition-group";
 import useAnimation from "@hooks/useAnimation";
-import {IAnimationState, IEditMessengerForm} from "@appTypes";
+import {IAnimationState, IEditMessengerForm, IMessengerSettings} from "@appTypes";
 import {Buttons} from "@components/buttons";
 import {
     HiOutlineArrowLeft, HiOutlineHeart, HiOutlineLockClosed,
@@ -16,10 +16,10 @@ import style from "./style.module.css";
 import InputFile from "@components/inputForm/inputImage/InputFile";
 import Caption from "@components/caption/Caption";
 import messengerService from "../../../../service/MessengerService";
-import {data, useParams} from "react-router-dom";
+import {useParams} from "react-router-dom";
+import EditReactions from "@components/sidebar/rightSidebar/editMessenger/editReactions/EditReactions";
 
 interface IEditMessengerProps {
-    state: IAnimationState,
     setState: Dispatch<SetStateAction<IAnimationState>>,
     refSidebar: RefObject<HTMLDivElement | null>,
 }
@@ -32,29 +32,37 @@ const InitialValues: IEditMessengerForm = {
     moderators: []
 }
 
-const EditMessenger: FC<IEditMessengerProps> = ({state, setState, refSidebar}) => {
+const InitialSettings: IMessengerSettings = {
+    messenger_setting_type: 'private',
+    reactions: [],
+    reactions_count: 0,
+    removed_users: [],
+    members: [],
+    moderators: [],
+    messenger_name: '',
+    messenger_desc: '',
+    messenger_image: null
+}
+
+const EditMessenger: FC<IEditMessengerProps> = ({setState, refSidebar}) => {
     const [animation, setAnimation] = useState(false)
-    useAnimation(state.state, setAnimation, setState)
+    const [isLoaded, setIsLoaded] = useState(false)
     const refForm = useRef<HTMLDivElement>(null)
     const [picture, setPicture] = useState<File | null>(null)
-    const [settings, setSettings] = useState({})
+    const [settings, setSettings] = useState(InitialSettings)
+    const [newSettings, setNewSettings] = useState({
+        messenger_name: '',
+        messenger_desc: ''
+    })
+
+    const [editReactions, setEditReactions] = useState({
+        state: false,
+        mounted: false
+    })
+    const refEditReactions = useRef<HTMLDivElement>(null)
 
     const {id} = useParams()
-
-    useEffect(() => {
-        if (!id) return
-
-        const  getSettings = async () => {
-            messengerService.getMessengerSettings(id)
-                .then(res => res.data)
-                .then(data => setSettings(data))
-                .catch(e => console.log(e))
-        }
-
-        getSettings().catch(e => console.log(e))
-    }, [id])
-
-    console.log(settings)
+    useAnimation(isLoaded, setAnimation, setState)
 
     const handleImageChange = (file: FileList | null, onChange: (value: File) => void) => {
         if (file) {
@@ -65,12 +73,40 @@ const EditMessenger: FC<IEditMessengerProps> = ({state, setState, refSidebar}) =
 
     const {
         register,
-        handleSubmit,
         formState: {errors},
-        trigger,
-        watch,
-        control
+        control,
+        setValue
     } = useForm({defaultValues: InitialValues})
+
+    useEffect(() => {
+        if (!id) return
+
+        const getSettings = async () => {
+            messengerService.getMessengerSettings(id)
+                .then(res => res.data)
+                .then(data => {
+                    if (!data.messenger_name) throw data
+
+                    setSettings(data)
+                    setNewSettings({
+                        messenger_name: data.messenger_name,
+                        messenger_desc: data.messenger_desc
+                    })
+
+                    setValue('messenger_name', data.messenger_name)
+                    setValue('messenger_desc', data.messenger_desc)
+
+                    if (data.messenger_image) {
+                        const blob = new Blob([Uint8Array.from(atob(data.messenger_image), c => c.charCodeAt(0))], {type: 'image/png'}) as File
+                        setPicture(blob)
+                    }
+                })
+                .catch(e => console.log(e))
+                .finally(() => setIsLoaded(true))
+        }
+
+        getSettings().catch(e => console.log(e))
+    }, [id, setValue])
 
     return (
         <CSSTransition
@@ -83,10 +119,13 @@ const EditMessenger: FC<IEditMessengerProps> = ({state, setState, refSidebar}) =
             <SidebarContainer styles={['RightSidebarContainer', 'RightSidebarContainerEdit']} ref={refSidebar}>
                 <TopBar>
                     <span>
-                        <Buttons.DefaultButton foo={() => setState(prev => ({
-                            ...prev,
-                            state: false
-                        }))}>
+                        <Buttons.DefaultButton foo={() => {
+                            setState(prev => ({
+                                ...prev,
+                                state: false
+                            }))
+                            setIsLoaded(false)
+                        }}>
                             <HiOutlineArrowLeft/>
                         </Buttons.DefaultButton>
                         <p>Edit</p>
@@ -94,8 +133,7 @@ const EditMessenger: FC<IEditMessengerProps> = ({state, setState, refSidebar}) =
                 </TopBar>
                 <div className={style.FormContainer} ref={refForm}>
                     <div className={style.TopForm}>
-                        <InputFile name="messenger_image" control={control} handleImageChange={handleImageChange}
-                                   picture={picture}/>
+                        <InputFile name="messenger_image" control={control} handleImageChange={handleImageChange} picture={picture}/>
                         <InputForm errors={errors} field="messenger_name">
                             <input
                                 type="text"
@@ -111,6 +149,7 @@ const EditMessenger: FC<IEditMessengerProps> = ({state, setState, refSidebar}) =
                                 type="text"
                                 id="messenger_desc"
                                 placeholder="Description"
+                                value={newSettings.messenger_desc}
                                 {...register('messenger_desc')}
                             />
                         </InputForm>
@@ -120,11 +159,13 @@ const EditMessenger: FC<IEditMessengerProps> = ({state, setState, refSidebar}) =
                     </Caption>
                     <div className={style.Form}>
                         <Buttons.SettingButton foo={() => {
-                        }} text={'Channel Type'} desc={'Private'}>
+                        }} text={'Channel Type'} desc={settings.messenger_setting_type}>
                             <HiOutlineLockClosed/>
                         </Buttons.SettingButton>
-                        <Buttons.SettingButton foo={() => {
-                        }} text={'Reactions'} desc={'Disabled'}>
+                        <Buttons.SettingButton foo={() => setEditReactions({
+                            state: true,
+                            mounted: true
+                        })} text={'Reactions'} desc={settings.reactions.length ? `${settings.reactions.length}/${settings.reactions_count}` :'Disabled'}>
                             <HiOutlineHeart/>
                         </Buttons.SettingButton>
                     </div>
@@ -133,15 +174,15 @@ const EditMessenger: FC<IEditMessengerProps> = ({state, setState, refSidebar}) =
                     </Caption>
                     <div className={style.Form}>
                         <Buttons.SettingButton foo={() => {
-                        }} text={'Moderators'} desc={'1'}>
+                        }} text={'Moderators'} desc={settings.moderators.length}>
                             <HiOutlineShieldCheck/>
                         </Buttons.SettingButton>
                         <Buttons.SettingButton foo={() => {
-                        }} text={'Subscribers'} desc={'2'}>
+                        }} text={'Subscribers'} desc={settings.members.length}>
                             <HiOutlineUsers/>
                         </Buttons.SettingButton>
                         <Buttons.SettingButton foo={() => {
-                        }} text={'Removed users'} desc={'No removed users'}>
+                        }} text={'Removed users'} desc={settings.removed_users.length ? settings.removed_users.length : 'No removed users'}>
                             <HiOutlineUserMinus/>
                         </Buttons.SettingButton>
                     </div>
@@ -156,6 +197,7 @@ const EditMessenger: FC<IEditMessengerProps> = ({state, setState, refSidebar}) =
                     </div>
                     <Caption/>
                 </div>
+                {editReactions.mounted && <EditReactions state={editReactions} setState={setEditReactions} refSidebar={refEditReactions} channelReactions={settings.reactions}/>}
             </SidebarContainer>
         </CSSTransition>
     )

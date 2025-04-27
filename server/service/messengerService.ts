@@ -3,6 +3,8 @@ import ApiError from "../error/ApiError";
 import * as uuid from "uuid";
 import filesUploadingService from "./filesUploadingService";
 import {UploadedFile} from "express-fileupload";
+import * as fs from "fs";
+import IReaction from "../types/IReaction";
 
 interface IUserFiles {
     messenger_image?: UploadedFile
@@ -85,49 +87,71 @@ class MessengerService {
 
     async fetchMessengerSettings(messenger_id: string) {
         const messengerSettings = await models.messenger_settings.findAll({
-            where: {messenger_id: messenger_id},
             include: [{
                 model: models.messenger_reactions,
                 include: [{
                     model: models.reactions,
-                    attributes: ['reaction_code']
+                    required: false
                 }],
-                attributes: []
+                required: false
             }],
+            where: {messenger_id: messenger_id},
             attributes: ['messenger_setting_type']
         })
+
+        const reactions_count = await models.reactions.count()
 
         const messengerData = await models.messenger.findAll({
             include: [
                 {
                     model: models.removed_users,
                     attributes: ['user_id'],
+                    required: false
                 },
                 {
                     model: models.members,
+                    required: false
                 },
                 {
                     model: models.members,
                     as: 'moderators',
                     where: {member_status: "moderator"},
+                    order: [['member_status', 'ASC']],
+                    required: false
                 }
             ],
             where: {messenger_id: messenger_id},
-            attributes: [],
+            attributes: ['messenger_name', 'messenger_desc', 'messenger_image'],
         })
 
         if (!messengerSettings || !messengerData) return ApiError.internalServerError("No messenger settings found")
 
-        const setting = messengerSettings[0].dataValues
-        const data = messengerData[0].dataValues
+        const setting = messengerSettings[0]?.dataValues
+        const data = messengerData[0]?.dataValues
+        const messenger_image = data?.messenger_image ? fs.readFileSync(__dirname + `/../src/static/messengers/${messenger_id}/${data.messenger_image}`) : null
 
         return {
-            messenger_setting_type: setting.messenger_setting_type,
-            reactions: setting.messenger_reactions,
-            removed_users: data.dataValues.removed_users,
-            members: data.dataValues.members,
-            moderators: data.dataValues.moderators,
+            messenger_setting_type: setting?.messenger_setting_type || 'private',
+            messenger_image: messenger_image ? messenger_image.toString('base64') : null,
+            messenger_name: data.messenger_name,
+            messenger_desc: data.messenger_desc,
+            reactions: setting.messenger_reactions?.map(
+                (reaction: { dataValues: { reaction: IReaction[] } }) =>
+                    reaction.dataValues.reaction
+            ) ?? [],
+            reactions_count: reactions_count,
+            removed_users: data?.removed_users ?? [],
+            members: data.members ?? [],
+            moderators: data.moderators ?? []
         }
+    }
+
+    async fetchReactions() {
+        const reactions = await models.reactions.findAll()
+
+        if (!reactions) return ApiError.internalServerError("No reactions found")
+
+        return reactions
     }
 }
 

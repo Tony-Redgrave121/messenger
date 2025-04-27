@@ -14,7 +14,7 @@ import {InputForm} from "@components/inputForm";
 import {Controller, SubmitHandler, useForm} from "react-hook-form";
 import {useNavigate} from "react-router-dom";
 import {IMessenger, IContact} from "@appTypes";
-import messengerService from "../../../../service/MessengerService"
+import messengerService from "@service/MessengerService"
 import {useAppDispatch, useAppSelector} from "@hooks/useRedux";
 import {setMessengersList} from "@store/reducers/appReducer";
 import useGetContacts from "@hooks/useGetContacts"
