@@ -18,6 +18,8 @@ import Caption from "@components/caption/Caption";
 import messengerService from "../../../../service/MessengerService";
 import {useParams} from "react-router-dom";
 import EditReactions from "@components/sidebar/rightSidebar/editMessenger/editReactions/EditReactions";
+import EditType from "@components/sidebar/rightSidebar/editMessenger/editType/EditType";
+import EditMembers from "@components/sidebar/rightSidebar/editMessenger/editMembers/EditMembers";
 
 interface IEditMessengerProps {
     setState: Dispatch<SetStateAction<IAnimationState>>,
@@ -60,6 +62,18 @@ const EditMessenger: FC<IEditMessengerProps> = ({setState, refSidebar}) => {
         mounted: false
     })
     const refEditReactions = useRef<HTMLDivElement>(null)
+
+    const [editChannelType, setEditChannelType] = useState({
+        state: false,
+        mounted: false
+    })
+    const refEditChannelType = useRef<HTMLDivElement>(null)
+
+    const [editMembers, setEditMembers] = useState({
+        state: false,
+        mounted: false
+    })
+    const refEditMember = useRef<HTMLDivElement>(null)
 
     const {id} = useParams()
     useAnimation(isLoaded, setAnimation, setState)
@@ -158,8 +172,10 @@ const EditMessenger: FC<IEditMessengerProps> = ({setState, refSidebar}) => {
                         You can provide an optional description for your channel.
                     </Caption>
                     <div className={style.Form}>
-                        <Buttons.SettingButton foo={() => {
-                        }} text={'Channel Type'} desc={settings.messenger_setting_type}>
+                        <Buttons.SettingButton foo={() => setEditChannelType({
+                            state: true,
+                            mounted: true
+                        })} text={'Channel Type'} desc={settings.messenger_setting_type}>
                             <HiOutlineLockClosed/>
                         </Buttons.SettingButton>
                         <Buttons.SettingButton foo={() => setEditReactions({
@@ -173,8 +189,10 @@ const EditMessenger: FC<IEditMessengerProps> = ({setState, refSidebar}) => {
                         Add a channel chat for comments.
                     </Caption>
                     <div className={style.Form}>
-                        <Buttons.SettingButton foo={() => {
-                        }} text={'Moderators'} desc={settings.moderators.length}>
+                        <Buttons.SettingButton foo={() => setEditMembers({
+                            state: true,
+                            mounted: true
+                        })} text={'Moderators'} desc={settings.moderators.length}>
                             <HiOutlineShieldCheck/>
                         </Buttons.SettingButton>
                         <Buttons.SettingButton foo={() => {
@@ -198,6 +216,8 @@ const EditMessenger: FC<IEditMessengerProps> = ({setState, refSidebar}) => {
                     <Caption/>
                 </div>
                 {editReactions.mounted && <EditReactions state={editReactions} setState={setEditReactions} refSidebar={refEditReactions} channelReactions={settings.reactions}/>}
+                {editChannelType.mounted && <EditType state={editChannelType} setState={setEditChannelType} refSidebar={refEditChannelType} channelType={settings.messenger_setting_type}/>}
+                {editMembers.mounted && <EditMembers state={editMembers} setState={setEditMembers} refSidebar={refEditMember} moderators={settings.moderators.flatMap(member => member.user)} members={settings.members.flatMap(member => member.user)}/>}
             </SidebarContainer>
         </CSSTransition>
     )

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {Dispatch, FC, SetStateAction} from 'react'
 import {Buttons} from "@components/buttons";
 import {Contact} from "../";
 import {IContact} from "@appTypes";
@@ -6,19 +6,24 @@ import style from "./style.module.css";
 import {HiMagnifyingGlass} from "react-icons/hi2";
 import {LoadFile} from "@components/loadFile";
 import useSearch from "@hooks/useSearch";
+import NoResult from "@components/noResult/NoResult";
 
 interface ICheckboxContactProps {
     members: IContact[],
     contacts: IContact[],
-    setMembers: React.Dispatch<React.SetStateAction<IContact[]>>
+    setMembers: Dispatch<SetStateAction<IContact[]>>
 }
 
-const AddContacts: React.FC<ICheckboxContactProps> = ({members, contacts, setMembers}) => {
-    const {filteredContacts, handleInput, filter} = useSearch(contacts)
+const AddContacts: FC<ICheckboxContactProps> = ({members, contacts, setMembers}) => {
+    const {filteredArr, handleInput, filter} = useSearch(contacts, 'user_name')
+
+    const handleCheck = (contact: IContact, members: IContact[]) => {
+        return members.some(el => el.user_id === contact.user_id)
+    }
 
     const handleAddMember = (contact: IContact) => {
         setMembers((prev) => {
-            if (prev.includes(contact)) return [...prev.filter(el => el !== contact)]
+            if (handleCheck(contact, prev)) return [...prev.filter(el => el.user_id !== contact.user_id)]
             else return [...prev, contact]
         })
     }
@@ -34,17 +39,12 @@ const AddContacts: React.FC<ICheckboxContactProps> = ({members, contacts, setMem
                 )}
                 <input type="text" placeholder="Add people..." onChange={handleInput}/>
             </div>
-            {filteredContacts.length > 0 ?
-                filteredContacts.map((contact) =>
-                    <Buttons.Checkbox key={contact.user_id} foo={() => handleAddMember(contact)} state={members.includes(contact)}>
+            {filteredArr.length > 0 ?
+                filteredArr.map((contact) =>
+                    <Buttons.Checkbox key={contact.user_id} foo={() => handleAddMember(contact)} state={handleCheck(contact, members)}>
                         <Contact contact={contact}/>
                     </Buttons.Checkbox>
-                ) :
-                <div className={style.NoResultContainer}>
-                    <HiMagnifyingGlass/>
-                    <h1>No Results</h1>
-                    <p>There were no results for "{filter}".<br/> Try a new search.</p>
-                </div>
+                ) : <NoResult filter={filter}/>
             }
         </div>
     )

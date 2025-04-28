@@ -31,17 +31,19 @@ class MessengerController {
     }
     async getMessengerSettings(req: Request, res: Response): Promise<any> {
         try {
-            const {messenger_id} = req.params
 
-            if (!messenger_id)
-                return res.json(ApiError.internalServerError('An error occurred while fetching the messenger settings'))
-
-            const messengerSettings = await MessengerService.fetchMessengerSettings(messenger_id)
-
-            return res.json(messengerSettings)
         } catch (e) {
             return res.json(ApiError.internalServerError("An error occurred while fetching the messenger settings"))
         }
+
+        const {messenger_id} = req.params
+
+        if (!messenger_id)
+            return res.json(ApiError.internalServerError('An error occurred while fetching the messenger settings'))
+
+        const messengerSettings = await MessengerService.fetchMessengerSettings(messenger_id)
+
+        return res.json(messengerSettings)
     }
     async getReactions(req: Request, res: Response): Promise<any> {
         try {

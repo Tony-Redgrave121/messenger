@@ -124,6 +124,32 @@
   border-right: 2.5px solid #212121;
 }
 
+.RadioButtonContainer {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+  cursor: pointer;
+  padding: 8px 16px;
+  border-radius: 10px;
+  transition: 0.2s background-color ease-in-out;
+  line-height: 1.5;
+  color: white;
+}
+.RadioButtonContainer:hover {
+  background-color: #2b2b2b;
+}
+.RadioButtonContainer > input {
+  min-height: 18px;
+  min-width: 18px;
+  border: 2px solid #8c959b;
+  border-radius: 50%;
+  transition: background-color 0.2s ease-in-out;
+  box-shadow: 0 0 0 3px rgb(33, 33, 33) inset;
+}
+.RadioButtonContainer > input:checked {
+  background-color: #8c959b;
+}
+
 .PlayButton {
   display: flex;
   position: absolute;
@@ -179,7 +205,8 @@
 .SettingButton div {
   margin: 0 8px 0 auto;
 }
-.SettingButton small {
+
+.GreySmall {
   position: relative;
   bottom: unset;
   display: block;

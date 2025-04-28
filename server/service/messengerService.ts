@@ -5,6 +5,7 @@ import filesUploadingService from "./filesUploadingService";
 import {UploadedFile} from "express-fileupload";
 import * as fs from "fs";
 import IReaction from "../types/IReaction";
+import IMember from "../types/IMember";
 
 interface IUserFiles {
     messenger_image?: UploadedFile
@@ -110,11 +111,21 @@ class MessengerService {
                 },
                 {
                     model: models.members,
+                    include: [{
+                        model: models.users,
+                        attributes: ['user_id', 'user_name', 'user_img', 'user_last_seen'],
+                    }],
+                    attributes: ['member_id', 'member_date', 'member_status'],
                     required: false
                 },
                 {
                     model: models.members,
+                    include: [{
+                        model: models.users,
+                        attributes: ['user_id', 'user_name', 'user_img', 'user_last_seen'],
+                    }],
                     as: 'moderators',
+                    attributes: ['member_id', 'member_date', 'member_status'],
                     where: {member_status: "moderator"},
                     order: [['member_status', 'ASC']],
                     required: false
@@ -141,8 +152,8 @@ class MessengerService {
             ) ?? [],
             reactions_count: reactions_count,
             removed_users: data?.removed_users ?? [],
-            members: data.members ?? [],
-            moderators: data.moderators ?? []
+            members: data?.members ?? [],
+            moderators: data?.moderators ?? []
         }
     }
 

@@ -53,7 +53,7 @@ const LeftSidebar = () => {
                     </div>
                     <ChatList/>
                     <Caption/>
-                    <ContactList contacts={contacts}/>
+                    <ContactList contacts={contacts} text='Contacts'/>
                     <span className={style.CreateButton}>
                         <Buttons.InterButton foo={() => setMessenger(!messenger)}>
                             <HiOutlinePencil/>

@@ -1,27 +1,16 @@
-import React from 'react'
+import {FC, ReactNode, useRef} from 'react'
 import style from './style.module.css'
 import './animation.css'
 import {CSSTransition} from "react-transition-group"
-import {IFilesState} from "@appTypes";
 
 interface IPopup {
     state: boolean,
-    setState: React.Dispatch<React.SetStateAction<IFilesState>>,
-    children?: React.ReactNode,
+    handleCancel: () => void,
+    children?: ReactNode,
 }
 
-const PopupContainer: React.FC<IPopup> = ({state, setState, children}) => {
-    const refDiv = React.useRef<HTMLDivElement>(null)
-
-    const handleCancel = () => {
-        setState(prev => ({...prev, popup: false}))
-
-        setTimeout(() => setState({
-            files: null,
-            popup: false,
-            type: ''
-        }), 300)
-    }
+const PopupContainer: FC<IPopup> = ({state, handleCancel, children}) => {
+    const refDiv = useRef<HTMLDivElement>(null)
 
     return (
         <CSSTransition

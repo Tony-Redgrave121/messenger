@@ -1,0 +1,19 @@
+@use '../../../styles/base/_variables.css' as v;
+@import url("../../../styles/base/_normalize.scss");
+
+.ToolsBlock {
+  &, span, svg {
+    display: flex;
+    align-items: center;
+  }
+
+  p {
+    font-weight: 600;
+    margin-left: 24px;
+    font-size: 20px;
+  }
+}
+
+.SearchBlock {
+  min-height: 294.4px;
+}

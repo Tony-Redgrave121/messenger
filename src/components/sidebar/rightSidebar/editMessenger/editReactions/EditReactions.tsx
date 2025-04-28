@@ -79,6 +79,7 @@ const EditReactions: FC<IEditReactionsProps> = ({setState, refSidebar, state, ch
                         )}
                     </div>
                 </div>
+                <Caption/>
             </SidebarContainer>
         </CSSTransition>
     )

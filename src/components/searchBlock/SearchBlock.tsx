@@ -1,13 +1,13 @@
-import React from 'react'
+import React, {ChangeEvent, FC, RefObject} from 'react'
 import style from './style.module.css'
 import { HiOutlineMagnifyingGlass } from "react-icons/hi2"
 
 interface ISearchBlock {
-    ref: React.RefObject<HTMLDivElement | null>,
-    foo: (event: React.ChangeEvent<HTMLInputElement>) => void
+    ref: RefObject<HTMLDivElement | null>,
+    foo: (event: ChangeEvent<HTMLInputElement>) => void
 }
 
-const SearchBlock: React.FC<ISearchBlock> = ({ref, foo}) => {
+const SearchBlock: FC<ISearchBlock> = ({ref, foo}) => {
     return (
         <div className={style.SearchContainer} ref={ref}>
             <HiOutlineMagnifyingGlass className={style.SearchIcon}/>

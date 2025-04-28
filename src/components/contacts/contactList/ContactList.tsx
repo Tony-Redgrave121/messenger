@@ -1,20 +1,22 @@
-import React from 'react'
+import React, {FC} from 'react'
 import style from './style.module.css'
 import {Contact} from "../"
 import {Buttons} from "@components/buttons"
 import {IContact} from "@appTypes"
 
 interface ContactListProps {
-    contacts: IContact[]
+    contacts: IContact[],
+    text: string,
+    childrenFront?: React.ReactNode,
 }
 
-const ContactList: React.FC<ContactListProps> = ({contacts}) => {
+const ContactList: FC<ContactListProps> = ({contacts, text, childrenFront}) => {
     return (
         <section className={style.ContactListContainer}>
-            <p>Contacts</p>
+            <p>{text}</p>
             {contacts.map(contact =>
                 <Buttons.ContactButton key={contact.user_id}>
-                    <Contact contact={contact} />
+                    <Contact contact={contact} childrenFront={childrenFront}/>
                 </Buttons.ContactButton>
             )}
         </section>

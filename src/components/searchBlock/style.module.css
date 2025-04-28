@@ -16,7 +16,6 @@
   padding: 0 44px;
   color: white;
   transition: 0.2s all ease-in-out;
-  caret-color: #2f2f2f;
 }
 .SearchContainer .SearchInput:focus {
   box-shadow: 0 0 0 1px #2f2f2f inset;

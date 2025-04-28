@@ -1,0 +1,24 @@
+@import url("../../../../../styles/base/_normalize.scss");
+
+.FormContainer > div {
+  padding: 8px 8px 0;
+}
+.FormContainer > :first-child {
+  padding: 64px 8px 8px;
+}
+.FormContainer > :first-child > p {
+  padding: 12px 16px;
+  font-weight: 600;
+  color: white;
+}
+.FormContainer .CreateButton {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+}
+.FormContainer .CreateButton > button > svg {
+  width: 26px;
+  height: 26px;
+}
+
+/*# sourceMappingURL=style.module.css.map */

@@ -1,4 +1,4 @@
-import React, {Dispatch, RefObject, SetStateAction, useEffect, useRef, useState} from 'react'
+import React, {Dispatch, FC, RefObject, SetStateAction, useEffect, useRef, useState} from 'react'
 import {SidebarContainer} from "@components/sidebar";
 import {CSSTransition} from "react-transition-group";
 import '../animation.css'
@@ -42,13 +42,13 @@ const InitialValues: IMessenger = {
     messenger_members: [],
 }
 
-const Messenger: React.FC<IMessengerProps> = ({messengerCreation, setMessengerCreation, socketRef}) => {
+const Messenger: FC<IMessengerProps> = ({messengerCreation, setMessengerCreation, socketRef}) => {
     const [errorForm, setErrorForm] = useState<string | null>(null)
     const [members, setMembers] = useState<IContact[]>([])
     const [picture, setPicture] = useState<File | null>(null)
     const [animationState, setAnimationState] = useState(false)
     const {contacts} = useGetContacts()
-    const {filteredContacts, handleInput} = useSearch(contacts)
+    const {filteredArr, handleInput} = useSearch(contacts, 'user_name')
 
     const refSidebar = useRef(null)
     const refForm = useRef(null)
@@ -181,7 +181,7 @@ const Messenger: React.FC<IMessengerProps> = ({messengerCreation, setMessengerCr
                     :
                     <>
                         <SearchBlock foo={handleInput} ref={searchRef}/>
-                        {filteredContacts.length > 0 && <ContactList contacts={filteredContacts}/>}
+                        <ContactList contacts={filteredArr} text='Contacts'/>
                     </>
                 }
                 {messengerCreation.type !== "chat" &&

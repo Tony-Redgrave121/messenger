@@ -6,6 +6,13 @@
   align-items: center;
   gap: 18px;
 
+  svg {
+    color: #aaaaaa;
+    width: 26px;
+    height: 26px;
+    margin-left: auto;
+  }
+
   > span > * {
     width: 42px;
     height: 42px;

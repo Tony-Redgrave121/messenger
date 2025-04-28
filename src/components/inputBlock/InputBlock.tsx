@@ -123,6 +123,16 @@ const InputBlock: FC<IInputBlock> = ({reply, setReply, socketRef}) => {
         }
     ]
 
+    const handleCancel = () => {
+        setFilesState(prev => ({...prev, popup: false}))
+
+        setTimeout(() => setFilesState({
+            files: null,
+            popup: false,
+            type: ''
+        }), 300)
+    }
+
     return (
         <div className={style.InputContainer}>
             <div className={style.Input}>
@@ -149,8 +159,19 @@ const InputBlock: FC<IInputBlock> = ({reply, setReply, socketRef}) => {
                         <DropDown list={dropDownUpload} state={upload} setState={setUpload}/>
                     </Buttons.DefaultButton>
                     {filesState.files &&
-                        <PopupContainer state={filesState.popup} setState={setFilesState}>
-                            <PopupInputBlock type={filesState.type} files={filesState.files} setState={setFilesState} setInputText={setInputText} inputText={inputText} handleSubmit={handleSubmit} filesRef={filesRef}/>
+                        <PopupContainer
+                            state={filesState.popup}
+                            handleCancel={handleCancel}>
+                            <PopupInputBlock
+                                type={filesState.type}
+                                files={filesState.files}
+                                setState={setFilesState}
+                                setInputText={setInputText}
+                                inputText={inputText}
+                                handleSubmit={handleSubmit}
+                                filesRef={filesRef}
+                                handleCancel={handleCancel}
+                            />
                         </PopupContainer>
                     }
                 </div>

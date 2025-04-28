@@ -2,18 +2,18 @@ import React, {useEffect, useMemo, useState} from "react";
 import debounce from "debounce";
 import {IContact} from "@appTypes";
 
-const useSearch = (contacts: IContact[]) => {
-    const [filteredContacts, setFilteredContacts] = useState<IContact[]>([])
+const useSearch = (arr: any[], field: string) => {
+    const [filteredArr, setFilteredArr] = useState<IContact[]>([])
     const [filter, setFilter] = useState('')
 
     useEffect(() => {
-        setFilteredContacts(contacts)
-    }, [contacts])
+        setFilteredArr(arr)
+    }, [arr])
 
     const searchDebounce = useMemo(() =>
         debounce((query: string) => (
-            setFilteredContacts(contacts.filter(el => el.user_name.toLowerCase().includes(query)))
-        ), 200), [contacts]
+            setFilteredArr(arr.filter(el => el[field].toLowerCase().includes(query)))
+        ), 200), [arr, field]
     )
 
     const handleInput = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -24,8 +24,8 @@ const useSearch = (contacts: IContact[]) => {
     }
 
     return {
-        filteredContacts,
-        setFilteredContacts,
+        filteredArr,
+        setFilteredArr,
         filter,
         setFilter,
         handleInput

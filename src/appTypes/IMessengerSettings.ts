@@ -2,7 +2,7 @@ import IMember from "./IMember";
 import {IReaction} from "./index";
 
 export default interface IMessengerSettings {
-    messenger_setting_type: string,
+    messenger_setting_type: 'private' | 'public',
     reactions: IReaction[],
     reactions_count: number,
     removed_users: { user_id: string }[],

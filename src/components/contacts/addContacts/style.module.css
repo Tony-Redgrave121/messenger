@@ -10,26 +10,6 @@
   padding: 15px;
   border-bottom: 1px solid #2f2f2f;
 }
-.ContactsContainer .NoResultContainer {
-  height: 100%;
-  justify-content: center;
-  align-items: center;
-  gap: 4px;
-  text-align: center;
-  line-height: 1.3;
-}
-.ContactsContainer .NoResultContainer svg, .ContactsContainer .NoResultContainer h1 {
-  color: white;
-}
-.ContactsContainer .NoResultContainer svg {
-  font-size: 140px;
-}
-.ContactsContainer .NoResultContainer h1 {
-  font-size: 20px;
-}
-.ContactsContainer .NoResultContainer p {
-  color: #a9a9a9;
-}
 .ContactsContainer .MemberContainer {
   display: flex;
   flex-wrap: wrap;

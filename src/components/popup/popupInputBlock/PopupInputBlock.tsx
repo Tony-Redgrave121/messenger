@@ -14,21 +14,12 @@ interface IPopupInputBlock {
     inputText: string,
     setInputText: Dispatch<SetStateAction<string>>,
     handleSubmit: () => void,
-    filesRef: RefObject<File[] | null>
+    filesRef: RefObject<File[] | null>,
+    handleCancel: () => void
 }
 
-const PopupInputBlock: FC<IPopupInputBlock> = ({setState, files, type, inputText, setInputText, handleSubmit, filesRef}) => {
+const PopupInputBlock: FC<IPopupInputBlock> = ({setState, files, type, inputText, setInputText, handleSubmit, filesRef, handleCancel}) => {
     const refTextarea = useRef<HTMLTextAreaElement>(null)
-
-    const handleCancel = () => {
-        setState(prev => ({...prev, popup: false}))
-
-        setTimeout(() => setState({
-            files: null,
-            popup: false,
-            type: ''
-        }), 300)
-    }
 
     return (
         <>

@@ -25,6 +25,13 @@ interface ICheckbox {
     state: boolean
 }
 
+interface IRadioButton {
+    foo?: (event?: ChangeEvent<any>) => void,
+    state: boolean,
+    text: string | number,
+    desc?: string | number,
+}
+
 interface IVolumeButton {
     handleVolume?: () => void,
 }
@@ -37,7 +44,7 @@ interface IPlayerButton {
 
 interface ISettingButton {
     foo?: () => void,
-    children: ReactNode,
+    children?: ReactNode,
     text: string | number,
     desc?: string | number,
     isRed?: boolean
@@ -84,6 +91,14 @@ namespace Buttons {
             </label>
         )
     }
+    export const RadioButton: FC<IRadioButton> = ({foo, text, desc, state}) => {
+        return (
+            <label className={style.RadioButtonContainer}>
+                <input type="radio" onChange={foo} checked={state}/>
+                <p>{text} {desc?.toString && <small className={style.GreySmall}>{desc}</small>}</p>
+            </label>
+        )
+    }
     export const ContactButton: FC<IDefaultButton> = ({children, foo}) => {
         return (
             <button className={style.ContactButton} onClick={foo}>{children}</button>
@@ -109,7 +124,7 @@ namespace Buttons {
         return (
             <button onClick={foo} className={`${style.SettingButton} ${isRed && style.SettingButtonRed}`} >
                 {children}
-                <p>{text} {desc?.toString && <small>{desc}</small>}</p>
+                <p>{text} {desc?.toString && <small className={style.GreySmall}>{desc}</small>}</p>
             </button>
         )
     }
