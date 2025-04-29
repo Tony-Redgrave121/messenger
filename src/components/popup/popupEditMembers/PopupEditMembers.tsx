@@ -1,7 +1,7 @@
 import React, {Dispatch, FC, SetStateAction, useRef} from 'react'
 import style from './style.module.css'
 import {Buttons} from "@components/buttons";
-import {HiOutlineUserPlus, HiOutlineXMark} from "react-icons/hi2";
+import {HiOutlineXMark} from "react-icons/hi2";
 import useSearch from "@hooks/useSearch";
 import {IContact} from "@appTypes";
 import {SearchBlock} from "@components/searchBlock";
@@ -32,7 +32,7 @@ const PopupEditMembers: FC<IPopupInputBlock> = ({handleCancel, moderators, membe
             <div className={style.SearchBlock}>
                 <SearchBlock foo={handleInput} ref={searchRef}/>
                 {filteredArr.length > 0 ?
-                    <ContactList contacts={filteredArr} text='Members' childrenFront={<HiOutlineUserPlus/>}/>
+                    <ContactList contacts={filteredArr} text='Members'/>
                     :
                     <NoResult filter={filter}/>
                 }

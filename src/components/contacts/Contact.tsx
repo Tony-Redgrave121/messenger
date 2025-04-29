@@ -1,4 +1,4 @@
-import React from 'react';
+import {FC, ReactNode} from 'react';
 import style from './style.module.css';
 import {IContact} from "@appTypes";
 import {getDate} from "@utils/logic/getDate";
@@ -6,11 +6,10 @@ import {LoadFile} from "../loadFile";
 
 interface IContactsProps {
     contact: IContact,
-    children?: React.ReactNode,
-    childrenFront?: React.ReactNode,
+    children?: ReactNode,
 }
 
-const Contact: React.FC<IContactsProps> = ({contact, children, childrenFront}) => {
+const Contact: FC<IContactsProps> = ({contact, children}) => {
     return (
         <div className={style.ContactBlock}>
             {children}
@@ -21,7 +20,6 @@ const Contact: React.FC<IContactsProps> = ({contact, children, childrenFront}) =
                 <h4>{contact.user_name}</h4>
                 <p>{getDate(contact.user_last_seen)}</p>
             </div>
-            {childrenFront}
         </div>
     )
 }

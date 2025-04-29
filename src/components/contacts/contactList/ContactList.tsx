@@ -7,16 +7,15 @@ import {IContact} from "@appTypes"
 interface ContactListProps {
     contacts: IContact[],
     text: string,
-    childrenFront?: React.ReactNode,
 }
 
-const ContactList: FC<ContactListProps> = ({contacts, text, childrenFront}) => {
+const ContactList: FC<ContactListProps> = ({contacts, text}) => {
     return (
         <section className={style.ContactListContainer}>
             <p>{text}</p>
             {contacts.map(contact =>
                 <Buttons.ContactButton key={contact.user_id}>
-                    <Contact contact={contact} childrenFront={childrenFront}/>
+                    <Contact contact={contact}/>
                 </Buttons.ContactButton>
             )}
         </section>

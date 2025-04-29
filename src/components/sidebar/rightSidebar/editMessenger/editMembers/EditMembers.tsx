@@ -6,7 +6,6 @@ import {IAnimationState, IContact} from "@appTypes"
 import style from "./style.module.css"
 import {Buttons} from "@components/buttons"
 import {
-    HiMagnifyingGlass,
     HiOutlineArrowLeft,
     HiOutlineUserMinus,
     HiOutlineUserPlus
@@ -85,7 +84,6 @@ const EditMembers: FC<IEditMemberProps> = ({setState, refSidebar, state, members
                             <ContactList
                                 contacts={filteredArr}
                                 text='Moderators'
-                                childrenFront={<HiOutlineUserMinus/>}
                             /> : <NoResult filter={filter}/>
                         }
                     </div>
