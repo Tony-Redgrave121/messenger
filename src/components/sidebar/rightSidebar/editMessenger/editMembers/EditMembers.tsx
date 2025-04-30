@@ -2,31 +2,31 @@ import React, {Dispatch, FC, RefObject, SetStateAction, useEffect, useRef, useSt
 import {SidebarContainer, TopBar} from "@components/sidebar"
 import {CSSTransition} from "react-transition-group"
 import useAnimation from "@hooks/useAnimation"
-import {IAnimationState, IContact} from "@appTypes"
+import {IAnimationState, IContact, IDropDownList} from "@appTypes"
 import style from "./style.module.css"
 import {Buttons} from "@components/buttons"
 import {
     HiOutlineArrowLeft,
-    HiOutlineUserMinus,
     HiOutlineUserPlus
 } from "react-icons/hi2"
 import Caption from "@components/caption/Caption";
 import useSearch from "@hooks/useSearch";
-import {ContactList} from "@components/contacts";
 import {SearchBlock} from "@components/searchBlock";
 import {PopupContainer} from "@components/popup";
 import PopupEditMembers from "@components/popup/popupEditMembers/PopupEditMembers";
 import NoResult from "@components/noResult/NoResult";
+import MembersList from "@components/sidebar/rightSidebar/editMessenger/editMembers/membersList/MembersList";
 
 interface IEditMemberProps {
     state: IAnimationState,
     setState: Dispatch<SetStateAction<IAnimationState>>,
     refSidebar: RefObject<HTMLDivElement | null>,
     members: IContact[],
-    moderators: IContact[]
+    moderators: IContact[],
+    dropList: IDropDownList[]
 }
 
-const EditMembers: FC<IEditMemberProps> = ({setState, refSidebar, state, members, moderators}) => {
+const EditMembers: FC<IEditMemberProps> = ({setState, refSidebar, state, members, moderators, dropList}) => {
     const [animation, setAnimation] = useState(false)
     const [newMembers, setNewMembers] = useState<IContact[]>([])
     useAnimation(state.state, setAnimation, setState)
@@ -81,9 +81,10 @@ const EditMembers: FC<IEditMemberProps> = ({setState, refSidebar, state, members
                     <Caption/>
                     <div>
                         {filteredArr.length > 0 ?
-                            <ContactList
-                                contacts={filteredArr}
+                            <MembersList
+                                members={filteredArr}
                                 text='Moderators'
+                                dropList={dropList}
                             /> : <NoResult filter={filter}/>
                         }
                     </div>
@@ -94,6 +95,7 @@ const EditMembers: FC<IEditMemberProps> = ({setState, refSidebar, state, members
                             members={members}
                             moderators={newMembers}
                             setMembers={setNewMembers}
+                            title='Add moderators'
                         />
                     </PopupContainer>
                 </div>

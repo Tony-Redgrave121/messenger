@@ -15,6 +15,7 @@ import {DropDown} from "../dropDown";
 import {DocumentBlock} from "@components/message";
 import UserService from "../../service/UserService";
 import {useParams} from "react-router-dom";
+import handleContextMenu from "@utils/logic/handleContextMenu";
 
 interface IChatMessage {
     message: IMessagesResponse,
@@ -89,20 +90,6 @@ namespace Message {
             }
         }, [message.message_files, message.message_type])
 
-        const handleContextMenu = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-            event.preventDefault()
-            const parent = event.currentTarget.getBoundingClientRect()
-
-            let x = event.clientX - parent.left, y = event.clientY - parent.top
-            const clientWidth = event.currentTarget.clientWidth, clientHeight = event.currentTarget.clientHeight
-
-            if (x + 170 > clientWidth) x = clientWidth - 170
-            if (y + 100 > clientHeight) y = clientHeight - 100
-
-            setPosition({x: x, y: y})
-            setContextMenu(!contextMenu)
-        }
-
         return (
             <div className={`${style.ChatMessageContainer} ${message.user_id === user_id ? style.Owner : ''}`}>
                 {message.reply &&
@@ -111,7 +98,11 @@ namespace Message {
                         <p>{message.reply.message_text}</p>
                     </button>
                 }
-                <div className={style.ChatMessageBlock} onContextMenu={(event) => handleContextMenu(event)}>
+                <div className={style.ChatMessageBlock} onContextMenu={(event) => handleContextMenu({
+                    event,
+                    setPosition,
+                    setContextMenu
+                })}>
                     {(mediaArr && mediaArr.length > 0) &&
                         <MediaBlock.MessageMedia media={mediaArr} setSlider={setSlider} setCurrMedia={setCurrMedia}/>
                     }

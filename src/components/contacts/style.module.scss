@@ -2,11 +2,12 @@
 @import url("../../styles/base/_normalize.scss");
 
 .ContactBlock {
+  position: relative;
   display: flex;
   align-items: center;
   gap: 18px;
 
-  svg {
+  > svg {
     color: #aaaaaa;
     width: 26px;
     height: 26px;
@@ -35,5 +36,9 @@
       color: #a9a9a9;
       font-size: 14px;
     }
+  }
+
+  ul {
+    transform-origin: center;
   }
 }

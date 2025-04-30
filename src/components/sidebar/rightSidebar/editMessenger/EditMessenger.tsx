@@ -5,8 +5,8 @@ import useAnimation from "@hooks/useAnimation";
 import {IAnimationState, IEditMessengerForm, IMessengerSettings} from "@appTypes";
 import {Buttons} from "@components/buttons";
 import {
-    HiOutlineArrowLeft, HiOutlineHeart, HiOutlineLockClosed,
-    HiOutlineShieldCheck, HiOutlineTrash,
+    HiOutlineArrowLeft, HiOutlineChatBubbleLeft, HiOutlineHeart, HiOutlineLockClosed,
+    HiOutlineShieldCheck, HiOutlineShieldExclamation, HiOutlineTrash,
     HiOutlineUserMinus,
     HiOutlineUsers
 } from "react-icons/hi2";
@@ -69,11 +69,17 @@ const EditMessenger: FC<IEditMessengerProps> = ({setState, refSidebar}) => {
     })
     const refEditChannelType = useRef<HTMLDivElement>(null)
 
-    const [editMembers, setEditMembers] = useState({
+    const [editModerators, setEditModerators] = useState({
         state: false,
         mounted: false
     })
-    const refEditMember = useRef<HTMLDivElement>(null)
+    const refEditModerators = useRef<HTMLDivElement>(null)
+
+    const [editSubscribers, setEditSubscribers] = useState({
+        state: false,
+        mounted: false
+    })
+    const refEditSubscribers = useRef<HTMLDivElement>(null)
 
     const {id} = useParams()
     useAnimation(isLoaded, setAnimation, setState)
@@ -121,6 +127,24 @@ const EditMessenger: FC<IEditMessengerProps> = ({setState, refSidebar}) => {
 
         getSettings().catch(e => console.log(e))
     }, [id, setValue])
+
+    const ModeratorDropDown = [
+        {
+            liChildren: <HiOutlineChatBubbleLeft/>,
+            liText: 'Send Message',
+            liFoo: () => {}
+        },
+        {
+            liChildren: <HiOutlineShieldExclamation/>,
+            liText: 'Remove from group',
+            liFoo: () => {}
+        },
+        {
+            liChildren: <HiOutlineTrash/>,
+            liText: 'Dismiss Moderator',
+            liFoo: () => {}
+        }
+    ]
 
     return (
         <CSSTransition
@@ -189,14 +213,16 @@ const EditMessenger: FC<IEditMessengerProps> = ({setState, refSidebar}) => {
                         Add a channel chat for comments.
                     </Caption>
                     <div className={style.Form}>
-                        <Buttons.SettingButton foo={() => setEditMembers({
+                        <Buttons.SettingButton foo={() => setEditModerators({
                             state: true,
                             mounted: true
                         })} text={'Moderators'} desc={settings.moderators.length}>
                             <HiOutlineShieldCheck/>
                         </Buttons.SettingButton>
-                        <Buttons.SettingButton foo={() => {
-                        }} text={'Subscribers'} desc={settings.members.length}>
+                        <Buttons.SettingButton foo={() => setEditSubscribers({
+                            state: true,
+                            mounted: true
+                        })} text={'Subscribers'} desc={settings.members.length}>
                             <HiOutlineUsers/>
                         </Buttons.SettingButton>
                         <Buttons.SettingButton foo={() => {
@@ -215,9 +241,43 @@ const EditMessenger: FC<IEditMessengerProps> = ({setState, refSidebar}) => {
                     </div>
                     <Caption/>
                 </div>
-                {editReactions.mounted && <EditReactions state={editReactions} setState={setEditReactions} refSidebar={refEditReactions} channelReactions={settings.reactions}/>}
-                {editChannelType.mounted && <EditType state={editChannelType} setState={setEditChannelType} refSidebar={refEditChannelType} channelType={settings.messenger_setting_type}/>}
-                {editMembers.mounted && <EditMembers state={editMembers} setState={setEditMembers} refSidebar={refEditMember} moderators={settings.moderators.flatMap(member => member.user)} members={settings.members.flatMap(member => member.user)}/>}
+                {editReactions.mounted &&
+                    <EditReactions
+                        state={editReactions}
+                        setState={setEditReactions}
+                        refSidebar={refEditReactions}
+                        channelReactions={settings.reactions}
+                    />
+                }
+                {editChannelType.mounted &&
+                    <EditType
+                        state={editChannelType}
+                        setState={setEditChannelType}
+                        refSidebar={refEditChannelType}
+                        channelType={settings.messenger_setting_type}
+                    />
+                }
+                {editModerators.mounted &&
+                    <EditMembers
+                        state={editModerators}
+                        setState={setEditModerators}
+                        refSidebar={refEditModerators}
+                        moderators={settings.moderators.flatMap(member => member.user)}
+                        members={settings.members.flatMap(member => member.user)}
+                        dropList={ModeratorDropDown}
+                    />
+                }
+
+                {editSubscribers.mounted &&
+                    <EditMembers
+                        state={editSubscribers}
+                        setState={setEditSubscribers}
+                        refSidebar={refEditSubscribers}
+                        moderators={settings.members.flatMap(member => member.user)}
+                        members={settings.members.flatMap(member => member.user)}
+                        dropList={ModeratorDropDown}
+                    />
+                }
             </SidebarContainer>
         </CSSTransition>
     )

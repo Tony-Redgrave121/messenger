@@ -1,24 +1,19 @@
-import React, {Dispatch, FC, SetStateAction, useRef} from 'react'
+import React, {Dispatch, FC, SetStateAction} from 'react'
 import style from './style.module.css'
 import {Buttons} from "@components/buttons";
 import {HiOutlineXMark} from "react-icons/hi2";
-import useSearch from "@hooks/useSearch";
 import {IContact} from "@appTypes";
-import {SearchBlock} from "@components/searchBlock";
-import {ContactList} from "@components/contacts";
-import NoResult from "@components/noResult/NoResult";
+import {AddContacts} from "@components/contacts";
 
 interface IPopupInputBlock {
     handleCancel: () => void,
     moderators: IContact[],
     members: IContact[],
-    setMembers: Dispatch<SetStateAction<IContact[]>>
+    setMembers: Dispatch<SetStateAction<IContact[]>>,
+    title: string
 }
 
-const PopupEditMembers: FC<IPopupInputBlock> = ({handleCancel, moderators, members, setMembers}) => {
-    const searchRef = useRef<HTMLDivElement>(null)
-    const {filteredArr, handleInput, filter} = useSearch(moderators, 'user_name')
-
+const PopupEditMembers: FC<IPopupInputBlock> = ({handleCancel, moderators, members, setMembers, title}) => {
     return (
         <>
             <div className={style.ToolsBlock}>
@@ -26,16 +21,15 @@ const PopupEditMembers: FC<IPopupInputBlock> = ({handleCancel, moderators, membe
                     <Buttons.DefaultButton foo={handleCancel}>
                         <HiOutlineXMark/>
                     </Buttons.DefaultButton>
-                    <p>Add moderators</p>
+                    <p>{title}</p>
                 </span>
             </div>
             <div className={style.SearchBlock}>
-                <SearchBlock foo={handleInput} ref={searchRef}/>
-                {filteredArr.length > 0 ?
-                    <ContactList contacts={filteredArr} text='Members'/>
-                    :
-                    <NoResult filter={filter}/>
-                }
+                <AddContacts
+                    members={moderators}
+                    setMembers={setMembers}
+                    contacts={members}
+                />
             </div>
         </>
     )

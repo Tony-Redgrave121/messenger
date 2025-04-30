@@ -1,11 +1,12 @@
 @import url("../../styles/base/_normalize.scss");
 
 .ContactBlock {
+  position: relative;
   display: flex;
   align-items: center;
   gap: 18px;
 }
-.ContactBlock svg {
+.ContactBlock > svg {
   color: #aaaaaa;
   width: 26px;
   height: 26px;
@@ -29,6 +30,9 @@
 .ContactBlock .ContactInfo p {
   color: #a9a9a9;
   font-size: 14px;
+}
+.ContactBlock ul {
+  transform-origin: center;
 }
 
 /*# sourceMappingURL=style.module.css.map */

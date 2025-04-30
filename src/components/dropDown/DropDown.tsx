@@ -2,13 +2,10 @@ import React, {useEffect} from 'react'
 import style from './style.module.css'
 import './animation.css'
 import {CSSTransition} from "react-transition-group"
+import {IDropDownList} from "@appTypes";
 
 interface IDropDown {
-    list: Array<{
-        liChildren: React.ReactNode,
-        liText?: string,
-        liFoo: () => void
-    }>,
+    list: IDropDownList[],
     state: boolean,
     setState: ((state: boolean) => void),
     styles?: Array<string>,
