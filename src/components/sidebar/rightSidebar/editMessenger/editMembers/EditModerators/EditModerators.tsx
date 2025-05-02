@@ -3,7 +3,7 @@ import {SidebarContainer, TopBar} from "@components/sidebar"
 import {CSSTransition} from "react-transition-group"
 import useAnimation from "@hooks/useAnimation"
 import {IAnimationState, IContact, IDropDownList} from "@appTypes"
-import style from "./style.module.css"
+import style from "../shared.module.css"
 import {Buttons} from "@components/buttons"
 import {
     HiOutlineArrowLeft,
@@ -13,7 +13,7 @@ import Caption from "@components/caption/Caption";
 import useSearch from "@hooks/useSearch";
 import {SearchBlock} from "@components/searchBlock";
 import {PopupContainer} from "@components/popup";
-import PopupEditMembers from "@components/popup/popupEditMembers/PopupEditMembers";
+import PopupEditModerators from "@components/popup/popupEditMembers/PopupEditModerators";
 import NoResult from "@components/noResult/NoResult";
 import MembersList from "@components/sidebar/rightSidebar/editMessenger/editMembers/membersList/MembersList";
 
@@ -26,7 +26,7 @@ interface IEditMemberProps {
     dropList: IDropDownList[]
 }
 
-const EditMembers: FC<IEditMemberProps> = ({setState, refSidebar, state, members, moderators, dropList}) => {
+const EditModerators: FC<IEditMemberProps> = ({setState, refSidebar, state, members, moderators, dropList}) => {
     const [animation, setAnimation] = useState(false)
     const [newMembers, setNewMembers] = useState<IContact[]>([])
     useAnimation(state.state, setAnimation, setState)
@@ -90,7 +90,7 @@ const EditMembers: FC<IEditMemberProps> = ({setState, refSidebar, state, members
                     </div>
                     <Caption/>
                     <PopupContainer state={popup} handleCancel={handleCancel}>
-                        <PopupEditMembers
+                        <PopupEditModerators
                             handleCancel={handleCancel}
                             members={members}
                             moderators={newMembers}
@@ -104,4 +104,4 @@ const EditMembers: FC<IEditMemberProps> = ({setState, refSidebar, state, members
     )
 }
 
-export default EditMembers
+export default EditModerators

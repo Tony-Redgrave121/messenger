@@ -1,10 +1,11 @@
-import React, {ChangeEvent, FC, ReactNode} from 'react'
+import React, {ChangeEvent, FC, ReactNode, useRef} from 'react'
 import style from './style.module.css'
 import {
     HiMiniSpeakerWave,
-    HiMiniSpeakerXMark,
+    HiMiniSpeakerXMark, HiOutlineArrowRight,
 } from "react-icons/hi2"
 import {useAppSelector} from "@hooks/useRedux";
+import {CSSTransition} from "react-transition-group"
 
 interface IDefaultButton {
     children?: ReactNode,
@@ -55,6 +56,12 @@ interface ISwitchSettingButton {
     children?: ReactNode,
     text: string,
     state: boolean | number
+}
+
+interface ICreateButton {
+    foo?: () => void,
+    state: boolean,
+    children: ReactNode,
 }
 
 namespace Buttons {
@@ -137,6 +144,25 @@ namespace Buttons {
                 </span>
                 <Buttons.SwitchButton state={state} foo={foo}/>
             </button>
+        )
+    }
+    export const CreateButton: FC<ICreateButton> = ({foo, children, text, state}) => {
+        const refButton = useRef<HTMLButtonElement>(null)
+
+        return (
+            <CSSTransition
+                in={state}
+                nodeRef={refButton}
+                timeout={300}
+                classNames='left-sidebar-node'
+                unmountOnExit
+            >
+                <span className={style.CreateButton}>
+                    <Buttons.InterButton foo={foo}>
+                        <HiOutlineArrowRight/>
+                    </Buttons.InterButton>
+                </span>
+            </CSSTransition>
         )
     }
 }

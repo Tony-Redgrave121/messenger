@@ -13,3 +13,16 @@
     font-size: 20px;
   }
 }
+
+.CreateButton {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+
+  > button {
+    > svg {
+      width: 24px;
+      height: 24px;
+    }
+  }
+}

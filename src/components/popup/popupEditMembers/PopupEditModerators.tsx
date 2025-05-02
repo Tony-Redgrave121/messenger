@@ -5,7 +5,7 @@ import {HiOutlineXMark} from "react-icons/hi2";
 import {IContact} from "@appTypes";
 import {AddContacts} from "@components/contacts";
 
-interface IPopupInputBlock {
+interface IPopupEditModeratorsProps {
     handleCancel: () => void,
     moderators: IContact[],
     members: IContact[],
@@ -13,7 +13,7 @@ interface IPopupInputBlock {
     title: string
 }
 
-const PopupEditMembers: FC<IPopupInputBlock> = ({handleCancel, moderators, members, setMembers, title}) => {
+const PopupEditModerators: FC<IPopupEditModeratorsProps> = ({handleCancel, moderators, members, setMembers, title}) => {
     return (
         <>
             <div className={style.ToolsBlock}>
@@ -35,4 +35,4 @@ const PopupEditMembers: FC<IPopupInputBlock> = ({handleCancel, moderators, membe
     )
 }
 
-export default PopupEditMembers
+export default PopupEditModerators

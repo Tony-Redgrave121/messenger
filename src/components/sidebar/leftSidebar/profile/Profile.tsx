@@ -117,7 +117,7 @@ const Profile: FC<IProfileProps> = ({state, setState, refSidebar}) => {
                     </li>
                 </ul>
                 <Caption/>
-                <ul className={`${style.InfoList} ${profileStyle.ProfileInfoList}`}>
+                <ul className={style.InfoList}>
                     <li>
                         <Buttons.SettingButton foo={() => {
                         }} text={'CrowCaw Features'}>

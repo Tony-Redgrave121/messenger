@@ -19,7 +19,8 @@ import messengerService from "../../../../service/MessengerService";
 import {useParams} from "react-router-dom";
 import EditReactions from "@components/sidebar/rightSidebar/editMessenger/editReactions/EditReactions";
 import EditType from "@components/sidebar/rightSidebar/editMessenger/editType/EditType";
-import EditMembers from "@components/sidebar/rightSidebar/editMessenger/editMembers/EditMembers";
+import EditModerators from "@components/sidebar/rightSidebar/editMessenger/editMembers/EditModerators/EditModerators";
+import EditSubscribers from "@components/sidebar/rightSidebar/editMessenger/editMembers/EditMembers/EditSubscribers";
 
 interface IEditMessengerProps {
     setState: Dispatch<SetStateAction<IAnimationState>>,
@@ -135,13 +136,26 @@ const EditMessenger: FC<IEditMessengerProps> = ({setState, refSidebar}) => {
             liFoo: () => {}
         },
         {
-            liChildren: <HiOutlineShieldExclamation/>,
+            liChildren: <HiOutlineTrash/>,
             liText: 'Remove from group',
             liFoo: () => {}
         },
         {
-            liChildren: <HiOutlineTrash/>,
+            liChildren: <HiOutlineShieldExclamation/>,
             liText: 'Dismiss Moderator',
+            liFoo: () => {}
+        }
+    ]
+
+    const MemberDropDown = [
+        {
+            liChildren: <HiOutlineChatBubbleLeft/>,
+            liText: 'Send Message',
+            liFoo: () => {}
+        },
+        {
+            liChildren: <HiOutlineTrash/>,
+            liText: 'Remove from group',
             liFoo: () => {}
         }
     ]
@@ -258,7 +272,7 @@ const EditMessenger: FC<IEditMessengerProps> = ({setState, refSidebar}) => {
                     />
                 }
                 {editModerators.mounted &&
-                    <EditMembers
+                    <EditModerators
                         state={editModerators}
                         setState={setEditModerators}
                         refSidebar={refEditModerators}
@@ -267,15 +281,13 @@ const EditMessenger: FC<IEditMessengerProps> = ({setState, refSidebar}) => {
                         dropList={ModeratorDropDown}
                     />
                 }
-
                 {editSubscribers.mounted &&
-                    <EditMembers
+                    <EditSubscribers
                         state={editSubscribers}
                         setState={setEditSubscribers}
                         refSidebar={refEditSubscribers}
-                        moderators={settings.members.flatMap(member => member.user)}
                         members={settings.members.flatMap(member => member.user)}
-                        dropList={ModeratorDropDown}
+                        dropList={MemberDropDown}
                     />
                 }
             </SidebarContainer>
