@@ -31,14 +31,9 @@ const PopupEditSubscribers: FC<IPopupEditSubscribersProps> = ({handleCancel}) =>
                     contacts={contacts}
                 />
             </div>
-            {members.length > 0 &&
-                <span className={style.CreateButton}>
-                    <Buttons.InterButton foo={() => {
-                    }}>
-                        <HiOutlineArrowRight/>
-                    </Buttons.InterButton>
-                </span>
-            }
+            <Buttons.CreateButton state={members.length > 0} foo={() => {}}>
+                <HiOutlineArrowRight/>
+            </Buttons.CreateButton>
         </>
     )
 }

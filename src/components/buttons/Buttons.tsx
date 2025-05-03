@@ -2,10 +2,11 @@ import React, {ChangeEvent, FC, ReactNode, useRef} from 'react'
 import style from './style.module.css'
 import {
     HiMiniSpeakerWave,
-    HiMiniSpeakerXMark, HiOutlineArrowRight,
+    HiMiniSpeakerXMark,
 } from "react-icons/hi2"
 import {useAppSelector} from "@hooks/useRedux";
 import {CSSTransition} from "react-transition-group"
+import './animations/animationCreateButton.css'
 
 interface IDefaultButton {
     children?: ReactNode,
@@ -146,7 +147,7 @@ namespace Buttons {
             </button>
         )
     }
-    export const CreateButton: FC<ICreateButton> = ({foo, children, text, state}) => {
+    export const CreateButton: FC<ICreateButton> = ({foo, children, state}) => {
         const refButton = useRef<HTMLButtonElement>(null)
 
         return (
@@ -154,12 +155,12 @@ namespace Buttons {
                 in={state}
                 nodeRef={refButton}
                 timeout={300}
-                classNames='left-sidebar-node'
+                classNames='create-button'
                 unmountOnExit
             >
-                <span className={style.CreateButton}>
+                <span className={style.CreateButton} ref={refButton}>
                     <Buttons.InterButton foo={foo}>
-                        <HiOutlineArrowRight/>
+                        {children}
                     </Buttons.InterButton>
                 </span>
             </CSSTransition>

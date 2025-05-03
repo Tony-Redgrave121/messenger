@@ -5,6 +5,7 @@ import {getDate} from "@utils/logic/getDate";
 import {LoadFile} from "@components/loadFile";
 import {DropDown} from "@components/dropDown";
 import handleContextMenu from "@utils/logic/handleContextMenu";
+import {useAppSelector} from "@hooks/useRedux";
 
 interface IContactsProps {
     contact: IContact,
@@ -15,9 +16,10 @@ interface IContactsProps {
 const Member: FC<IContactsProps> = ({contact, children, dropList}) => {
     const [contextMenu, setContextMenu] = useState(false)
     const [position, setPosition] = useState({x: 0, y: 0})
+    const user_id = useAppSelector(state => state.user.userId)
 
     return (
-        <div className={style.ContactBlock} onContextMenu={(event) => handleContextMenu({
+        <div className={style.ContactBlock} onContextMenu={(event) => user_id !== contact.user_id && handleContextMenu({
             event,
             setPosition,
             setContextMenu

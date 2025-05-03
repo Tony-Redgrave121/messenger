@@ -3,12 +3,11 @@ import {SidebarContainer} from "@components/sidebar";
 import {CSSTransition} from "react-transition-group";
 import '../animation.css'
 import style from "./style.module.css";
-import styleSidebar from "../style.module.css";
 import {Buttons} from "@components/buttons";
 import {
     HiOutlineArrowLeft,
     HiOutlineArrowRight,
-    HiOutlinePhoto
+    HiOutlinePhoto,
 } from "react-icons/hi2";
 import {InputForm} from "@components/inputForm";
 import {Controller, SubmitHandler, useForm} from "react-hook-form";
@@ -85,7 +84,8 @@ const Messenger: FC<IMessengerProps> = ({messengerCreation, setMessengerCreation
         register,
         handleSubmit,
         formState: {errors},
-        control
+        control,
+        watch
     } = useForm({defaultValues: InitialValues})
 
     const fieldOptions = {
@@ -172,9 +172,7 @@ const Messenger: FC<IMessengerProps> = ({messengerCreation, setMessengerCreation
                             </InputForm>
                         }
                         {(members && contacts.length > 0) &&
-                            <AddContacts members={members} contacts={contacts} setMembers={setMembers}/>}
-                        {messengerCreation.type === "channel" &&
-                            <p>You can provide an optional description for your channel.</p>
+                            <AddContacts members={members} contacts={contacts} setMembers={setMembers}/>
                         }
                         {errorForm && <small>{errorForm}</small>}
                     </form>
@@ -184,13 +182,12 @@ const Messenger: FC<IMessengerProps> = ({messengerCreation, setMessengerCreation
                         <ContactList contacts={filteredArr} text='Contacts'/>
                     </>
                 }
-                {messengerCreation.type !== "chat" &&
-                    <span className={styleSidebar.CreateButton}>
-                        <Buttons.InterButton foo={handleSubmit(handleCreation)}>
-                            <HiOutlineArrowRight/>
-                        </Buttons.InterButton>
-                    </span>
+                {messengerCreation.type === "channel" &&
+                    <p>You can provide an optional description for your channel.</p>
                 }
+                <Buttons.CreateButton state={messengerCreation.type !== "chat" && watch('messenger_name') !== ''} foo={handleSubmit(handleCreation)}>
+                    <HiOutlineArrowRight/>
+                </Buttons.CreateButton>
             </SidebarContainer>
         </CSSTransition>
     )

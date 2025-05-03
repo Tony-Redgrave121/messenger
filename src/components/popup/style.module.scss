@@ -1,5 +1,5 @@
 @use '../../styles/base/_variables.css' as v;
-@import url("../../styles/base/_normalize.scss");
+@use '../../styles/base/_normalize.scss';
 
 .PopupContainer {
   position: fixed;
@@ -26,6 +26,7 @@
     box-shadow: 0 2px 2px #00000024,0 3px 1px -2px #0000001f,0 1px 5px #0003;
     padding: 8px;
     color: white;
+    overflow: hidden;
 
     img {
       cursor: auto;

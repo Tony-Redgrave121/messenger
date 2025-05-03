@@ -6,13 +6,13 @@ import {IContact} from "@appTypes"
 
 interface ContactListProps {
     contacts: IContact[],
-    text: string,
+    text?: string,
 }
 
 const ContactList: FC<ContactListProps> = ({contacts, text}) => {
     return (
         <section className={style.ContactListContainer}>
-            <p>{text}</p>
+            {text && <p>{text}</p>}
             {contacts.map(contact =>
                 <Buttons.ContactButton key={contact.user_id}>
                     <Contact contact={contact}/>

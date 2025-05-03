@@ -1,5 +1,5 @@
 @use '../../../../../styles/base/_variables.css' as v;
-@import url("../../../../../styles/base/_normalize.scss");
+@use '../../../../../styles/base/_normalize.scss';
 
 .FormContainer {
   > div {

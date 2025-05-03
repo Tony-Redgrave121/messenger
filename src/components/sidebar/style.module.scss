@@ -1,5 +1,5 @@
 @use '../../styles/base/_variables.css' as v;
-@import url("../../styles/base/_normalize.scss");
+@use '../../styles/base/_normalize.scss';
 
 .SidebarContainer {
   position: relative;
@@ -11,6 +11,10 @@
   height: 100vh;
   background-color: #212121FF;
   overflow: hidden;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 
   .Wrapper {
     overflow-y: auto;
@@ -36,6 +40,16 @@
 
   .Wrapper {
     background-color: #212121;
+
+    > p {
+      display: flex;
+      position: absolute;
+      left: 0;
+      padding: 12px 24px;
+      color: #747474;
+      font-size: 14px;
+      min-width: inherit;
+    }
   }
 }
 

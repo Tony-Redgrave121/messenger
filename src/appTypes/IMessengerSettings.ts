@@ -1,11 +1,12 @@
 import IMember from "./IMember";
 import {IReaction} from "./index";
+import IRemovedUser from "./sidebar/IRemovedUser";
 
 export default interface IMessengerSettings {
     messenger_setting_type: 'private' | 'public',
     reactions: IReaction[],
     reactions_count: number,
-    removed_users: { user_id: string }[],
+    removed_users: IRemovedUser[],
     members: IMember[],
     moderators: IMember[],
     messenger_name: string,

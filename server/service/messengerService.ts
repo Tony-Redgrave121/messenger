@@ -5,7 +5,6 @@ import filesUploadingService from "./filesUploadingService";
 import {UploadedFile} from "express-fileupload";
 import * as fs from "fs";
 import IReaction from "../types/IReaction";
-import IMember from "../types/IMember";
 
 interface IUserFiles {
     messenger_image?: UploadedFile
@@ -106,7 +105,11 @@ class MessengerService {
             include: [
                 {
                     model: models.removed_users,
-                    attributes: ['user_id'],
+                    include: [{
+                        model: models.users,
+                        attributes: ['user_id', 'user_name', 'user_img', 'user_last_seen'],
+                    }],
+                    attributes: ['removed_user_id'],
                     required: false
                 },
                 {
@@ -159,7 +162,6 @@ class MessengerService {
 
     async fetchReactions() {
         const reactions = await models.reactions.findAll()
-
         if (!reactions) return ApiError.internalServerError("No reactions found")
 
         return reactions

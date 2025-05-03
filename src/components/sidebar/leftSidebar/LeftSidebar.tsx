@@ -1,5 +1,8 @@
 import React from 'react'
-import {HiBars3, HiOutlinePencil} from "react-icons/hi2"
+import {
+    HiBars3,
+    HiOutlinePencil
+} from "react-icons/hi2"
 import style from './style.module.css'
 import {Buttons} from '@components/buttons'
 import {SearchBlock} from "@components/searchBlock"
@@ -54,14 +57,24 @@ const LeftSidebar = () => {
                     <ChatList/>
                     <Caption/>
                     <ContactList contacts={contacts} text='Contacts'/>
-                    <span className={style.CreateButton}>
-                        <Buttons.InterButton foo={() => setMessenger(!messenger)}>
-                            <HiOutlinePencil/>
-                            <DropDown list={messengersList} state={messenger} setState={setMessenger}/>
-                        </Buttons.InterButton>
-                    </span>
-                    {(messengerCreation.type && socketRef) && <Messenger messengerCreation={messengerCreation} setMessengerCreation={setMessengerCreation} socketRef={socketRef}/>}
-                    {profile.mounted && <Profile setState={setProfile} state={profile} refSidebar={refProfile}/>}
+                    <Buttons.CreateButton state={true} foo={() => setMessenger(!messenger)}>
+                        <HiOutlinePencil/>
+                        <DropDown list={messengersList} state={messenger} setState={setMessenger}/>
+                    </Buttons.CreateButton>
+                    {(messengerCreation.type && socketRef) &&
+                        <Messenger
+                            messengerCreation={messengerCreation}
+                            setMessengerCreation={setMessengerCreation}
+                            socketRef={socketRef}
+                        />
+                    }
+                    {profile.mounted &&
+                        <Profile
+                            setState={setProfile}
+                            state={profile}
+                            refSidebar={refProfile}
+                        />
+                    }
                 </SidebarContainer>
             </CSSTransition>
         </>

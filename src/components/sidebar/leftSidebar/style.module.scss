@@ -1,5 +1,5 @@
 @use '../../../styles/base/_variables.css' as v;
-@import url("../../../styles/base/_normalize.scss");
+@use '../../../styles/base/_normalize.scss';
 
 .TopBar {
   display: flex;
@@ -12,25 +12,5 @@
     color: white;
     font-size: 20px;
     padding-left: 24px;
-  }
-}
-
-.CreateButton {
-  position: absolute;
-  bottom: 20px;
-  right: 20px;
-
-  > button {
-    > svg {
-      width: 26px;
-      height: 26px;
-    }
-
-    ul {
-      top: unset;
-      bottom: calc(100% + 8px);
-      right: 0;
-      transform-origin: bottom right;
-    }
   }
 }

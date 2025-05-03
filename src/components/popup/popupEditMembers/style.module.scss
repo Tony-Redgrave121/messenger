@@ -1,5 +1,5 @@
 @use '../../../styles/base/_variables.css' as v;
-@import url("../../../styles/base/_normalize.scss");
+@use '../../../styles/base/_normalize.scss';
 
 .ToolsBlock {
   &, span, svg {
@@ -14,15 +14,8 @@
   }
 }
 
-.CreateButton {
-  position: absolute;
-  bottom: 20px;
-  right: 20px;
-
-  > button {
-    > svg {
-      width: 24px;
-      height: 24px;
-    }
-  }
+.SearchBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
 }

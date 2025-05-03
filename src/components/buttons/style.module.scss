@@ -1,5 +1,5 @@
 @use '../../styles/base/_variables.css' as v;
-@import url("../../styles/base/_normalize.scss");
+@use '../../styles/base/_normalize.scss';
 
 .DefaultButton {
   position: relative;
@@ -249,5 +249,24 @@
 
   &:hover {
     background-color: #322525;
+  }
+}
+
+.CreateButton {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  display: flex;
+
+  > button > svg {
+    width: 24px;
+    height: 24px;
+  }
+
+  ul {
+    top: unset;
+    bottom: calc(100% + 8px);
+    right: 0;
+    transform-origin: bottom right;
   }
 }
