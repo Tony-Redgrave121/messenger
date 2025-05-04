@@ -38,6 +38,8 @@ const InitialValues: IEditMessengerForm = {
 
 const InitialSettings: IMessengerSettings = {
     messenger_setting_type: 'private',
+    messenger_setting_id: '',
+    messenger_type: '',
     reactions: [],
     reactions_count: 0,
     removed_users: [],
@@ -59,14 +61,14 @@ const EditMessenger: FC<IEditMessengerProps> = ({setState, refSidebar}) => {
         messenger_desc: ''
     })
 
-    type FormKeys = 'reactions' | 'channelType' | 'moderators' | 'subscribers' | 'removedUsers';
+    type FormKeys = 'reactions' | 'channelType' | 'moderators' | 'subscribers' | 'removedUsers'
 
     const initialToggleState: IToggleState<FormKeys> = {
         reactions: { state: false, mounted: false },
         channelType: { state: false, mounted: false },
         moderators: { state: false, mounted: false },
         subscribers: { state: false, mounted: false },
-        removedUsers: { state: false, mounted: false },
+        removedUsers: { state: false, mounted: false }
     }
 
     const [formsState, setFormsState] = useState(initialToggleState)
@@ -262,7 +264,7 @@ const EditMessenger: FC<IEditMessengerProps> = ({setState, refSidebar}) => {
                             <HiOutlineUsers/>
                         </Buttons.SettingButton>
                         <Buttons.SettingButton
-                            foo={() => openForm('removed', setFormsState)}
+                            foo={() => openForm('removedUsers', setFormsState)}
                             text={'Removed users'}
                             desc={settings.removed_users.length ? settings.removed_users.length : 'No removed users'}>
                             <HiOutlineUserMinus/>
@@ -285,6 +287,7 @@ const EditMessenger: FC<IEditMessengerProps> = ({setState, refSidebar}) => {
                         setState={setFormsState}
                         refSidebar={refEditReactions}
                         channelReactions={settings.reactions}
+                        messengerSettingsId={settings.messenger_setting_id}
                     />
                 }
                 {formsState.channelType.mounted &&
@@ -292,7 +295,8 @@ const EditMessenger: FC<IEditMessengerProps> = ({setState, refSidebar}) => {
                         state={formsState.channelType}
                         setState={setFormsState}
                         refSidebar={refEditChannelType}
-                        channelType={settings.messenger_setting_type}
+                        messengerType={settings.messenger_setting_type}
+                        messengerUrlType={settings.messenger_type}
                     />
                 }
                 {formsState.moderators.mounted &&
@@ -304,6 +308,7 @@ const EditMessenger: FC<IEditMessengerProps> = ({setState, refSidebar}) => {
                         members={settings.members.flatMap(member => member.user)}
                         dropList={ModeratorDropDown}
                         title='Moderators'
+                        keyName='moderators'
                     />
                 }
                 {formsState.subscribers.mounted &&
@@ -315,15 +320,16 @@ const EditMessenger: FC<IEditMessengerProps> = ({setState, refSidebar}) => {
                         dropList={MemberDropDown}
                     />
                 }
-                {formsState.removed.mounted &&
+                {formsState.removedUsers.mounted &&
                     <EditMembers
-                        state={formsState.removed}
+                        state={formsState.removedUsers}
                         setState={setFormsState}
                         refSidebar={refEditRemoved}
                         moderators={settings.removed_users.flatMap(member => member.user)}
                         members={settings.members.flatMap(member => member.user)}
                         dropList={RemovedDropDown}
                         title='Removed Users'
+                        keyName='removedUsers'
                     />
                 }
             </SidebarContainer>

@@ -5,6 +5,7 @@ import filesUploadingService from "./filesUploadingService";
 import {UploadedFile} from "express-fileupload";
 import * as fs from "fs";
 import IReaction from "../types/IReaction";
+import path from "path";
 
 interface IUserFiles {
     messenger_image?: UploadedFile
@@ -34,7 +35,6 @@ class MessengerService {
 
         return contacts.map(contact => contact.user)
     }
-
     async postMessenger(user_id: string, messenger_name: string, messenger_desc: string, messenger_type: string, messenger_members?: string[], messenger_files?: IUserFiles | null) {
         const messenger_id = uuid.v4()
         let messenger_image = null
@@ -84,7 +84,6 @@ class MessengerService {
             messages: []
         }
     }
-
     async fetchMessengerSettings(messenger_id: string) {
         const messengerSettings = await models.messenger_settings.findAll({
             include: [{
@@ -96,7 +95,7 @@ class MessengerService {
                 required: false
             }],
             where: {messenger_id: messenger_id},
-            attributes: ['messenger_setting_type']
+            attributes: ['messenger_setting_type', 'messenger_setting_id']
         })
 
         const reactions_count = await models.reactions.count()
@@ -135,17 +134,20 @@ class MessengerService {
                 }
             ],
             where: {messenger_id: messenger_id},
-            attributes: ['messenger_name', 'messenger_desc', 'messenger_image'],
+            attributes: ['messenger_name', 'messenger_desc', 'messenger_image', 'messenger_type'],
         })
-
-        if (!messengerSettings || !messengerData) return ApiError.internalServerError("No messenger settings found")
 
         const setting = messengerSettings[0]?.dataValues
         const data = messengerData[0]?.dataValues
+
+        if (!setting || !data) return ApiError.internalServerError("No messenger settings found")
+
         const messenger_image = data?.messenger_image ? fs.readFileSync(__dirname + `/../src/static/messengers/${messenger_id}/${data.messenger_image}`) : null
 
         return {
             messenger_setting_type: setting?.messenger_setting_type || 'private',
+            messenger_setting_id: setting?.messenger_setting_id || '',
+            messenger_type: data?.messenger_type || '',
             messenger_image: messenger_image ? messenger_image.toString('base64') : null,
             messenger_name: data.messenger_name,
             messenger_desc: data.messenger_desc,
@@ -159,12 +161,68 @@ class MessengerService {
             moderators: data?.moderators ?? []
         }
     }
-
     async fetchReactions() {
         const reactions = await models.reactions.findAll()
         if (!reactions) return ApiError.internalServerError("No reactions found")
 
         return reactions
+    }
+    async updateMessengerType(messenger_id: string, messenger_type: string) {
+        const updateRes = await models.messenger_settings.update(
+            {messenger_setting_type: messenger_type},
+            {where: {messenger_id: messenger_id}}
+        )
+        if (!updateRes) return ApiError.internalServerError("No messenger settings found")
+
+        return updateRes
+    }
+    async updateMessengerLink(messenger_id: string) {
+        const messengerLink = uuid.v4()
+
+        const updateRes = await models.messenger.update(
+            {messenger_id: messengerLink},
+            {where: {messenger_id: messenger_id}}
+        )
+        if (!updateRes) return ApiError.internalServerError("No messenger found")
+
+        const messengerPath = path.resolve(__dirname + "/../src/static/messengers", messenger_id)
+        const newMessengerPath = path.resolve(__dirname + "/../src/static/messengers", messengerLink)
+
+        fs.rename(messengerPath, newMessengerPath, () => {
+            return ApiError.internalServerError("Error when changing the path to the messenger")
+        })
+
+        return {
+            messenger_id: messengerLink
+        }
+    }
+    async updateMessengerReactions(messenger_setting_id: string, newReactions: string[]) {
+        const reactions = await models.messenger_reactions.findAll({
+            where: {messenger_setting_id: messenger_setting_id},
+            attributes: ['reaction_id'],
+            raw: true,
+            nest: true
+        }) as unknown as { reaction_id: string }[]
+
+        const oldReactions = reactions.flatMap(react => react.reaction_id)
+
+        const toPost = newReactions.filter(reaction => !oldReactions.includes(reaction))
+        const toDelete = oldReactions.filter(reaction => !newReactions.includes(reaction))
+
+        const createPromise = toPost.map(reaction_id => models.messenger_reactions.create({
+            messenger_reaction_id: uuid.v4(),
+            messenger_setting_id,
+            reaction_id,
+        }))
+
+        const deletePromise = toDelete.map(reaction_id => models.messenger_reactions.destroy({
+            where: {
+                reaction_id: reaction_id,
+                messenger_setting_id: messenger_setting_id
+            }
+        }))
+
+        await Promise.all([...createPromise, ...deletePromise])
     }
 }
 

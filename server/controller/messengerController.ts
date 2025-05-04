@@ -31,19 +31,17 @@ class MessengerController {
     }
     async getMessengerSettings(req: Request, res: Response): Promise<any> {
         try {
+            const {messenger_id} = req.params
 
+            if (!messenger_id)
+                return res.json(ApiError.internalServerError('An error occurred while fetching the messenger settings'))
+
+            const messengerSettings = await MessengerService.fetchMessengerSettings(messenger_id)
+
+            return res.json(messengerSettings)
         } catch (e) {
             return res.json(ApiError.internalServerError("An error occurred while fetching the messenger settings"))
         }
-
-        const {messenger_id} = req.params
-
-        if (!messenger_id)
-            return res.json(ApiError.internalServerError('An error occurred while fetching the messenger settings'))
-
-        const messengerSettings = await MessengerService.fetchMessengerSettings(messenger_id)
-
-        return res.json(messengerSettings)
     }
     async getReactions(req: Request, res: Response): Promise<any> {
         try {
@@ -52,6 +50,48 @@ class MessengerController {
             return res.json(reactions)
         } catch (e) {
             return res.json(ApiError.internalServerError("An error occurred while fetching a reactions"))
+        }
+    }
+    async putMessengerType(req: Request, res: Response): Promise<any> {
+        try {
+            const {messenger_id} = req.params
+            const messenger_type = req.body.messenger_type
+
+            if (!messenger_id || !messenger_type)
+                return res.json(ApiError.internalServerError('An error occurred while updating the messenger type'))
+
+            const updateRes = await MessengerService.updateMessengerType(messenger_id, messenger_type)
+
+            return res.json(updateRes)
+        } catch (e) {
+            return res.json(ApiError.internalServerError("An error occurred while updating the messenger type"))
+        }
+    }
+    async putMessengerLink(req: Request, res: Response): Promise<any> {
+        try {
+            const {messenger_id} = req.params
+
+            if (!messenger_id)
+                return res.json(ApiError.internalServerError('An error occurred while updating the messenger link'))
+
+            const updateRes = await MessengerService.updateMessengerLink(messenger_id)
+
+            return res.json(updateRes)
+        } catch (e) {
+            return res.json(ApiError.internalServerError("An error occurred while updating the messenger link"))
+        }
+    }
+    async putMessengerReactions(req: Request, res: Response): Promise<any> {
+        try {
+            const {messenger_setting_id} = req.params
+            const reactions = req.body.reactions
+
+            if (!messenger_setting_id)
+                return res.json(ApiError.internalServerError('An error occurred while updating the messenger type'))
+
+            await MessengerService.updateMessengerReactions(messenger_setting_id, reactions)
+        } catch (e) {
+            return res.json(ApiError.internalServerError("An error occurred while updating the messenger type"))
         }
     }
 }

@@ -1,4 +1,4 @@
-import {IMember} from "./index";
+import {IMember} from "@appTypes";
 
 export default interface IMessengerResponse {
     messenger_id: string,

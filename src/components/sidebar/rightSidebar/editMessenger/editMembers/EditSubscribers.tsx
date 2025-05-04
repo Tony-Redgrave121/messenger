@@ -2,7 +2,7 @@ import React, {Dispatch, FC, RefObject, SetStateAction, useRef, useState} from '
 import {SidebarContainer, TopBar} from "@components/sidebar"
 import {CSSTransition} from "react-transition-group"
 import useAnimation from "@hooks/useAnimation"
-import {IAnimationState, IContact, IDropDownList} from "@appTypes"
+import {IAnimationState, IContact, IDropDownList, IToggleState, SettingsKeys} from "@appTypes"
 import style from "./shared.module.css"
 import {Buttons} from "@components/buttons"
 import {
@@ -16,10 +16,12 @@ import {PopupContainer} from "@components/popup";
 import NoResult from "@components/noResult/NoResult";
 import MembersList from "@components/sidebar/rightSidebar/editMessenger/editMembers/membersList/MembersList";
 import PopupEditSubscribers from "@components/popup/popupEditMembers/PopupEditSubscribers";
+import useSettingsAnimation from "@hooks/useSettingsAnimation";
+import closeForm from "@utils/logic/closeForm";
 
 interface IEditSubscribersProps {
     state: IAnimationState,
-    setState: Dispatch<SetStateAction<IAnimationState>>,
+    setState: Dispatch<SetStateAction<IToggleState<SettingsKeys>>>,
     refSidebar: RefObject<HTMLDivElement | null>,
     members: IContact[],
     dropList: IDropDownList[]
@@ -28,7 +30,7 @@ interface IEditSubscribersProps {
 const EditSubscribers: FC<IEditSubscribersProps> = ({setState, refSidebar, state, members, dropList}) => {
     const [animation, setAnimation] = useState(false)
     const [newSubscribers, setNewSubscribers] = useState<IContact[]>([])
-    useAnimation(state.state, setAnimation, setState)
+    useSettingsAnimation(state.state, setAnimation, setState, 'subscribers')
 
     const [popup, setPopup] = useState(false)
 
@@ -53,12 +55,7 @@ const EditSubscribers: FC<IEditSubscribersProps> = ({setState, refSidebar, state
             <SidebarContainer styles={['RightSidebarContainer', 'RightSidebarContainerEdit']} ref={refSidebar}>
                 <TopBar>
                     <span>
-                        <Buttons.DefaultButton foo={() => {
-                            setState(prev => ({
-                                ...prev,
-                                state: false
-                            }))
-                        }}>
+                        <Buttons.DefaultButton foo={() => closeForm('subscribers', setState)}>
                             <HiOutlineArrowLeft/>
                         </Buttons.DefaultButton>
                         <p>Add Subscribers</p>

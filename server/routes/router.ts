@@ -13,7 +13,10 @@ import {
     REGISTRATION_ROUTE,
     GET_CONTACTS,
     GET_MESSENGER_SETTINGS,
-    GET_REACTIONS
+    GET_REACTIONS,
+    PUT_MESSENGER_TYPE,
+    PUT_MESSENGER_LINK,
+    POST_MESSENGER_REACTIONS
 } from "../utils/const"
 import express from "express"
 import UserController from "../controller/userController"
@@ -42,5 +45,8 @@ router.post(FETCH_MESSENGER, MessengerController.postMessenger)
 
 router.get(GET_MESSENGER_SETTINGS, MessengerController.getMessengerSettings)
 router.get(GET_REACTIONS, MessengerController.getReactions)
+router.put(PUT_MESSENGER_TYPE, MessengerController.putMessengerType)
+router.put(PUT_MESSENGER_LINK, MessengerController.putMessengerLink)
+router.post(POST_MESSENGER_REACTIONS, MessengerController.putMessengerReactions)
 
 export default router
