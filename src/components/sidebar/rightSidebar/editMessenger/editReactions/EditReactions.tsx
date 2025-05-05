@@ -1,7 +1,7 @@
 import React, {Dispatch, FC, RefObject, SetStateAction, useCallback, useEffect, useRef, useState} from 'react'
 import {SidebarContainer, TopBar} from "@components/sidebar";
 import {CSSTransition} from "react-transition-group";
-import {IAnimationState, IReaction, IToggleState, SettingsKeys} from "@appTypes";
+import {IAnimationState, IMessengerSettings, IReaction, IToggleState, SettingsKeys} from "@appTypes";
 import style from "./style.module.css";
 import Caption from "@components/caption/Caption";
 import {Buttons} from "@components/buttons";
@@ -16,7 +16,8 @@ interface IEditReactionsProps {
     setState: Dispatch<SetStateAction<IToggleState<SettingsKeys>>>,
     refSidebar: RefObject<HTMLDivElement | null>,
     channelReactions: IReaction[],
-    messengerSettingsId: string
+    messengerSettingsId: string,
+    setSettings: Dispatch<SetStateAction<IMessengerSettings>>
 }
 
 const EditReactions: FC<IEditReactionsProps> = (
@@ -25,7 +26,8 @@ const EditReactions: FC<IEditReactionsProps> = (
         refSidebar,
         state,
         channelReactions,
-        messengerSettingsId
+        messengerSettingsId,
+        setSettings
     }
 ) => {
     const [animation, setAnimation] = useState(false)
@@ -38,7 +40,7 @@ const EditReactions: FC<IEditReactionsProps> = (
 
     useEffect(() => {
         setNewReactions(channelReactions.flatMap(el => el.reaction_id))
-    }, [channelReactions])
+    }, [])
 
     useEffect(() => {
         const fetchReactions = async () => {
@@ -55,14 +57,19 @@ const EditReactions: FC<IEditReactionsProps> = (
         if (!messengerSettingsId) return
 
         try {
-            await MessengerService.postMessengerReactions(messengerSettingsId, reactions)
+            const updatedReactions = await MessengerService.postMessengerReactions(messengerSettingsId, reactions)
+
+            setSettings(prev => ({
+                ...prev,
+                reactions: updatedReactions.data,
+            }))
         } catch (error) {
             console.error(error)
         }
-    }, 3000), [messengerSettingsId])
+    }, 1500), [messengerSettingsId])
 
     useEffect(() => {
-        debounceHandleReactions(newReactions)
+        animation && debounceHandleReactions(newReactions)
     }, [debounceHandleReactions, newReactions])
 
     return (

@@ -3,7 +3,6 @@ import {Buttons} from "@components/buttons";
 import {Contact} from "../";
 import {IContact} from "@appTypes";
 import style from "./style.module.css";
-import {HiMagnifyingGlass} from "react-icons/hi2";
 import {LoadFile} from "@components/loadFile";
 import useSearch from "@hooks/useSearch";
 import NoResult from "@components/noResult/NoResult";
@@ -12,9 +11,10 @@ interface ICheckboxContactProps {
     members: IContact[],
     contacts: IContact[],
     setMembers: Dispatch<SetStateAction<IContact[]>>
+    onClick: () => void
 }
 
-const AddContacts: FC<ICheckboxContactProps> = ({members, contacts, setMembers}) => {
+const AddContacts: FC<ICheckboxContactProps> = ({members, contacts, setMembers, onClick}) => {
     const {filteredArr, handleInput, filter} = useSearch(contacts, 'user_name')
 
     const handleCheck = (contact: IContact, members: IContact[]) => {
@@ -42,7 +42,7 @@ const AddContacts: FC<ICheckboxContactProps> = ({members, contacts, setMembers})
             {filteredArr.length > 0 ?
                 filteredArr.map((contact) =>
                     <Buttons.Checkbox key={contact.user_id} foo={() => handleAddMember(contact)} state={handleCheck(contact, members)}>
-                        <Contact contact={contact}/>
+                        <Contact contact={contact} onClick={() => onClick()}/>
                     </Buttons.Checkbox>
                 ) : <NoResult filter={filter}/>
             }

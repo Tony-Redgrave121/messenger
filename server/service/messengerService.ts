@@ -68,7 +68,7 @@ class MessengerService {
             for (const user_id of messenger_members) {
                 await models.members.create({
                     member_id: uuid.v4(),
-                    member_status: "user",
+                    member_status: "member",
                     user_id: user_id,
                     messenger_id
                 })
@@ -196,7 +196,7 @@ class MessengerService {
             messenger_id: messengerLink
         }
     }
-    async updateMessengerReactions(messenger_setting_id: string, newReactions: string[]) {
+    async postMessengerReactions(messenger_setting_id: string, newReactions: string[]) {
         const reactions = await models.messenger_reactions.findAll({
             where: {messenger_setting_id: messenger_setting_id},
             attributes: ['reaction_id'],
@@ -223,6 +223,24 @@ class MessengerService {
         }))
 
         await Promise.all([...createPromise, ...deletePromise])
+
+        return await models.messenger_reactions.findAll({where: {messenger_setting_id: messenger_setting_id}})
+    }
+    async updateMessengerModerators(member_status: string, user_id: string, messenger_id: string) {
+
+        await models.members.update(
+            {member_status: member_status},
+            {where: {messenger_id: messenger_id, user_id: user_id}}
+        )
+
+        return await models.members.findOne({
+            include: [{
+                model: models.users,
+                attributes: ['user_id', 'user_name', 'user_img', 'user_last_seen'],
+            }],
+            where: {messenger_id: messenger_id, user_id: user_id},
+            attributes: ['member_id', 'member_date', 'member_status'],
+        })
     }
 }
 

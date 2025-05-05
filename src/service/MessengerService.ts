@@ -5,7 +5,8 @@ import {
     GET_REACTIONS,
     PUT_MESSENGER_TYPE,
     PUT_MESSENGER_LINK,
-    POST_MESSENGER_REACTIONS
+    POST_MESSENGER_REACTIONS,
+    PUT_MESSENGER_MODERATORS
 } from "@utils/const/const"
 import $api from '@utils/http/index'
 import {AxiosResponse} from 'axios'
@@ -33,5 +34,8 @@ export default class MessengerService {
     }
     static async postMessengerReactions(messenger_setting_id: string, reactions: string[]): Promise<AxiosResponse> {
         return $api.post(`${POST_MESSENGER_REACTIONS}/${messenger_setting_id}`, {reactions: reactions})
+    }
+    static async putMessengerModerator(member_status: string, user_id: string, messenger_id: string): Promise<AxiosResponse> {
+        return $api.put(`${PUT_MESSENGER_MODERATORS}/${messenger_id}`, {member_status: member_status, user_id: user_id})
     }
 }

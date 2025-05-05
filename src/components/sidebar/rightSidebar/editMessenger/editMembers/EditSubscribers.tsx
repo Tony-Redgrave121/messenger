@@ -24,7 +24,7 @@ interface IEditSubscribersProps {
     setState: Dispatch<SetStateAction<IToggleState<SettingsKeys>>>,
     refSidebar: RefObject<HTMLDivElement | null>,
     members: IContact[],
-    dropList: IDropDownList[]
+    dropList: (user_id: string) => IDropDownList[]
 }
 
 const EditSubscribers: FC<IEditSubscribersProps> = ({setState, refSidebar, state, members, dropList}) => {

@@ -81,7 +81,7 @@ class MessengerController {
             return res.json(ApiError.internalServerError("An error occurred while updating the messenger link"))
         }
     }
-    async putMessengerReactions(req: Request, res: Response): Promise<any> {
+    async postMessengerReactions(req: Request, res: Response): Promise<any> {
         try {
             const {messenger_setting_id} = req.params
             const reactions = req.body.reactions
@@ -89,10 +89,28 @@ class MessengerController {
             if (!messenger_setting_id)
                 return res.json(ApiError.internalServerError('An error occurred while updating the messenger type'))
 
-            await MessengerService.updateMessengerReactions(messenger_setting_id, reactions)
+            const newReactions =await MessengerService.postMessengerReactions(messenger_setting_id, reactions)
+
+            return res.json(newReactions)
         } catch (e) {
             return res.json(ApiError.internalServerError("An error occurred while updating the messenger type"))
         }
+    }
+    async putMessengerModerators(req: Request, res: Response): Promise<any> {
+        try {
+
+        } catch (e) {
+            return res.json(ApiError.internalServerError("An error occurred while updating a messenger moderators"))
+        }
+        const {messenger_id} = req.params
+        const {member_status, user_id} = req.body
+
+        if (!messenger_id || !member_status || !user_id)
+            return res.json(ApiError.internalServerError('An error occurred while updating a messenger moderators'))
+
+        const moderators = await MessengerService.updateMessengerModerators(member_status, user_id, messenger_id)
+
+        return res.json(moderators)
     }
 }
 

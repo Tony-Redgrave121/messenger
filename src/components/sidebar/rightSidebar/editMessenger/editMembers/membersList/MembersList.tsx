@@ -7,7 +7,7 @@ import {IContact, IDropDownList} from "@appTypes"
 interface ContactListProps {
     members: IContact[],
     text?: string,
-    dropList: IDropDownList[]
+    dropList: (user_id: string) => IDropDownList[]
 }
 
 const MembersList: FC<ContactListProps> = ({members, text, dropList}) => {
@@ -16,7 +16,7 @@ const MembersList: FC<ContactListProps> = ({members, text, dropList}) => {
             {text && <p>{text}</p>}
             {members.map(member =>
                 <Buttons.ContactButton key={member.user_id}>
-                    <Member contact={member} dropList={dropList}/>
+                    <Member contact={member} dropList={dropList(member.user_id)}/>
                 </Buttons.ContactButton>
             )}
         </section>

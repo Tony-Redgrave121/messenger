@@ -172,14 +172,14 @@ const Messenger: FC<IMessengerProps> = ({messengerCreation, setMessengerCreation
                             </InputForm>
                         }
                         {(members && contacts.length > 0) &&
-                            <AddContacts members={members} contacts={contacts} setMembers={setMembers}/>
+                            <AddContacts members={members} contacts={contacts} setMembers={setMembers} onClick={() => {}}/>
                         }
                         {errorForm && <small>{errorForm}</small>}
                     </form>
                     :
                     <>
                         <SearchBlock foo={handleInput} ref={searchRef}/>
-                        <ContactList contacts={filteredArr} text='Contacts'/>
+                        <ContactList contacts={filteredArr} text='Contacts' onClick={() => {}}/>
                     </>
                 }
                 {messengerCreation.type === "channel" &&

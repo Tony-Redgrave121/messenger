@@ -56,7 +56,7 @@ const LeftSidebar = () => {
                     </div>
                     <ChatList/>
                     <Caption/>
-                    <ContactList contacts={contacts} text='Contacts'/>
+                    <ContactList contacts={contacts} text='Contacts' onClick={() => {}}/>
                     <Buttons.CreateButton state={true} foo={() => setMessenger(!messenger)}>
                         <HiOutlinePencil/>
                         <DropDown list={messengersList} state={messenger} setState={setMessenger}/>

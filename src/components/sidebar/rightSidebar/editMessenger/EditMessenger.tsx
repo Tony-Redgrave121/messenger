@@ -5,9 +5,13 @@ import useAnimation from "@hooks/useAnimation";
 import {IAnimationState, IEditMessengerForm, IMessengerSettings, IToggleState} from "@appTypes";
 import {Buttons} from "@components/buttons";
 import {
-    HiOutlineArrowLeft, HiOutlineChatBubbleLeft, HiOutlineHeart, HiOutlineLockClosed,
-    HiOutlineShieldCheck, HiOutlineShieldExclamation, HiOutlineTrash,
-    HiOutlineUserMinus, HiOutlineUserPlus,
+    HiOutlineArrowLeft,
+    HiOutlineChatBubbleLeft,
+    HiOutlineHeart,
+    HiOutlineLockClosed,
+    HiOutlineShieldCheck,
+    HiOutlineTrash,
+    HiOutlineUserMinus,
     HiOutlineUsers
 } from "react-icons/hi2";
 import {useForm} from "react-hook-form";
@@ -19,9 +23,10 @@ import messengerService from "../../../../service/MessengerService";
 import {useParams} from "react-router-dom";
 import EditReactions from "@components/sidebar/rightSidebar/editMessenger/editReactions/EditReactions";
 import EditType from "@components/sidebar/rightSidebar/editMessenger/editType/EditType";
-import EditMembers from "@components/sidebar/rightSidebar/editMessenger/editMembers/EditMembers";
+import EditModerators from "@components/sidebar/rightSidebar/editMessenger/editMembers/EditModerators";
 import EditSubscribers from "@components/sidebar/rightSidebar/editMessenger/editMembers/EditSubscribers";
 import openForm from "@utils/logic/openForm";
+import EditRemoved from "@components/sidebar/rightSidebar/editMessenger/editMembers/EditRemoved";
 
 interface IEditMessengerProps {
     setState: Dispatch<SetStateAction<IAnimationState>>,
@@ -55,7 +60,7 @@ const EditMessenger: FC<IEditMessengerProps> = ({setState, refSidebar}) => {
     const [isLoaded, setIsLoaded] = useState(false)
     const refForm = useRef<HTMLDivElement>(null)
     const [picture, setPicture] = useState<File | null>(null)
-    const [settings, setSettings] = useState(InitialSettings)
+    const [settings, setSettings] = useState<IMessengerSettings>(InitialSettings)
     const [newSettings, setNewSettings] = useState({
         messenger_name: '',
         messenger_desc: ''
@@ -126,7 +131,7 @@ const EditMessenger: FC<IEditMessengerProps> = ({setState, refSidebar}) => {
         getSettings().catch(e => console.log(e))
     }, [id, setValue])
 
-    const ModeratorDropDown = [
+    const MemberDropDown = (user_id: string) => [
         {
             liChildren: <HiOutlineChatBubbleLeft/>,
             liText: 'Send Message',
@@ -136,48 +141,6 @@ const EditMessenger: FC<IEditMessengerProps> = ({setState, refSidebar}) => {
         {
             liChildren: <HiOutlineTrash/>,
             liText: 'Remove from group',
-            liFoo: () => {
-            }
-        },
-        {
-            liChildren: <HiOutlineShieldExclamation/>,
-            liText: 'Dismiss Moderator',
-            liFoo: () => {
-            }
-        }
-    ]
-
-    const MemberDropDown = [
-        {
-            liChildren: <HiOutlineChatBubbleLeft/>,
-            liText: 'Send Message',
-            liFoo: () => {
-            }
-        },
-        {
-            liChildren: <HiOutlineTrash/>,
-            liText: 'Remove from group',
-            liFoo: () => {
-            }
-        }
-    ]
-
-    const RemovedDropDown = [
-        {
-            liChildren: <HiOutlineChatBubbleLeft/>,
-            liText: 'Send Message',
-            liFoo: () => {
-            }
-        },
-        {
-            liChildren: <HiOutlineUserPlus/>,
-            liText: 'Add to Group',
-            liFoo: () => {
-            }
-        },
-        {
-            liChildren: <HiOutlineTrash/>,
-            liText: 'Delete',
             liFoo: () => {
             }
         }
@@ -288,6 +251,7 @@ const EditMessenger: FC<IEditMessengerProps> = ({setState, refSidebar}) => {
                         refSidebar={refEditReactions}
                         channelReactions={settings.reactions}
                         messengerSettingsId={settings.messenger_setting_id}
+                        setSettings={setSettings}
                     />
                 }
                 {formsState.channelType.mounted &&
@@ -300,15 +264,13 @@ const EditMessenger: FC<IEditMessengerProps> = ({setState, refSidebar}) => {
                     />
                 }
                 {formsState.moderators.mounted &&
-                    <EditMembers
+                    <EditModerators
                         state={formsState.moderators}
                         setState={setFormsState}
                         refSidebar={refEditModerators}
                         moderators={settings.moderators.flatMap(member => member.user)}
                         members={settings.members.flatMap(member => member.user)}
-                        dropList={ModeratorDropDown}
-                        title='Moderators'
-                        keyName='moderators'
+                        setSettings={setSettings}
                     />
                 }
                 {formsState.subscribers.mounted &&
@@ -321,15 +283,12 @@ const EditMessenger: FC<IEditMessengerProps> = ({setState, refSidebar}) => {
                     />
                 }
                 {formsState.removedUsers.mounted &&
-                    <EditMembers
+                    <EditRemoved
                         state={formsState.removedUsers}
                         setState={setFormsState}
                         refSidebar={refEditRemoved}
-                        moderators={settings.removed_users.flatMap(member => member.user)}
+                        removed={settings.removed_users.flatMap(member => member.user)}
                         members={settings.members.flatMap(member => member.user)}
-                        dropList={RemovedDropDown}
-                        title='Removed Users'
-                        keyName='removedUsers'
                     />
                 }
             </SidebarContainer>

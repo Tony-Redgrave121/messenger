@@ -1,11 +1,11 @@
 import React, {Dispatch, FC, RefObject, SetStateAction, useEffect, useRef, useState} from 'react'
 import {SidebarContainer, TopBar} from "@components/sidebar"
 import {CSSTransition} from "react-transition-group"
-import {IAnimationState, IContact, IDropDownList, IToggleState, SettingsKeys} from "@appTypes"
+import {IAnimationState, IContact, IToggleState, SettingsKeys} from "@appTypes"
 import style from "./shared.module.css"
 import {Buttons} from "@components/buttons"
 import {
-    HiOutlineArrowLeft,
+    HiOutlineArrowLeft, HiOutlineChatBubbleLeft, HiOutlineTrash,
     HiOutlineUserPlus
 } from "react-icons/hi2"
 import Caption from "@components/caption/Caption";
@@ -23,10 +23,7 @@ interface IEditMemberProps {
     setState: Dispatch<SetStateAction<IToggleState<SettingsKeys>>>,
     refSidebar: RefObject<HTMLDivElement | null>,
     members: IContact[],
-    moderators: IContact[],
-    dropList: IDropDownList[],
-    title: string,
-    keyName: string
+    removed: IContact[]
 }
 
 const EditMembers: FC<IEditMemberProps> = (
@@ -35,31 +32,48 @@ const EditMembers: FC<IEditMemberProps> = (
         refSidebar,
         state,
         members,
-        moderators,
-        dropList,
-        title,
-        keyName
+        removed
     }
 ) => {
     const [animation, setAnimation] = useState(false)
     const [newMembers, setNewMembers] = useState<IContact[]>([])
-    useSettingsAnimation(state.state, setAnimation, setState, keyName)
+    useSettingsAnimation(state.state, setAnimation, setState, 'removedUsers')
 
     const [popup, setPopup] = useState(false)
 
     const refForm = useRef<HTMLDivElement>(null)
     const searchRef = useRef<HTMLDivElement>(null)
-    const {filteredArr, handleInput, filter} = useSearch(moderators, 'user_id')
+    const {filteredArr, handleInput, filter} = useSearch(removed, 'user_id')
 
     useEffect(() => {
-        setNewMembers(moderators)
-    }, [moderators])
+        setNewMembers(removed)
+    }, [removed])
 
     const handleCancel = () => {
         setPopup(false)
-
         setTimeout(() => setPopup(false), 300)
     }
+
+    const RemovedDropDown = (user_id: string) => [
+        {
+            liChildren: <HiOutlineChatBubbleLeft/>,
+            liText: 'Send Message',
+            liFoo: () => {
+            }
+        },
+        {
+            liChildren: <HiOutlineUserPlus/>,
+            liText: 'Add to Group',
+            liFoo: () => {
+            }
+        },
+        {
+            liChildren: <HiOutlineTrash/>,
+            liText: 'Delete',
+            liFoo: () => {
+            }
+        }
+    ]
 
     return (
         <CSSTransition
@@ -72,10 +86,10 @@ const EditMembers: FC<IEditMemberProps> = (
             <SidebarContainer styles={['RightSidebarContainer', 'RightSidebarContainerEdit']} ref={refSidebar}>
                 <TopBar>
                     <span>
-                        <Buttons.DefaultButton foo={() => closeForm(keyName, setState)}>
+                        <Buttons.DefaultButton foo={() => closeForm('removedUsers', setState)}>
                             <HiOutlineArrowLeft/>
                         </Buttons.DefaultButton>
-                        <p>{title}</p>
+                        <p>Removed Users</p>
                     </span>
                 </TopBar>
                 <div className={style.FormContainer} ref={refForm}>
@@ -90,7 +104,7 @@ const EditMembers: FC<IEditMemberProps> = (
                         {filteredArr.length > 0 ?
                             <MembersList
                                 members={filteredArr}
-                                dropList={dropList}
+                                dropList={RemovedDropDown}
                             /> : <NoResult filter={filter}/>
                         }
                     </div>
@@ -101,7 +115,8 @@ const EditMembers: FC<IEditMemberProps> = (
                             members={members}
                             moderators={newMembers}
                             setMembers={setNewMembers}
-                            title={title}
+                            title='Removed Users'
+                            onClick={() => {}}
                         />
                     </PopupContainer>
                 </div>

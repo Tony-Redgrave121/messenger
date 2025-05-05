@@ -7,15 +7,16 @@ import {IContact} from "@appTypes"
 interface ContactListProps {
     contacts: IContact[],
     text?: string,
+    onClick: (user_id: string) => void
 }
 
-const ContactList: FC<ContactListProps> = ({contacts, text}) => {
+const ContactList: FC<ContactListProps> = ({contacts, text, onClick}) => {
     return (
         <section className={style.ContactListContainer}>
             {text && <p>{text}</p>}
             {contacts.map(contact =>
                 <Buttons.ContactButton key={contact.user_id}>
-                    <Contact contact={contact}/>
+                    <Contact contact={contact} onClick={() => onClick(contact.user_id)}/>
                 </Buttons.ContactButton>
             )}
         </section>

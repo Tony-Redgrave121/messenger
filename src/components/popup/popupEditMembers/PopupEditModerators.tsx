@@ -2,20 +2,21 @@ import React, {Dispatch, FC, SetStateAction, useEffect, useRef, useState} from '
 import style from './style.module.css'
 import {Buttons} from "@components/buttons";
 import {HiOutlineXMark} from "react-icons/hi2";
-import {IContact} from "@appTypes";
+import {IContact, IMessengerSettings} from "@appTypes";
 import {SearchBlock} from "@components/searchBlock";
 import useSearch from "@hooks/useSearch";
 import {ContactList} from "@components/contacts";
 import NoResult from "@components/noResult/NoResult";
 import {useAppSelector} from "@hooks/useRedux";
+import MessengerService from "@service/MessengerService";
+import {useParams} from "react-router-dom";
 
 interface IPopupEditModeratorsProps {
     handleCancel: () => void,
     moderators: IContact[],
     members: IContact[],
     setMembers: Dispatch<SetStateAction<IContact[]>>,
-    title: string,
-    onClick: () => void
+    setSettings: Dispatch<SetStateAction<IMessengerSettings>>
 }
 
 const PopupEditMembers: FC<IPopupEditModeratorsProps> = (
@@ -24,8 +25,7 @@ const PopupEditMembers: FC<IPopupEditModeratorsProps> = (
         moderators,
         members,
         setMembers,
-        title,
-        onClick
+        setSettings
     }
 ) => {
     const [unrated, setUnrated] = useState<IContact[]>([])
@@ -42,6 +42,27 @@ const PopupEditMembers: FC<IPopupEditModeratorsProps> = (
         filter
     } = useSearch(unrated, 'user_name')
 
+    const {id} = useParams()
+
+    const handleAddModerator = async (user_id: string) => {
+        if (!id) return
+
+        try {
+            const newModerators = await MessengerService.putMessengerModerator('moderator', user_id, id)
+
+            if (newModerators.data.message) return
+
+            setSettings(prev => ({
+                ...prev,
+                moderators: [...prev.moderators, newModerators.data],
+            }))
+
+            handleCancel()
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
     return (
         <>
             <div className={style.ToolsBlock}>
@@ -49,13 +70,13 @@ const PopupEditMembers: FC<IPopupEditModeratorsProps> = (
                     <Buttons.DefaultButton foo={handleCancel}>
                         <HiOutlineXMark/>
                     </Buttons.DefaultButton>
-                    <p>{title}</p>
+                    <p>Moderators</p>
                 </span>
             </div>
             <div className={style.SearchBlock}>
                 <SearchBlock ref={searchRef} foo={handleInput}/>
                 {filteredArr.length > 0 ?
-                    <ContactList contacts={filteredArr} onClick={() => {}}/> : <NoResult filter={filter}/>
+                    <ContactList contacts={filteredArr} onClick={handleAddModerator}/> : <NoResult filter={filter}/>
                 }
             </div>
         </>
