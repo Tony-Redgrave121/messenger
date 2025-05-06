@@ -98,19 +98,48 @@ class MessengerController {
     }
     async putMessengerModerators(req: Request, res: Response): Promise<any> {
         try {
+            const {messenger_id} = req.params
+            const {member_status, user_id} = req.body
 
+            if (!messenger_id || !member_status || !user_id)
+                return res.json(ApiError.internalServerError('An error occurred while updating a messenger moderators'))
+
+            const moderators = await MessengerService.updateMessengerModerators(member_status, user_id, messenger_id)
+
+            return res.json(moderators)
         } catch (e) {
             return res.json(ApiError.internalServerError("An error occurred while updating a messenger moderators"))
         }
-        const {messenger_id} = req.params
-        const {member_status, user_id} = req.body
+    }
+    async postMembers(req: Request, res: Response): Promise<any> {
+        try {
+            const {messenger_id} = req.params
+            const members = req.body.members
 
-        if (!messenger_id || !member_status || !user_id)
-            return res.json(ApiError.internalServerError('An error occurred while updating a messenger moderators'))
+            if (!messenger_id || !members)
+                return res.json(ApiError.internalServerError('An error occurred while adding a new members'))
 
-        const moderators = await MessengerService.updateMessengerModerators(member_status, user_id, messenger_id)
+            const newMembers = await MessengerService.addMembers(members, messenger_id)
 
-        return res.json(moderators)
+            return res.json(newMembers)
+        } catch (e) {
+            return res.json(ApiError.internalServerError("An error occurred while adding a new members"))
+        }
+    }
+    async postRemoved(req: Request, res: Response): Promise<any> {
+        try {
+            const {messenger_id} = req.params
+            const user_id = req.body.user_id
+
+            if (!messenger_id || !user_id)
+                return res.json(ApiError.internalServerError('An error occurred while removing a members'))
+
+            const newRemoved = await MessengerService.postRemoved(user_id, messenger_id)
+
+            return res.json(newRemoved)
+        } catch (e) {
+            return res.json(ApiError.internalServerError("An error occurred while removing a members"))
+        }
     }
 }
 

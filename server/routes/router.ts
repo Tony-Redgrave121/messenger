@@ -17,7 +17,7 @@ import {
     PUT_MESSENGER_TYPE,
     PUT_MESSENGER_LINK,
     POST_MESSENGER_REACTIONS,
-    PUT_MESSENGER_MODERATORS
+    PUT_MESSENGER_MODERATORS, POST_MEMBERS, POST_REMOVED
 } from "../utils/const"
 import express from "express"
 import UserController from "../controller/userController"
@@ -50,5 +50,7 @@ router.put(PUT_MESSENGER_TYPE, MessengerController.putMessengerType)
 router.put(PUT_MESSENGER_LINK, MessengerController.putMessengerLink)
 router.post(POST_MESSENGER_REACTIONS, MessengerController.postMessengerReactions)
 router.put(PUT_MESSENGER_MODERATORS, MessengerController.putMessengerModerators)
+router.post(POST_MEMBERS, MessengerController.postMembers)
+router.post(POST_REMOVED, MessengerController.postRemoved)
 
 export default router

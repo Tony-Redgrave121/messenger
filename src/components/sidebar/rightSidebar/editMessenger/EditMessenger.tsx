@@ -280,6 +280,7 @@ const EditMessenger: FC<IEditMessengerProps> = ({setState, refSidebar}) => {
                         refSidebar={refEditSubscribers}
                         members={settings.members.flatMap(member => member.user)}
                         dropList={MemberDropDown}
+                        setSettings={setSettings}
                     />
                 }
                 {formsState.removedUsers.mounted &&
@@ -289,6 +290,7 @@ const EditMessenger: FC<IEditMessengerProps> = ({setState, refSidebar}) => {
                         refSidebar={refEditRemoved}
                         removed={settings.removed_users.flatMap(member => member.user)}
                         members={settings.members.flatMap(member => member.user)}
+                        setSettings={setSettings}
                     />
                 }
             </SidebarContainer>

@@ -1,8 +1,7 @@
 import React, {Dispatch, FC, RefObject, SetStateAction, useRef, useState} from 'react'
 import {SidebarContainer, TopBar} from "@components/sidebar"
 import {CSSTransition} from "react-transition-group"
-import useAnimation from "@hooks/useAnimation"
-import {IAnimationState, IContact, IDropDownList, IToggleState, SettingsKeys} from "@appTypes"
+import {IAnimationState, IContact, IDropDownList, IMessengerSettings, IToggleState, SettingsKeys} from "@appTypes"
 import style from "./shared.module.css"
 import {Buttons} from "@components/buttons"
 import {
@@ -24,10 +23,20 @@ interface IEditSubscribersProps {
     setState: Dispatch<SetStateAction<IToggleState<SettingsKeys>>>,
     refSidebar: RefObject<HTMLDivElement | null>,
     members: IContact[],
-    dropList: (user_id: string) => IDropDownList[]
+    dropList: (user_id: string) => IDropDownList[],
+    setSettings: Dispatch<SetStateAction<IMessengerSettings>>
 }
 
-const EditSubscribers: FC<IEditSubscribersProps> = ({setState, refSidebar, state, members, dropList}) => {
+const EditSubscribers: FC<IEditSubscribersProps> = (
+    {
+        setState,
+        refSidebar,
+        state,
+        members,
+        dropList,
+        setSettings
+    }
+) => {
     const [animation, setAnimation] = useState(false)
     const [newSubscribers, setNewSubscribers] = useState<IContact[]>([])
     useSettingsAnimation(state.state, setAnimation, setState, 'subscribers')
@@ -79,7 +88,7 @@ const EditSubscribers: FC<IEditSubscribersProps> = ({setState, refSidebar, state
                     </div>
                     <Caption/>
                     <PopupContainer state={popup} handleCancel={handleCancel}>
-                        <PopupEditSubscribers handleCancel={handleCancel}/>
+                        <PopupEditSubscribers handleCancel={handleCancel} setSettings={setSettings}/>
                     </PopupContainer>
                 </div>
             </SidebarContainer>

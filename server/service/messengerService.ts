@@ -242,6 +242,60 @@ class MessengerService {
             attributes: ['member_id', 'member_date', 'member_status'],
         })
     }
+    async addMembers(members: string[], messenger_id: string) {
+        const [existingMembers, removedMembers] = await Promise.all([
+            await models.members.findAll({
+                attributes: ['user_id'],
+                where: {
+                    user_id: members,
+                    messenger_id
+                },
+                raw: true
+            }) as unknown as { user_id: string }[],
+            await models.removed_users.findAll({
+                attributes: ['user_id'],
+                where: {
+                    user_id: members,
+                    messenger_id
+                },
+                raw: true
+            }) as unknown as { user_id: string }[]
+        ])
+
+        const existing = new Set(existingMembers.map(m => m.user_id))
+        const removed = new Set(removedMembers.map(m => m.user_id))
+
+        const filtered = members.filter(user_id => !existing.has(user_id) && !removed.has(user_id))
+        if (filtered.length === 0) return []
+
+        await models.members.bulkCreate(filtered.map(user_id => ({
+            member_id: uuid.v4(),
+            member_status: 'member',
+            user_id: user_id,
+            messenger_id: messenger_id
+        })))
+
+        const getPromise = filtered.map(user_id => models.members.findOne({
+            include: [{
+                model: models.users,
+                attributes: ['user_id', 'user_name', 'user_img', 'user_last_seen'],
+            }],
+            attributes: ['member_id', 'member_date', 'member_status'],
+            where: {user_id: user_id, messenger_id: messenger_id}
+        }))
+
+        return await Promise.all(getPromise)
+    }
+    async postRemoved(user_id: string, messenger_id: string) {
+        return await models.members.findOne({
+            include: [{
+                model: models.users,
+                attributes: ['user_id', 'user_name', 'user_img', 'user_last_seen'],
+            }],
+            where: {messenger_id: messenger_id, user_id: user_id},
+            attributes: ['member_id', 'member_date', 'member_status'],
+        })
+    }
 }
 
 export default new MessengerService()

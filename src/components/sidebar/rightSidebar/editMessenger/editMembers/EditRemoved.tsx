@@ -1,7 +1,7 @@
 import React, {Dispatch, FC, RefObject, SetStateAction, useEffect, useRef, useState} from 'react'
 import {SidebarContainer, TopBar} from "@components/sidebar"
 import {CSSTransition} from "react-transition-group"
-import {IAnimationState, IContact, IToggleState, SettingsKeys} from "@appTypes"
+import {IAnimationState, IContact, IMessengerSettings, IToggleState, SettingsKeys} from "@appTypes"
 import style from "./shared.module.css"
 import {Buttons} from "@components/buttons"
 import {
@@ -12,7 +12,7 @@ import Caption from "@components/caption/Caption";
 import useSearch from "@hooks/useSearch";
 import {SearchBlock} from "@components/searchBlock";
 import {PopupContainer} from "@components/popup";
-import PopupEditMembers from "@components/popup/popupEditMembers/PopupEditMembers";
+import PopupEditRemoved from "@components/popup/popupEditMembers/PopupEditRemoved";
 import NoResult from "@components/noResult/NoResult";
 import MembersList from "@components/sidebar/rightSidebar/editMessenger/editMembers/membersList/MembersList";
 import useSettingsAnimation from "@hooks/useSettingsAnimation";
@@ -23,7 +23,8 @@ interface IEditMemberProps {
     setState: Dispatch<SetStateAction<IToggleState<SettingsKeys>>>,
     refSidebar: RefObject<HTMLDivElement | null>,
     members: IContact[],
-    removed: IContact[]
+    removed: IContact[],
+    setSettings: Dispatch<SetStateAction<IMessengerSettings>>
 }
 
 const EditMembers: FC<IEditMemberProps> = (
@@ -32,7 +33,8 @@ const EditMembers: FC<IEditMemberProps> = (
         refSidebar,
         state,
         members,
-        removed
+        removed,
+        setSettings
     }
 ) => {
     const [animation, setAnimation] = useState(false)
@@ -110,13 +112,11 @@ const EditMembers: FC<IEditMemberProps> = (
                     </div>
                     <Caption/>
                     <PopupContainer state={popup} handleCancel={handleCancel}>
-                        <PopupEditMembers
+                        <PopupEditRemoved
                             handleCancel={handleCancel}
                             members={members}
                             moderators={newMembers}
-                            setMembers={setNewMembers}
-                            title='Removed Users'
-                            onClick={() => {}}
+                            setSettings={setSettings}
                         />
                     </PopupContainer>
                 </div>
