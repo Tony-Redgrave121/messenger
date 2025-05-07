@@ -30,6 +30,9 @@ const InputBlock: FC<IInputBlock> = ({reply, setReply, socketRef}) => {
     const [inputText, setInputText] = useState('')
     const refTextarea = useRef<HTMLTextAreaElement>(null)
 
+    const mediaRef = useRef<HTMLInputElement>(null)
+    const documentRef = useRef<HTMLInputElement>(null)
+
     const [emoji, setEmoji] = useState(false)
     const emojis = useEmojis(refTextarea, setInputText)
 
@@ -102,24 +105,12 @@ const InputBlock: FC<IInputBlock> = ({reply, setReply, socketRef}) => {
 
     const dropDownUpload = [
         {
-            liChildren:
-                <>
-                    <label htmlFor="media"><HiOutlineFolderOpen/> Photo or Video</label>
-                    <input name='media' id='media' type="file" accept='image/*, video/*' style={{display: 'none'}}
-                           onChange={(event) => uploadFiles(event, 'media')} multiple/>
-                </>,
-            liFoo: () => {
-            }
+            liChildren: <><HiOutlineFolderOpen/> Photo or Video</>,
+            liFoo: () => mediaRef.current?.click()
         },
         {
-            liChildren:
-                <>
-                    <label htmlFor="documentInput"><HiOutlineDocument/> Document</label>
-                    <input name='document' id='documentInput' type="file" style={{display: 'none'}}
-                           onChange={(event) => uploadFiles(event, 'document')} multiple/>
-                </>,
-            liFoo: () => {
-            }
+            liChildren: <><HiOutlineDocument/> Document</>,
+            liFoo: () => documentRef.current?.click()
         }
     ]
 
@@ -179,6 +170,25 @@ const InputBlock: FC<IInputBlock> = ({reply, setReply, socketRef}) => {
             <Buttons.InterButton foo={handleSubmit}>
                 <HiOutlinePaperAirplane/>
             </Buttons.InterButton>
+            <label htmlFor="media">
+                <input
+                    ref={mediaRef}
+                    name='media'
+                    id='media'
+                    type="file"
+                    accept='image/*, video/*'
+                    onChange={(event) => uploadFiles(event, 'media')}
+                    multiple/>
+            </label>
+            <label htmlFor="documentInput">
+                <input
+                    ref={documentRef}
+                    name='document'
+                    id='documentInput'
+                    type="file"
+                    onChange={(event) => uploadFiles(event, 'document')}
+                    multiple/>
+            </label>
         </div>
     )
 }

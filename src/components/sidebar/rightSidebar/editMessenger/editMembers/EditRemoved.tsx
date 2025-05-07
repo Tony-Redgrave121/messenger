@@ -1,4 +1,4 @@
-import React, {Dispatch, FC, RefObject, SetStateAction, useEffect, useRef, useState} from 'react'
+import React, {Dispatch, FC, RefObject, SetStateAction, useRef, useState} from 'react'
 import {SidebarContainer, TopBar} from "@components/sidebar"
 import {CSSTransition} from "react-transition-group"
 import {IAnimationState, IContact, IMessengerSettings, IToggleState, SettingsKeys} from "@appTypes"
@@ -38,7 +38,6 @@ const EditMembers: FC<IEditMemberProps> = (
     }
 ) => {
     const [animation, setAnimation] = useState(false)
-    const [newMembers, setNewMembers] = useState<IContact[]>([])
     useSettingsAnimation(state.state, setAnimation, setState, 'removedUsers')
 
     const [popup, setPopup] = useState(false)
@@ -46,10 +45,6 @@ const EditMembers: FC<IEditMemberProps> = (
     const refForm = useRef<HTMLDivElement>(null)
     const searchRef = useRef<HTMLDivElement>(null)
     const {filteredArr, handleInput, filter} = useSearch(removed, 'user_id')
-
-    useEffect(() => {
-        setNewMembers(removed)
-    }, [removed])
 
     const handleCancel = () => {
         setPopup(false)
@@ -115,7 +110,6 @@ const EditMembers: FC<IEditMemberProps> = (
                         <PopupEditRemoved
                             handleCancel={handleCancel}
                             members={members}
-                            moderators={newMembers}
                             setSettings={setSettings}
                         />
                     </PopupContainer>

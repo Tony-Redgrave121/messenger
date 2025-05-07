@@ -186,6 +186,9 @@ h1, h2, h3, h4, p, a, button, input, textarea, small, time {
   left: 0;
   transform-origin: bottom left;
 }
+.InputContainer > label {
+  display: none;
+}
 .InputContainer > button {
   align-self: end;
 }

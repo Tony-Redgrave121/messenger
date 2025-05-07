@@ -13,7 +13,6 @@ import MessengerService from "@service/MessengerService";
 
 interface IPopupEditModeratorsProps {
     handleCancel: () => void,
-    moderators: IContact[],
     members: IContact[],
     setSettings: Dispatch<SetStateAction<IMessengerSettings>>
 }
@@ -21,38 +20,41 @@ interface IPopupEditModeratorsProps {
 const PopupEditRemoved: FC<IPopupEditModeratorsProps> = (
     {
         handleCancel,
-        moderators,
         members,
         setSettings,
     }
 ) => {
-    const [unrated, setUnrated] = useState<IContact[]>([])
     const searchRef = useRef<HTMLDivElement>(null)
-    const user_id = useAppSelector(state => state.user.userId)
+    const [userToRemove, setUserToRemove] = useState<IContact[]>([])
+    const owner_id = useAppSelector(state => state.user.userId)
 
     useEffect(() => {
-        setUnrated(members.filter(member => moderators.some(moderator => moderator.user_id !== member.user_id && member.user_id !== user_id)))
-    }, [members, moderators, user_id])
-
+        setUserToRemove(members.filter(member => member.user_id !== owner_id))
+    }, [members, owner_id])
+    
     const {
         filteredArr,
         handleInput,
         filter
-    } = useSearch(unrated, 'user_name')
+    } = useSearch(userToRemove, 'user_name')
 
     const {id} = useParams()
 
-    const handleAddRemoved = async (user_id: string) => {
+    const handleRemoveMember = async (user_id: string) => {
         if (!id) return
 
         try {
-            const newModerators = await MessengerService.postRemoved(user_id, id)
-
-            if (newModerators.data.message) return
+            const newRemovedMember = await MessengerService.postRemoved(user_id, id)
+            if (newRemovedMember.data.message) return
 
             setSettings(prev => ({
                 ...prev,
-                moderators: [...prev.moderators, newModerators.data],
+                removed_users: [...prev.removed_users, newRemovedMember.data],
+            }))
+
+            setSettings(prev => ({
+                ...prev,
+                members: [...prev.members.filter(member => member.user.user_id !== newRemovedMember.data.user.user_id)],
             }))
 
             handleCancel()
@@ -74,7 +76,7 @@ const PopupEditRemoved: FC<IPopupEditModeratorsProps> = (
             <div className={style.SearchBlock}>
                 <SearchBlock ref={searchRef} foo={handleInput}/>
                 {filteredArr.length > 0 ?
-                    <ContactList contacts={filteredArr} onClick={handleAddRemoved}/> : <NoResult filter={filter}/>
+                    <ContactList contacts={filteredArr} onClick={handleRemoveMember}/> : <NoResult filter={filter}/>
                 }
             </div>
         </>

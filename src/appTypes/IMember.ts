@@ -5,5 +5,5 @@ export default interface IMember {
     member_id: string,
     member_status: string,
     messenger_id: string,
-    user: IContact[]
+    user: IContact
 }

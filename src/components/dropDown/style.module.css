@@ -136,7 +136,7 @@ h1, h2, h3, h4, p, a, button, input, textarea, small, time {
   padding: 5px 10px;
   border-radius: 5px;
 }
-.DropDownContainer li, .DropDownContainer li label {
+.DropDownContainer li, .DropDownContainer li label, .DropDownContainer li button {
   display: flex;
   align-items: center;
   gap: 20px;
