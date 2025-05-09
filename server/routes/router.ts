@@ -1,23 +1,16 @@
 import {
-    CONFIRM_EMAIL,
-    SEND_CODE,
-    DELETE_ACCOUNT_ROUTE,
-    DELETE_MESSAGE,
-    FETCH_MESSAGES,
-    FETCH_MESSENGER,
-    FETCH_MESSENGERS_LIST,
-    LOGIN_ROUTE,
-    LOGOUT_ROUTE,
-    POST_MESSAGE,
-    REFRESH_ROUTE,
-    REGISTRATION_ROUTE,
-    GET_CONTACTS,
-    GET_MESSENGER_SETTINGS,
-    GET_REACTIONS,
-    PUT_MESSENGER_TYPE,
-    PUT_MESSENGER_LINK,
-    POST_MESSENGER_REACTIONS,
-    PUT_MESSENGER_MODERATORS, POST_MEMBERS, POST_REMOVED
+    CONFIRM_EMAIL, SEND_CODE,
+    DELETE_ACCOUNT_ROUTE, DELETE_MESSAGE,
+    FETCH_MESSAGES, FETCH_MESSENGER,
+    FETCH_MESSENGERS_LIST, LOGIN_ROUTE,
+    LOGOUT_ROUTE, POST_MESSAGE,
+    REFRESH_ROUTE, REGISTRATION_ROUTE,
+    GET_CONTACTS, GET_MESSENGER_SETTINGS,
+    GET_REACTIONS, PUT_MESSENGER_TYPE,
+    PUT_MESSENGER_LINK, POST_MESSENGER_REACTIONS,
+    PUT_MESSENGER_MODERATORS, POST_REMOVED,
+    POST_CONTACTS_MEMBERS, POST_MEMBER,
+    DELETE_REMOVED, DELETE_MEMBER
 } from "../utils/const"
 import express from "express"
 import UserController from "../controller/userController"
@@ -50,7 +43,10 @@ router.put(PUT_MESSENGER_TYPE, MessengerController.putMessengerType)
 router.put(PUT_MESSENGER_LINK, MessengerController.putMessengerLink)
 router.post(POST_MESSENGER_REACTIONS, MessengerController.postMessengerReactions)
 router.put(PUT_MESSENGER_MODERATORS, MessengerController.putMessengerModerators)
-router.post(POST_MEMBERS, MessengerController.postMembers)
+router.post(POST_CONTACTS_MEMBERS, MessengerController.postContactsMembers)
+router.post(POST_MEMBER, MessengerController.postMember)
+router.delete(DELETE_MEMBER, MessengerController.deleteMember)
 router.post(POST_REMOVED, MessengerController.postRemoved)
+router.delete(DELETE_REMOVED, MessengerController.deleteRemoved)
 
 export default router

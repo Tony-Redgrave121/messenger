@@ -111,7 +111,7 @@ class MessengerController {
             return res.json(ApiError.internalServerError("An error occurred while updating a messenger moderators"))
         }
     }
-    async postMembers(req: Request, res: Response): Promise<any> {
+    async postContactsMembers(req: Request, res: Response): Promise<any> {
         try {
             const {messenger_id} = req.params
             const members = req.body.members
@@ -119,11 +119,26 @@ class MessengerController {
             if (!messenger_id || !members)
                 return res.json(ApiError.internalServerError('An error occurred while adding a new members'))
 
-            const newMembers = await MessengerService.addMembers(members, messenger_id)
+            const newMembers = await MessengerService.addContactsMembers(members, messenger_id)
 
             return res.json(newMembers)
         } catch (e) {
             return res.json(ApiError.internalServerError("An error occurred while adding a new members"))
+        }
+    }
+    async postMember(req: Request, res: Response): Promise<any> {
+        try {
+            const {messenger_id} = req.params
+            const user_id = req.body.user_id
+
+            if (!messenger_id || !user_id)
+                return res.json(ApiError.internalServerError('An error occurred while adding a new member'))
+
+            const newMember = await MessengerService.addMember(user_id, messenger_id)
+
+            return res.json(newMember)
+        } catch (e) {
+            return res.json(ApiError.internalServerError("An error occurred while adding a new member"))
         }
     }
     async postRemoved(req: Request, res: Response): Promise<any> {
@@ -139,6 +154,34 @@ class MessengerController {
             return res.json(newRemoved)
         } catch (e) {
             return res.json(ApiError.internalServerError("An error occurred while removing a members"))
+        }
+    }
+    async deleteRemoved(req: Request, res: Response): Promise<any> {
+        try {
+            const {messenger_id, user_id} = req.params
+
+            if (!messenger_id || !user_id)
+                return res.json(ApiError.internalServerError('An error occurred while deleting a member from removed'))
+
+            await MessengerService.deleteRemoved(user_id, messenger_id)
+
+            return res.sendStatus(200)
+        } catch (e) {
+            return res.json(ApiError.internalServerError("An error occurred while deleting a member from removed"))
+        }
+    }
+    async deleteMember(req: Request, res: Response): Promise<any> {
+        try {
+            const {messenger_id, user_id} = req.params
+
+            if (!messenger_id || !user_id)
+                return res.json(ApiError.internalServerError('An error occurred while deleting a member from group'))
+
+            await MessengerService.deleteMember(user_id, messenger_id)
+
+            return res.sendStatus(200)
+        } catch (e) {
+            return res.json(ApiError.internalServerError("An error occurred while deleting a member from group"))
         }
     }
 }

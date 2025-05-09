@@ -153,7 +153,12 @@ const Messenger: FC<IMessengerProps> = ({messengerCreation, setMessengerCreation
                                 control={control}
                                 name="messenger_image"
                                 render={({field: {onChange}}) => (
-                                    <input type="file" accept="image/png, image/jpeg" id='messenger_img' onChange={(event) => handleImageChange(event.currentTarget.files, onChange)}/>
+                                    <input
+                                        type="file"
+                                        accept="image/png, image/jpeg"
+                                        id='messenger_img'
+                                        onChange={(event) => handleImageChange(event.currentTarget.files, onChange)}
+                                    />
                                 )}
                             />
                             <label htmlFor="messenger_img">
@@ -164,11 +169,21 @@ const Messenger: FC<IMessengerProps> = ({messengerCreation, setMessengerCreation
                             </label>
                         </div>
                         <InputForm errors={errors} field={"messenger_name"}>
-                            <input type='text' id="messenger_name" placeholder={`${messengerCreation.type} name`} {...register('messenger_name', fieldOptions.messenger_name)}></input>
+                            <input
+                                type="text"
+                                id="messenger_name"
+                                placeholder={`${messengerCreation.type} name`}
+                                {...register('messenger_name', fieldOptions.messenger_name)}
+                            />
                         </InputForm>
                         {messengerCreation.type === "channel" &&
                             <InputForm errors={errors} field={"messenger_desc"}>
-                                <input type='text' id="messenger_desc" placeholder="Description (optional)" {...register('messenger_desc')}></input>
+                                <input
+                                    type="text"
+                                    id="messenger_desc"
+                                    placeholder="Description (optional)"
+                                    {...register('messenger_desc')}
+                                />
                             </InputForm>
                         }
                         {(members && contacts.length > 0) &&
@@ -185,7 +200,10 @@ const Messenger: FC<IMessengerProps> = ({messengerCreation, setMessengerCreation
                 {messengerCreation.type === "channel" &&
                     <p>You can provide an optional description for your channel.</p>
                 }
-                <Buttons.CreateButton state={messengerCreation.type !== "chat" && watch('messenger_name') !== ''} foo={handleSubmit(handleCreation)}>
+                <Buttons.CreateButton
+                    state={messengerCreation.type !== "chat" && watch('messenger_name') !== ''}
+                    foo={handleSubmit(handleCreation)}
+                >
                     <HiOutlineArrowRight/>
                 </Buttons.CreateButton>
             </SidebarContainer>

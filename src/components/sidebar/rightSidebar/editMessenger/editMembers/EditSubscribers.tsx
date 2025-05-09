@@ -1,29 +1,29 @@
-import React, {Dispatch, FC, RefObject, SetStateAction, useRef, useState} from 'react'
+import {Dispatch, FC, RefObject, SetStateAction} from 'react'
 import {SidebarContainer, TopBar} from "@components/sidebar"
 import {CSSTransition} from "react-transition-group"
-import {IAnimationState, IContact, IDropDownList, IMessengerSettings, IToggleState, SettingsKeys} from "@appTypes"
+import {IAnimationState, IContact, IMessengerSettings, IToggleState, SettingsKeys} from "@appTypes"
 import style from "./shared.module.css"
 import {Buttons} from "@components/buttons"
 import {
     HiOutlineArrowLeft,
+    HiOutlineMinusCircle,
     HiOutlineUserPlus
 } from "react-icons/hi2"
 import Caption from "@components/caption/Caption";
-import useSearch from "@hooks/useSearch";
 import {SearchBlock} from "@components/searchBlock";
 import {PopupContainer} from "@components/popup";
 import NoResult from "@components/noResult/NoResult";
 import MembersList from "@components/sidebar/rightSidebar/editMessenger/editMembers/membersList/MembersList";
 import PopupEditSubscribers from "@components/popup/popupEditMembers/PopupEditSubscribers";
-import useSettingsAnimation from "@hooks/useSettingsAnimation";
 import closeForm from "@utils/logic/closeForm";
+import useEditSettings from "@utils/hooks/settings/useEditSettings";
+import useEditSubscribers from "@utils/hooks/settings/useEditSubscribers";
 
 interface IEditSubscribersProps {
     state: IAnimationState,
     setState: Dispatch<SetStateAction<IToggleState<SettingsKeys>>>,
     refSidebar: RefObject<HTMLDivElement | null>,
     members: IContact[],
-    dropList: (user_id: string) => IDropDownList[],
     setSettings: Dispatch<SetStateAction<IMessengerSettings>>
 }
 
@@ -33,25 +33,32 @@ const EditSubscribers: FC<IEditSubscribersProps> = (
         refSidebar,
         state,
         members,
-        dropList,
         setSettings
     }
 ) => {
-    const [animation, setAnimation] = useState(false)
-    const [newSubscribers, setNewSubscribers] = useState<IContact[]>([])
-    useSettingsAnimation(state.state, setAnimation, setState, 'subscribers')
+    const {
+        animation,
+        refForm,
+        searchRef,
+        filteredArr,
+        handleInput,
+        filter
+    } = useEditSubscribers(state, setState, members)
 
-    const [popup, setPopup] = useState(false)
+    const {
+        deleteFromGroup,
+        handleCancel,
+        setPopup,
+        popup
+    } = useEditSettings(setSettings)
 
-    const refForm = useRef<HTMLDivElement>(null)
-    const searchRef = useRef<HTMLDivElement>(null)
-    const {filteredArr, handleInput, filter} = useSearch(members, 'user_id')
-
-    const handleCancel = () => {
-        setPopup(false)
-
-        setTimeout(() => setPopup(false), 300)
-    }
+    const SubscribersDropDown = (user_id: string) => [
+        {
+            liChildren: <HiOutlineMinusCircle/>,
+            liText: 'Remove from group',
+            liFoo: () => deleteFromGroup(user_id)
+        }
+    ]
 
     return (
         <CSSTransition
@@ -82,7 +89,7 @@ const EditSubscribers: FC<IEditSubscribersProps> = (
                         {filteredArr.length > 0 ?
                             <MembersList
                                 members={filteredArr}
-                                dropList={dropList}
+                                dropList={SubscribersDropDown}
                             /> : <NoResult filter={filter}/>
                         }
                     </div>

@@ -7,8 +7,9 @@ import {
     PUT_MESSENGER_LINK,
     POST_MESSENGER_REACTIONS,
     PUT_MESSENGER_MODERATORS,
-    POST_MEMBERS,
-    POST_REMOVED
+    POST_REMOVED,
+    POST_CONTACTS_MEMBERS,
+    POST_MEMBER
 } from "@utils/const/const"
 import $api from '@utils/http/index'
 import {AxiosResponse} from 'axios'
@@ -40,10 +41,19 @@ export default class MessengerService {
     static async putMessengerModerator(member_status: string, user_id: string, messenger_id: string): Promise<AxiosResponse> {
         return $api.put(`${PUT_MESSENGER_MODERATORS}/${messenger_id}`, {member_status: member_status, user_id: user_id})
     }
-    static async postMembers(members: string[], messenger_id: string): Promise<AxiosResponse> {
-        return $api.post(`${POST_MEMBERS}/${messenger_id}`, {members: members})
+    static async postContactsMembers(members: string[], messenger_id: string): Promise<AxiosResponse> {
+        return $api.post(`${POST_CONTACTS_MEMBERS}/${messenger_id}`, {members: members})
+    }
+    static async postMember(user_id: string, messenger_id: string): Promise<AxiosResponse> {
+        return $api.post(`${POST_MEMBER}/${messenger_id}`, {user_id: user_id})
+    }
+    static async deleteMember(user_id: string, messenger_id: string): Promise<AxiosResponse> {
+        return $api.delete(`${POST_MEMBER}/${messenger_id}/${user_id}`)
     }
     static async postRemoved(user_id: string, messenger_id: string): Promise<AxiosResponse> {
         return $api.post(`${POST_REMOVED}/${messenger_id}`, {user_id: user_id})
+    }
+    static async deleteRemoved(user_id: string, messenger_id: string): Promise<AxiosResponse> {
+        return $api.delete(`${POST_REMOVED}/${messenger_id}/${user_id}`)
     }
 }

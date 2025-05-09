@@ -35,7 +35,6 @@ class MessengerService {
 
         return contacts.map(contact => contact.user)
     }
-
     async postMessenger(user_id: string, messenger_name: string, messenger_desc: string, messenger_type: string, messenger_members?: string[], messenger_files?: IUserFiles | null) {
         const messenger_id = uuid.v4()
         let messenger_image = null
@@ -85,7 +84,6 @@ class MessengerService {
             messages: []
         }
     }
-
     async fetchMessengerSettings(messenger_id: string) {
         const messengerSettings = await models.messenger_settings.findAll({
             include: [{
@@ -163,14 +161,12 @@ class MessengerService {
             moderators: data?.moderators ?? []
         }
     }
-
     async fetchReactions() {
         const reactions = await models.reactions.findAll()
         if (!reactions) return ApiError.internalServerError("No reactions found")
 
         return reactions
     }
-
     async updateMessengerType(messenger_id: string, messenger_type: string) {
         const updateRes = await models.messenger_settings.update(
             {messenger_setting_type: messenger_type},
@@ -180,7 +176,6 @@ class MessengerService {
 
         return updateRes
     }
-
     async updateMessengerLink(messenger_id: string) {
         const messengerLink = uuid.v4()
 
@@ -201,7 +196,6 @@ class MessengerService {
             messenger_id: messengerLink
         }
     }
-
     async postMessengerReactions(messenger_setting_id: string, newReactions: string[]) {
         const reactions = await models.messenger_reactions.findAll({
             where: {messenger_setting_id: messenger_setting_id},
@@ -232,7 +226,6 @@ class MessengerService {
 
         return await models.messenger_reactions.findAll({where: {messenger_setting_id: messenger_setting_id}})
     }
-
     async updateMessengerModerators(member_status: string, user_id: string, messenger_id: string) {
 
         await models.members.update(
@@ -249,8 +242,7 @@ class MessengerService {
             attributes: ['member_id', 'member_date', 'member_status'],
         })
     }
-
-    async addMembers(members: string[], messenger_id: string) {
+    async addContactsMembers(members: string[], messenger_id: string) {
         const [existingMembers, removedMembers] = await Promise.all([
             await models.members.findAll({
                 attributes: ['user_id'],
@@ -294,7 +286,25 @@ class MessengerService {
 
         return await Promise.all(getPromise)
     }
+    async addMember(user_id: string, messenger_id: string) {
+        await models.removed_users.destroy({where: {messenger_id: messenger_id, user_id: user_id}})
 
+        await models.members.create({
+            member_id: uuid.v4(),
+            member_status: 'member',
+            user_id: user_id,
+            messenger_id: messenger_id
+        })
+
+        return await models.members.findOne({
+            include: [{
+                model: models.users,
+                attributes: ['user_id', 'user_name', 'user_img', 'user_last_seen'],
+            }],
+            attributes: ['member_id', 'member_date', 'member_status'],
+            where: {user_id: user_id, messenger_id: messenger_id}
+        })
+    }
     async postRemoved(user_id: string, messenger_id: string) {
         await models.removed_users.create({
             removed_user_id: uuid.v4(),
@@ -315,6 +325,22 @@ class MessengerService {
                 attributes: ['user_id', 'user_name', 'user_img', 'user_last_seen'],
             }],
             attributes: ['removed_user_id'],
+            where: {
+                messenger_id: messenger_id,
+                user_id: user_id
+            }
+        })
+    }
+    async deleteRemoved(user_id: string, messenger_id: string) {
+        await models.removed_users.destroy({
+            where: {
+                messenger_id: messenger_id,
+                user_id: user_id
+            }
+        })
+    }
+    async deleteMember(user_id: string, messenger_id: string) {
+        await models.members.destroy({
             where: {
                 messenger_id: messenger_id,
                 user_id: user_id

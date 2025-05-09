@@ -1,24 +1,24 @@
-import React, {Dispatch, FC, RefObject, SetStateAction, useEffect, useRef, useState} from 'react'
+import React, {Dispatch, FC, RefObject, SetStateAction} from 'react'
 import {SidebarContainer, TopBar} from "@components/sidebar"
 import {CSSTransition} from "react-transition-group"
 import {IAnimationState, IContact, IMessengerSettings, IToggleState, SettingsKeys} from "@appTypes"
 import style from "./shared.module.css"
 import {Buttons} from "@components/buttons"
 import {
-    HiOutlineArrowLeft, HiOutlineChatBubbleLeft, HiOutlineShieldExclamation, HiOutlineTrash,
+    HiOutlineArrowLeft,
+    HiOutlineShieldExclamation,
+    HiOutlineTrash,
     HiOutlineUserPlus
 } from "react-icons/hi2"
 import Caption from "@components/caption/Caption";
-import useSearch from "@hooks/useSearch";
 import {SearchBlock} from "@components/searchBlock";
 import {PopupContainer} from "@components/popup";
 import NoResult from "@components/noResult/NoResult";
 import MembersList from "@components/sidebar/rightSidebar/editMessenger/editMembers/membersList/MembersList";
-import useSettingsAnimation from "@hooks/useSettingsAnimation";
 import closeForm from "@utils/logic/closeForm";
 import PopupEditModerators from "@components/popup/popupEditMembers/PopupEditModerators";
-import MessengerService from "@service/MessengerService";
-import {useParams} from "react-router-dom";
+import useEditModerators from "@utils/hooks/settings/useEditModerators";
+import useEditSettings from "@utils/hooks/settings/useEditSettings";
 
 interface IEditMemberProps {
     state: IAnimationState,
@@ -39,66 +39,35 @@ const EditModerators: FC<IEditMemberProps> = (
         setSettings
     }
 ) => {
-    const [animation, setAnimation] = useState(false)
-    const [newMembers, setNewMembers] = useState<IContact[]>([])
-    useSettingsAnimation(state.state, setAnimation, setState, 'moderators')
+    const {
+        animation,
+        newMembers,
+        setNewMembers,
+        refForm,
+        searchRef,
+        filteredArr,
+        handleInput,
+        filter
+    } = useEditModerators(moderators, state, setState)
 
-    const [popup, setPopup] = useState(false)
-
-    const refForm = useRef<HTMLDivElement>(null)
-    const searchRef = useRef<HTMLDivElement>(null)
-    const {filteredArr, handleInput, filter} = useSearch(moderators, 'user_id')
-
-    useEffect(() => {
-        setNewMembers(moderators)
-    }, [moderators])
-
-    const handleCancel = () => {
-        setPopup(false)
-
-        setTimeout(() => setPopup(false), 300)
-    }
-
-    const {id} = useParams()
-
-    const handleDismissModerator = async (user_id: string) => {
-        if (!id) return
-
-        try {
-            const newModerators = await MessengerService.putMessengerModerator('member', user_id, id)
-
-            if (newModerators.data.message) return
-
-            setSettings(prev => ({
-                ...prev,
-                moderators: [...prev.moderators.filter(moderator =>
-                    moderator.member_id !== newModerators.data.member_id
-                )]
-            }))
-
-            handleCancel()
-        } catch (error) {
-            console.log(error)
-        }
-    }
+    const {
+        deleteFromGroup,
+        dismissModerator,
+        handleCancel,
+        setPopup,
+        popup
+    } = useEditSettings(setSettings)
 
     const ModeratorDropDown = (user_id: string) => [
         {
-            liChildren: <HiOutlineChatBubbleLeft/>,
-            liText: 'Send Message',
-            liFoo: () => {
-            }
-        },
-        {
             liChildren: <HiOutlineTrash/>,
             liText: 'Remove from group',
-            liFoo: () => {
-            }
+            liFoo: () => deleteFromGroup(user_id)
         },
         {
             liChildren: <HiOutlineShieldExclamation/>,
             liText: 'Dismiss Moderator',
-            liFoo: () => handleDismissModerator(user_id)
+            liFoo: () => dismissModerator(user_id)
         }
     ]
 

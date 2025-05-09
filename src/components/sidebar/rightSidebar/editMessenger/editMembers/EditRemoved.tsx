@@ -1,22 +1,23 @@
-import React, {Dispatch, FC, RefObject, SetStateAction, useRef, useState} from 'react'
+import {Dispatch, FC, RefObject, SetStateAction} from 'react'
 import {SidebarContainer, TopBar} from "@components/sidebar"
 import {CSSTransition} from "react-transition-group"
 import {IAnimationState, IContact, IMessengerSettings, IToggleState, SettingsKeys} from "@appTypes"
 import style from "./shared.module.css"
 import {Buttons} from "@components/buttons"
 import {
-    HiOutlineArrowLeft, HiOutlineChatBubbleLeft, HiOutlineTrash,
+    HiOutlineArrowLeft,
+    HiOutlineTrash,
     HiOutlineUserPlus
 } from "react-icons/hi2"
 import Caption from "@components/caption/Caption";
-import useSearch from "@hooks/useSearch";
 import {SearchBlock} from "@components/searchBlock";
 import {PopupContainer} from "@components/popup";
 import PopupEditRemoved from "@components/popup/popupEditMembers/PopupEditRemoved";
 import NoResult from "@components/noResult/NoResult";
 import MembersList from "@components/sidebar/rightSidebar/editMessenger/editMembers/membersList/MembersList";
-import useSettingsAnimation from "@hooks/useSettingsAnimation";
 import closeForm from "@utils/logic/closeForm";
+import useEditSettings from "@utils/hooks/settings/useEditSettings";
+import useEditRemoved from "@utils/hooks/settings/useEditRemoved";
 
 interface IEditMemberProps {
     state: IAnimationState,
@@ -37,38 +38,33 @@ const EditMembers: FC<IEditMemberProps> = (
         setSettings
     }
 ) => {
-    const [animation, setAnimation] = useState(false)
-    useSettingsAnimation(state.state, setAnimation, setState, 'removedUsers')
+    const {
+        animation,
+        refForm,
+        searchRef,
+        filteredArr,
+        handleInput,
+        filter
+    } = useEditRemoved(state, setState, removed)
 
-    const [popup, setPopup] = useState(false)
-
-    const refForm = useRef<HTMLDivElement>(null)
-    const searchRef = useRef<HTMLDivElement>(null)
-    const {filteredArr, handleInput, filter} = useSearch(removed, 'user_id')
-
-    const handleCancel = () => {
-        setPopup(false)
-        setTimeout(() => setPopup(false), 300)
-    }
+    const {
+        handleCancel,
+        addToGroup,
+        deleteFromRemoved,
+        setPopup,
+        popup
+    } = useEditSettings(setSettings)
 
     const RemovedDropDown = (user_id: string) => [
         {
-            liChildren: <HiOutlineChatBubbleLeft/>,
-            liText: 'Send Message',
-            liFoo: () => {
-            }
-        },
-        {
             liChildren: <HiOutlineUserPlus/>,
             liText: 'Add to Group',
-            liFoo: () => {
-            }
+            liFoo: () => addToGroup(user_id)
         },
         {
             liChildren: <HiOutlineTrash/>,
-            liText: 'Delete',
-            liFoo: () => {
-            }
+            liText: 'Unblock user',
+            liFoo: () => deleteFromRemoved(user_id)
         }
     ]
 

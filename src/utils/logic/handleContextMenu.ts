@@ -8,7 +8,7 @@ const handleContextMenu = ({event, setPosition, setContextMenu}: IHandleContextM
     const clientWidth = event.currentTarget.clientWidth, clientHeight = event.currentTarget.clientHeight
 
     if (x + 170 > clientWidth) x = clientWidth - 170
-    if (y + 100 > clientHeight) y = clientHeight - 100
+    if (y + 45 > clientHeight) y = clientHeight - 45
 
     setPosition({x: x, y: y})
     setContextMenu(prev => !prev)

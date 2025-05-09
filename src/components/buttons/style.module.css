@@ -65,6 +65,8 @@ footer, header, hgroup, menu, nav, section {
 
 html {
   scroll-behavior: smooth;
+  scrollbar-width: thin;
+  scrollbar-color: #2f2f2f transparent;
 }
 
 body {

@@ -2,11 +2,10 @@ import React, {Dispatch, FC, RefObject, SetStateAction, useEffect, useRef, useSt
 import {SidebarContainer, TopBar} from "@components/sidebar";
 import {CSSTransition} from "react-transition-group";
 import useAnimation from "@hooks/useAnimation";
-import {IAnimationState, IEditMessengerForm, IMessengerSettings, IToggleState} from "@appTypes";
+import {IAnimationState, IEditMessengerForm, IMessenger, IMessengerSettings, IToggleState} from "@appTypes";
 import {Buttons} from "@components/buttons";
 import {
     HiOutlineArrowLeft,
-    HiOutlineChatBubbleLeft,
     HiOutlineHeart,
     HiOutlineLockClosed,
     HiOutlineShieldCheck,
@@ -14,7 +13,7 @@ import {
     HiOutlineUserMinus,
     HiOutlineUsers
 } from "react-icons/hi2";
-import {useForm} from "react-hook-form";
+import {SubmitHandler, useForm} from "react-hook-form";
 import {InputForm} from "@components/inputForm";
 import style from "./style.module.css";
 import InputFile from "@components/inputForm/inputImage/InputFile";
@@ -27,6 +26,7 @@ import EditModerators from "@components/sidebar/rightSidebar/editMessenger/editM
 import EditSubscribers from "@components/sidebar/rightSidebar/editMessenger/editMembers/EditSubscribers";
 import openForm from "@utils/logic/openForm";
 import EditRemoved from "@components/sidebar/rightSidebar/editMessenger/editMembers/EditRemoved";
+import {setMessengersList} from "@store/reducers/appReducer";
 
 interface IEditMessengerProps {
     setState: Dispatch<SetStateAction<IAnimationState>>,
@@ -131,20 +131,28 @@ const EditMessenger: FC<IEditMessengerProps> = ({setState, refSidebar}) => {
         getSettings().catch(e => console.log(e))
     }, [id, setValue])
 
-    const MemberDropDown = (user_id: string) => [
-        {
-            liChildren: <HiOutlineChatBubbleLeft/>,
-            liText: 'Send Message',
-            liFoo: () => {
-            }
-        },
-        {
-            liChildren: <HiOutlineTrash/>,
-            liText: 'Remove from group',
-            liFoo: () => {
-            }
+    const handleChange: SubmitHandler<IMessenger> = async (data) => {
+        if (!id) return
+        const formData = new FormData()
+
+        formData.append('messenger_id', id)
+        formData.append('messenger_name', data.messenger_name)
+        formData.append('messenger_image', data.messenger_image as File)
+        formData.append('messenger_desc', data.messenger_desc)
+
+        const res = await messengerService.postMessenger(formData)
+
+        if (res.data.message) setErrorForm(res.data.message)
+        else {
+            setAnimationState(false)
+            dispatch(setMessengersList(res.data))
+
+            return setMessengerCreation(prev => ({
+                ...prev,
+                state: false,
+            }))
         }
-    ]
+    }
 
     return (
         <CSSTransition
@@ -279,7 +287,6 @@ const EditMessenger: FC<IEditMessengerProps> = ({setState, refSidebar}) => {
                         setState={setFormsState}
                         refSidebar={refEditSubscribers}
                         members={settings.members.flatMap(member => member.user)}
-                        dropList={MemberDropDown}
                         setSettings={setSettings}
                     />
                 }

@@ -56,6 +56,10 @@
 .RightSidebarContainerEdit {
   left: unset;
   right: 0;
+
+  .Wrapper {
+    height: 100%;
+  }
 }
 
 @media screen and (max-width: 1280px) {
