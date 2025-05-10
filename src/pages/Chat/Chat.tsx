@@ -10,10 +10,21 @@ import {IMessagesResponse, IMessengerResponse} from "@appTypes"
 import ChatHeader from "./chatHeader/ChatHeader"
 import {useMessageWS} from "@utils/hooks/useMessageWS";
 
+const InitialMessenger = {
+    messenger_id: '',
+    messenger_name: '',
+    messenger_date: new Date(),
+    messenger_image: undefined,
+    messenger_desc: undefined,
+    messenger_type: '',
+    user_member: [],
+    members_count: ''
+}
+
 const Chat = () => {
     const [sidebarState, setSidebarState] = useState(false)
     const [reply, setReply] = useState<IMessagesResponse | null>(null)
-    const [messenger, setMessenger] = useState<IMessengerResponse>()
+    const [messenger, setMessenger] = useState<IMessengerResponse>(InitialMessenger)
     
     const refEnd = useRef<HTMLDivElement>(null)
     const refRightSidebar = useRef<HTMLDivElement>(null)
@@ -70,14 +81,26 @@ const Chat = () => {
                             <ChatHeader messenger={messenger} setSidebarState={setSidebarState}/>
                             <div className={style.MessageBlock} key={id}>
                                 {messagesList.length > 0 && messagesList.map(message =>
-                                    <Message.ChatMessage message={message} key={message.message_id} setReply={setReply} socketRef={socketRef}/>
+                                    <Message.ChatMessage
+                                        message={message}
+                                        key={message.message_id}
+                                        setReply={setReply}
+                                        socketRef={socketRef}
+                                    />
                                 )}
                                 <div ref={refEnd}/>
                             </div>
                             <InputBlock setReply={setReply} reply={reply} socketRef={socketRef}/>
                         </div>
                     </div>
-                    <RightSidebar entity={messenger} ref={refRightSidebar} state={sidebarState} setState={setSidebarState} key={messenger.messenger_id}/>
+                    <RightSidebar
+                        entity={messenger}
+                        setEntity={setMessenger}
+                        ref={refRightSidebar}
+                        state={sidebarState}
+                        setState={setSidebarState}
+                        key={messenger.messenger_id}
+                    />
                 </>
             }
         </>

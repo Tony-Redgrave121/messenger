@@ -6,6 +6,7 @@ import {UploadedFile} from "express-fileupload";
 import * as fs from "fs";
 import IReaction from "../types/IReaction";
 import path from "path";
+import IMessenger from "../types/IMessenger";
 
 interface IUserFiles {
     messenger_image?: UploadedFile
@@ -346,6 +347,42 @@ class MessengerService {
                 user_id: user_id
             }
         })
+    }
+    async putMessenger(messenger_id: string, messenger_name: string, messenger_desc?: string, messenger_files?: IUserFiles | null) {
+        const oldMessenger = await models.messenger.findOne({where: {messenger_id: messenger_id}}) as IMessenger | null
+
+        if (!oldMessenger) return ApiError.notFound(`Messenger not found`)
+        let messenger_image = null
+
+        if (messenger_files?.messenger_image) {
+            const folder = `messengers/${messenger_id}`
+
+            if (oldMessenger.messenger_image) {
+                try {
+                    const filePath = path.join(__dirname + "/../src/static", folder, oldMessenger.messenger_image)
+
+                    await fs.promises.rm(filePath, {force: true})
+                } catch (error) {
+                    return ApiError.badRequest(`Error with messenger image deleting`)
+                }
+            }
+
+            messenger_image = await filesUploadingService(folder, messenger_files.messenger_image, 'media')
+
+            if (messenger_image instanceof ApiError) return ApiError.badRequest(`Error with messenger image creation`)
+        }
+
+        try {
+            await models.messenger.update({
+                messenger_name: messenger_name,
+                messenger_image: messenger_image ? messenger_image.file : oldMessenger.messenger_image,
+                messenger_desc: messenger_desc
+            }, {where: {messenger_id: messenger_id}})
+        } catch (error) {
+            return ApiError.internalServerError(`Error with messenger updating`)
+        }
+
+        return models.messenger.findOne({where: {messenger_id: messenger_id}})
     }
 }
 

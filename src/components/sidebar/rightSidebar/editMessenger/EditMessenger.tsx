@@ -2,10 +2,11 @@ import React, {Dispatch, FC, RefObject, SetStateAction, useEffect, useRef, useSt
 import {SidebarContainer, TopBar} from "@components/sidebar";
 import {CSSTransition} from "react-transition-group";
 import useAnimation from "@hooks/useAnimation";
-import {IAnimationState, IEditMessengerForm, IMessenger, IMessengerSettings, IToggleState} from "@appTypes";
+import {IAnimationState, IEditMessengerForm, IMessengerResponse, IMessengerSettings, IToggleState} from "@appTypes";
 import {Buttons} from "@components/buttons";
 import {
     HiOutlineArrowLeft,
+    HiOutlineCheck,
     HiOutlineHeart,
     HiOutlineLockClosed,
     HiOutlineShieldCheck,
@@ -16,7 +17,7 @@ import {
 import {SubmitHandler, useForm} from "react-hook-form";
 import {InputForm} from "@components/inputForm";
 import style from "./style.module.css";
-import InputFile from "@components/inputForm/inputImage/InputFile";
+import InputFile from "@components/inputForm/inputFile/InputFile";
 import Caption from "@components/caption/Caption";
 import messengerService from "../../../../service/MessengerService";
 import {useParams} from "react-router-dom";
@@ -26,10 +27,10 @@ import EditModerators from "@components/sidebar/rightSidebar/editMessenger/editM
 import EditSubscribers from "@components/sidebar/rightSidebar/editMessenger/editMembers/EditSubscribers";
 import openForm from "@utils/logic/openForm";
 import EditRemoved from "@components/sidebar/rightSidebar/editMessenger/editMembers/EditRemoved";
-import {setMessengersList} from "@store/reducers/appReducer";
 
 interface IEditMessengerProps {
     setState: Dispatch<SetStateAction<IAnimationState>>,
+    setEntity: Dispatch<SetStateAction<IMessengerResponse>>,
     refSidebar: RefObject<HTMLDivElement | null>,
 }
 
@@ -38,7 +39,6 @@ const InitialValues: IEditMessengerForm = {
     messenger_name: '',
     messenger_image: null,
     messenger_desc: '',
-    moderators: []
 }
 
 const InitialSettings: IMessengerSettings = {
@@ -55,25 +55,22 @@ const InitialSettings: IMessengerSettings = {
     messenger_image: null
 }
 
-const EditMessenger: FC<IEditMessengerProps> = ({setState, refSidebar}) => {
+const EditMessenger: FC<IEditMessengerProps> = ({setState, setEntity, refSidebar}) => {
     const [animation, setAnimation] = useState(false)
     const [isLoaded, setIsLoaded] = useState(false)
     const refForm = useRef<HTMLDivElement>(null)
-    const [picture, setPicture] = useState<File | null>(null)
+    const pictureRef = useRef<File>(null)
+
     const [settings, setSettings] = useState<IMessengerSettings>(InitialSettings)
-    const [newSettings, setNewSettings] = useState({
-        messenger_name: '',
-        messenger_desc: ''
-    })
 
     type FormKeys = 'reactions' | 'channelType' | 'moderators' | 'subscribers' | 'removedUsers'
 
     const initialToggleState: IToggleState<FormKeys> = {
-        reactions: { state: false, mounted: false },
-        channelType: { state: false, mounted: false },
-        moderators: { state: false, mounted: false },
-        subscribers: { state: false, mounted: false },
-        removedUsers: { state: false, mounted: false }
+        reactions: {state: false, mounted: false},
+        channelType: {state: false, mounted: false},
+        moderators: {state: false, mounted: false},
+        subscribers: {state: false, mounted: false},
+        removedUsers: {state: false, mounted: false}
     }
 
     const [formsState, setFormsState] = useState(initialToggleState)
@@ -89,7 +86,7 @@ const EditMessenger: FC<IEditMessengerProps> = ({setState, refSidebar}) => {
 
     const handleImageChange = (file: FileList | null, onChange: (value: File) => void) => {
         if (file) {
-            setPicture(file[0])
+            pictureRef.current = file[0]
             onChange(file[0])
         }
     }
@@ -98,7 +95,9 @@ const EditMessenger: FC<IEditMessengerProps> = ({setState, refSidebar}) => {
         register,
         formState: {errors},
         control,
-        setValue
+        setValue,
+        handleSubmit,
+        watch
     } = useForm({defaultValues: InitialValues})
 
     useEffect(() => {
@@ -111,17 +110,12 @@ const EditMessenger: FC<IEditMessengerProps> = ({setState, refSidebar}) => {
                     if (!data.messenger_name) throw data
 
                     setSettings(data)
-                    setNewSettings({
-                        messenger_name: data.messenger_name,
-                        messenger_desc: data.messenger_desc
-                    })
 
                     setValue('messenger_name', data.messenger_name)
                     setValue('messenger_desc', data.messenger_desc)
 
                     if (data.messenger_image) {
-                        const blob = new Blob([Uint8Array.from(atob(data.messenger_image), c => c.charCodeAt(0))], {type: 'image/png'}) as File
-                        setPicture(blob)
+                        pictureRef.current = new Blob([Uint8Array.from(atob(data.messenger_image), c => c.charCodeAt(0))], {type: 'image/png'}) as File
                     }
                 })
                 .catch(e => console.log(e))
@@ -131,26 +125,43 @@ const EditMessenger: FC<IEditMessengerProps> = ({setState, refSidebar}) => {
         getSettings().catch(e => console.log(e))
     }, [id, setValue])
 
-    const handleChange: SubmitHandler<IMessenger> = async (data) => {
+    const handleChange: SubmitHandler<IEditMessengerForm> = async (data) => {
         if (!id) return
-        const formData = new FormData()
 
-        formData.append('messenger_id', id)
-        formData.append('messenger_name', data.messenger_name)
-        formData.append('messenger_image', data.messenger_image as File)
-        formData.append('messenger_desc', data.messenger_desc)
+        try {
+            const formData = new FormData()
 
-        const res = await messengerService.postMessenger(formData)
+            formData.append('messenger_id', id)
+            formData.append('messenger_name', data.messenger_name)
+            formData.append('messenger_image', data.messenger_image as File)
+            formData.append('messenger_desc', data.messenger_desc)
 
-        if (res.data.message) setErrorForm(res.data.message)
-        else {
-            setAnimationState(false)
-            dispatch(setMessengersList(res.data))
+            const newData = await messengerService.putMessenger(formData)
 
-            return setMessengerCreation(prev => ({
-                ...prev,
-                state: false,
-            }))
+            if (newData.status === 200) {
+                setSettings(prev => ({
+                    ...prev,
+                    messenger_name: data.messenger_name,
+                    messenger_desc: data.messenger_desc
+                }))
+
+                setState(prev => ({
+                    ...prev,
+                    state: false
+                }))
+
+                setEntity(prev => ({
+                    ...prev,
+                    messenger_name: newData.data.messenger_name,
+                    messenger_desc: newData.data.messenger_desc,
+                    messenger_image: newData.data.messenger_image,
+                }))
+
+                setValue('messenger_image', null)
+                setIsLoaded(false)
+            }
+        } catch (error) {
+            console.log(error)
         }
     }
 
@@ -179,8 +190,11 @@ const EditMessenger: FC<IEditMessengerProps> = ({setState, refSidebar}) => {
                 </TopBar>
                 <div className={style.FormContainer} ref={refForm}>
                     <div className={style.TopForm}>
-                        <InputFile name="messenger_image" control={control} handleImageChange={handleImageChange}
-                                   picture={picture}/>
+                        <InputFile
+                            name="messenger_image"
+                            control={control}
+                            handleImageChange={handleImageChange}
+                            picture={pictureRef.current}/>
                         <InputForm errors={errors} field="messenger_name">
                             <input
                                 type="text"
@@ -196,14 +210,11 @@ const EditMessenger: FC<IEditMessengerProps> = ({setState, refSidebar}) => {
                                 type="text"
                                 id="messenger_desc"
                                 placeholder="Description"
-                                value={newSettings.messenger_desc}
                                 {...register('messenger_desc')}
                             />
                         </InputForm>
                     </div>
-                    <Caption>
-                        You can provide an optional description for your channel.
-                    </Caption>
+                    <Caption>You can provide an optional description for your channel.</Caption>
                     <div className={style.Form}>
                         <Buttons.SettingButton
                             foo={() => openForm('channelType', setFormsState)}
@@ -250,6 +261,16 @@ const EditMessenger: FC<IEditMessengerProps> = ({setState, refSidebar}) => {
                             <HiOutlineTrash/>
                         </Buttons.SettingButton>
                     </div>
+                    <Buttons.CreateButton
+                        state={
+                            watch('messenger_name') !== settings.messenger_name ||
+                            watch('messenger_desc') !== settings.messenger_desc ||
+                            watch('messenger_image') !== null
+                        }
+                        foo={handleSubmit(handleChange)}
+                    >
+                        <HiOutlineCheck/>
+                    </Buttons.CreateButton>
                     <Caption/>
                 </div>
                 {formsState.reactions.mounted &&

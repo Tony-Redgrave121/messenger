@@ -1,11 +1,11 @@
 import { WebSocketServer, WebSocket } from "ws";
-import IMessenger from "../types/IMessenger";
+import IFullMessenger from "../types/IFullMessenger";
 
 const liveUpdatesHandlerWS = (aWss: WebSocketServer) => {
     interface IUpdateConfig {
         user_id: string,
         method: string,
-        data: IMessenger
+        data: IFullMessenger
     }
 
     interface UserWebSocket extends WebSocket {

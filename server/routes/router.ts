@@ -36,6 +36,7 @@ router.delete(DELETE_MESSAGE, UserController.deleteMessage)
 
 router.get(GET_CONTACTS, MessengerController.getContacts)
 router.post(FETCH_MESSENGER, MessengerController.postMessenger)
+router.put(FETCH_MESSENGER, MessengerController.putMessenger)
 
 router.get(GET_MESSENGER_SETTINGS, MessengerController.getMessengerSettings)
 router.get(GET_REACTIONS, MessengerController.getReactions)

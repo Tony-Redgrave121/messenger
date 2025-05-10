@@ -8,7 +8,7 @@ import {registration} from "@store/reducers/userReducer";
 import {useNavigate} from "react-router-dom";
 import {useAppDispatch} from "@hooks/useRedux";
 import { Control, UseFormHandleSubmit } from "react-hook-form";
-import InputFile from "@components/inputForm/inputImage/InputFile";
+import InputFile from "@components/inputForm/inputFile/InputFile";
 
 interface IStep4Props extends IStepProps {
     handleSubmit: UseFormHandleSubmit<IAuthForm>,

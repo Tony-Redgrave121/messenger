@@ -16,7 +16,14 @@ const InputFile: FC<IInputFileProps> = memo(({control, handleImageChange, pictur
             <Controller
                 control={control}
                 name={name}
-                render={({field: {onChange}}) => <input type="file" accept="image/png, image/jpeg" id={name} onChange={(event) => handleImageChange(event.currentTarget.files, onChange)}/>}
+                render={({field: {onChange}}) =>
+                    <input
+                        type="file"
+                        accept="image/png, image/jpeg"
+                        id={name}
+                        onChange={(event) => handleImageChange(event.currentTarget.files, onChange)}
+                    />
+                }
             />
             <label htmlFor={name}>
                 {picture ?

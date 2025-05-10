@@ -56,4 +56,7 @@ export default class MessengerService {
     static async deleteRemoved(user_id: string, messenger_id: string): Promise<AxiosResponse> {
         return $api.delete(`${POST_REMOVED}/${messenger_id}/${user_id}`)
     }
+    static async putMessenger(messenger: FormData): Promise<AxiosResponse<IMessengerResponse>> {
+        return $api.put<IMessengerResponse>(POST_MESSENGER, messenger)
+    }
 }
