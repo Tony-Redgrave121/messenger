@@ -10,7 +10,8 @@ import {
     PUT_MESSENGER_LINK, POST_MESSENGER_REACTIONS,
     PUT_MESSENGER_MODERATORS, POST_REMOVED,
     POST_CONTACTS_MEMBERS, POST_MEMBER,
-    DELETE_REMOVED, DELETE_MEMBER
+    DELETE_REMOVED, DELETE_MEMBER,
+    PROFILE
 } from "../utils/const"
 import express from "express"
 import UserController from "../controller/userController"
@@ -49,5 +50,8 @@ router.post(POST_MEMBER, MessengerController.postMember)
 router.delete(DELETE_MEMBER, MessengerController.deleteMember)
 router.post(POST_REMOVED, MessengerController.postRemoved)
 router.delete(DELETE_REMOVED, MessengerController.deleteRemoved)
+
+router.get(PROFILE, UserController.getProfile)
+router.put(PROFILE, UserController.putProfile)
 
 export default router

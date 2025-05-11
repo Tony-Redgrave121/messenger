@@ -2,7 +2,14 @@ import React, {Dispatch, FC, RefObject, SetStateAction, useEffect, useRef, useSt
 import {SidebarContainer, TopBar} from "@components/sidebar";
 import {CSSTransition} from "react-transition-group";
 import useAnimation from "@hooks/useAnimation";
-import {IAnimationState, IEditMessengerForm, IMessengerResponse, IMessengerSettings, IToggleState} from "@appTypes";
+import {
+    IAnimationState,
+    IEditMessengerForm,
+    IMessengerResponse,
+    IMessengerSettings,
+    IToggleState,
+    SettingsKeys
+} from "@appTypes";
 import {Buttons} from "@components/buttons";
 import {
     HiOutlineArrowLeft,
@@ -63,9 +70,7 @@ const EditMessenger: FC<IEditMessengerProps> = ({setState, setEntity, refSidebar
 
     const [settings, setSettings] = useState<IMessengerSettings>(InitialSettings)
 
-    type FormKeys = 'reactions' | 'channelType' | 'moderators' | 'subscribers' | 'removedUsers'
-
-    const initialToggleState: IToggleState<FormKeys> = {
+    const initialToggleState: IToggleState<SettingsKeys> = {
         reactions: {state: false, mounted: false},
         channelType: {state: false, mounted: false},
         moderators: {state: false, mounted: false},

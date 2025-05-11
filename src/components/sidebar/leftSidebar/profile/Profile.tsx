@@ -1,9 +1,8 @@
-import React, {Dispatch, FC, RefObject, SetStateAction, useState} from 'react'
+import React, {Dispatch, FC, RefObject, SetStateAction, useRef, useState} from 'react'
 import {SidebarContainer} from "@components/sidebar";
 import {CSSTransition} from "react-transition-group";
 import '../animation.css'
 import style from "../../rightSidebar/style.module.css";
-import profileStyle from "./style.module.css";
 import {ImageBlock} from "@components/sidebar";
 import useLoadBlob from "@hooks/useLoadBlob";
 import {useAppSelector} from "@hooks/useRedux";
@@ -22,8 +21,10 @@ import {
 } from "react-icons/hi2";
 import {TopBar} from "@components/sidebar";
 import useAnimation from "@hooks/useAnimation";
-import {IAnimationState} from "@appTypes";
+import {IAnimationState, IToggleState} from "@appTypes";
 import Caption from "@components/caption/Caption";
+import EditProfile from "@components/sidebar/leftSidebar/profile/editProfile/EditProfile";
+import openForm from "@utils/logic/openForm";
 
 interface IProfileProps {
     state: IAnimationState,
@@ -37,6 +38,15 @@ const Profile: FC<IProfileProps> = ({state, setState, refSidebar}) => {
     const {image} = useLoadBlob(userImg ? `users/${userId}/${userImg}` : '')
 
     useAnimation(state.state, setAnimation, setState)
+
+    type FormKeys = 'profile'
+    const initialToggleState: IToggleState<FormKeys> = {
+        profile: {state: false, mounted: false},
+    }
+
+    const [formsState, setFormsState] = useState(initialToggleState)
+
+    const refEditProfile = useRef<HTMLDivElement>(null)
 
     return (
         <CSSTransition
@@ -58,8 +68,7 @@ const Profile: FC<IProfileProps> = ({state, setState, refSidebar}) => {
                         <p>Settings</p>
                     </span>
                     <span>
-                        <Buttons.DefaultButton foo={() => {
-                        }}>
+                        <Buttons.DefaultButton foo={() => openForm('profile', setFormsState)}>
                             <HiOutlinePencil/>
                         </Buttons.DefaultButton>
                         <Buttons.DefaultButton foo={() => {
@@ -72,10 +81,12 @@ const Profile: FC<IProfileProps> = ({state, setState, refSidebar}) => {
                     name: userName,
                     type: "online"
                 }}/>
-                <ul className={`${style.InfoList} ${profileStyle.ProfileInfoList}`}>
+                <ul className={style.InfoList}>
                     <li>
-                        <Buttons.SettingButton foo={() => window.navigator.clipboard.writeText(userName)}
-                                               text={userName} desc={'Username'}>
+                        <Buttons.SettingButton
+                            foo={() => window.navigator.clipboard.writeText(userName)}
+                            text={userName}
+                            desc={'Username'}>
                             <HiOutlineUser/>
                         </Buttons.SettingButton>
                     </li>
@@ -88,15 +99,17 @@ const Profile: FC<IProfileProps> = ({state, setState, refSidebar}) => {
                     </li>
                     {userBio &&
                         <li>
-                            <Buttons.SettingButton foo={() => window.navigator.clipboard.writeText(userBio)}
-                                                   text={userBio} desc={'Bio'}>
+                            <Buttons.SettingButton
+                                foo={() => window.navigator.clipboard.writeText(userBio)}
+                                text={userBio}
+                                desc={'Bio'}>
                                 <HiOutlineExclamationCircle/>
                             </Buttons.SettingButton>
                         </li>
                     }
                 </ul>
                 <Caption/>
-                <ul className={`${style.InfoList} ${profileStyle.ProfileInfoList}`}>
+                <ul className={style.InfoList}>
                     <li>
                         <Buttons.SettingButton foo={() => {
                         }} text={'Notifications and Sounds'}>
@@ -126,6 +139,13 @@ const Profile: FC<IProfileProps> = ({state, setState, refSidebar}) => {
                     </li>
                 </ul>
                 <Caption/>
+                {formsState.profile.mounted &&
+                    <EditProfile
+                        state={formsState.profile}
+                        setState={setFormsState}
+                        refSidebar={refEditProfile}
+                    />
+                }
             </SidebarContainer>
         </CSSTransition>
     )

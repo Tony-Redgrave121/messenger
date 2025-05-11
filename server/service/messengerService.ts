@@ -7,6 +7,7 @@ import * as fs from "fs";
 import IReaction from "../types/IReaction";
 import path from "path";
 import IMessenger from "../types/IMessenger";
+import changeOldImage from "../lib/changeOldImage";
 
 interface IUserFiles {
     messenger_image?: UploadedFile
@@ -356,20 +357,9 @@ class MessengerService {
 
         if (messenger_files?.messenger_image) {
             const folder = `messengers/${messenger_id}`
+            messenger_image = await changeOldImage(oldMessenger.messenger_image, folder, messenger_files.messenger_image)
 
-            if (oldMessenger.messenger_image) {
-                try {
-                    const filePath = path.join(__dirname + "/../src/static", folder, oldMessenger.messenger_image)
-
-                    await fs.promises.rm(filePath, {force: true})
-                } catch (error) {
-                    return ApiError.badRequest(`Error with messenger image deleting`)
-                }
-            }
-
-            messenger_image = await filesUploadingService(folder, messenger_files.messenger_image, 'media')
-
-            if (messenger_image instanceof ApiError) return ApiError.badRequest(`Error with messenger image creation`)
+            if (messenger_image instanceof ApiError) return messenger_image
         }
 
         try {

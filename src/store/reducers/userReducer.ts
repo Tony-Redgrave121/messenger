@@ -123,6 +123,15 @@ const userSlice = createSlice({
         updateIsLoading(state, action) {
             state.isLoading = action.payload
         },
+        setUserName(state, action) {
+            state.userName = action.payload
+        },
+        setUserBio(state, action) {
+            state.userBio = action.payload
+        },
+        setUserImg(state, action) {
+            state.userImg = action.payload
+        }
     },
     extraReducers: (builder) => {
         builder.addCase(userCheckAuth.fulfilled, (state, action) => updateState(state, action))
@@ -136,4 +145,7 @@ const userSlice = createSlice({
 export default userSlice.reducer
 export const {
     updateIsLoading,
+    setUserName,
+    setUserBio,
+    setUserImg
 } = userSlice.actions

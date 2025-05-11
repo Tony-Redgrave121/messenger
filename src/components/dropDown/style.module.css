@@ -151,6 +151,10 @@ h1, h2, h3, h4, p, a, button, input, textarea, small, time {
 .DropDownContainer li > div {
   border: 2px solid rgba(0, 0, 0, 0);
   outline: 3px solid rgba(33, 33, 33, 0.8);
+  background: none;
+}
+.DropDownContainer li > div h1 {
+  font-size: 12px;
 }
 .DropDownContainer li:hover {
   background-color: rgba(66, 66, 66, 0.5);

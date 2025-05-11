@@ -1,11 +1,14 @@
 import ApiError from "../error/ApiError"
 import models from "../model/models"
-import {FileArray} from "express-fileupload"
+import {FileArray, UploadedFile} from "express-fileupload"
 import * as uuid from "uuid"
 import filesUploadingService from "./filesUploadingService"
 import path from "path"
 import fs from "fs"
 import {Sequelize} from "sequelize";
+import IProfileSettings from "../types/IProfileSettings";
+import IUser from "../types/IUser";
+import changeOldImage from "../lib/changeOldImage";
 
 interface IPostMessage {
     user_id: string,
@@ -19,6 +22,10 @@ interface IMessageFiles {
     message_file_id: string,
     message_file_name: string,
     message_file_size: number
+}
+
+interface IUserFiles {
+    user_img?: UploadedFile
 }
 
 class UserService {
@@ -47,7 +54,6 @@ class UserService {
 
         return messenger
     }
-
     async fetchMessengersList(user_id: string) {
         if (!user_id) return ApiError.internalServerError("An error occurred while fetching messengers list")
 
@@ -71,7 +77,6 @@ class UserService {
 
         return messengersList
     }
-
     async fetchMessages(user_id: string, messenger_id: string) {
         if (!user_id) return ApiError.internalServerError("An error occurred while fetching the messages")
 
@@ -94,7 +99,6 @@ class UserService {
 
         return messages
     }
-
     async postMessage(message: IPostMessage, files: FileArray | null | undefined) {
         const message_id = uuid.v4()
         let message_files: IMessageFiles[] = []
@@ -150,7 +154,6 @@ class UserService {
             user: user
         }
     }
-
     async deleteMessage(message_id: string, messenger_id: string) {
         try {
             const message_files = await models.message_file.findAll({
@@ -169,6 +172,51 @@ class UserService {
         } catch (e) {
             console.log(e)
         }
+    }
+    async getProfile(user_id: string) {
+        const userData = await models.users.findOne({
+            where: {user_id: user_id},
+            attributes: ['user_id', 'user_name', 'user_img', 'user_bio']
+        }) as IProfileSettings | null
+
+        if (!userData) return ApiError.internalServerError("No user settings found")
+
+        const user_img = userData?.user_img ? fs.readFileSync(__dirname + `/../src/static/users/${user_id}/${userData.user_img}`) : null
+
+        return {
+            user_id: userData.user_id,
+            user_name: userData.user_name,
+            user_bio: userData.user_bio,
+            user_img: user_img ? user_img.toString('base64') : null,
+        }
+    }
+    async putProfile(user_id: string, user_name: string, user_bio?: string, user_files?: IUserFiles | null) {
+        const oldProfile = await models.users.findOne({where: {user_id: user_id}}) as IUser | null
+
+        if (!oldProfile) return ApiError.notFound(`Profile not found`)
+        let user_img = null
+
+        if (user_files?.user_img) {
+            const folder = `users/${user_id}`
+            user_img = await changeOldImage(oldProfile.user_img, folder, user_files.user_img)
+
+            if (user_img instanceof ApiError) return user_img
+        }
+
+        try {
+            await models.users.update({
+                user_name: user_name,
+                user_bio: user_bio,
+                user_img: user_img ? user_img.file : oldProfile.user_img
+            }, {where: {user_id: user_id}})
+        } catch (error) {
+            return ApiError.internalServerError(`Error with profile updating`)
+        }
+
+        return models.users.findOne({
+            where: {user_id: user_id},
+            attributes: ['user_id', 'user_name', 'user_img', 'user_bio']
+        })
     }
 }
 

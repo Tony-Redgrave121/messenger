@@ -14,7 +14,7 @@ const ImageBlock: FC<IImageBlockProps> = ({image, info}) => {
     return (
         <>
             {image ?
-                <div className={style.ImageBlock} style={{backgroundImage: `url('${image}')`}}>
+                <div className={`${style.ImageBlock} ${style.ImageGradient}`} style={{backgroundImage: `url('${image}')`}}>
                     <div className={style.TitleBlock}>
                         <h1>{info.name}</h1>
                         <p>{info.type}</p>

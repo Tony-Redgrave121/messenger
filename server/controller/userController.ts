@@ -1,7 +1,7 @@
 import ApiError from "../error/ApiError"
 import {Request, Response} from "express"
 import UserService from "../service/userService"
-import userService from "../service/userService";
+
 class UserController {
     async fetchMessenger(req: Request, res: Response): Promise<any> {
         try {
@@ -17,7 +17,6 @@ class UserController {
             return res.json(ApiError.internalServerError("An error occurred while fetching the messenger"))
         }
     }
-
     async fetchMessengersList(req: Request, res: Response): Promise<any> {
         try {
             if (!req.params) return res.json(ApiError.internalServerError('An error occurred while fetching messengers list'))
@@ -30,7 +29,6 @@ class UserController {
             return res.json(ApiError.internalServerError("An error occurred while fetching messengers list"))
         }
     }
-
     async fetchMessages(req: Request, res: Response): Promise<any> {
         try {
             const {user_id, messenger_id} = req.query
@@ -45,7 +43,6 @@ class UserController {
             return res.json(ApiError.internalServerError("An error occurred while fetching the messages"))
         }
     }
-
     async postMessage(req: Request, res: Response): Promise<any> {
         try {
             const {user_id, messenger_id, reply_id, message_text, message_type} = req.body
@@ -60,7 +57,7 @@ class UserController {
                 message_type: message_type
             }
 
-            const data = await userService.postMessage(message, req.files)
+            const data = await UserService.postMessage(message, req.files)
 
             if (data instanceof ApiError) return res.json(ApiError.internalServerError('An error occurred while posting the message'))
 
@@ -69,18 +66,47 @@ class UserController {
             return res.json(ApiError.internalServerError('An error occurred while posting the message'))
         }
     }
-
     async deleteMessage(req: Request, res: Response): Promise<any> {
         try {
             const {message_id, messenger_id} = req.query
 
             if (!message_id || !messenger_id || typeof message_id !== 'string' || typeof messenger_id !== 'string')return res.json(ApiError.internalServerError('An error occurred while deleting the message'))
 
-            await userService.deleteMessage(message_id, messenger_id)
+            await UserService.deleteMessage(message_id, messenger_id)
 
             return res.json(message_id)
         } catch (e) {
             return res.json(ApiError.internalServerError('An error occurred while deleting the message'))
+        }
+    }
+    async getProfile(req: Request, res: Response): Promise<any> {
+        try {
+
+        } catch (e) {
+            return res.json(ApiError.internalServerError("An error occurred while fetching a profile"))
+        }
+        const {user_id} = req.params
+
+        if (!user_id)
+            return res.json(ApiError.internalServerError('An error occurred while fetching a profile'))
+
+        const profile = await UserService.getProfile(user_id)
+
+        return res.json(profile)
+    }
+    async putProfile(req: Request, res: Response): Promise<any> {
+        try {
+            const {user_id} = req.params
+            const {user_name, user_bio} = req.body
+
+            if (!user_id || !user_name)
+                return res.json(ApiError.internalServerError('An error occurred while updating a profile'))
+
+            const profile = await UserService.putProfile(user_id, user_name, user_bio, req.files)
+
+            return res.json(profile)
+        } catch (e) {
+            return res.json(ApiError.internalServerError("An error occurred while updating a profile"))
         }
     }
 }

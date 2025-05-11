@@ -1,30 +1,35 @@
 import {
     DELETE_MESSAGE,
     FETCH_MESSAGES,
+    PROFILE_SETTINGS,
     POST_MESSAGE,
+    PROFILE,
 } from "@utils/const/const"
 import $api from '@utils/http/index'
 import {AxiosResponse} from 'axios'
 import {IMessengerResponse, IMessagesResponse, IMessengersListResponse} from "@appTypes"
+import IProfileSettings from "../appTypes/user/IProfileSettings";
 
 export default class UserService {
     static async fetchMessenger(user_id: string, messenger_id: string, signal: AbortSignal): Promise<AxiosResponse<IMessengerResponse>> {
         return $api.get<IMessengerResponse>(`/messenger/?user_id=${user_id}&messenger_id=${messenger_id}`, {signal})
     }
-
     static async fetchMessengersList(user_id: string, signal: AbortSignal): Promise<AxiosResponse<IMessengersListResponse[]>> {
         return $api.get<IMessengersListResponse[]>(`/messengers-list/${user_id}`, {signal})
     }
-
     static async fetchMessages(user_id: string, messenger_id: string, signal: AbortSignal): Promise<AxiosResponse<IMessagesResponse[]>> {
         return $api.get<IMessagesResponse[]>(`${FETCH_MESSAGES}?user_id=${user_id}&messenger_id=${messenger_id}`, {signal})
     }
-
     static async postMessage(message: FormData): Promise<AxiosResponse<IMessagesResponse>> {
         return $api.post<IMessagesResponse>(POST_MESSAGE, message)
     }
-
     static async deleteMessage(message_id: string, messenger_id: string): Promise<AxiosResponse> {
         return $api.delete(`${DELETE_MESSAGE}?message_id=${message_id}&messenger_id=${messenger_id}`)
+    }
+    static async getProfile(user_id: string): Promise<AxiosResponse<IProfileSettings>> {
+        return $api.get(`${PROFILE}/${user_id}`)
+    }
+    static async putProfile(user_id: string, formData: FormData): Promise<AxiosResponse<IProfileSettings>> {
+        return $api.put(`${PROFILE}/${user_id}`, formData)
     }
 }

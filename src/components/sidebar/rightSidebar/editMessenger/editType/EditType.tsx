@@ -16,7 +16,6 @@ interface IEditTypeProps {
     refSidebar: RefObject<HTMLDivElement | null>,
     messengerType: 'private' | 'public',
     messengerUrlType: string,
-
 }
 
 const EditType: FC<IEditTypeProps> = ({setState, refSidebar, state, messengerType, messengerUrlType}) => {
