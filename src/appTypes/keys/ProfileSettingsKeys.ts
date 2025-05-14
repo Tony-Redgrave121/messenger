@@ -1,3 +1,3 @@
-type ProfileSettingsKeys = 'profile'
+type ProfileSettingsKeys = 'profile' | 'password'
 
 export default ProfileSettingsKeys

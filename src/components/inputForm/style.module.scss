@@ -34,16 +34,16 @@
     word-wrap: break-word;
     word-break: break-all;
   }
-}
 
-small {
-  position: absolute;
-  bottom: -25px;
-  color: #ca0000;
-  font-size: 14px;
-  line-height: 1.5;
+  small {
+    position: absolute;
+    bottom: -25px;
+    color: #ca0000;
+    font-size: 14px;
+    line-height: 1.5;
 
-  &::first-letter {
-    text-transform: capitalize;
+    &::first-letter {
+      text-transform: capitalize;
+    }
   }
 }

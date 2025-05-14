@@ -5,26 +5,31 @@ import '../animation.css'
 import style from "../../rightSidebar/style.module.css";
 import {ImageBlock} from "@components/sidebar";
 import useLoadBlob from "@hooks/useLoadBlob";
-import {useAppSelector} from "@hooks/useRedux";
+import {useAppDispatch, useAppSelector} from "@hooks/useRedux";
 import {Buttons} from "@components/buttons";
 import {
     HiOutlinePencil,
     HiOutlineArrowRightOnRectangle,
     HiOutlineExclamationCircle,
     HiOutlinePaperClip,
-    HiOutlineBell,
-    HiOutlineServerStack,
     HiOutlineLockClosed,
-    HiOutlineQuestionMarkCircle,
     HiOutlineUser,
     HiOutlineArrowLeft,
+    HiOutlineTrash,
 } from "react-icons/hi2";
 import {TopBar} from "@components/sidebar";
 import useAnimation from "@hooks/useAnimation";
-import {IAnimationState, IToggleState} from "@appTypes";
+import {IAnimationState, IToggleState, ProfileSettingsKeys} from "@appTypes";
 import Caption from "@components/caption/Caption";
 import EditProfile from "@components/sidebar/leftSidebar/profile/editProfile/EditProfile";
 import openForm from "@utils/logic/openForm";
+import EditPassword from "@components/sidebar/leftSidebar/profile/editPassword/EditPassword";
+import useCopy from "@utils/hooks/useCopy";
+import EditDelete from "@components/sidebar/leftSidebar/profile/editDelete/EditDelete";
+import PopupEditModerators from "@components/popup/popupEditMembers/PopupEditModerators";
+import {PopupContainer} from "@components/popup";
+import PopupConfirmation from "@components/popup/popupConfirmation/PopupConfirmation";
+import {deleteAccount} from "@store/reducers/userReducer";
 
 interface IProfileProps {
     state: IAnimationState,
@@ -33,20 +38,23 @@ interface IProfileProps {
 }
 
 const Profile: FC<IProfileProps> = ({state, setState, refSidebar}) => {
+    const initialToggleState: IToggleState<ProfileSettingsKeys> = {
+        profile: {state: false, mounted: false},
+        password: {state: false, mounted: false}
+    }
+
+    const [popup, setPopup] = useState(false)
     const [animation, setAnimation] = useState(false)
+    const [formsState, setFormsState] = useState(initialToggleState)
+
     const {userImg, userName, userId, userBio} = useAppSelector(state => state.user)
     const {image} = useLoadBlob(userImg ? `users/${userId}/${userImg}` : '')
 
     useAnimation(state.state, setAnimation, setState)
-
-    type FormKeys = 'profile'
-    const initialToggleState: IToggleState<FormKeys> = {
-        profile: {state: false, mounted: false},
-    }
-
-    const [formsState, setFormsState] = useState(initialToggleState)
-
     const refEditProfile = useRef<HTMLDivElement>(null)
+
+    const {handleCopy} = useCopy()
+    const dispatch = useAppDispatch()
 
     return (
         <CSSTransition
@@ -84,7 +92,7 @@ const Profile: FC<IProfileProps> = ({state, setState, refSidebar}) => {
                 <ul className={style.InfoList}>
                     <li>
                         <Buttons.SettingButton
-                            foo={() => window.navigator.clipboard.writeText(userName)}
+                            foo={() => handleCopy(userName, 'Username copied to clipboard')}
                             text={userName}
                             desc={'Username'}>
                             <HiOutlineUser/>
@@ -92,15 +100,16 @@ const Profile: FC<IProfileProps> = ({state, setState, refSidebar}) => {
                     </li>
                     <li>
                         <Buttons.SettingButton
-                            foo={() => window.navigator.clipboard.writeText(`http://localhost:3000/chat/${userId}`)}
-                            text={userId} desc={'Link'}>
+                            foo={() => handleCopy(`http://localhost:3000/chat/${userId}`, 'Link copied to clipboard')}
+                            text={userId}
+                            desc={'Link'}>
                             <HiOutlinePaperClip/>
                         </Buttons.SettingButton>
                     </li>
                     {userBio &&
                         <li>
                             <Buttons.SettingButton
-                                foo={() => window.navigator.clipboard.writeText(userBio)}
+                                foo={() => handleCopy(userBio, 'Bio copied to clipboard')}
                                 text={userBio}
                                 desc={'Bio'}>
                                 <HiOutlineExclamationCircle/>
@@ -111,20 +120,10 @@ const Profile: FC<IProfileProps> = ({state, setState, refSidebar}) => {
                 <Caption/>
                 <ul className={style.InfoList}>
                     <li>
-                        <Buttons.SettingButton foo={() => {
-                        }} text={'Notifications and Sounds'}>
-                            <HiOutlineBell/>
-                        </Buttons.SettingButton>
-                    </li>
-                    <li>
-                        <Buttons.SettingButton foo={() => {
-                        }} text={'Data and Storage'}>
-                            <HiOutlineServerStack/>
-                        </Buttons.SettingButton>
-                    </li>
-                    <li>
-                        <Buttons.SettingButton foo={() => {
-                        }} text={'Privacy and Security'}>
+                        <Buttons.SettingButton
+                            foo={() => openForm('password', setFormsState)}
+                            text={'Edit Password'}
+                        >
                             <HiOutlineLockClosed/>
                         </Buttons.SettingButton>
                     </li>
@@ -132,9 +131,12 @@ const Profile: FC<IProfileProps> = ({state, setState, refSidebar}) => {
                 <Caption/>
                 <ul className={style.InfoList}>
                     <li>
-                        <Buttons.SettingButton foo={() => {
-                        }} text={'CrowCaw Features'}>
-                            <HiOutlineQuestionMarkCircle/>
+                        <Buttons.SettingButton
+                            foo={() => openForm('delete', setFormsState)}
+                            text={'Delete Account'}
+                            isRed
+                        >
+                            <HiOutlineTrash/>
                         </Buttons.SettingButton>
                     </li>
                 </ul>
@@ -146,6 +148,22 @@ const Profile: FC<IProfileProps> = ({state, setState, refSidebar}) => {
                         refSidebar={refEditProfile}
                     />
                 }
+                {formsState.password.mounted &&
+                    <EditPassword
+                        state={formsState.password}
+                        setState={setFormsState}
+                        refSidebar={refEditProfile}
+                    />
+                }
+                <PopupContainer state={popup} handleCancel={() => setPopup(false)}>
+                    <PopupConfirmation
+                        title='Delete Account'
+                        text='Are you sure you want to permanently delete all your data?'
+                        confirmButtonText='delete'
+                        onCancel={() => setPopup(false)}
+                        onConfirm={() => dispatch(deleteAccount({user_id: userId}))}
+                    />
+                </PopupContainer>
             </SidebarContainer>
         </CSSTransition>
     )

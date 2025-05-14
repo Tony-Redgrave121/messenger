@@ -9,6 +9,7 @@ import {Sequelize} from "sequelize";
 import IProfileSettings from "../types/IProfileSettings";
 import IUser from "../types/IUser";
 import changeOldImage from "../lib/changeOldImage";
+import bcrypt from "bcrypt";
 
 interface IPostMessage {
     user_id: string,
@@ -217,6 +218,24 @@ class UserService {
             where: {user_id: user_id},
             attributes: ['user_id', 'user_name', 'user_img', 'user_bio']
         })
+    }
+    async putPassword(user_id: string, user_password: string, user_password_new: string) {
+        const user = await models.users.findOne({
+            where: {user_id: user_id},
+            attributes: ['user_password']
+        }) as {user_password: string} | null
+
+        if (!user) return ApiError.notFound("User account not found")
+        let comparePassword = bcrypt.compareSync(user_password, user.user_password)
+
+        if (!comparePassword) return ApiError.forbidden('Old password is incorrect')
+        const hash_user_password = await bcrypt.hash(user_password_new, 5)
+
+        await models.users.update({
+            user_password: hash_user_password,
+        }, {where: {user_id: user_id}})
+
+        return "Password successfully updated"
     }
 }
 

@@ -16,6 +16,7 @@ import useLoadBlob from "@hooks/useLoadBlob";
 import {ImageBlock} from "@components/sidebar";
 import {TopBar} from "../";
 import EditMessenger from "@components/sidebar/rightSidebar/editMessenger/EditMessenger";
+import useCopy from "@utils/hooks/useCopy";
 
 interface IRightSidebar {
     entity: IMessengerResponse,
@@ -42,6 +43,8 @@ const RightSidebar: FC<IRightSidebar> = (
         mounted: false
     })
     const refEditMessenger = useRef<HTMLDivElement>(null)
+
+    const {handleCopy} = useCopy()
 
     return (
         <CSSTransition
@@ -72,9 +75,9 @@ const RightSidebar: FC<IRightSidebar> = (
                     {entity.messenger_desc &&
                         <li>
                             <Buttons.SettingButton
-                                foo={() => window.navigator.clipboard.writeText(entity.messenger_desc!)}
+                                foo={() => handleCopy(entity.messenger_desc!, 'Info copied to clipboard')}
                                 text={entity.messenger_desc}
-                                desc={'Bio'}
+                                desc={'Info'}
                             >
                                 <HiOutlineExclamationCircle/>
                             </Buttons.SettingButton>
@@ -82,7 +85,7 @@ const RightSidebar: FC<IRightSidebar> = (
                     }
                     <li>
                         <Buttons.SettingButton
-                            foo={() => window.navigator.clipboard.writeText(`http://localhost:3000/${entity.messenger_type}/${entity.messenger_id}`)}
+                            foo={() => handleCopy(`http://localhost:3000/${entity.messenger_type}/${entity.messenger_id}`, 'Link copied to clipboard')}
                             text={entity.messenger_id}
                             desc={'Link'}
                         >

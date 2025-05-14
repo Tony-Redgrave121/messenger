@@ -1,0 +1,31 @@
+@use '../../../../../styles/base/_variables.css' as v;
+@use '../../../../../styles/base/_normalize.scss';
+
+.FormContainer {
+  &, .Form, .TopForm {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+  }
+
+  .TopForm {
+    padding: 80px 8px 8px;
+    gap: 16px;
+
+    > svg {
+      color: white;
+      width: 120px;
+      height: 120px;
+    }
+
+    > p {
+      color: white;
+      line-height: 1.3;
+      font-weight: 600;
+      text-align: left;
+      padding: 0 16px;
+      width: 100%;
+    }
+  }
+}

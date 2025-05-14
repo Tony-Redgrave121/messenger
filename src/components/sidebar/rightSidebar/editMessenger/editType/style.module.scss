@@ -2,7 +2,7 @@
 @use '../../../../../styles/base/_normalize.scss';
 
 .FormContainer {
-  > div {
+  .FormBlock {
     padding: 8px;
   }
 

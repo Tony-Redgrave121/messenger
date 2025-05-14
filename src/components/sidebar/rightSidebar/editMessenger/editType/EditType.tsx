@@ -9,7 +9,9 @@ import Caption from "@components/caption/Caption";
 import closeForm from "@utils/logic/closeForm";
 import useSettingsAnimation from "@hooks/useSettingsAnimation";
 import MessengerService from "@service/MessengerService";
-import {useNavigate, useParams} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom"
+import useCopy from "@utils/hooks/useCopy";
+
 interface IEditTypeProps {
     state: IAnimationState,
     setState: Dispatch<SetStateAction<IToggleState<SettingsKeys>>>,
@@ -18,7 +20,15 @@ interface IEditTypeProps {
     messengerUrlType: string,
 }
 
-const EditType: FC<IEditTypeProps> = ({setState, refSidebar, state, messengerType, messengerUrlType}) => {
+const EditType: FC<IEditTypeProps> = (
+    {
+        setState,
+        refSidebar,
+        state,
+        messengerType,
+        messengerUrlType
+    }
+) => {
     const [animation, setAnimation] = useState(false)
     const [newMessengerType, setNewMessengerType] = useState('private')
     const [newMessengerLink, setNewMessengerLink] = useState('')
@@ -28,6 +38,7 @@ const EditType: FC<IEditTypeProps> = ({setState, refSidebar, state, messengerTyp
 
     const {id} = useParams()
     const navigate = useNavigate()
+    const {handleCopy} = useCopy()
 
     useEffect(() => {
         if (!id) return
@@ -79,7 +90,7 @@ const EditType: FC<IEditTypeProps> = ({setState, refSidebar, state, messengerTyp
                     </span>
                 </TopBar>
                 <div className={style.FormContainer} ref={refForm}>
-                    <div>
+                    <div className={style.FormBlock}>
                         <p>Channel Type</p>
                         <Buttons.RadioButton
                             key='private'
@@ -93,11 +104,11 @@ const EditType: FC<IEditTypeProps> = ({setState, refSidebar, state, messengerTyp
                             desc='Public channels can be found in search, anyone can join them.'/>
                     </div>
                     <Caption/>
-                    <div>
+                    <div className={style.FormBlock}>
                         <Buttons.SettingButton
                             text={window.location.href}
                             desc='People can join your channel by following this link. You can revoke the link any time.'
-                            foo={() => navigator.clipboard.writeText(window.location.href)}
+                            foo={() =>  handleCopy(window.location.href, 'Link copied to clipboard')}
                         />
                         <Buttons.SettingButton
                             foo={handleRevokeLink}

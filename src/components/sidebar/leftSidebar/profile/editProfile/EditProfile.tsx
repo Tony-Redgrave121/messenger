@@ -39,16 +39,9 @@ const InitialValues: IEditProfileForm = {
     user_bio: '',
 }
 
-const InitialSettings: IProfileSettings = {
-    user_id: '',
-    user_name: '',
-    user_img: null,
-    user_bio: '',
-}
-
 const EditProfile: FC<IProfileProps> = ({state, setState, refSidebar}) => {
     const [animation, setAnimation] = useState(false)
-    const [settings, setSettings] = useState<IProfileSettings>(InitialSettings)
+    const [settings, setSettings] = useState<IProfileSettings>(InitialValues)
 
     const refForm = useRef<HTMLDivElement>(null)
     const pictureRef = useRef<File>(null)

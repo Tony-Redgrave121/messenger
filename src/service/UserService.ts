@@ -3,7 +3,7 @@ import {
     FETCH_MESSAGES,
     PROFILE_SETTINGS,
     POST_MESSAGE,
-    PROFILE,
+    PROFILE, PASSWORD,
 } from "@utils/const/const"
 import $api from '@utils/http/index'
 import {AxiosResponse} from 'axios'
@@ -31,5 +31,8 @@ export default class UserService {
     }
     static async putProfile(user_id: string, formData: FormData): Promise<AxiosResponse<IProfileSettings>> {
         return $api.put(`${PROFILE}/${user_id}`, formData)
+    }
+    static async putPassword(user_id: string, formData: FormData): Promise<AxiosResponse> {
+        return $api.put(`${PASSWORD}/${user_id}`, formData)
     }
 }

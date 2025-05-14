@@ -1,0 +1,10 @@
+@use '../../../styles/base/_variables.css' as v;
+@use '../../../styles/base/_normalize.scss';
+
+.PopupBlock {
+  color: white;
+
+  & > :first-child {
+    font-size: 24px;
+  }
+}

@@ -11,7 +11,7 @@ import {
     PUT_MESSENGER_MODERATORS, POST_REMOVED,
     POST_CONTACTS_MEMBERS, POST_MEMBER,
     DELETE_REMOVED, DELETE_MEMBER,
-    PROFILE
+    PROFILE, PASSWORD
 } from "../utils/const"
 import express from "express"
 import UserController from "../controller/userController"
@@ -53,5 +53,6 @@ router.delete(DELETE_REMOVED, MessengerController.deleteRemoved)
 
 router.get(PROFILE, UserController.getProfile)
 router.put(PROFILE, UserController.putProfile)
+router.put(PASSWORD, UserController.putPassword)
 
 export default router

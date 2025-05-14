@@ -106,31 +106,28 @@ h1, h2, h3, h4, p, a, button, input, textarea, small, time {
   font-family: "Roboto", -apple-system, apple color emoji, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
 }
 
-.MainContainer {
-  position: relative;
+.FormContainer, .FormContainer .Form, .FormContainer .TopForm {
   display: flex;
-  justify-content: center;
-  background-repeat: repeat;
-  background-size: 400px;
-  height: 100vh;
+  flex-direction: column;
+  align-items: center;
   width: 100%;
-  overflow: hidden;
-  left: 0;
 }
-.MainContainer:after {
-  content: "";
-  position: absolute;
-  display: flex;
+.FormContainer .TopForm {
+  padding: 80px 8px 8px;
+  gap: 16px;
+}
+.FormContainer .TopForm > svg {
+  color: white;
+  width: 120px;
+  height: 120px;
+}
+.FormContainer .TopForm > p {
+  color: white;
+  line-height: 1.3;
+  font-weight: 600;
+  text-align: left;
+  padding: 0 16px;
   width: 100%;
-  height: 100vh;
-  background: linear-gradient(-45deg, rgba(0, 0, 0, 0.75) 0%, rgba(0, 0, 0, 0.9) 50%, rgba(0, 0, 0, 0.75) 100%);
-}
-
-@media screen and (max-width: 940px) {
-  .MainContainer {
-    width: 100vw;
-    justify-content: start;
-  }
 }
 
 /*# sourceMappingURL=style.module.css.map */

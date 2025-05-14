@@ -1,12 +1,12 @@
-import React from 'react'
+import React, {FC, ReactNode} from 'react'
 import style from './style.module.css'
-import img from './backgrounds/background.webp'
+import img from './backgrounds/pattern.svg'
 
 interface IMainContainer {
-    children?: React.ReactNode
+    children?: ReactNode
 }
 
-const MainContainer: React.FC<IMainContainer> = ({children}) => {
+const MainContainer: FC<IMainContainer> = ({children}) => {
     return (
         <main style={{backgroundImage: `url('${img}')`}} className={style.MainContainer}>
             {children}

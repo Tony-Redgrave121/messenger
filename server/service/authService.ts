@@ -54,7 +54,7 @@ class AuthService {
     }
 
     async login(user_email: string, user_password: string) {
-        const user: IUser | null = await models.users.findOne({where: {user_email: user_email}}) as IUser | null
+        const user = await models.users.findOne({where: {user_email: user_email}}) as IUser | null
 
         if (!user) return ApiError.notFound("User account not found")
 

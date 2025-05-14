@@ -3,6 +3,7 @@ import MainContainer from "./mainContainer/MainContainer";
 import {Outlet} from "react-router-dom";
 import style from './style.module.css'
 import {LeftSidebar} from "@components/sidebar";
+import PopupMessage from "@components/popup/popupMessage/PopupMessage";
 
 const Layout = () => {
     return (
@@ -15,6 +16,7 @@ const Layout = () => {
                     </MainContainer>
                 </Suspense>
             </div>
+            <PopupMessage/>
         </div>
     )
 }
