@@ -34,7 +34,7 @@ class AuthService {
 
         if (user_files && user_files.user_image) userImg = await filesUploadingService(`users/${user_id}`, user_files.user_image, 'media')
 
-        if (!userImg || userImg instanceof ApiError) return ApiError.badRequest(`Error with user image creation`)
+        if (userImg instanceof ApiError) return ApiError.badRequest(`Error with user image creation`)
 
         const hash_user_password = await bcrypt.hash(user_password, 5)
         await models.users.create({user_id: user_id, user_name, user_email, user_password: hash_user_password, user_img: userImg ? userImg.file : null, user_activation_code: user_activation_code, user_bio: user_bio})

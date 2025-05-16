@@ -92,7 +92,7 @@ const EditPassword: FC<IPasswordProps> = ({state, setState, refSidebar}) => {
                     <div className={style.TopForm}>
                         <InputForm errors={errors} field="user_password">
                             <input
-                                type="text"
+                                type="password"
                                 id="user_password"
                                 placeholder="Current Password"
                                 {...register('user_password', {
@@ -106,7 +106,7 @@ const EditPassword: FC<IPasswordProps> = ({state, setState, refSidebar}) => {
                         </InputForm>
                         <InputForm errors={errors} field="user_password_new">
                             <input
-                                type="text"
+                                type="password"
                                 id="user_password_new"
                                 placeholder="New Password"
                                 {...register('user_password_new', {

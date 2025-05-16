@@ -8,6 +8,8 @@ import {CSSTransition} from "react-transition-group"
 import './animation.css'
 import {Step1, Step2, Step3, Step4} from "./";
 import {IAuthForm} from "@appTypes";
+import {setPopupMessageChildren, setPopupMessageState} from "@store/reducers/appReducer";
+import PopupMessage from "@components/popup/popupMessage/PopupMessage";
 
 const InitialValues: IAuthForm = {
     user_email: '',
@@ -58,7 +60,10 @@ const AuthForm = () => {
                 const res = await dispatch(login({formData: formData})) as any
                 const payload = res.payload
 
-                if (payload.message) return setErrorForm(payload.message)
+                if (payload.message) {
+                    dispatch(setPopupMessageState(true))
+                    return dispatch(setPopupMessageChildren(payload.message))
+                }
                 else if (!payload.registration) return navigate('/')
             }
 
@@ -101,10 +106,10 @@ const AuthForm = () => {
                 >
                     <div ref={refForm}>
                         {steps[formNumber].component}
-                        {errorForm && <small>{errorForm}</small>}
                     </div>
                 </CSSTransition>
             </form>
+            <PopupMessage/>
         </div>
     )
 }

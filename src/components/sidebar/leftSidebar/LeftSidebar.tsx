@@ -52,11 +52,21 @@ const LeftSidebar = () => {
                             <HiBars3/>
                             <DropDown list={dropDownList} state={settings} setState={setSettings}/>
                         </Buttons.DefaultButton>
-                        <SearchBlock ref={refSearch} foo={() => {}}/>
+                        <SearchBlock ref={refSearch} foo={() => {
+                        }}/>
                     </div>
                     <ChatList/>
-                    <Caption/>
-                    <ContactList contacts={contacts} text='Contacts' onClick={() => {}}/>
+                    {contacts.length > 0 &&
+                        <>
+                            <Caption/>
+                            <ContactList
+                                contacts={contacts}
+                                text='Contacts'
+                                onClick={() => {
+                                }}
+                            />
+                        </>
+                    }
                     <Buttons.CreateButton state={true} foo={() => setMessenger(!messenger)}>
                         <HiOutlinePencil/>
                         <DropDown list={messengersList} state={messenger} setState={setMessenger}/>

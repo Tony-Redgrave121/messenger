@@ -124,6 +124,7 @@ h1, h2, h3, h4, p, a, button, input, textarea, small, time {
 .SidebarContainer .Wrapper {
   overflow-y: auto;
   min-width: 420px;
+  height: 100%;
 }
 
 .RightSidebarContainer {

@@ -25,11 +25,9 @@ import EditProfile from "@components/sidebar/leftSidebar/profile/editProfile/Edi
 import openForm from "@utils/logic/openForm";
 import EditPassword from "@components/sidebar/leftSidebar/profile/editPassword/EditPassword";
 import useCopy from "@utils/hooks/useCopy";
-import EditDelete from "@components/sidebar/leftSidebar/profile/editDelete/EditDelete";
-import PopupEditModerators from "@components/popup/popupEditMembers/PopupEditModerators";
 import {PopupContainer} from "@components/popup";
 import PopupConfirmation from "@components/popup/popupConfirmation/PopupConfirmation";
-import {deleteAccount} from "@store/reducers/userReducer";
+import {deleteAccount, logout} from "@store/reducers/userReducer";
 
 interface IProfileProps {
     state: IAnimationState,
@@ -79,8 +77,7 @@ const Profile: FC<IProfileProps> = ({state, setState, refSidebar}) => {
                         <Buttons.DefaultButton foo={() => openForm('profile', setFormsState)}>
                             <HiOutlinePencil/>
                         </Buttons.DefaultButton>
-                        <Buttons.DefaultButton foo={() => {
-                        }}>
+                        <Buttons.DefaultButton foo={() => dispatch(logout())}>
                             <HiOutlineArrowRightOnRectangle/>
                         </Buttons.DefaultButton>
                     </span>
@@ -127,12 +124,9 @@ const Profile: FC<IProfileProps> = ({state, setState, refSidebar}) => {
                             <HiOutlineLockClosed/>
                         </Buttons.SettingButton>
                     </li>
-                </ul>
-                <Caption/>
-                <ul className={style.InfoList}>
                     <li>
                         <Buttons.SettingButton
-                            foo={() => openForm('delete', setFormsState)}
+                            foo={() => setPopup(true)}
                             text={'Delete Account'}
                             isRed
                         >

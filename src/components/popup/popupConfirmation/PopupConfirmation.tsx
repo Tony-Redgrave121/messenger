@@ -1,7 +1,6 @@
 import {FC} from 'react'
 import style from './style.module.css'
 import '../animation.css'
-import Buttons from "@components/buttons/Buttons";
 
 interface IPopupConfirmationProps {
     onConfirm: () => void,
@@ -18,9 +17,10 @@ const PopupConfirmation: FC<IPopupConfirmationProps> = ({onCancel, onConfirm, ti
             <div className={style.PopupBlock}>
                 <p>{title}</p>
                 <p>{text}</p>
-                <Buttons.FormButton>
-
-                </Buttons.FormButton>
+                <span>
+                   <button onClick={onCancel}>Cancel</button>
+                   <button onClick={onConfirm}>{confirmButtonText}</button>
+                </span>
             </div>
         </>
     )

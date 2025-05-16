@@ -113,7 +113,7 @@ h1, h2, h3, h4, p, a, button, input, textarea, small, time {
   width: 100%;
 }
 .FormContainer .TopForm {
-  padding: 56px 24px 16px;
+  padding: 72px 24px 16px;
   gap: 24px;
 }
 .FormContainer .Form {
