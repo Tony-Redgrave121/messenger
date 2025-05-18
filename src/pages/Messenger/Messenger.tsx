@@ -2,34 +2,34 @@ import React, {useEffect, useRef, useState} from 'react'
 import style from './style.module.css'
 import {InputBlock} from "@components/inputBlock"
 import {RightSidebar} from "@components/sidebar"
-import {Message} from "@components/message"
-import UserService from "../../service/UserService"
+import {Message} from "./message"
+import UserService from "@service/UserService"
 import {useAppSelector} from "@hooks/useRedux"
 import {useNavigate, useParams} from "react-router-dom"
-import {IMessagesResponse, IMessengerResponse} from "@appTypes"
-import ChatHeader from "./chatHeader/ChatHeader"
+import {IMessagesResponse, IAdaptMessenger} from "@appTypes"
+import MessengerHeader from "./messengerHeader/MessengerHeader"
 import {useMessageWS} from "@utils/hooks/useMessageWS";
 
-const InitialMessenger = {
-    messenger_id: '',
-    messenger_name: '',
-    messenger_date: new Date(),
-    messenger_image: undefined,
-    messenger_desc: undefined,
-    messenger_type: '',
-    user_member: [],
-    members_count: ''
+const InitialMessenger: IAdaptMessenger = {
+    id: '',
+    name: '',
+    image: '',
+    desc: '',
+    type: 'chat',
+    members: [],
+    members_count: 0,
+    last_seen: new Date(),
 }
 
-const Chat = () => {
+const Messenger= () => {
     const [sidebarState, setSidebarState] = useState(false)
     const [reply, setReply] = useState<IMessagesResponse | null>(null)
-    const [messenger, setMessenger] = useState<IMessengerResponse>(InitialMessenger)
+    const [messenger, setMessenger] = useState<IAdaptMessenger>(InitialMessenger)
     
     const refEnd = useRef<HTMLDivElement>(null)
     const refRightSidebar = useRef<HTMLDivElement>(null)
 
-    const {id} = useParams()
+    const {id, type} = useParams()
     const user = useAppSelector(state => state.user)
     const navigate = useNavigate()
     
@@ -38,9 +38,9 @@ const Chat = () => {
         messagesList,
         setMessagesList,
     } = useMessageWS()
-    
+
     useEffect(() => {
-        if (!id) return
+        if (!id || !type) return
 
         const controller = new AbortController()
         const signal = controller.signal
@@ -50,14 +50,40 @@ const Chat = () => {
 
             try {
                 const [messenger, messages] = await Promise.all([
-                    UserService.fetchMessenger(user.userId, id, signal),
+                    UserService.fetchMessenger(user.userId, type, id, signal),
                     UserService.fetchMessages(user.userId, id, signal)
                 ])
-                const error = messenger.data as any
-                if (error.message) navigate('/')
 
-                setMessenger(messenger.data)
-                setMessagesList(messages.data)
+                if (messenger.status === 200 && messages.status === 200) {
+                    const messengerData = messenger.data
+                    let adaptMessenger = InitialMessenger
+console.log(messengerData)
+                    if ("user_id" in messengerData) {
+                        adaptMessenger = {
+                            id: messengerData.user_id,
+                            name: messengerData.user_name,
+                            image: messengerData.user_img,
+                            desc: messengerData.user_bio,
+                            type: 'chat',
+                            last_seen: messengerData.user_last_seen,
+                        }
+                    } else if ("messenger_id" in messengerData) {
+                        adaptMessenger = {
+                            id: messengerData.messenger_id,
+                            name: messengerData.messenger_name,
+                            image: messengerData.messenger_image,
+                            desc: messengerData.messenger_desc,
+                            type: messengerData.messenger_type,
+                            members: messengerData.user_member,
+                            members_count: messengerData.members_count,
+                        }
+                    }
+
+                    if (adaptMessenger.id !== '') {
+                        setMessenger(adaptMessenger)
+                        setMessagesList(messages.data)
+                    }
+                } else navigate('/')
             } catch (error) {
                 console.log(error)
             }
@@ -78,7 +104,7 @@ const Chat = () => {
                 <>
                     <div className={style.Wrapper}>
                         <div className={style.ChatContainer}>
-                            <ChatHeader messenger={messenger} setSidebarState={setSidebarState}/>
+                            <MessengerHeader messenger={messenger} setSidebarState={setSidebarState}/>
                             <div className={style.MessageBlock} key={id}>
                                 {messagesList.length > 0 && messagesList.map(message =>
                                     <Message.ChatMessage
@@ -99,7 +125,7 @@ const Chat = () => {
                         ref={refRightSidebar}
                         state={sidebarState}
                         setState={setSidebarState}
-                        key={messenger.messenger_id}
+                        key={messenger.id}
                     />
                 </>
             }
@@ -107,4 +133,4 @@ const Chat = () => {
     )
 }
 
-export default Chat
+export default Messenger

@@ -5,11 +5,12 @@ import UserService from "../service/userService"
 class UserController {
     async fetchMessenger(req: Request, res: Response): Promise<any> {
         try {
-            const {user_id, messenger_id} = req.query
-            if (!user_id || !messenger_id || typeof user_id !== "string" || typeof messenger_id !== "string")
+            const {type, user_id, messenger_id} = req.query
+
+            if (!type || !user_id || !messenger_id || typeof type !== "string" || typeof user_id !== "string" || typeof messenger_id !== "string")
                 return res.json(ApiError.badRequest('Missing required fields'))
 
-            const messengers = await UserService.fetchMessenger(user_id, messenger_id)
+            const messengers = await UserService.fetchMessenger(type, user_id, messenger_id)
 
             if (messengers instanceof ApiError) return res.json(ApiError.internalServerError('An error occurred while fetching the messenger'))
 

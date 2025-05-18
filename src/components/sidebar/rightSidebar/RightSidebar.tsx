@@ -11,7 +11,7 @@ import './animation.css'
 import {Buttons} from '@components/buttons'
 import {SidebarContainer} from "../"
 import {CSSTransition} from 'react-transition-group'
-import {IMessengerResponse} from "@appTypes";
+import {IAdaptMessenger} from "@appTypes";
 import useLoadBlob from "@hooks/useLoadBlob";
 import {ImageBlock} from "@components/sidebar";
 import {TopBar} from "../";
@@ -19,8 +19,8 @@ import EditMessenger from "@components/sidebar/rightSidebar/editMessenger/EditMe
 import useCopy from "@utils/hooks/useCopy";
 
 interface IRightSidebar {
-    entity: IMessengerResponse,
-    setEntity: Dispatch<SetStateAction<IMessengerResponse>>,
+    entity: IAdaptMessenger,
+    setEntity: Dispatch<SetStateAction<IAdaptMessenger>>,
     ref: RefObject<HTMLDivElement | null>,
     state: boolean,
     setState: (state: boolean) => void
@@ -36,7 +36,7 @@ const RightSidebar: FC<IRightSidebar> = (
     }
 ) => {
     const [notification, setNotification] = useState(false)
-    const {image} = useLoadBlob(entity.messenger_image ? `messengers/${entity.messenger_id}/${entity.messenger_image}` : '')
+    const {image} = useLoadBlob(entity.image ? `messengers/${entity.id}/${entity.image}` : '')
 
     const [editMessenger, setEditMessenger] = useState({
         state: false,
@@ -59,7 +59,7 @@ const RightSidebar: FC<IRightSidebar> = (
                     <Buttons.DefaultButton foo={() => setState(false)}>
                         <HiOutlineXMark/>
                     </Buttons.DefaultButton>
-                    <p>{entity.messenger_type} info</p>
+                    <p>{entity.type} info</p>
                     <Buttons.DefaultButton foo={() => setEditMessenger({
                         state: true,
                         mounted: true
@@ -68,15 +68,15 @@ const RightSidebar: FC<IRightSidebar> = (
                     </Buttons.DefaultButton>
                 </TopBar>
                 <ImageBlock image={image} info={{
-                    name: entity.messenger_name,
-                    type: entity.messenger_type !== 'chat' ? `${entity.members_count} subscribers` : entity.messenger_type
+                    name: entity.name,
+                    type: entity.type !== 'chat' ? `${entity.members_count} subscribers` : entity.type
                 }}/>
                 <ul className={style.InfoList}>
-                    {entity.messenger_desc &&
+                    {entity.desc &&
                         <li>
                             <Buttons.SettingButton
-                                foo={() => handleCopy(entity.messenger_desc!, 'Info copied to clipboard')}
-                                text={entity.messenger_desc}
+                                foo={() => handleCopy(entity.desc!, 'Info copied to clipboard')}
+                                text={entity.desc}
                                 desc={'Info'}
                             >
                                 <HiOutlineExclamationCircle/>
@@ -85,8 +85,8 @@ const RightSidebar: FC<IRightSidebar> = (
                     }
                     <li>
                         <Buttons.SettingButton
-                            foo={() => handleCopy(`http://localhost:3000/${entity.messenger_type}/${entity.messenger_id}`, 'Link copied to clipboard')}
-                            text={entity.messenger_id}
+                            foo={() => handleCopy(`http://localhost:3000/${entity.type}/${entity.id}`, 'Link copied to clipboard')}
+                            text={entity.id}
                             desc={'Link'}
                         >
                             <HiOutlinePaperClip/>

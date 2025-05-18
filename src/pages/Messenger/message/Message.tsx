@@ -11,9 +11,9 @@ import {
 } from "react-icons/hi2"
 import {IMessagesResponse, IMessageFile} from "@appTypes";
 import {useAppSelector} from "@hooks/useRedux";
-import {DropDown} from "../dropDown";
-import {DocumentBlock} from "@components/message";
-import UserService from "../../service/UserService";
+import {DropDown} from "@components/dropDown";
+import {DocumentBlock} from "./index";
+import UserService from "@service/UserService";
 import {useParams} from "react-router-dom";
 import handleContextMenu from "@utils/logic/handleContextMenu";
 

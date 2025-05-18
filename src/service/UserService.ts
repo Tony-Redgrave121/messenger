@@ -1,18 +1,16 @@
 import {
     DELETE_MESSAGE,
     FETCH_MESSAGES,
-    PROFILE_SETTINGS,
     POST_MESSAGE,
     PROFILE, PASSWORD,
 } from "@utils/const/const"
 import $api from '@utils/http/index'
 import {AxiosResponse} from 'axios'
-import {IMessengerResponse, IMessagesResponse, IMessengersListResponse} from "@appTypes"
-import IProfileSettings from "../appTypes/user/IProfileSettings";
+import {IMessengerResponse, IMessagesResponse, IMessengersListResponse, IProfileSettings, IContact} from "@appTypes"
 
 export default class UserService {
-    static async fetchMessenger(user_id: string, messenger_id: string, signal: AbortSignal): Promise<AxiosResponse<IMessengerResponse>> {
-        return $api.get<IMessengerResponse>(`/messenger/?user_id=${user_id}&messenger_id=${messenger_id}`, {signal})
+    static async fetchMessenger(user_id: string, type: string, messenger_id: string, signal: AbortSignal): Promise<AxiosResponse<IMessengerResponse | IContact>> {
+        return $api.get<IMessengerResponse | IContact>(`/messenger/?type=${type}&user_id=${user_id}&messenger_id=${messenger_id}`, {signal})
     }
     static async fetchMessengersList(user_id: string, signal: AbortSignal): Promise<AxiosResponse<IMessengersListResponse[]>> {
         return $api.get<IMessengersListResponse[]>(`/messengers-list/${user_id}`, {signal})

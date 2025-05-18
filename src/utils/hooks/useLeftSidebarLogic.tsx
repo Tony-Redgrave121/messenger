@@ -56,7 +56,7 @@ const useLeftSidebarLogic = () => {
         },
         {
             liChildren: <HiOutlineUsers/>,
-            liText: 'New Group',
+            liText: 'New Messenger',
             liFoo: () => setMessengerCreation(prev => ({
                 state: !prev.state,
                 type: 'group'
@@ -64,7 +64,7 @@ const useLeftSidebarLogic = () => {
         },
         {
             liChildren: <HiOutlineUser/>,
-            liText: 'New Private Chat',
+            liText: 'New Private Messenger',
             liFoo: () => setMessengerCreation(prev => ({
                 state: !prev.state,
                 type: 'chat'

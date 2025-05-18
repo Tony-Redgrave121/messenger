@@ -17,8 +17,8 @@ import {DropDown} from "@components/dropDown"
 import {SearchBlock} from "@components/searchBlock"
 import {CSSTransition} from 'react-transition-group'
 import {useAppDispatch, useAppSelector} from "@hooks/useRedux"
-import {IMessengerResponse} from "@appTypes"
 import {setSidebarLeft} from "@store/reducers/appReducer";
+import IAdaptMessenger from "../../../appTypes/IAdaptMessenger";
 
 const list = [
     {
@@ -41,18 +41,18 @@ const list = [
     },
     {
         liChildren: <HiOutlineTrash/>,
-        liText: 'Delete Chat',
+        liText: 'Delete Messenger',
         liFoo: () => {
         }
     }
 ]
 
 interface IChatHeader {
-    messenger: IMessengerResponse,
+    messenger: IAdaptMessenger,
     setSidebarState: (state: boolean) => void
 }
 
-const ChatHeader: FC<IChatHeader> = memo(({messenger, setSidebarState}) => {
+const MessengerHeader: FC<IChatHeader> = memo(({messenger, setSidebarState}) => {
     const [settings, setSettings] = useState(false)
     const [inputState, setInputState] = useState(false)
 
@@ -61,16 +61,23 @@ const ChatHeader: FC<IChatHeader> = memo(({messenger, setSidebarState}) => {
     const sidebarLeft = useAppSelector(state => state.app.sidebarLeft)
     const dispatch = useAppDispatch()
 
+    const getHeaderDesc = () => {
+        switch (messenger.type) {
+            case "chat":
+                return `${messenger.members_count}`
+        }
+    }
+
     return (
         <header className={style.ChatHeader}>
             <Buttons.DefaultButton foo={() => dispatch(setSidebarLeft(!sidebarLeft))}>
                 <HiOutlineArrowLeft/>
             </Buttons.DefaultButton>
             <button className={style.DeskBlock} onClick={() => setSidebarState(true)}>
-                <LoadFile imagePath={messenger.messenger_image ? `messengers/${messenger.messenger_id}/${messenger.messenger_image}` : ''} imageTitle={messenger.messenger_name} key={messenger.messenger_id}/>
+                <LoadFile imagePath={messenger.image ? `messengers/${messenger.id}/${messenger.image}` : ''} imageTitle={messenger.type} key={messenger.id}/>
                 <div>
-                    <h3>{messenger.messenger_name}</h3>
-                    <p>{messenger.members_count} subscribers</p>
+                    <h3>{messenger.name}</h3>
+                    <p>{getHeaderDesc()}</p>
                 </div>
             </button>
             <span>
@@ -95,4 +102,4 @@ const ChatHeader: FC<IChatHeader> = memo(({messenger, setSidebarState}) => {
     )
 })
 
-export default ChatHeader
+export default MessengerHeader

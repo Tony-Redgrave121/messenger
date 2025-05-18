@@ -1,17 +1,9 @@
-import Chat from "../pages/Chat/Chat";
+import Messenger from "../pages/Messenger/Messenger";
 
 const UserRoutes = [
     {
-        path: "chat/:id",
-        Component: Chat
-    },
-    {
-        path: "group/:id",
-        Component: Chat
-    },
-    {
-        path: "channel/:id",
-        Component: Chat
+        path: ":type/:id",
+        Component: Messenger
     }
 ]
 

@@ -6,7 +6,7 @@ export default interface IMessengerResponse {
     messenger_date: Date,
     messenger_image?: string,
     messenger_desc?: string,
-    messenger_type: string,
+    messenger_type: 'chat' | 'channel' | 'group',
     user_member: IMember[],
-    members_count: string
+    members_count: number
 }

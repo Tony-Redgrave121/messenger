@@ -1,3 +1,5 @@
+import IAdaptMessenger from "./IAdaptMessenger";
+
 export type {default as IAuthForm} from './IAuthForm'
 export type {default as IAuthResponse} from './IAuthResponse'
 export type {default as IContact} from './IContact'
@@ -25,3 +27,4 @@ export type {default as ProfileSettingsKeys} from './keys/ProfileSettingsKeys'
 export type {default as IEditProfileForm} from './user/IEditProfileForm'
 export type {default as IProfileSettings} from './user/IProfileSettings'
 export type {default as IEditPasswordForm} from './user/IEditPasswordForm'
+export type {default as IAdaptMessenger} from './IAdaptMessenger'

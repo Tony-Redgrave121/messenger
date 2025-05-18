@@ -3,9 +3,9 @@ import {SidebarContainer, TopBar} from "@components/sidebar";
 import {CSSTransition} from "react-transition-group";
 import useAnimation from "@hooks/useAnimation";
 import {
+    IAdaptMessenger,
     IAnimationState,
     IEditMessengerForm,
-    IMessengerResponse,
     IMessengerSettings,
     IToggleState,
     SettingsKeys
@@ -26,7 +26,7 @@ import {InputForm} from "@components/inputForm";
 import style from "./style.module.css";
 import InputFile from "@components/inputForm/inputFile/InputFile";
 import Caption from "@components/caption/Caption";
-import messengerService from "../../../../service/MessengerService";
+import messengerService from "@service/MessengerService";
 import {useParams} from "react-router-dom";
 import EditReactions from "@components/sidebar/rightSidebar/editMessenger/editReactions/EditReactions";
 import EditType from "@components/sidebar/rightSidebar/editMessenger/editType/EditType";
@@ -37,7 +37,7 @@ import EditRemoved from "@components/sidebar/rightSidebar/editMessenger/editMemb
 
 interface IEditMessengerProps {
     setState: Dispatch<SetStateAction<IAnimationState>>,
-    setEntity: Dispatch<SetStateAction<IMessengerResponse>>,
+    setEntity: Dispatch<SetStateAction<IAdaptMessenger>>,
     refSidebar: RefObject<HTMLDivElement | null>,
 }
 
@@ -157,9 +157,9 @@ const EditMessenger: FC<IEditMessengerProps> = ({setState, setEntity, refSidebar
 
                 setEntity(prev => ({
                     ...prev,
-                    messenger_name: newData.data.messenger_name,
-                    messenger_desc: newData.data.messenger_desc,
-                    messenger_image: newData.data.messenger_image,
+                    name: newData.data.messenger_name,
+                    desc: newData.data.messenger_desc,
+                    image: newData.data.messenger_image,
                 }))
 
                 setValue('messenger_image', null)
