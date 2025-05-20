@@ -15,14 +15,14 @@ export default class UserService {
     static async fetchMessengersList(user_id: string, signal: AbortSignal): Promise<AxiosResponse<IMessengersListResponse[]>> {
         return $api.get<IMessengersListResponse[]>(`/messengers-list/${user_id}`, {signal})
     }
-    static async fetchMessages(user_id: string, messenger_id: string, signal: AbortSignal): Promise<AxiosResponse<IMessagesResponse[]>> {
-        return $api.get<IMessagesResponse[]>(`${FETCH_MESSAGES}?user_id=${user_id}&messenger_id=${messenger_id}`, {signal})
+    static async fetchMessages(user_id: string, type: string, messenger_id: string, signal: AbortSignal): Promise<AxiosResponse<IMessagesResponse[]>> {
+        return $api.get<IMessagesResponse[]>(`${FETCH_MESSAGES}?type=${type}&user_id=${user_id}&messenger_id=${messenger_id}`, {signal})
     }
     static async postMessage(message: FormData): Promise<AxiosResponse<IMessagesResponse>> {
         return $api.post<IMessagesResponse>(POST_MESSAGE, message)
     }
-    static async deleteMessage(message_id: string, messenger_id: string): Promise<AxiosResponse> {
-        return $api.delete(`${DELETE_MESSAGE}?message_id=${message_id}&messenger_id=${messenger_id}`)
+    static async deleteMessage(message_id: string): Promise<AxiosResponse> {
+        return $api.delete(`${DELETE_MESSAGE}?message_id=${message_id}`)
     }
     static async getProfile(user_id: string): Promise<AxiosResponse<IProfileSettings>> {
         return $api.get(`${PROFILE}/${user_id}`)

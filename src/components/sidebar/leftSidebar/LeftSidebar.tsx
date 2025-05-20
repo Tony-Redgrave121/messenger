@@ -34,7 +34,8 @@ const LeftSidebar = () => {
         setMessengerCreation,
         profile,
         setProfile,
-        refProfile
+        refProfile,
+        navigateChat
     } = useLeftSidebarLogic()
 
     return (
@@ -62,8 +63,7 @@ const LeftSidebar = () => {
                             <ContactList
                                 contacts={contacts}
                                 text='Contacts'
-                                onClick={() => {
-                                }}
+                                onClick={navigateChat}
                             />
                         </>
                     }

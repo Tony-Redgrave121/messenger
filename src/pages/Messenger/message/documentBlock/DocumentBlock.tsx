@@ -1,21 +1,16 @@
-import React from 'react'
+import {FC} from 'react'
 import style from "./style.module.css"
 import {HiOutlineDocumentText} from "react-icons/hi2"
 import useLoadBlob from "@hooks/useLoadBlob"
-import {useParams} from "react-router-dom"
 import getFileName from "@utils/logic/getFileName";
+import {IMessageFile} from "@appTypes";
 
-interface IDocumentBlock {
-    doc: {
-        message_file_id: string,
-        message_file_name: string,
-        message_file_size: number
-    }
+interface IDocumentBlockProps {
+    doc: IMessageFile
 }
 
-const DocumentBlock: React.FC<IDocumentBlock> = ({doc}) => {
-    const {id} = useParams()
-    const {image} = useLoadBlob(`messengers/${id}/${doc.message_file_name}`)
+const DocumentBlock: FC<IDocumentBlockProps> = ({doc}) => {
+    const {image} = useLoadBlob(`messengers/${doc.message_file_path}/${doc.message_file_name}`)
 
     return (
         <a download={getFileName(doc.message_file_name)} href={image} className={style.DocumentBlock}>

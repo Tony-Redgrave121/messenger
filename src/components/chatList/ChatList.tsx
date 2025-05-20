@@ -17,6 +17,8 @@ const ChatList = memo(() => {
         const handleMessengerList = async () => {
             const messengers = await UserService.fetchMessengersList(user_id, constructor.signal)
 
+            console.log(messengers)
+
             setMessengersList(messengers.data)
         }
 

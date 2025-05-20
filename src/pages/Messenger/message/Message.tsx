@@ -23,10 +23,11 @@ interface IChatMessage {
     socketRef: RefObject<WebSocket | null>
 }
 
-const initialCurrMedia = {
+const initialCurrMedia: IMessageFile = {
     message_file_id: '',
     message_file_name: '',
-    message_file_size: 0
+    message_file_size: 0,
+    message_file_path: ''
 }
 
 namespace Message {
@@ -45,7 +46,7 @@ namespace Message {
 
         const handleDelete = useCallback(async () => {
             if (!id) return
-            const messageDelete = await UserService.deleteMessage(message.message_id, id)
+            const messageDelete = await UserService.deleteMessage(message.message_id)
 
             if (messageDelete && socketRef.current?.readyState === WebSocket.OPEN) {
                 socketRef.current.send(JSON.stringify({

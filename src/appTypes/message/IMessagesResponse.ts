@@ -1,3 +1,5 @@
+import IMessageFile from "./IMessageFile";
+
 export default interface IMessagesResponse {
     message_id: string,
     message_text?: string,
@@ -6,13 +8,7 @@ export default interface IMessagesResponse {
     reply_id?: string,
     user_id: string,
     messenger_id: string,
-    message_files?: [
-        {
-            message_file_id: string,
-            message_file_name: string,
-            message_file_size: number
-        }
-    ],
+    message_files?: IMessageFile[]
     user: {
         user_id: string,
         user_name: string,

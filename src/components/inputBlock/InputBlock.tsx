@@ -62,17 +62,21 @@ const InputBlock: FC<IInputBlock> = ({reply, setReply, socketRef}) => {
         }
     }
 
-    const {id} = useParams()
+    const {type, id} = useParams()
     const user_id = useAppSelector(state => state.user.userId)
 
     const handleSubmit = async () => {
+        if (!type || !id) return
+
         if ((filesState.files || inputText) && socketRef.current) {
             const message = new FormData()
             message.append('message_text', inputText)
             message.append('message_type', filesState.files ? filesState.type : 'message')
             reply && message.append('reply_id', reply.message_id)
             message.append('user_id', user_id)
-            message.append('messenger_id', id!)
+            type !== "chat" ?
+                message.append('messenger_id',  id) :
+                message.append('recipient_user_id', id)
 
             if (filesRef && filesRef.current) {
                 filesRef.current.forEach((file: File) => message.append('message_files', file))
@@ -92,7 +96,10 @@ const InputBlock: FC<IInputBlock> = ({reply, setReply, socketRef}) => {
 
             const newMessage = await UserService.postMessage(message).catch(error => console.log(error))
 
+
             if (newMessage && socketRef.current?.readyState === WebSocket.OPEN) {
+                console.log(newMessage.data);
+
                 socketRef.current.send(JSON.stringify({
                     messenger_id: id,
                     user_id: user_id,

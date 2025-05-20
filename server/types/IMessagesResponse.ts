@@ -5,7 +5,8 @@ export default interface IMessagesResponse {
     message_type: string,
     reply_id?: string,
     user_id: string,
-    messenger_id: string,
+    messenger_id?: string,
+    recipient_user_id?: string,
     message_files?: [
         {
             message_file_id: string,

@@ -21,18 +21,20 @@ const InitialMessenger: IAdaptMessenger = {
     last_seen: new Date(),
 }
 
+const types = ['chat', 'channel', 'group']
+
 const Messenger= () => {
     const [sidebarState, setSidebarState] = useState(false)
     const [reply, setReply] = useState<IMessagesResponse | null>(null)
     const [messenger, setMessenger] = useState<IAdaptMessenger>(InitialMessenger)
-    
+
     const refEnd = useRef<HTMLDivElement>(null)
     const refRightSidebar = useRef<HTMLDivElement>(null)
 
     const {id, type} = useParams()
     const user = useAppSelector(state => state.user)
     const navigate = useNavigate()
-    
+
     const {
         socketRef,
         messagesList,
@@ -41,6 +43,11 @@ const Messenger= () => {
 
     useEffect(() => {
         if (!id || !type) return
+
+        if (!types.includes(type)) {
+            navigate("/")
+            return
+        }
 
         const controller = new AbortController()
         const signal = controller.signal
@@ -51,13 +58,13 @@ const Messenger= () => {
             try {
                 const [messenger, messages] = await Promise.all([
                     UserService.fetchMessenger(user.userId, type, id, signal),
-                    UserService.fetchMessages(user.userId, id, signal)
+                    UserService.fetchMessages(user.userId, type, id, signal)
                 ])
 
                 if (messenger.status === 200 && messages.status === 200) {
                     const messengerData = messenger.data
                     let adaptMessenger = InitialMessenger
-console.log(messengerData)
+
                     if ("user_id" in messengerData) {
                         adaptMessenger = {
                             id: messengerData.user_id,

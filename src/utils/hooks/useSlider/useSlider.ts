@@ -1,6 +1,6 @@
 import {useEffect, useState} from "react"
 import useZoom from "./useZoom"
-import {IUseSliderProps} from "@appTypes";
+import {IMessageFile, IUseSliderProps} from "@appTypes";
 import useSwipe from "@utils/hooks/useSlider/useSwipe";
 import getExt from "@utils/logic/getExt";
 import useLoadBlob from "@hooks/useLoadBlob";
@@ -9,10 +9,11 @@ import {useAppDispatch} from "@hooks/useRedux";
 import {setZoom} from "@store/reducers/sliderReducer";
 import getFileName from "@utils/logic/getFileName";
 
-const initialCurrMedia = {
+const initialCurrMedia: IMessageFile = {
     message_file_id: '',
     message_file_name: '',
-    message_file_size: 0
+    message_file_size: 0,
+    message_file_path: ''
 }
 
 const useSlider = (media: IUseSliderProps) => {

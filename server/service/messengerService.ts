@@ -41,8 +41,8 @@ class MessengerService {
         const messenger_id = uuid.v4()
         let messenger_image = null
 
-        if (messenger_files && messenger_files.messenger_image) messenger_image = await filesUploadingService(`messengers/${messenger_id}`, messenger_files.messenger_image, 'media')
-
+        if (messenger_files && messenger_files.messenger_image)
+            messenger_image = await filesUploadingService(`messengers/${messenger_id}`, messenger_files.messenger_image, 'media')
         if (messenger_image instanceof ApiError) return ApiError.badRequest(`Error with user image creation`)
 
         const messenger = await models.messenger.create({
@@ -63,6 +63,14 @@ class MessengerService {
         })
 
         if (member instanceof ApiError) return ApiError.badRequest(`Error adding users to the messenger`)
+
+        const messengerSettings = await models.messenger_settings.create({
+            messenger_setting_id: uuid.v4(),
+            messenger_setting_type: "private",
+            messenger_id: messenger_id,
+        })
+
+        if (messengerSettings instanceof ApiError) return ApiError.badRequest(`Error adding settings to the messenger`)
 
         if (messenger_members) {
             if (!Array.isArray(messenger_members)) messenger_members = [messenger_members]

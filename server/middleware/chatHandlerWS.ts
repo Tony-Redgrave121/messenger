@@ -16,7 +16,7 @@ const chatHandlerWS = (aWss: WebSocketServer) => {
 
     const broadcastChatConnection = (message: IMessage) => {
         aWss.clients.forEach((client: any) => {
-            if (client.id === message.messenger_id) {
+            if (client.id === message.messenger_id || client.id === message.user_id) {
                 client.send(JSON.stringify(message))
             }
         })
@@ -24,7 +24,7 @@ const chatHandlerWS = (aWss: WebSocketServer) => {
 
     const handleMessage = (message: IMessage, method: string) => {
         aWss.clients.forEach((client: any) => {
-            if (client.id === message.messenger_id) {
+            if (client.id === message.messenger_id || client.id === message.user_id) {
                 client.send(JSON.stringify({
                     method: method,
                     data: message.data

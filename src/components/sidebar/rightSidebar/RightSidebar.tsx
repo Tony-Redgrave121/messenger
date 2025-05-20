@@ -4,7 +4,7 @@ import {
     HiOutlineXMark,
     HiOutlineExclamationCircle,
     HiOutlinePaperClip,
-    HiOutlineBell
+    HiOutlineBell, HiOutlineMinusCircle
 } from "react-icons/hi2"
 import style from './style.module.css'
 import './animation.css'
@@ -17,6 +17,9 @@ import {ImageBlock} from "@components/sidebar";
 import {TopBar} from "../";
 import EditMessenger from "@components/sidebar/rightSidebar/editMessenger/EditMessenger";
 import useCopy from "@utils/hooks/useCopy";
+import Caption from "@components/caption/Caption";
+import MembersList from "@components/sidebar/rightSidebar/editMessenger/editMembers/membersList/MembersList";
+import {useNavigate} from "react-router-dom";
 
 interface IRightSidebar {
     entity: IAdaptMessenger,
@@ -35,16 +38,26 @@ const RightSidebar: FC<IRightSidebar> = (
         setState
     }
 ) => {
+    const refEditMessenger = useRef<HTMLDivElement>(null)
     const [notification, setNotification] = useState(false)
-    const {image} = useLoadBlob(entity.image ? `messengers/${entity.id}/${entity.image}` : '')
+    const {handleCopy} = useCopy()
+
+    const {image} = useLoadBlob(entity.image ? `${entity.type !== "chat" ? "messengers" : "users"}/${entity.id}/${entity.image}` : '')
 
     const [editMessenger, setEditMessenger] = useState({
         state: false,
         mounted: false
     })
-    const refEditMessenger = useRef<HTMLDivElement>(null)
 
-    const {handleCopy} = useCopy()
+    const navigate = useNavigate()
+
+    const MembersDropDown = (user_id: string) => [
+        {
+            liChildren: <HiOutlineMinusCircle/>,
+            liText: 'Send Message',
+            liFoo: () => navigate(`/chat/${user_id}`)
+        }
+    ]
 
     return (
         <CSSTransition
@@ -60,12 +73,14 @@ const RightSidebar: FC<IRightSidebar> = (
                         <HiOutlineXMark/>
                     </Buttons.DefaultButton>
                     <p>{entity.type} info</p>
-                    <Buttons.DefaultButton foo={() => setEditMessenger({
-                        state: true,
-                        mounted: true
-                    })}>
-                        <HiOutlinePencil/>
-                    </Buttons.DefaultButton>
+                    {entity.type !== "chat" &&
+                        <Buttons.DefaultButton foo={() => setEditMessenger({
+                            state: true,
+                            mounted: true
+                        })}>
+                            <HiOutlinePencil/>
+                        </Buttons.DefaultButton>
+                    }
                 </TopBar>
                 <ImageBlock image={image} info={{
                     name: entity.name,
@@ -102,6 +117,16 @@ const RightSidebar: FC<IRightSidebar> = (
                         </Buttons.SwitchSettingButton>
                     </li>
                 </ul>
+                <Caption/>
+                <div>
+                    {(entity?.members && entity.type === "group") &&
+                        <MembersList
+                            members={entity.members.flatMap(member => member.user)}
+                            dropList={MembersDropDown}
+                        />
+                    }
+                </div>
+                <Caption/>
                 {editMessenger.mounted &&
                     <EditMessenger
                         setState={setEditMessenger}

@@ -19,33 +19,64 @@ import {CSSTransition} from 'react-transition-group'
 import {useAppDispatch, useAppSelector} from "@hooks/useRedux"
 import {setSidebarLeft} from "@store/reducers/appReducer";
 import IAdaptMessenger from "../../../appTypes/IAdaptMessenger";
+import {getDate} from "@utils/logic/getDate";
 
-const list = [
-    {
-        liChildren: <HiOutlineBellSlash/>,
-        liText: 'Mute',
-        liFoo: () => {
+const HeaderLists = {
+    chat: [
+        {
+            liChildren: <HiOutlineBellSlash/>,
+            liText: 'Mute',
+            liFoo: () => {
+            }
+        },
+        {
+            liChildren: <HiOutlineUserPlus/>,
+            liText: 'Add to contacts',
+            liFoo: () => {
+            }
+        },
+        {
+            liChildren: <HiOutlineLockClosed/>,
+            liText: 'Block user',
+            liFoo: () => {
+            }
+        },
+        {
+            liChildren: <HiOutlineTrash/>,
+            liText: 'Delete Chat',
+            liFoo: () => {
+            }
         }
-    },
-    {
-        liChildren: <HiOutlineUserPlus/>,
-        liText: 'Add to contacts',
-        liFoo: () => {
+    ],
+    group: [
+        {
+            liChildren: <HiOutlineBellSlash/>,
+            liText: 'Mute',
+            liFoo: () => {
+            }
+        },
+        {
+            liChildren: <HiOutlineTrash/>,
+            liText: 'Leave Group',
+            liFoo: () => {
+            }
         }
-    },
-    {
-        liChildren: <HiOutlineLockClosed/>,
-        liText: 'Block user',
-        liFoo: () => {
+    ],
+    channel: [
+        {
+            liChildren: <HiOutlineBellSlash/>,
+            liText: 'Mute',
+            liFoo: () => {
+            }
+        },
+        {
+            liChildren: <HiOutlineTrash/>,
+            liText: 'Leave Channel',
+            liFoo: () => {
+            }
         }
-    },
-    {
-        liChildren: <HiOutlineTrash/>,
-        liText: 'Delete Messenger',
-        liFoo: () => {
-        }
-    }
-]
+    ]
+}
 
 interface IChatHeader {
     messenger: IAdaptMessenger,
@@ -64,7 +95,14 @@ const MessengerHeader: FC<IChatHeader> = memo(({messenger, setSidebarState}) => 
     const getHeaderDesc = () => {
         switch (messenger.type) {
             case "chat":
-                return `${messenger.members_count}`
+                return getDate(messenger.last_seen!)
+            case "group":
+                return `${messenger.members_count} members`
+            case "channel":
+                return `${messenger.members_count} subscribers`
+            default:
+                const exhaustiveCheck: never = messenger.type
+                return exhaustiveCheck
         }
     }
 
@@ -74,7 +112,7 @@ const MessengerHeader: FC<IChatHeader> = memo(({messenger, setSidebarState}) => 
                 <HiOutlineArrowLeft/>
             </Buttons.DefaultButton>
             <button className={style.DeskBlock} onClick={() => setSidebarState(true)}>
-                <LoadFile imagePath={messenger.image ? `messengers/${messenger.id}/${messenger.image}` : ''} imageTitle={messenger.type} key={messenger.id}/>
+                <LoadFile imagePath={messenger.image ? `${messenger.type !== "chat" ? "messengers" : "users"}/${messenger.id}/${messenger.image}` : ''} imageTitle={messenger.type} key={messenger.id}/>
                 <div>
                     <h3>{messenger.name}</h3>
                     <p>{getHeaderDesc()}</p>
@@ -95,7 +133,7 @@ const MessengerHeader: FC<IChatHeader> = memo(({messenger, setSidebarState}) => 
                 </Buttons.DefaultButton>
                 <Buttons.DefaultButton foo={() => setSettings(!settings)}>
                     <HiEllipsisVertical/>
-                    <DropDown list={list} state={settings} setState={setSettings}/>
+                    <DropDown list={HeaderLists[messenger.type]} state={settings} setState={setSettings}/>
                 </Buttons.DefaultButton>
             </span>
         </header>

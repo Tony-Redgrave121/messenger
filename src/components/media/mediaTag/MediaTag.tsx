@@ -1,6 +1,5 @@
 import React, {Dispatch, FC, SetStateAction} from 'react'
 import useLoadBlob from "@hooks/useLoadBlob";
-import {useParams} from "react-router-dom";
 import style from './style.module.css'
 import {IAnimationState, IFileObject, IMessageFile} from "@appTypes";
 import {Player} from "@components/player";
@@ -28,8 +27,7 @@ const isVideo = ['mp4', 'webm']
 
 namespace MediaTag {
     export const Slider: FC<ISliderProps> = ({media}) => {
-        const {id} = useParams()
-        let {load, image} = useLoadBlob(`messengers/${id}/${media.message_file_name}`)
+        let {load, image} = useLoadBlob(`messengers/${media.message_file_path}/${media.message_file_name}`)
 
         const handlePropagation = (event: React.MouseEvent<HTMLElement>) => {
             event.stopPropagation()
@@ -52,8 +50,7 @@ namespace MediaTag {
     }
 
     export const MessageMedia: FC<IMessageMediaProps> = ({media, setSlider, setCurrMedia}) => {
-        const {id} = useParams()
-        let {load, image} = useLoadBlob(`messengers/${id}/${media.message_file_name}`)
+        let {load, image} = useLoadBlob(`messengers/${media.message_file_path}/${media.message_file_name}`)
         const ext = getExt(media.message_file_name)
 
         const fileObj = {

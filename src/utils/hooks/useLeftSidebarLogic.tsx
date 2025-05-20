@@ -13,6 +13,7 @@ import {
     HiOutlineUsers
 } from "react-icons/hi2";
 import {LoadFile} from "@components/loadFile";
+import {useNavigate} from "react-router";
 
 const useLeftSidebarLogic = () => {
     const [settings, setSettings] = useState(false)
@@ -33,6 +34,7 @@ const useLeftSidebarLogic = () => {
     const dispatch = useAppDispatch()
     const socketRef = useMessengerWS()
     const {contacts} = useGetContacts()
+    const navigate = useNavigate()
 
     const handleResize = debounce(() => {
         if (window.innerWidth >= 940) dispatch(setSidebarLeft(true))
@@ -56,7 +58,7 @@ const useLeftSidebarLogic = () => {
         },
         {
             liChildren: <HiOutlineUsers/>,
-            liText: 'New Messenger',
+            liText: 'New Group',
             liFoo: () => setMessengerCreation(prev => ({
                 state: !prev.state,
                 type: 'group'
@@ -111,6 +113,10 @@ const useLeftSidebarLogic = () => {
         }
     ]
 
+    const navigateChat = (user_id: string) => {
+        return navigate(`/chat/${user_id}`)
+    }
+
     return {
         sidebarLeft,
         refSidebar,
@@ -127,7 +133,8 @@ const useLeftSidebarLogic = () => {
         setMessengerCreation,
         profile,
         setProfile,
-        refProfile
+        refProfile,
+        navigateChat
     }
 }
 

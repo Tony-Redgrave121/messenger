@@ -76,6 +76,7 @@ const message_file = sequelize.define("message_file", {
     message_file_id: {type: DataTypes.UUID, primaryKey: true},
     message_file_name: {type: DataTypes.STRING, allowNull: false},
     message_file_size: {type: DataTypes.INTEGER, allowNull: true},
+    message_file_path: {type: DataTypes.UUID, allowNull: false},
 }, {timestamps: false})
 
 users.hasMany(user_tokens, {foreignKey: {name: 'user_id', allowNull: false}, onDelete: 'CASCADE', onUpdate: 'CASCADE'})
@@ -100,8 +101,11 @@ message.belongsTo(users, {foreignKey: 'user_id'})
 message.hasMany(message_file, {foreignKey: {name: 'message_id', allowNull: false}, onDelete: 'CASCADE', onUpdate: 'CASCADE'})
 message_file.belongsTo(message, {foreignKey: 'message_id'})
 
-messenger.hasMany(message, {foreignKey: {name: 'messenger_id', allowNull: false}, onDelete: 'CASCADE', onUpdate: 'CASCADE'})
+messenger.hasMany(message, {foreignKey: {name: 'messenger_id', allowNull: true}, onDelete: 'CASCADE', onUpdate: 'CASCADE'})
 message.belongsTo(messenger, {foreignKey: 'messenger_id'})
+
+users.hasMany(message, {foreignKey: {name: 'recipient_user_id', allowNull: true}, onDelete: 'CASCADE', onUpdate: 'CASCADE'})
+message.belongsTo(users, {foreignKey: 'recipient_user_id', as: 'recipient'})
 
 message.belongsTo(message, {as: "reply", foreignKey: "reply_id"})
 
