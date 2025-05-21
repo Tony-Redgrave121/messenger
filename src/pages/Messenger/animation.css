@@ -1,20 +1,20 @@
-.search-node-enter {
+.scale-node-enter {
     opacity: 0;
     transform: scale(0);
 }
 
-.search-node-enter-active {
+.scale-node-enter-active {
     opacity: 1;
     transform: scale(1);
-    transition: opacity .3s ease-in-out, transform .3s ease-in-out;
+    transition: opacity .3s ease-in-out, transform .2s ease-in-out;
 }
 
-.search-node-exit {
+.scale-node-exit {
     opacity: 1;
 }
 
-.search-node-exit-active {
+.scale-node-exit-active {
     opacity: 0;
     transform: scale(0);
-    transition: opacity .3s ease-in-out, transform .3s ease-in-out;
+    transition: opacity .3s ease-in-out, transform .2s ease-in-out;
 }

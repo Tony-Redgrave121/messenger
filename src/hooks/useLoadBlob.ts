@@ -9,7 +9,7 @@ const useLoadBlob = (imagePath: string | undefined) => {
             setLoad(true)
             return
         }
-
+        
         const controller = new AbortController(), signal = controller.signal
         let objectUrl = ''
 

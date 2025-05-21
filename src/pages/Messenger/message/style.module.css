@@ -114,6 +114,7 @@ h1, h2, h3, h4, p, a, button, input, textarea, small, time {
   line-height: 1.5;
   max-width: 65%;
   min-width: 180px;
+  transform-origin: bottom left;
 }
 .ChatMessageContainer .ReplyBlock {
   border-left: 3px solid white;
@@ -143,6 +144,9 @@ h1, h2, h3, h4, p, a, button, input, textarea, small, time {
   color: #a9a9a9;
   font-size: 12px;
 }
+.ChatMessageContainer .ChatMessageBlock p {
+  word-break: break-all;
+}
 .ChatMessageContainer .ChatMessageBlock ul {
   transform-origin: center center;
 }
@@ -153,6 +157,7 @@ h1, h2, h3, h4, p, a, button, input, textarea, small, time {
 }
 
 .Owner {
+  transform-origin: bottom right;
   background-color: #212121;
   border-radius: 15px 15px 0 15px;
   align-self: end;

@@ -4,7 +4,8 @@ import {
     HiOutlineXMark,
     HiOutlineExclamationCircle,
     HiOutlinePaperClip,
-    HiOutlineBell, HiOutlineMinusCircle
+    HiOutlineBell,
+    HiOutlineChatBubbleLeft
 } from "react-icons/hi2"
 import style from './style.module.css'
 import './animation.css'
@@ -20,6 +21,7 @@ import useCopy from "@utils/hooks/useCopy";
 import Caption from "@components/caption/Caption";
 import MembersList from "@components/sidebar/rightSidebar/editMessenger/editMembers/membersList/MembersList";
 import {useNavigate} from "react-router-dom";
+import {getDate} from "@utils/logic/getDate";
 
 interface IRightSidebar {
     entity: IAdaptMessenger,
@@ -39,7 +41,7 @@ const RightSidebar: FC<IRightSidebar> = (
     }
 ) => {
     const refEditMessenger = useRef<HTMLDivElement>(null)
-    const [notification, setNotification] = useState(false)
+    const [notification, setNotification] = useState(true)
     const {handleCopy} = useCopy()
 
     const {image} = useLoadBlob(entity.image ? `${entity.type !== "chat" ? "messengers" : "users"}/${entity.id}/${entity.image}` : '')
@@ -53,9 +55,12 @@ const RightSidebar: FC<IRightSidebar> = (
 
     const MembersDropDown = (user_id: string) => [
         {
-            liChildren: <HiOutlineMinusCircle/>,
+            liChildren: <HiOutlineChatBubbleLeft/>,
             liText: 'Send Message',
-            liFoo: () => navigate(`/chat/${user_id}`)
+            liFoo: () => {
+                setState(false)
+                setTimeout(() => navigate(`/chat/${user_id}`), 300)
+            }
         }
     ]
 
@@ -84,7 +89,7 @@ const RightSidebar: FC<IRightSidebar> = (
                 </TopBar>
                 <ImageBlock image={image} info={{
                     name: entity.name,
-                    type: entity.type !== 'chat' ? `${entity.members_count} subscribers` : entity.type
+                    type: entity.type !== 'chat' ? `${entity.members_count} subscribers` : getDate(entity.last_seen!)
                 }}/>
                 <ul className={style.InfoList}>
                     {entity.desc &&
@@ -121,6 +126,7 @@ const RightSidebar: FC<IRightSidebar> = (
                 <div>
                     {(entity?.members && entity.type === "group") &&
                         <MembersList
+                            text='Members'
                             members={entity.members.flatMap(member => member.user)}
                             dropList={MembersDropDown}
                         />

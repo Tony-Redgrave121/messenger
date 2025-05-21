@@ -219,7 +219,9 @@ const EditMessenger: FC<IEditMessengerProps> = ({setState, setEntity, refSidebar
                             />
                         </InputForm>
                     </div>
-                    <Caption>You can provide an optional description for your channel.</Caption>
+                    <Caption>
+                        You can provide an optional description for your {settings.messenger_type === "group" ? 'group' : 'channel'}.
+                    </Caption>
                     <div className={style.Form}>
                         <Buttons.SettingButton
                             foo={() => openForm('channelType', setFormsState)}
@@ -227,15 +229,17 @@ const EditMessenger: FC<IEditMessengerProps> = ({setState, setEntity, refSidebar
                             desc={settings.messenger_setting_type}>
                             <HiOutlineLockClosed/>
                         </Buttons.SettingButton>
-                        <Buttons.SettingButton
-                            foo={() => openForm('reactions', setFormsState)}
-                            text={'Reactions'}
-                            desc={settings.reactions.length ? `${settings.reactions.length}/${settings.reactions_count}` : 'Disabled'}>
-                            <HiOutlineHeart/>
-                        </Buttons.SettingButton>
+                        {settings.messenger_type === "channel" &&
+                            <Buttons.SettingButton
+                                foo={() => openForm('reactions', setFormsState)}
+                                text={'Reactions'}
+                                desc={settings.reactions.length ? `${settings.reactions.length}/${settings.reactions_count}` : 'Disabled'}>
+                                <HiOutlineHeart/>
+                            </Buttons.SettingButton>
+                        }
                     </div>
                     <Caption>
-                        Add a channel chat for comments.
+                        {settings.messenger_type !== "group" ? 'Add a channel chat for comments.' : ''}
                     </Caption>
                     <div className={style.Form}>
                         <Buttons.SettingButton
@@ -258,11 +262,11 @@ const EditMessenger: FC<IEditMessengerProps> = ({setState, setEntity, refSidebar
                         </Buttons.SettingButton>
                     </div>
                     <Caption>
-                        You can control access to the channel.
+                        {settings.messenger_type !== "group" ? 'You can control access to the channel.' : ''}
                     </Caption>
                     <div className={style.Form}>
                         <Buttons.SettingButton foo={() => {
-                        }} text={'Delete Channel'} isRed>
+                        }} text={`Delete ${settings.messenger_type === "group" ? "and Leave Group" : "Channel"}`} isRed>
                             <HiOutlineTrash/>
                         </Buttons.SettingButton>
                     </div>

@@ -9,6 +9,7 @@
   line-height: 1.5;
   max-width: 65%;
   min-width: 180px;
+  transform-origin: bottom left;
 
   .ReplyBlock {
     border-left: 3px solid white;
@@ -42,6 +43,10 @@
       font-size: 12px;
     }
 
+    p {
+      word-break: break-all;
+    }
+
     ul {
       transform-origin: center center;
     }
@@ -55,6 +60,7 @@
 }
 
 .Owner {
+  transform-origin: bottom right;
   background-color: #212121;
   border-radius: 15px 15px 0 15px;
   align-self: end;

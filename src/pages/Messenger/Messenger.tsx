@@ -102,7 +102,8 @@ const Messenger= () => {
     }, [user.userId, id, navigate, setMessagesList])
 
     useEffect(() => {
-        refEnd.current?.scrollIntoView({behavior: 'smooth'})
+        const timeout = setTimeout(() => refEnd.current?.scrollIntoView({behavior: 'smooth'}), 300)
+        return () => clearTimeout(timeout)
     }, [messagesList])
 
     return (
@@ -113,7 +114,7 @@ const Messenger= () => {
                         <div className={style.ChatContainer}>
                             <MessengerHeader messenger={messenger} setSidebarState={setSidebarState}/>
                             <div className={style.MessageBlock} key={id}>
-                                {messagesList.length > 0 && messagesList.map(message =>
+                                {messagesList.map(message =>
                                     <Message.ChatMessage
                                         message={message}
                                         key={message.message_id}

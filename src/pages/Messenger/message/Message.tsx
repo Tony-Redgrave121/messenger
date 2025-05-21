@@ -16,6 +16,8 @@ import {DocumentBlock} from "./index";
 import UserService from "@service/UserService";
 import {useParams} from "react-router-dom";
 import handleContextMenu from "@utils/logic/handleContextMenu";
+import {CSSTransition} from 'react-transition-group'
+import '../animation.css'
 
 interface IChatMessage {
     message: IMessagesResponse,
@@ -34,9 +36,13 @@ namespace Message {
     export const ChatMessage: FC<IChatMessage> = ({message, setReply, socketRef}) => {
         const {id} = useParams()
         const [contextMenu, setContextMenu] = useState(false)
+        const [animateMessage, setAnimateMessage] = useState(false)
+
         const [position, setPosition] = useState({x: 0, y: 0})
         const [currMedia, setCurrMedia] = useState(initialCurrMedia)
         const refSlider = useRef<HTMLDivElement>(null)
+        const refMessage = useRef<HTMLDivElement>(null)
+
         const [mediaArr, setMediaArr] = useState<IMessageFile[]>([])
         const user_id = useAppSelector(state => state.user.userId)
         const [slider, setSlider] = useState({
@@ -85,6 +91,11 @@ namespace Message {
         ]
 
         useEffect(() => {
+            const timeout = setTimeout(() => setAnimateMessage(true), 200)
+            return () => clearTimeout(timeout)
+        }, [])
+
+        useEffect(() => {
             if (message.message_files && message.message_type === 'media') {
                 setMediaArr(message.message_files)
                 setCurrMedia(message.message_files[0])
@@ -92,50 +103,59 @@ namespace Message {
         }, [message.message_files, message.message_type])
 
         return (
-            <div className={`${style.ChatMessageContainer} ${message.user_id === user_id ? style.Owner : ''}`}>
-                {message.reply &&
-                    <button className={style.ReplyBlock}>
-                        <h4>{message.reply.user.user_name}</h4>
-                        <p>{message.reply.message_text}</p>
-                    </button>
-                }
-                <div className={style.ChatMessageBlock} onContextMenu={(event) => handleContextMenu({
-                    event,
-                    setPosition,
-                    setContextMenu
-                })}>
-                    {(mediaArr && mediaArr.length > 0) &&
-                        <MediaBlock.MessageMedia media={mediaArr} setSlider={setSlider} setCurrMedia={setCurrMedia}/>
+            <CSSTransition
+                in={animateMessage}
+                nodeRef={refMessage}
+                timeout={200}
+                classNames='scale-node'
+                unmountOnExit
+            >
+                <div className={`${style.ChatMessageContainer} ${message.user_id === user_id ? style.Owner : ''}`} ref={refMessage}>
+                    {message.reply &&
+                        <button className={style.ReplyBlock}>
+                            <h4>{message.reply.user.user_name}</h4>
+                            <p>{message.reply.message_text}</p>
+                        </button>
                     }
-                    {(message.message_files && message.message_type === 'document') &&
-                        <div className={style.ChatDocumentBlock}>
-                            {message.message_files.map(doc => <DocumentBlock doc={doc} key={doc.message_file_id}/>)}
-                        </div>
+                    <div className={style.ChatMessageBlock} onContextMenu={(event) => handleContextMenu({
+                        event,
+                        setPosition,
+                        setContextMenu,
+                        height: 115
+                    })}>
+                        {(mediaArr && mediaArr.length > 0) &&
+                            <MediaBlock.MessageMedia media={mediaArr} setSlider={setSlider} setCurrMedia={setCurrMedia}/>
+                        }
+                        {(message.message_files && message.message_type === 'document') &&
+                            <div className={style.ChatDocumentBlock}>
+                                {message.message_files.map(doc => <DocumentBlock doc={doc} key={doc.message_file_id}/>)}
+                            </div>
+                        }
+                        <p>
+                            {message.message_text}
+                            <small>{getTime(message.message_date)}</small>
+                        </p>
+                        <DropDown list={list} state={contextMenu} setState={setContextMenu} position={position}/>
+                    </div>
+                    {slider.mounted && mediaArr &&
+                        <Slider animation={{
+                            state: slider.state,
+                            setState: setSlider,
+                            ref: refSlider
+                        }} media={{
+                            mediaArr: mediaArr,
+                            setMediaArr: setMediaArr,
+                            currentSlide: currMedia
+                        }} user={{
+                            owner_id: message.user.user_id,
+                            owner_image: message.user.user_img,
+                            owner_name: message.user.user_name,
+                            message_date: message.message_date
+                        }}
+                        />
                     }
-                    <p>
-                        {message.message_text}
-                        <small>{getTime(message.message_date)}</small>
-                    </p>
-                    <DropDown list={list} state={contextMenu} setState={setContextMenu} position={position}/>
                 </div>
-                {slider.mounted && mediaArr &&
-                    <Slider animation={{
-                        state: slider.state,
-                        setState: setSlider,
-                        ref: refSlider
-                    }} media={{
-                        mediaArr: mediaArr,
-                        setMediaArr: setMediaArr,
-                        currentSlide: currMedia
-                    }} user={{
-                        owner_id: message.user.user_id,
-                        owner_image: message.user.user_img,
-                        owner_name: message.user.user_name,
-                        message_date: message.message_date
-                    }}
-                    />
-                }
-            </div>
+            </CSSTransition>
         )
     }
 }

@@ -66,7 +66,7 @@ const removed_users = sequelize.define("removed_users", {
 
 const message = sequelize.define("message", {
     message_id: {type: DataTypes.UUID, primaryKey: true},
-    message_text: {type: DataTypes.STRING, allowNull: true},
+    message_text: {type: DataTypes.TEXT, allowNull: true},
     message_date: {type: DataTypes.DATE, allowNull: false, defaultValue: DataTypes.NOW},
     message_type: {type: DataTypes.STRING, allowNull: false},
     reply_id: {type: DataTypes.UUID, allowNull: true}

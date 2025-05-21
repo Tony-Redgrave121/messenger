@@ -49,15 +49,27 @@ class UserService {
                     {
                         model: models.members,
                         as: "user_member",
-                        where: {user_id: user_id}
+                        include: [
+                            {
+                                model: models.users,
+                                attributes: ['user_id', 'user_name', 'user_img', 'user_bio', 'user_last_seen'],
+                            }
+                        ]
                     }
                 ],
                 attributes: {
                     include: [[Sequelize.fn("COUNT", Sequelize.col("members.member_id")), "members_count"]]
                 },
-
                 where: {messenger_id: messenger_id},
-                group: ['messenger.messenger_id', 'user_member.member_id']
+                group: [
+                    'messenger.messenger_id',
+                    'user_member.member_id',
+                    'user_member.user.user_id',
+                    'user_member.user.user_name',
+                    'user_member.user.user_img',
+                    'user_member.user.user_bio',
+                    'user_member.user.user_last_seen'
+                ]
             })
         }
 

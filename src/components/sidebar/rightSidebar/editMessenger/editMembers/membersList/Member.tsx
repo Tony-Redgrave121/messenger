@@ -22,7 +22,8 @@ const Member: FC<IContactsProps> = ({contact, children, dropList}) => {
         <div className={style.ContactBlock} onContextMenu={(event) => user_id !== contact.user_id && handleContextMenu({
             event,
             setPosition,
-            setContextMenu
+            setContextMenu,
+            height: 45
         })}>
             {children}
             <span>

@@ -18,7 +18,7 @@ import {SearchBlock} from "@components/searchBlock"
 import {CSSTransition} from 'react-transition-group'
 import {useAppDispatch, useAppSelector} from "@hooks/useRedux"
 import {setSidebarLeft} from "@store/reducers/appReducer";
-import IAdaptMessenger from "../../../appTypes/IAdaptMessenger";
+import {IAdaptMessenger} from "@appTypes";
 import {getDate} from "@utils/logic/getDate";
 
 const HeaderLists = {
@@ -123,7 +123,7 @@ const MessengerHeader: FC<IChatHeader> = memo(({messenger, setSidebarState}) => 
                     in={inputState}
                     nodeRef={refSearch}
                     timeout={300}
-                    classNames='search-node'
+                    classNames='scale-node'
                     unmountOnExit
                 >
                     <SearchBlock ref={refSearch} foo={() => {}}/>
