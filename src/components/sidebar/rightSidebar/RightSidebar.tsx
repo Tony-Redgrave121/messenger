@@ -22,6 +22,8 @@ import Caption from "@components/caption/Caption";
 import MembersList from "@components/sidebar/rightSidebar/editMessenger/editMembers/membersList/MembersList";
 import {useNavigate} from "react-router-dom";
 import {getDate} from "@utils/logic/getDate";
+import checkRights from "@utils/logic/checkRights";
+import {useAppSelector} from "@hooks/useRedux";
 
 interface IRightSidebar {
     entity: IAdaptMessenger,
@@ -44,6 +46,7 @@ const RightSidebar: FC<IRightSidebar> = (
     const [notification, setNotification] = useState(true)
     const {handleCopy} = useCopy()
 
+    const user_id = useAppSelector(state => state.user.userId)
     const {image} = useLoadBlob(entity.image ? `${entity.type !== "chat" ? "messengers" : "users"}/${entity.id}/${entity.image}` : '')
 
     const [editMessenger, setEditMessenger] = useState({
@@ -78,7 +81,7 @@ const RightSidebar: FC<IRightSidebar> = (
                         <HiOutlineXMark/>
                     </Buttons.DefaultButton>
                     <p>{entity.type} info</p>
-                    {entity.type !== "chat" &&
+                    {(entity.members && checkRights(entity.members, user_id)) &&
                         <Buttons.DefaultButton foo={() => setEditMessenger({
                             state: true,
                             mounted: true

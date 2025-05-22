@@ -4,7 +4,6 @@ import {IMessageFile, IUseSliderProps} from "@appTypes";
 import useSwipe from "@utils/hooks/useSlider/useSwipe";
 import getExt from "@utils/logic/getExt";
 import useLoadBlob from "@hooks/useLoadBlob";
-import {useParams} from "react-router-dom";
 import {useAppDispatch} from "@hooks/useRedux";
 import {setZoom} from "@store/reducers/sliderReducer";
 import getFileName from "@utils/logic/getFileName";
@@ -24,9 +23,8 @@ const useSlider = (media: IUseSliderProps) => {
     })
     const {setZoomSize, zoomSize, refZoom} = useZoom()
     const {handlePosition} = useSwipe(media, refZoom, slide, setSlide)
-    const {id} = useParams()
 
-    let {load, image} = useLoadBlob(`messengers/${id}/${slide.currentSlide.message_file_name}`)
+    let {load, image} = useLoadBlob(slide.currentSlide.message_file_name ? `messengers/${slide.currentSlide.message_file_path}/${slide.currentSlide.message_file_name}` : '')
 
     useEffect(() => {
         dispatch(setZoom(false))

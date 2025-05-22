@@ -1,4 +1,4 @@
-import React, {Dispatch, FC, SetStateAction, useEffect} from 'react'
+import React, {Dispatch, FC, SetStateAction} from 'react'
 import useLoadBlob from "@hooks/useLoadBlob";
 import style from './style.module.css'
 import {IAnimationState, IFileObject, IMessageFile} from "@appTypes";
@@ -28,8 +28,6 @@ const isVideo = ['mp4', 'webm']
 namespace MediaTag {
     export const Slider: FC<ISliderProps> = ({media}) => {
         const {load, image} = useLoadBlob(`messengers/${media.message_file_path}/${media.message_file_name}`)
-
-
 
         const handlePropagation = (event: React.MouseEvent<HTMLElement>) => {
             event.stopPropagation()

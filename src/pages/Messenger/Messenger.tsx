@@ -9,6 +9,7 @@ import {useNavigate, useParams} from "react-router-dom"
 import {IMessagesResponse, IAdaptMessenger} from "@appTypes"
 import MessengerHeader from "./messengerHeader/MessengerHeader"
 import {useMessageWS} from "@utils/hooks/useMessageWS";
+import checkRights from "@utils/logic/checkRights";
 
 const InitialMessenger: IAdaptMessenger = {
     id: '',
@@ -115,8 +116,9 @@ const Messenger= () => {
                             <MessengerHeader messenger={messenger} setSidebarState={setSidebarState}/>
                             <div className={style.MessageBlock} key={id}>
                                 {messagesList.map(message =>
-                                    <Message.ChatMessage
+                                    <Message
                                         message={message}
+                                        messenger={messenger}
                                         key={message.message_id}
                                         setReply={setReply}
                                         socketRef={socketRef}
@@ -124,7 +126,9 @@ const Messenger= () => {
                                 )}
                                 <div ref={refEnd}/>
                             </div>
-                            <InputBlock setReply={setReply} reply={reply} socketRef={socketRef}/>
+                            {(messenger.type === "channel" ? checkRights(messenger.members!, user.userId) : true) &&
+                                <InputBlock setReply={setReply} reply={reply} socketRef={socketRef}/>
+                            }
                         </div>
                     </div>
                     <RightSidebar
