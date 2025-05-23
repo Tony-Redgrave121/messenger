@@ -6,18 +6,21 @@ import {getTime} from "@utils/logic/getDate";
 import {
     HiOutlineArrowUturnLeft,
     HiOutlineDocumentDuplicate,
-    HiOutlineTrash, HiOutlineFlag
+    HiOutlineTrash, HiOutlineFlag, HiOutlineChevronRight
 } from "react-icons/hi2"
 import {IMessagesResponse, IMessageFile, IAdaptMessenger} from "@appTypes";
 import {useAppSelector} from "@hooks/useRedux";
 import {DropDown} from "@components/dropDown";
 import {DocumentBlock} from "./index";
 import UserService from "@service/UserService";
-import {useParams} from "react-router-dom";
+import {Link, useParams} from "react-router-dom";
 import handleContextMenu from "@utils/logic/handleContextMenu";
 import {CSSTransition} from 'react-transition-group'
 import '../animation.css'
 import checkRights from "@utils/logic/checkRights";
+import {LoadFile} from "@components/loadFile";
+import {clsx} from 'clsx'
+import getTitle from "@utils/logic/getTitle";
 
 interface IChatMessage {
     message: IMessagesResponse,
@@ -37,11 +40,14 @@ const Message: FC<IChatMessage> = ({message, setReply, socketRef, messenger}) =>
     const {id} = useParams()
     const [contextMenu, setContextMenu] = useState(false)
     const [animateMessage, setAnimateMessage] = useState(false)
+    const [isOwner, setIsOwner] = useState(false)
 
     const [position, setPosition] = useState({x: 0, y: 0})
     const [currMedia, setCurrMedia] = useState(initialCurrMedia)
+
     const refSlider = useRef<HTMLDivElement>(null)
     const refMessage = useRef<HTMLDivElement>(null)
+    const refLink = useRef<HTMLAnchorElement>(null)
 
     const [mediaArr, setMediaArr] = useState<IMessageFile[]>([])
     const user_id = useAppSelector(state => state.user.userId)
@@ -147,8 +153,14 @@ const Message: FC<IChatMessage> = ({message, setReply, socketRef, messenger}) =>
 
     useEffect(() => {
         const timeout = setTimeout(() => setAnimateMessage(true), 200)
+        setIsOwner(message.user_id === user_id && messenger.type !== "channel")
+
         return () => clearTimeout(timeout)
     }, [])
+
+    const onEntered = () => {
+        getTitle(refLink, message.user.user_name, 'color')
+    }
 
     useEffect(() => {
         if (message.message_files && message.message_type === 'media') {
@@ -164,34 +176,63 @@ const Message: FC<IChatMessage> = ({message, setReply, socketRef, messenger}) =>
             timeout={200}
             classNames='scale-node'
             unmountOnExit
+            onEntered={onEntered}
         >
-            <div className={`${style.ChatMessageContainer} ${message.user_id === user_id ? style.Owner : ''}`}
-                 ref={refMessage}>
-                {message.reply &&
-                    <button className={style.ReplyBlock}>
-                        <h4>{message.reply.user.user_name}</h4>
-                        <p>{message.reply.message_text}</p>
-                    </button>
-                }
-                <div className={style.ChatMessageBlock} onContextMenu={(event) => handleContextMenu({
-                    event,
-                    setPosition,
-                    setContextMenu,
-                    height: 50
-                })}>
-                    {(mediaArr && mediaArr.length > 0) &&
-                        <MediaBlock.MessageMedia media={mediaArr} setSlider={setSlider} setCurrMedia={setCurrMedia}/>
+            <div className={clsx(style.MessageContainer, isOwner && style.OwnerMessageContainer)} ref={refMessage}>
+                <div className={clsx(style.MessageInnerBlock, isOwner && style.OwnerMessageInnerBlock)}>
+                    {(!isOwner && !['chat', 'channel'].includes(messenger.type)) &&
+                        <Link className={style.UserAvatarLink} to={`/chat/${message.user.user_id}`}>
+                            <LoadFile
+                                imagePath={message.user.user_img && `users/${message.user.user_id}/${message.user.user_img}`}
+                                imageTitle={message.user.user_name}
+                            />
+                        </Link>
                     }
-                    {(message.message_files && message.message_type === 'document') &&
-                        <div className={style.ChatDocumentBlock}>
-                            {message.message_files.map(doc => <DocumentBlock doc={doc} key={doc.message_file_id}/>)}
+                    <div className={style.MessageWrapper}>
+                        <div className={clsx(style.MessageContent, isOwner && style.OwnerMessageContent, messenger.type === 'channel' && style.ChannelMessageContent)}>
+                            {message.reply &&
+                                <button className={style.ReplyBlock}>
+                                    <h4>{message.reply.user.user_name}</h4>
+                                    <p>{message.reply.message_text}</p>
+                                </button>
+                            }
+                            {(!isOwner && !['chat', 'channel'].includes(messenger.type)) &&
+                                <Link to={`/chat/${message.user.user_id}`} ref={refLink}>
+                                    {message.user.user_name}
+                                </Link>
+                            }
+                            <div className={style.MessageBlock} onContextMenu={(event) => handleContextMenu({
+                                event,
+                                setPosition,
+                                setContextMenu,
+                                height: 50
+                            })}>
+                                {(mediaArr.length > 0) &&
+                                    <MediaBlock.MessageMedia
+                                        media={mediaArr}
+                                        setSlider={setSlider}
+                                        setCurrMedia={setCurrMedia}
+                                    />
+                                }
+                                {(message.message_files && message.message_type === 'document') &&
+                                    <div className={style.DocumentBlock}>
+                                        {message.message_files.map(doc => <DocumentBlock doc={doc} key={doc.message_file_id}/>)}
+                                    </div>
+                                }
+                                <p>
+                                    {message.message_text}
+                                    <small>{getTime(message.message_date)}</small>
+                                </p>
+                                {handleDropDown()}
+                            </div>
                         </div>
-                    }
-                    <p>
-                        {message.message_text}
-                        <small>{getTime(message.message_date)}</small>
-                    </p>
-                    {handleDropDown()}
+                        {messenger.type === 'channel' &&
+                            <div className={style.CommentsContainer}>
+                                <p>94 Comments</p>
+                                <HiOutlineChevronRight/>
+                            </div>
+                        }
+                    </div>
                 </div>
                 {slider.mounted && mediaArr &&
                     <Slider animation={{

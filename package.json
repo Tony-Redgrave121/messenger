@@ -6,6 +6,7 @@
     "@craco/craco": "^7.1.0",
     "@reduxjs/toolkit": "^2.5.1",
     "axios": "^1.7.9",
+    "clsx": "^2.1.1",
     "cra-template-typescript": "1.2.0",
     "debounce": "^2.2.0",
     "react": "^19.0.0",

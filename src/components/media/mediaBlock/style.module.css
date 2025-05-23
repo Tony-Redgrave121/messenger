@@ -111,6 +111,9 @@ h1, h2, h3, h4, p, a, button, input, textarea, small, time {
   justify-content: center;
   flex-wrap: wrap;
 }
+.MediaBlock > :first-child img {
+  border-radius: 7.5px 7.5px 0 0;
+}
 .MediaBlock img, .MediaBlock section {
   border: 2px solid #212121;
   height: auto;

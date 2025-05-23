@@ -124,7 +124,7 @@ h1, h2, h3, h4, p, a, button, input, textarea, small, time {
   display: flex;
   width: 100%;
   height: 100vh;
-  background: linear-gradient(-45deg, rgba(0, 0, 0, 0.75) 0%, rgba(0, 0, 0, 0.9) 50%, rgba(0, 0, 0, 0.75) 100%);
+  background: linear-gradient(-45deg, rgba(0, 0, 0, 0.25) 0%, rgba(0, 0, 0, 0.55) 50%, rgba(0, 0, 0, 0.25) 100%);
 }
 
 @media screen and (max-width: 940px) {

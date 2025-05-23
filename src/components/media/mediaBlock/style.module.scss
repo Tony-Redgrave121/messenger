@@ -6,6 +6,10 @@
   justify-content: center;
   flex-wrap: wrap;
 
+  >:first-child img {
+    border-radius: 7.5px 7.5px 0 0;
+  }
+
   img, section {
     border: 2px solid #212121;
     height: auto;

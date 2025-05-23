@@ -139,7 +139,7 @@ const InputBlock: FC<IInputBlock> = ({reply, setReply, socketRef}) => {
                         <span><HiOutlineArrowUturnLeft/></span>
                         <button className={style.ReplyMessage}>
                             <h4>Reply to {reply.user.user_name}</h4>
-                            <p>{reply.message_text}</p>
+                            <p>{!reply.message_text && reply.message_files ? 'Media' : reply.message_text}</p>
                         </button>
                         <Buttons.DefaultButton foo={() => setReply(null)}>
                             <HiOutlineXMark/>

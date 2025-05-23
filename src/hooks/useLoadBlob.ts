@@ -1,6 +1,6 @@
 import {useEffect, useState} from "react";
 
-const useLoadBlob = (imagePath: string | undefined) => {
+const useLoadBlob = (imagePath?: string | boolean) => {
     const [load, setLoad] = useState(false)
     const [image, setImage] = useState('')
 

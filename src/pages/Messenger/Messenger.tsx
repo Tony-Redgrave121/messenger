@@ -114,7 +114,7 @@ const Messenger= () => {
                     <div className={style.Wrapper}>
                         <div className={style.ChatContainer}>
                             <MessengerHeader messenger={messenger} setSidebarState={setSidebarState}/>
-                            <div className={style.MessageBlock} key={id}>
+                            <section className={style.MessageBlock} key={id}>
                                 {messagesList.map(message =>
                                     <Message
                                         message={message}
@@ -125,7 +125,7 @@ const Messenger= () => {
                                     />
                                 )}
                                 <div ref={refEnd}/>
-                            </div>
+                            </section>
                             {(messenger.type === "channel" ? checkRights(messenger.members!, user.userId) : true) &&
                                 <InputBlock setReply={setReply} reply={reply} socketRef={socketRef}/>
                             }
