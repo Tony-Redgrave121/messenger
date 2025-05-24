@@ -16,46 +16,9 @@ menu, nav, output, ruby, section, summary,
 time, mark, audio, video {
   margin: 0;
   padding: 0;
-  border: none;
+  border: 0;
   font-size: 100%;
   vertical-align: baseline;
-  text-decoration: none;
-  box-sizing: border-box;
-}
-
-button, input, textarea {
-  all: unset;
-}
-
-input::-webkit-outer-spin-button,
-input::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
-
-input::-ms-reveal,
-input::-ms-clear {
-  display: none;
-}
-
-input[type=number] {
-  -moz-appearance: textfield;
-}
-
-::-ms-reveal {
-  filter: invert(100%);
-}
-
-button {
-  cursor: pointer;
-}
-
-input[text], textarea {
-  cursor: text;
-}
-
-input[type=file] {
-  display: none;
 }
 
 article, aside, details, figcaption, figure,
@@ -63,15 +26,8 @@ footer, header, hgroup, menu, nav, section {
   display: block;
 }
 
-html {
-  scroll-behavior: smooth;
-  scrollbar-width: thin;
-  scrollbar-color: #2f2f2f transparent;
-}
-
 body {
   line-height: 1;
-  background-color: rgb(28, 28, 28);
 }
 
 ol, ul {
@@ -92,19 +48,6 @@ table {
   border-spacing: 0;
 }
 
-::-webkit-scrollbar {
-  width: 5px;
-  height: 5px;
-}
-
-::-webkit-scrollbar-thumb {
-  background: #2f2f2f;
-  border-radius: 5px;
-}
-
-h1, h2, h3, h4, p, a, button, input, textarea, small, time {
-  font-family: "Roboto", -apple-system, apple color emoji, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
-}
 
 .ChatHeader {
   position: absolute;
@@ -154,12 +97,18 @@ h1, h2, h3, h4, p, a, button, input, textarea, small, time {
   font-size: 14px;
   color: #a9a9a9;
 }
-.ChatHeader > :first-child {
+.ChatHeader > p {
+  color: white;
+  font-weight: 600;
+  margin: auto 0;
+}
+
+.MainHeader > :first-child {
   display: none;
 }
 
 @media screen and (max-width: 940px) {
-  .ChatHeader > :first-child {
+  .MainHeader > :first-child {
     display: block;
   }
 }

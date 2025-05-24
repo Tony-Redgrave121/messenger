@@ -20,6 +20,7 @@ import {useAppDispatch, useAppSelector} from "@hooks/useRedux"
 import {setSidebarLeft} from "@store/reducers/appReducer";
 import {IAdaptMessenger} from "@appTypes";
 import {getDate} from "@utils/logic/getDate";
+import {clsx} from "clsx";
 
 const HeaderLists = {
     chat: [
@@ -107,7 +108,7 @@ const MessengerHeader: FC<IChatHeader> = memo(({messenger, setSidebarState}) => 
     }
 
     return (
-        <header className={style.ChatHeader}>
+        <header className={clsx(style.ChatHeader, style.MainHeader)}>
             <Buttons.DefaultButton foo={() => dispatch(setSidebarLeft(!sidebarLeft))}>
                 <HiOutlineArrowLeft/>
             </Buttons.DefaultButton>

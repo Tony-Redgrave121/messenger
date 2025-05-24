@@ -1,0 +1,25 @@
+.show-node-enter {
+    left: 0;
+}
+
+.show-node-enter-active {
+    left: -100%;
+    transition: left .3s ease-in-out;
+}
+
+.show-node-enter-done {
+    left: -100%;
+}
+
+.show-node-exit {
+    left: -100%;
+}
+
+.show-node-exit-active {
+    left: 0;
+    transition: left .3s ease-in-out;
+}
+
+.show-node-exit-done {
+    left: 0;
+}

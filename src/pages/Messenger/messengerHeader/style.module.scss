@@ -57,15 +57,19 @@
     }
   }
 
-  > :first-child {
-    display: none;
+  > p {
+    color: white;
+    font-weight: 600;
+    margin: auto 0;
   }
 }
 
+.MainHeader > :first-child {
+  display: none;
+}
+
 @media screen and (max-width: 940px) {
-  .ChatHeader {
-    > :first-child {
-      display: block;
-    }
+  .MainHeader > :first-child {
+    display: block;
   }
 }

@@ -22,11 +22,12 @@ import {LoadFile} from "@components/loadFile";
 import {clsx} from 'clsx'
 import getTitle from "@utils/logic/getTitle";
 
-interface IChatMessage {
+interface IMessageProps {
     message: IMessagesResponse,
     setReply: Dispatch<SetStateAction<IMessagesResponse | null>>,
     socketRef: RefObject<WebSocket | null>,
-    messenger: IAdaptMessenger
+    messenger: IAdaptMessenger,
+    setComment?: Dispatch<SetStateAction<IMessagesResponse | null>>
 }
 
 const initialCurrMedia: IMessageFile = {
@@ -36,7 +37,7 @@ const initialCurrMedia: IMessageFile = {
     message_file_path: ''
 }
 
-const Message: FC<IChatMessage> = ({message, setReply, socketRef, messenger}) => {
+const Message: FC<IMessageProps> = ({message, setReply, socketRef, messenger, setComment}) => {
     const {id} = useParams()
     const [contextMenu, setContextMenu] = useState(false)
     const [animateMessage, setAnimateMessage] = useState(false)
@@ -226,9 +227,9 @@ const Message: FC<IChatMessage> = ({message, setReply, socketRef, messenger}) =>
                                 {handleDropDown()}
                             </div>
                         </div>
-                        {messenger.type === 'channel' &&
-                            <div className={style.CommentsContainer}>
-                                <p>94 Comments</p>
+                        {messenger.type === 'channel' && setComment &&
+                            <div className={style.CommentsContainer} onClick={() => setComment(message)}>
+                                <p>{message.comments_count} Comments</p>
                                 <HiOutlineChevronRight/>
                             </div>
                         }

@@ -1,5 +1,3 @@
-import IAdaptMessenger from "./IAdaptMessenger";
-
 export type {default as IAuthForm} from './IAuthForm'
 export type {default as IAuthResponse} from './IAuthResponse'
 export type {default as IContact} from './IContact'

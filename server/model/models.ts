@@ -69,7 +69,8 @@ const message = sequelize.define("message", {
     message_text: {type: DataTypes.TEXT, allowNull: true},
     message_date: {type: DataTypes.DATE, allowNull: false, defaultValue: DataTypes.NOW},
     message_type: {type: DataTypes.STRING, allowNull: false},
-    reply_id: {type: DataTypes.UUID, allowNull: true}
+    reply_id: {type: DataTypes.UUID, allowNull: true},
+    parent_post_id: {type: DataTypes.UUID, allowNull: true}
 }, {timestamps: false})
 
 const message_file = sequelize.define("message_file", {
@@ -108,6 +109,8 @@ users.hasMany(message, {foreignKey: {name: 'recipient_user_id', allowNull: true}
 message.belongsTo(users, {foreignKey: 'recipient_user_id', as: 'recipient'})
 
 message.belongsTo(message, {as: "reply", foreignKey: "reply_id"})
+message.hasMany(message, { as: 'comments', foreignKey: 'parent_post_id' })
+message.belongsTo(message, { as: 'post', foreignKey: 'parent_post_id' })
 
 messenger.hasOne(messenger_settings, {foreignKey: {name: 'messenger_id', allowNull: false}, onDelete: 'CASCADE', onUpdate: 'CASCADE'})
 messenger_settings.belongsTo(messenger, {foreignKey: 'messenger_id'})

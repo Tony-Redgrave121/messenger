@@ -9,6 +9,7 @@ export default interface IMessagesResponse {
     user_id: string,
     messenger_id: string,
     message_files?: IMessageFile[]
+    comments_count?: number
     user: {
         user_id: string,
         user_name: string,

@@ -10,6 +10,8 @@ import {IMessagesResponse, IAdaptMessenger} from "@appTypes"
 import MessengerHeader from "./messengerHeader/MessengerHeader"
 import {useMessageWS} from "@utils/hooks/useMessageWS";
 import checkRights from "@utils/logic/checkRights";
+import CommentsBlock from "./commentsBlock/CommentsBlock";
+import {CSSTransition} from "react-transition-group";
 
 const InitialMessenger: IAdaptMessenger = {
     id: '',
@@ -28,6 +30,8 @@ const Messenger= () => {
     const [sidebarState, setSidebarState] = useState(false)
     const [reply, setReply] = useState<IMessagesResponse | null>(null)
     const [messenger, setMessenger] = useState<IAdaptMessenger>(InitialMessenger)
+
+    const [comment, setComment] = useState<IMessagesResponse | null>(null)
 
     const refEnd = useRef<HTMLDivElement>(null)
     const refRightSidebar = useRef<HTMLDivElement>(null)
@@ -107,39 +111,62 @@ const Messenger= () => {
         return () => clearTimeout(timeout)
     }, [messagesList])
 
+    const [animation, setAnimation] = useState(false)
+    const wrapperRef = useRef<HTMLDivElement>(null)
+
+    useEffect(() => {
+        if (comment) setAnimation(true)
+        else setAnimation(false)
+    }, [comment])
+
     return (
         <>
             {messenger &&
-                <>
-                    <div className={style.Wrapper}>
-                        <div className={style.ChatContainer}>
-                            <MessengerHeader messenger={messenger} setSidebarState={setSidebarState}/>
-                            <section className={style.MessageBlock} key={id}>
-                                {messagesList.map(message =>
-                                    <Message
-                                        message={message}
-                                        messenger={messenger}
-                                        key={message.message_id}
-                                        setReply={setReply}
-                                        socketRef={socketRef}
-                                    />
-                                )}
-                                <div ref={refEnd}/>
-                            </section>
-                            {(messenger.type === "channel" ? checkRights(messenger.members!, user.userId) : true) &&
-                                <InputBlock setReply={setReply} reply={reply} socketRef={socketRef}/>
+                <CSSTransition
+                    in={animation}
+                    nodeRef={wrapperRef}
+                    timeout={300}
+                    classNames='show-node'
+                >
+                    <>
+                        <div className={style.Wrapper} ref={wrapperRef}>
+                            <div className={style.ChatContainer}>
+                                <MessengerHeader messenger={messenger} setSidebarState={setSidebarState}/>
+                                <section className={style.MessageBlock} key={id}>
+                                    {messagesList.map(message =>
+                                        <Message
+                                            message={message}
+                                            messenger={messenger}
+                                            key={message.message_id}
+                                            setReply={setReply}
+                                            socketRef={socketRef}
+                                            setComment={setComment}
+                                        />
+                                    )}
+                                    <div ref={refEnd}/>
+                                </section>
+                                {(messenger.type === "channel" ? checkRights(messenger.members!, user.userId) : true) &&
+                                    <InputBlock setReply={setReply} reply={reply} socketRef={socketRef}/>
+                                }
+                            </div>
+                            {comment &&
+                                <CommentsBlock
+                                    channelPost={comment}
+                                    messenger={messenger}
+                                    setState={setComment}
+                                />
                             }
                         </div>
-                    </div>
-                    <RightSidebar
-                        entity={messenger}
-                        setEntity={setMessenger}
-                        ref={refRightSidebar}
-                        state={sidebarState}
-                        setState={setSidebarState}
-                        key={messenger.id}
-                    />
-                </>
+                        <RightSidebar
+                            entity={messenger}
+                            setEntity={setMessenger}
+                            ref={refRightSidebar}
+                            state={sidebarState}
+                            setState={setSidebarState}
+                            key={messenger.id}
+                        />
+                    </>
+                </CSSTransition>
             }
         </>
     )

@@ -195,7 +195,21 @@ class MessengerController {
 
             return res.json(messenger)
         } catch (e) {
-            return res.json(ApiError.internalServerError("An error occurred while posting the messenger"))
+            return res.json(ApiError.internalServerError("An error occurred while updating the messenger"))
+        }
+    }
+    async getComments(req: Request, res: Response): Promise<any> {
+        try {
+            const {messenger_id, messenger_name, messenger_desc} = req.body
+
+            if (!messenger_id || !messenger_name)
+                return res.json(ApiError.internalServerError('An error occurred while posting a comment'))
+
+            const messenger = await MessengerService.putMessenger(messenger_id, messenger_name, messenger_desc, req.files)
+
+            return res.json(messenger)
+        } catch (e) {
+            return res.json(ApiError.internalServerError("An error occurred while posting a comment"))
         }
     }
 }

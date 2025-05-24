@@ -38,25 +38,27 @@ class UserController {
 
     async fetchMessages(req: Request, res: Response): Promise<any> {
         try {
-            const {type, user_id, messenger_id} = req.query
 
-            if (
-                !user_id ||
-                !type ||
-                !messenger_id ||
-                typeof type !== 'string' ||
-                typeof user_id !== 'string' ||
-                typeof messenger_id !== 'string'
-            )
-                return res.json(ApiError.badRequest('Missing required fields'))
-            const messages = await UserService.fetchMessages(type, user_id, messenger_id)
-
-            if (messages instanceof ApiError) return res.json(ApiError.internalServerError('An error occurred while fetching messages'))
-
-            return res.json(messages)
         } catch (e) {
             return res.json(ApiError.internalServerError("An error occurred while fetching the messages"))
         }
+
+        const {type, user_id, messenger_id} = req.query
+
+        if (
+            !user_id ||
+            !type ||
+            !messenger_id ||
+            typeof type !== 'string' ||
+            typeof user_id !== 'string' ||
+            typeof messenger_id !== 'string'
+        )
+            return res.json(ApiError.badRequest('Missing required fields'))
+        const messages = await UserService.fetchMessages(type, user_id, messenger_id)
+
+        if (messages instanceof ApiError) return res.json(ApiError.internalServerError('An error occurred while fetching messages'))
+
+        return res.json(messages)
     }
 
     async postMessage(req: Request, res: Response): Promise<any> {
