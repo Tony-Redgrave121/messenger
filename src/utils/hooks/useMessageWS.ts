@@ -1,16 +1,15 @@
 import {useEffect, useRef, useState} from "react";
 import {useAppSelector} from "@hooks/useRedux";
 import {IMessagesResponse} from "@appTypes";
-import {useParams} from "react-router-dom";
 
-export const useMessageWS = () => {
+export const useMessageWS = (messenger_id?: string) => {
     const [messagesList, setMessagesList] = useState<IMessagesResponse[]>([])
 
     const socketRef = useRef<WebSocket | null>(null)
     const user = useAppSelector(state => state.user)
-    const {id} = useParams()
 
     useEffect(() => {
+        if (!messenger_id) return
         if (socketRef.current && socketRef.current.readyState === WebSocket.OPEN) socketRef.current.close()
 
         socketRef.current = new WebSocket("ws://localhost:5000/chat")
@@ -18,7 +17,7 @@ export const useMessageWS = () => {
 
         socket.onopen = () => {
             socket.send(JSON.stringify({
-                messenger_id: id,
+                messenger_id: messenger_id,
                 user_id: user.userId,
                 method: 'CONNECTION'
             }))
@@ -48,7 +47,7 @@ export const useMessageWS = () => {
         return () => {
             if (socket.readyState === 1) socket.close()
         }
-    }, [id, user.userId])
+    }, [user.userId])
 
     return {
         socketRef,

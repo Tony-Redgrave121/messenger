@@ -15,6 +15,7 @@ interface IPostMessage {
     user_id: string,
     messenger_id: string | null,
     reply_id: string,
+    post_id?: string,
     message_text: string,
     message_type: string,
     recipient_user_id: string | null,
@@ -167,9 +168,15 @@ class UserService {
         return [...transformedChats, ...messengersList]
     }
 
-    async fetchMessages(type: string, user_id: string, messenger_id: string) {
+    async fetchMessages(type: string, user_id: string, messenger_id: string, post_id?: string) {
         const messages = await models.message.findAll({
-            where: type !== "chat" ? {messenger_id: messenger_id} : {recipient_user_id: [messenger_id, user_id]},
+            where:
+                type !== "chat" ?
+                {
+                    messenger_id: messenger_id,
+                    ...(post_id !== 'undefined' ? {parent_post_id: post_id} : {parent_post_id: null})
+                } :
+                {recipient_user_id: [messenger_id, user_id]},
             include: [
                 {model: models.message_file, attributes: ['message_file_id', 'message_file_name', 'message_file_size', 'message_file_path']},
                 {model: models.users, attributes: ['user_id', 'user_name', 'user_img']},
@@ -197,6 +204,7 @@ class UserService {
             message_text: message.message_text,
             message_type: message.message_type,
             reply_id: message.reply_id,
+            parent_post_id: message.post_id,
             user_id: message.user_id,
             messenger_id: message.messenger_id,
             recipient_user_id: message.recipient_user_id

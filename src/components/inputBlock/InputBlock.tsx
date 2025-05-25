@@ -22,11 +22,13 @@ import getFileObject from "../../utils/logic/getFileObject";
 
 interface IInputBlock {
     reply: IMessagesResponse | null,
-    setReply: Dispatch<SetStateAction<IMessagesResponse | null>>
+    post_id?: string,
+    setReply: Dispatch<SetStateAction<IMessagesResponse | null>>,
+    socketRoom: string,
     socketRef: RefObject<WebSocket | null>
 }
 
-const InputBlock: FC<IInputBlock> = ({reply, setReply, socketRef}) => {
+const InputBlock: FC<IInputBlock> = ({post_id, reply, setReply, socketRoom, socketRef}) => {
     const [inputText, setInputText] = useState('')
     const refTextarea = useRef<HTMLTextAreaElement>(null)
 
@@ -73,6 +75,7 @@ const InputBlock: FC<IInputBlock> = ({reply, setReply, socketRef}) => {
             message.append('message_text', inputText)
             message.append('message_type', filesState.files ? filesState.type : 'message')
             reply && message.append('reply_id', reply.message_id)
+            post_id && message.append('post_id', post_id)
             message.append('user_id', user_id)
             type !== "chat" ?
                 message.append('messenger_id',  id) :
@@ -91,17 +94,15 @@ const InputBlock: FC<IInputBlock> = ({reply, setReply, socketRef}) => {
 
             setInputText('')
             if (refTextarea && refTextarea.current) refTextarea.current.value = ''
-
             setReply(null)
 
             const newMessage = await UserService.postMessage(message).catch(error => console.log(error))
 
-
             if (newMessage && socketRef.current?.readyState === WebSocket.OPEN) {
-                console.log(newMessage.data);
+                console.log(newMessage.data)
 
                 socketRef.current.send(JSON.stringify({
-                    messenger_id: id,
+                    messenger_id: socketRoom,
                     user_id: user_id,
                     method: 'POST_MESSAGE',
                     data: newMessage.data

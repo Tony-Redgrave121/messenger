@@ -1,46 +1,89 @@
 import React, {Dispatch, FC, memo, SetStateAction, useEffect, useState} from 'react'
 import style from '../style.module.css'
 import '../animationWrapper.css'
-import {IAdaptMessenger, IMessagesResponse} from "@appTypes";
+import {IAdaptMessenger, ICommentState, IMessagesResponse} from "@appTypes";
 import {Message} from "../message";
 import {InputBlock} from "@components/inputBlock";
 import CommentsHeader from "../messengerHeader/CommentsHeader";
-import {useCommentWS} from "@utils/hooks/useCommentWS";
+import userService from "@service/UserService";
+import {useAppSelector} from "@hooks/useRedux";
+import {useParams} from "react-router-dom";
+import {useMessageWS} from "@utils/hooks/useMessageWS";
 
 interface ICommentsBlock {
     channelPost: IMessagesResponse,
     messenger: IAdaptMessenger,
-    setState: Dispatch<SetStateAction<IMessagesResponse | null>>
+    setState: Dispatch<SetStateAction<ICommentState>>
 }
 
 const CommentsBlock: FC<ICommentsBlock> = memo(({channelPost, messenger, setState}) => {
     const [reply, setReply] = useState<IMessagesResponse | null>(null)
+    const userId = useAppSelector(state => state.user.userId)
+    const {type, id} = useParams()
 
     const {
         socketRef,
-        commentsList,
-        setCommentsList,
-    } = useCommentWS()
+        messagesList,
+        setMessagesList,
+    } = useMessageWS(`${id}/${channelPost.message_id}`)
 
     useEffect(() => {
-        setCommentsList(prev => [channelPost, ...prev])
-    }, [])
+        if (!channelPost || !type || !id) return
+        let timer: NodeJS.Timeout | null
+
+        const controller = new AbortController()
+        const signal = controller.signal
+
+        const handleComments = async () => {
+            const data = await userService.fetchMessages(userId, type, id, channelPost.message_id, signal)
+
+            if (data.status === 200) {
+                setMessagesList(data.data)
+            }
+        }
+
+        timer = setTimeout(() => handleComments(), 300)
+
+        return () => {
+            controller.abort()
+            timer && clearTimeout(timer)
+        }
+    }, [channelPost])
 
     return (
         <div className={style.ChatContainer}>
-            <CommentsHeader comments_count={channelPost.comments_count} setState={setState}/>
+            <CommentsHeader
+                comments_count={channelPost ? channelPost.comments_count : 0}
+                setState={setState}
+                setCommentsList={setMessagesList}
+            />
             <section className={style.MessageBlock}>
-                {commentsList.map(message =>
+                <Message
+                    message={channelPost}
+                    messenger={messenger}
+                    setReply={setReply}
+                    socketRef={socketRef}
+                />
+                {messagesList.map(message =>
                     <Message
                         message={message}
-                        messenger={messenger}
+                        messenger={{
+                            ...messenger,
+                            type: 'group',
+                        }}
                         key={message.message_id}
                         setReply={setReply}
                         socketRef={socketRef}
                     />
                 )}
             </section>
-            <InputBlock setReply={setReply} reply={reply} socketRef={socketRef}/>
+            <InputBlock
+                socketRoom={`${id}/${channelPost.message_id}`}
+                post_id={channelPost.message_id}
+                setReply={setReply}
+                reply={reply}
+                socketRef={socketRef}
+            />
         </div>
     )
 })

@@ -12,7 +12,6 @@ import compression from 'compression'
 import expressWs from "express-ws"
 import chatHandlerWS from "../middleware/chatHandlerWS";
 import liveUpdatesHandlerWS from "../middleware/liveUpdatesHandlerWS";
-import commentsHandlerWS from "../middleware/commentsHandlerWS";
 
 dotenv.config({path: "./.env"})
 const PORT = Number(process.env.SERVER_PORT)
@@ -44,7 +43,6 @@ app.use(errorHandler)
 
 app.ws("/chat", chatHandlerWS(aWss))
 app.ws("/live-updates", liveUpdatesHandlerWS(aWss))
-app.ws("/comments", commentsHandlerWS(aWss))
 
 const startServer = async () => {
     await sequelize.authenticate()

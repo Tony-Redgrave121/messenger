@@ -8,7 +8,7 @@ import {
     HiOutlineDocumentDuplicate,
     HiOutlineTrash, HiOutlineFlag, HiOutlineChevronRight
 } from "react-icons/hi2"
-import {IMessagesResponse, IMessageFile, IAdaptMessenger} from "@appTypes";
+import {IMessagesResponse, IMessageFile, IAdaptMessenger, ICommentState} from "@appTypes";
 import {useAppSelector} from "@hooks/useRedux";
 import {DropDown} from "@components/dropDown";
 import {DocumentBlock} from "./index";
@@ -27,7 +27,7 @@ interface IMessageProps {
     setReply: Dispatch<SetStateAction<IMessagesResponse | null>>,
     socketRef: RefObject<WebSocket | null>,
     messenger: IAdaptMessenger,
-    setComment?: Dispatch<SetStateAction<IMessagesResponse | null>>
+    setComment?: Dispatch<SetStateAction<ICommentState>>
 }
 
 const initialCurrMedia: IMessageFile = {
@@ -228,7 +228,10 @@ const Message: FC<IMessageProps> = ({message, setReply, socketRef, messenger, se
                             </div>
                         </div>
                         {messenger.type === 'channel' && setComment &&
-                            <div className={style.CommentsContainer} onClick={() => setComment(message)}>
+                            <div className={style.CommentsContainer} onClick={() => setComment({
+                                comment: message,
+                                commentState: true
+                            })}>
                                 <p>{message.comments_count} Comments</p>
                                 <HiOutlineChevronRight/>
                             </div>

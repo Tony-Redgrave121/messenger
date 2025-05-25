@@ -43,18 +43,19 @@ class UserController {
             return res.json(ApiError.internalServerError("An error occurred while fetching the messages"))
         }
 
-        const {type, user_id, messenger_id} = req.query
+        const {type, user_id, messenger_id, post_id} = req.query
 
         if (
             !user_id ||
             !type ||
             !messenger_id ||
             typeof type !== 'string' ||
+            typeof post_id !== 'string' ||
             typeof user_id !== 'string' ||
             typeof messenger_id !== 'string'
         )
             return res.json(ApiError.badRequest('Missing required fields'))
-        const messages = await UserService.fetchMessages(type, user_id, messenger_id)
+        const messages = await UserService.fetchMessages(type, user_id, messenger_id, post_id)
 
         if (messages instanceof ApiError) return res.json(ApiError.internalServerError('An error occurred while fetching messages'))
 
@@ -63,30 +64,30 @@ class UserController {
 
     async postMessage(req: Request, res: Response): Promise<any> {
         try {
+            const {user_id, messenger_id, reply_id, message_text, message_type, recipient_user_id, post_id} = req.body
 
+            if (!user_id || !message_type)
+                return res.json(ApiError.badRequest('Missing required fields'))
+
+            const message = {
+                user_id: user_id,
+                messenger_id: messenger_id,
+                reply_id: reply_id ? reply_id : null,
+                post_id: post_id ? post_id : null,
+                message_text: message_text,
+                message_type: message_type,
+                recipient_user_id: recipient_user_id
+            }
+
+            const data = await UserService.postMessage(message, req.files)
+
+            if (data instanceof ApiError)
+                return res.json(ApiError.internalServerError('An error occurred while posting the message'))
+
+            return res.json(data)
         } catch (e) {
             return res.json(ApiError.internalServerError('An error occurred while posting the message'))
         }
-        const {user_id, messenger_id, reply_id, message_text, message_type, recipient_user_id} = req.body
-
-        if (!user_id || !message_type)
-            return res.json(ApiError.badRequest('Missing required fields'))
-
-        const message = {
-            user_id: user_id,
-            messenger_id: messenger_id,
-            reply_id: reply_id ? reply_id : null,
-            message_text: message_text,
-            message_type: message_type,
-            recipient_user_id: recipient_user_id
-        }
-
-        const data = await UserService.postMessage(message, req.files)
-
-        if (data instanceof ApiError)
-            return res.json(ApiError.internalServerError('An error occurred while posting the message'))
-
-        return res.json(data)
     }
 
     async deleteMessage(req: Request, res: Response): Promise<any> {

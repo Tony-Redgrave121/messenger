@@ -9,7 +9,7 @@ import {
     PUT_MESSENGER_MODERATORS,
     POST_REMOVED,
     POST_CONTACTS_MEMBERS,
-    POST_MEMBER, COMMENT
+    POST_MEMBER
 } from "@utils/const/const"
 import $api from '@utils/http/index'
 import {AxiosResponse} from 'axios'
@@ -58,10 +58,5 @@ export default class MessengerService {
     }
     static async putMessenger(messenger: FormData): Promise<AxiosResponse<IMessengerResponse>> {
         return $api.put<IMessengerResponse>(POST_MESSENGER, messenger)
-    }
-    static async getComments(): Promise<AxiosResponse<IMessengerResponse>> {
-        return $api.get<IMessengerResponse>(COMMENT, {
-
-        })
     }
 }

@@ -15,8 +15,8 @@ export default class UserService {
     static async fetchMessengersList(user_id: string, signal: AbortSignal): Promise<AxiosResponse<IMessengersListResponse[]>> {
         return $api.get<IMessengersListResponse[]>(`/messengers-list/${user_id}`, {signal})
     }
-    static async fetchMessages(user_id: string, type: string, messenger_id: string, signal: AbortSignal): Promise<AxiosResponse<IMessagesResponse[]>> {
-        return $api.get<IMessagesResponse[]>(`${FETCH_MESSAGES}?type=${type}&user_id=${user_id}&messenger_id=${messenger_id}`, {signal})
+    static async fetchMessages(user_id: string, type: string, messenger_id: string, post_id: string | undefined, signal: AbortSignal): Promise<AxiosResponse<IMessagesResponse[]>> {
+        return $api.get<IMessagesResponse[]>(`${FETCH_MESSAGES}?type=${type}&user_id=${user_id}&messenger_id=${messenger_id}&post_id=${post_id}`, {signal})
     }
     static async postMessage(message: FormData): Promise<AxiosResponse<IMessagesResponse>> {
         return $api.post<IMessagesResponse>(POST_MESSAGE, message)

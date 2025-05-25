@@ -6,7 +6,7 @@ import {Message} from "./message"
 import UserService from "@service/UserService"
 import {useAppSelector} from "@hooks/useRedux"
 import {useNavigate, useParams} from "react-router-dom"
-import {IMessagesResponse, IAdaptMessenger} from "@appTypes"
+import {IMessagesResponse, IAdaptMessenger, ICommentState} from "@appTypes"
 import MessengerHeader from "./messengerHeader/MessengerHeader"
 import {useMessageWS} from "@utils/hooks/useMessageWS";
 import checkRights from "@utils/logic/checkRights";
@@ -31,7 +31,10 @@ const Messenger= () => {
     const [reply, setReply] = useState<IMessagesResponse | null>(null)
     const [messenger, setMessenger] = useState<IAdaptMessenger>(InitialMessenger)
 
-    const [comment, setComment] = useState<IMessagesResponse | null>(null)
+    const [comment, setComment] = useState<ICommentState>({
+        comment: null,
+        commentState: false
+    })
 
     const refEnd = useRef<HTMLDivElement>(null)
     const refRightSidebar = useRef<HTMLDivElement>(null)
@@ -44,7 +47,7 @@ const Messenger= () => {
         socketRef,
         messagesList,
         setMessagesList,
-    } = useMessageWS()
+    } = useMessageWS(id)
 
     useEffect(() => {
         if (!id || !type) return
@@ -63,7 +66,7 @@ const Messenger= () => {
             try {
                 const [messenger, messages] = await Promise.all([
                     UserService.fetchMessenger(user.userId, type, id, signal),
-                    UserService.fetchMessages(user.userId, type, id, signal)
+                    UserService.fetchMessages(user.userId, type, id, undefined, signal)
                 ])
 
                 if (messenger.status === 200 && messages.status === 200) {
@@ -115,9 +118,21 @@ const Messenger= () => {
     const wrapperRef = useRef<HTMLDivElement>(null)
 
     useEffect(() => {
-        if (comment) setAnimation(true)
-        else setAnimation(false)
-    }, [comment])
+        let timer: NodeJS.Timeout | null
+
+        if (comment.commentState) setAnimation(true)
+        else {
+            timer = setTimeout(() => setComment(prev => ({
+                ...prev,
+                comment: null
+            })), 300)
+            setAnimation(false)
+        }
+
+        return () => {
+            timer && clearTimeout(timer)
+        }
+    }, [comment.commentState])
 
     return (
         <>
@@ -145,17 +160,21 @@ const Messenger= () => {
                                     )}
                                     <div ref={refEnd}/>
                                 </section>
-                                {(messenger.type === "channel" ? checkRights(messenger.members!, user.userId) : true) &&
-                                    <InputBlock setReply={setReply} reply={reply} socketRef={socketRef}/>
+                                {(messenger.type === "channel" ? checkRights(messenger.members!, user.userId) : true) && id &&
+                                    <InputBlock
+                                        setReply={setReply}
+                                        reply={reply}
+                                        socketRef={socketRef}
+                                        socketRoom={id}
+                                    />
                                 }
                             </div>
-                            {comment &&
+                            {comment.comment &&
                                 <CommentsBlock
-                                    channelPost={comment}
+                                    channelPost={comment.comment}
                                     messenger={messenger}
                                     setState={setComment}
-                                />
-                            }
+                                />}
                         </div>
                         <RightSidebar
                             entity={messenger}
