@@ -6,9 +6,9 @@ import {getTime} from "@utils/logic/getDate";
 import {
     HiOutlineArrowUturnLeft,
     HiOutlineDocumentDuplicate,
-    HiOutlineTrash, HiOutlineFlag, HiOutlineChevronRight
+    HiOutlineTrash, HiOutlineFlag, HiOutlineChevronRight, HiOutlineFire
 } from "react-icons/hi2"
-import {IMessagesResponse, IMessageFile, IAdaptMessenger, ICommentState} from "@appTypes";
+import {IMessagesResponse, IMessageFile, IAdaptMessenger, ICommentState, IReaction} from "@appTypes";
 import {useAppSelector} from "@hooks/useRedux";
 import {DropDown} from "@components/dropDown";
 import {DocumentBlock} from "./index";
@@ -27,7 +27,8 @@ interface IMessageProps {
     setReply: Dispatch<SetStateAction<IMessagesResponse | null>>,
     socketRef: RefObject<WebSocket | null>,
     messenger: IAdaptMessenger,
-    setComment?: Dispatch<SetStateAction<ICommentState>>
+    setComment?: Dispatch<SetStateAction<ICommentState>>,
+    reactions?: IReaction[],
 }
 
 const initialCurrMedia: IMessageFile = {
@@ -37,9 +38,10 @@ const initialCurrMedia: IMessageFile = {
     message_file_path: ''
 }
 
-const Message: FC<IMessageProps> = ({message, setReply, socketRef, messenger, setComment}) => {
+const Message: FC<IMessageProps> = ({message, setReply, socketRef, messenger, setComment, reactions}) => {
     const {id} = useParams()
     const [contextMenu, setContextMenu] = useState(false)
+    const [reactionMenu, setReactionMenu] = useState(false)
     const [animateMessage, setAnimateMessage] = useState(false)
     const [isOwner, setIsOwner] = useState(false)
 
@@ -72,6 +74,14 @@ const Message: FC<IMessageProps> = ({message, setReply, socketRef, messenger, se
     }, [id, message.message_id, socketRef, user_id])
 
     const dropDownOptions = {
+        react: {
+            liChildren: <HiOutlineFire/>,
+            liText: 'Reactions',
+            liFoo: () => {
+                setReactionMenu(true)
+                setContextMenu(false)
+            }
+        },
         copy: {
             liChildren: <HiOutlineDocumentDuplicate/>,
             liText: 'Copy',
@@ -111,33 +121,39 @@ const Message: FC<IMessageProps> = ({message, setReply, socketRef, messenger, se
         switch (messenger.type) {
             case "chat":
                 if (message.user_id === user_id) list = [
+                    dropDownOptions.react,
                     dropDownOptions.copy,
                     dropDownOptions.reply,
                     dropDownOptions.delete
                 ]
                 else list = [
+                    dropDownOptions.react,
                     dropDownOptions.copy,
                     dropDownOptions.reply,
                 ]
                 break
             case "group":
                 if (message.user_id === user_id || checkRights(messenger.members!, user_id)) list = [
+                    dropDownOptions.react,
                     dropDownOptions.copy,
                     dropDownOptions.reply,
                     dropDownOptions.delete
                 ]
                 else list = [
+                    dropDownOptions.react,
                     dropDownOptions.copy,
                     dropDownOptions.reply,
                 ]
                 break
             case "channel":
                 if (checkRights(messenger.members!, user_id)) list = [
+                    dropDownOptions.react,
                     dropDownOptions.copy,
                     dropDownOptions.report,
                     dropDownOptions.delete
                 ]
                 else list = [
+                    dropDownOptions.react,
                     dropDownOptions.copy,
                     dropDownOptions.report
                 ]
@@ -149,6 +165,24 @@ const Message: FC<IMessageProps> = ({message, setReply, socketRef, messenger, se
             state={contextMenu}
             setState={setContextMenu}
             position={position}
+        />
+    }
+
+    const handleReactions = () => {
+        const reactionList = reactions?.map(reaction => ({
+            liChildren: reaction.reaction_code,
+            liFoo: () => {
+                setContextMenu(false)
+                setReactionMenu(false)
+            }
+        }))
+
+        return reactionList && <DropDown
+            list={reactionList}
+            state={reactionMenu}
+            setState={setReactionMenu}
+            position={position}
+            styles={['EmojiContainer']}
         />
     }
 
@@ -206,7 +240,7 @@ const Message: FC<IMessageProps> = ({message, setReply, socketRef, messenger, se
                                 event,
                                 setPosition,
                                 setContextMenu,
-                                height: 50
+                                height: 100
                             })}>
                                 {(mediaArr.length > 0) &&
                                     <MediaBlock.MessageMedia
@@ -224,7 +258,20 @@ const Message: FC<IMessageProps> = ({message, setReply, socketRef, messenger, se
                                     {message.message_text}
                                     <small>{getTime(message.message_date)}</small>
                                 </p>
+                                <ul className={style.ReactionsBlock}>
+                                    <li>
+                                        <button>
+                                            <span>😡</span> 1488
+                                        </button>
+                                    </li>
+                                    <li>
+                                        <button>
+                                            <span>😁</span> 234
+                                        </button>
+                                    </li>
+                                </ul>
                                 {handleDropDown()}
+                                {handleReactions()}
                             </div>
                         </div>
                         {messenger.type === 'channel' && setComment &&

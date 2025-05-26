@@ -1,3 +1,5 @@
+import IReaction from "./IReaction";
+
 export default interface IMessagesResponse {
     message_id: string,
     message_text?: string,
@@ -7,6 +9,10 @@ export default interface IMessagesResponse {
     user_id: string,
     messenger_id?: string,
     recipient_user_id?: string,
+    reactions?: {
+        reaction_count: string,
+        reaction: IReaction
+    }[],
     message_files?: [
         {
             message_file_id: string,

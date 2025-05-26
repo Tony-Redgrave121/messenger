@@ -1,6 +1,6 @@
 import {useEffect, useRef} from "react";
 import {useAppDispatch, useAppSelector} from "@hooks/useRedux";
-import {setMessengersList} from "../../store/reducers/appReducer";
+import {setMessengersList} from "@store/reducers/appReducer";
 
 export const useMessengerWS = () => {
     const socketRef = useRef<WebSocket | null>(null)

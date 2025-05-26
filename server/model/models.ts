@@ -54,6 +54,10 @@ const messenger_reactions = sequelize.define("messenger_reactions", {
     messenger_reaction_id: {type: DataTypes.UUID, primaryKey: true},
 }, {timestamps: false})
 
+const message_reactions = sequelize.define("message_reactions", {
+    message_reaction_id: {type: DataTypes.UUID, primaryKey: true},
+}, {timestamps: false})
+
 const reactions = sequelize.define("reactions", {
     reaction_id: {type: DataTypes.UUID, primaryKey: true},
     reaction_code: {type: DataTypes.STRING, allowNull: false},
@@ -112,6 +116,12 @@ message.belongsTo(message, {as: "reply", foreignKey: "reply_id"})
 message.hasMany(message, { as: 'comments', foreignKey: 'parent_post_id' })
 message.belongsTo(message, { as: 'post', foreignKey: 'parent_post_id' })
 
+message.hasMany(message_reactions, {foreignKey: {name: 'message_id', allowNull: false}, onDelete: 'CASCADE', onUpdate: 'CASCADE'})
+message_reactions.belongsTo(message, {foreignKey: 'message_id'})
+
+reactions.hasMany(message_reactions, {foreignKey: {name: 'reaction_id', allowNull: false}, onDelete: 'CASCADE', onUpdate: 'CASCADE'})
+message_reactions.belongsTo(reactions, {foreignKey: 'reaction_id'})
+
 messenger.hasOne(messenger_settings, {foreignKey: {name: 'messenger_id', allowNull: false}, onDelete: 'CASCADE', onUpdate: 'CASCADE'})
 messenger_settings.belongsTo(messenger, {foreignKey: 'messenger_id'})
 
@@ -141,7 +151,8 @@ const models = {
     removed_users,
     message,
     message_file,
-    contacts
+    contacts,
+    message_reactions
 }
 
 export default models

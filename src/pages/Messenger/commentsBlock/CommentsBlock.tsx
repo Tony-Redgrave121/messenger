@@ -1,7 +1,7 @@
 import React, {Dispatch, FC, memo, SetStateAction, useEffect, useState} from 'react'
 import style from '../style.module.css'
 import '../animationWrapper.css'
-import {IAdaptMessenger, ICommentState, IMessagesResponse} from "@appTypes";
+import {IAdaptMessenger, ICommentState, IMessagesResponse, IReaction} from "@appTypes";
 import {Message} from "../message";
 import {InputBlock} from "@components/inputBlock";
 import CommentsHeader from "../messengerHeader/CommentsHeader";
@@ -13,10 +13,11 @@ import {useMessageWS} from "@utils/hooks/useMessageWS";
 interface ICommentsBlock {
     channelPost: IMessagesResponse,
     messenger: IAdaptMessenger,
-    setState: Dispatch<SetStateAction<ICommentState>>
+    setState: Dispatch<SetStateAction<ICommentState>>,
+    reactions?: IReaction[]
 }
 
-const CommentsBlock: FC<ICommentsBlock> = memo(({channelPost, messenger, setState}) => {
+const CommentsBlock: FC<ICommentsBlock> = memo(({channelPost, messenger, setState, reactions}) => {
     const [reply, setReply] = useState<IMessagesResponse | null>(null)
     const userId = useAppSelector(state => state.user.userId)
     const {type, id} = useParams()
@@ -63,6 +64,7 @@ const CommentsBlock: FC<ICommentsBlock> = memo(({channelPost, messenger, setStat
                     messenger={messenger}
                     setReply={setReply}
                     socketRef={socketRef}
+                    reactions={reactions}
                 />
                 {messagesList.map(message =>
                     <Message
@@ -74,6 +76,7 @@ const CommentsBlock: FC<ICommentsBlock> = memo(({channelPost, messenger, setStat
                         key={message.message_id}
                         setReply={setReply}
                         socketRef={socketRef}
+                        reactions={reactions}
                     />
                 )}
             </section>

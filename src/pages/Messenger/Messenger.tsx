@@ -6,12 +6,13 @@ import {Message} from "./message"
 import UserService from "@service/UserService"
 import {useAppSelector} from "@hooks/useRedux"
 import {useNavigate, useParams} from "react-router-dom"
-import {IMessagesResponse, IAdaptMessenger, ICommentState} from "@appTypes"
+import {IMessagesResponse, IAdaptMessenger, ICommentState, IReaction} from "@appTypes"
 import MessengerHeader from "./messengerHeader/MessengerHeader"
 import {useMessageWS} from "@utils/hooks/useMessageWS";
 import checkRights from "@utils/logic/checkRights";
 import CommentsBlock from "./commentsBlock/CommentsBlock";
 import {CSSTransition} from "react-transition-group";
+import MessengerService from "@service/MessengerService";
 
 const InitialMessenger: IAdaptMessenger = {
     id: '',
@@ -29,6 +30,7 @@ const types = ['chat', 'channel', 'group']
 const Messenger= () => {
     const [sidebarState, setSidebarState] = useState(false)
     const [reply, setReply] = useState<IMessagesResponse | null>(null)
+    const [reactions, setReactions] = useState<IReaction[]>([])
     const [messenger, setMessenger] = useState<IAdaptMessenger>(InitialMessenger)
 
     const [comment, setComment] = useState<ICommentState>({
@@ -64,12 +66,13 @@ const Messenger= () => {
             setMessagesList([])
 
             try {
-                const [messenger, messages] = await Promise.all([
+                const [messenger, messages, reactions] = await Promise.all([
                     UserService.fetchMessenger(user.userId, type, id, signal),
-                    UserService.fetchMessages(user.userId, type, id, undefined, signal)
+                    UserService.fetchMessages(user.userId, type, id, undefined, signal),
+                    MessengerService.getReactions((type === 'channel' && id) ? id : undefined)
                 ])
 
-                if (messenger.status === 200 && messages.status === 200) {
+                if (messenger.status === 200 && messages.status === 200 && reactions.status === 200) {
                     const messengerData = messenger.data
                     let adaptMessenger = InitialMessenger
 
@@ -95,8 +98,11 @@ const Messenger= () => {
                     }
 
                     if (adaptMessenger.id !== '') {
+                        console.log(messages.data)
+
                         setMessenger(adaptMessenger)
                         setMessagesList(messages.data)
+                        setReactions(reactions.data)
                     }
                 } else navigate('/')
             } catch (error) {
@@ -156,6 +162,7 @@ const Messenger= () => {
                                             setReply={setReply}
                                             socketRef={socketRef}
                                             setComment={setComment}
+                                            reactions={reactions}
                                         />
                                     )}
                                     <div ref={refEnd}/>
@@ -174,6 +181,7 @@ const Messenger= () => {
                                     channelPost={comment.comment}
                                     messenger={messenger}
                                     setState={setComment}
+                                    reactions={reactions}
                                 />}
                         </div>
                         <RightSidebar

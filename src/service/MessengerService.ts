@@ -26,8 +26,8 @@ export default class MessengerService {
     static async getMessengerSettings(messenger_id: string): Promise<AxiosResponse<IMessengerSettings>> {
         return $api.get<IMessengerSettings>(`${GET_MESSENGER_SETTINGS}/${messenger_id}`)
     }
-    static async getReactions(): Promise<AxiosResponse<IReaction[]>> {
-        return $api.get<IReaction[]>(GET_REACTIONS)
+    static async getReactions(messenger_id?: string): Promise<AxiosResponse<IReaction[]>> {
+        return $api.get<IReaction[]>(`${GET_REACTIONS}${messenger_id ? `?messenger_id=${messenger_id}` : ''}`)
     }
     static async putMessengerType(type: string, messenger_id: string): Promise<AxiosResponse> {
         return $api.put(`${PUT_MESSENGER_TYPE}/${messenger_id}`, {messenger_type: type})

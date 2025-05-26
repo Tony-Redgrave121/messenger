@@ -45,7 +45,10 @@ const EditReactions: FC<IEditReactionsProps> = (
     useEffect(() => {
         const fetchReactions = async () => {
             MessengerService.getReactions()
-                .then(res => res.data)
+                .then(res => {
+                    console.log(res.data);
+                    return res.data
+                })
                 .then(data => setReactions(data))
                 .catch(e => console.log(e))
         }

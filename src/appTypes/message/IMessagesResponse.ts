@@ -1,4 +1,5 @@
 import IMessageFile from "./IMessageFile";
+import IReaction from "../../../server/types/IReaction";
 
 export default interface IMessagesResponse {
     message_id: string,
@@ -8,8 +9,12 @@ export default interface IMessagesResponse {
     reply_id?: string,
     user_id: string,
     messenger_id: string,
-    message_files?: IMessageFile[]
-    comments_count?: number
+    message_files?: IMessageFile[],
+    comments_count?: number,
+    reactions?: {
+        reaction_count: string,
+        reaction: IReaction
+    },
     user: {
         user_id: string,
         user_name: string,

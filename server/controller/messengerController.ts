@@ -45,11 +45,19 @@ class MessengerController {
     }
     async getReactions(req: Request, res: Response): Promise<any> {
         try {
-            const reactions = await MessengerService.fetchReactions()
+
+        } catch (e) {
+            return res.json(ApiError.internalServerError("An error occurred while fetching reactions"))
+        }
+
+        const {messenger_id} = req.query
+
+        if (typeof messenger_id === 'string' || typeof messenger_id === 'undefined') {
+            const reactions = await MessengerService.getReactions(messenger_id)
 
             return res.json(reactions)
-        } catch (e) {
-            return res.json(ApiError.internalServerError("An error occurred while fetching a reactions"))
+        } else {
+            return res.json(ApiError.internalServerError("An error occurred while fetching reactions"))
         }
     }
     async putMessengerType(req: Request, res: Response): Promise<any> {
@@ -196,20 +204,6 @@ class MessengerController {
             return res.json(messenger)
         } catch (e) {
             return res.json(ApiError.internalServerError("An error occurred while updating the messenger"))
-        }
-    }
-    async getComments(req: Request, res: Response): Promise<any> {
-        try {
-            const {messenger_id, messenger_name, messenger_desc} = req.body
-
-            if (!messenger_id || !messenger_name)
-                return res.json(ApiError.internalServerError('An error occurred while posting a comment'))
-
-            const messenger = await MessengerService.putMessenger(messenger_id, messenger_name, messenger_desc, req.files)
-
-            return res.json(messenger)
-        } catch (e) {
-            return res.json(ApiError.internalServerError("An error occurred while posting a comment"))
         }
     }
 }

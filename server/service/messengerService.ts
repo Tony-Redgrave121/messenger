@@ -8,6 +8,7 @@ import IReaction from "../types/IReaction";
 import path from "path";
 import IMessenger from "../types/IMessenger";
 import changeOldImage from "../lib/changeOldImage";
+import IReactionResponse from "../types/IReactionResponse";
 
 interface IUserFiles {
     messenger_image?: UploadedFile
@@ -36,6 +37,28 @@ class MessengerService {
         if (!contacts) return ApiError.internalServerError("No contacts found")
 
         return contacts.map(contact => contact.user)
+    }
+    async getReactions(messenger_id?: string) {
+        let reactions
+
+        if (messenger_id) {
+            reactions = await models.messenger_settings.findAll({
+                attributes: ['messenger_setting_id'],
+                include: [{
+                    model: models.messenger_reactions
+                }],
+                where: {messenger_id: messenger_id}
+            }) as unknown as IReactionResponse[] | null
+        } else {
+            reactions = await models.reactions.findAll()
+            if (!reactions) return ApiError.internalServerError("No reactions found")
+
+            return reactions
+        }
+
+        if (!reactions) return ApiError.internalServerError("No reactions found")
+
+        return reactions.flatMap(reaction => reaction.messenger_reactions ?? [])
     }
     async postMessenger(user_id: string, messenger_name: string, messenger_desc: string, messenger_type: string, messenger_members?: string[], messenger_files?: IUserFiles | null) {
         const messenger_id = uuid.v4()
@@ -170,12 +193,6 @@ class MessengerService {
             members: data?.members ?? [],
             moderators: data?.moderators ?? []
         }
-    }
-    async fetchReactions() {
-        const reactions = await models.reactions.findAll()
-        if (!reactions) return ApiError.internalServerError("No reactions found")
-
-        return reactions
     }
     async updateMessengerType(messenger_id: string, messenger_type: string) {
         const updateRes = await models.messenger_settings.update(

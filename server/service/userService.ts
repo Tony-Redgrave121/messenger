@@ -10,6 +10,8 @@ import IProfileSettings from "../types/IProfileSettings";
 import IUser from "../types/IUser";
 import changeOldImage from "../lib/changeOldImage";
 import bcrypt from "bcrypt";
+import IMessagesResponse from "../types/IMessagesResponse";
+import IReaction from "../types/IReaction";
 
 interface IPostMessage {
     user_id: string,
@@ -178,8 +180,20 @@ class UserService {
                 } :
                 {recipient_user_id: [messenger_id, user_id]},
             include: [
-                {model: models.message_file, attributes: ['message_file_id', 'message_file_name', 'message_file_size', 'message_file_path']},
-                {model: models.users, attributes: ['user_id', 'user_name', 'user_img']},
+                {
+                    model: models.message,
+                    as: 'comments',
+                    attributes: [],
+                    required: false
+                },
+                {
+                    model: models.message_file,
+                    attributes: ['message_file_id', 'message_file_name', 'message_file_size', 'message_file_path']
+                },
+                {
+                    model: models.users,
+                    attributes: ['user_id', 'user_name', 'user_img']
+                },
                 {
                     model: models.message,
                     as: 'reply',
@@ -187,12 +201,49 @@ class UserService {
                     include: [{model: models.users, attributes: ['user_id', 'user_name', 'user_img']}]
                 }
             ],
-            order: [['message_date', 'ASC']]
-        })
+            attributes: {
+                include: [[Sequelize.fn("COUNT", Sequelize.col("comments.parent_post_id")), "comments_count"]]
+            },
+            order: [['message_date', 'ASC']],
+            group: [
+                'message.message_id',
+                'message_files.message_file_id',
+                'user.user_id',
+                'reply.message_id',
+                'reply->user.user_id'
+            ]
+        }) as unknown as IMessagesResponse[]
 
         if (!messages) return ApiError.internalServerError("An error occurred while fetching the messages")
 
-        return messages
+        const updatedMessages = await Promise.all(
+            messages.map(async (message) => {
+                const reactions = await models.message_reactions.findAll({
+                    attributes: [
+                        [Sequelize.fn('COUNT', Sequelize.col('message_reactions.reaction_id')), 'reaction_count']
+                    ],
+                    include: [{
+                        model: models.reactions,
+                    }],
+                    group: ['reaction.reaction_id'],
+                    where: { message_id: message.message_id },
+                    raw: true
+                }) as unknown as {
+                    reaction_count: string,
+                    reaction: IReaction
+                }[]
+
+                console.log(message.reactions)
+                message.reactions = reactions
+                console.log(message.reactions)
+
+                return message
+            })
+        )
+
+        if (!updatedMessages) return ApiError.internalServerError("An error occurred while fetching the messages")
+
+        return updatedMessages
     }
 
     async postMessage(message: IPostMessage, files: FileArray | null | undefined) {
