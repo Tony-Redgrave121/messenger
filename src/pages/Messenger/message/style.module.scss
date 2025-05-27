@@ -74,33 +74,6 @@
           }
         }
 
-        .ReactionsBlock {
-          display: flex;
-          flex-wrap: wrap;
-          color: #a9a9a9;
-          font-weight: bold;
-          font-size: 15px;
-          gap: 5px;
-          margin-bottom: 5px;
-
-          button {
-            display: flex;
-            align-items: center;
-            gap: 4px;
-            background: linear-gradient(45deg, #212121, #181818);
-            padding: 1px 6px;
-            border-radius: 18px;
-
-            span {
-              font-size: 18px;
-            }
-
-            &:hover {
-              background: linear-gradient(45deg, #212121, #212121);
-            }
-          }
-        }
-
         .DocumentBlock {
           display: flex;
           flex-direction: column;
@@ -111,16 +84,6 @@
       .OwnerMessageContent {
         background-color: #212121;
         border-radius: 15px 15px 0 15px;
-
-        .ReactionsBlock {
-          button {
-            background: linear-gradient(45deg, #181818, #212121);
-
-            &:hover {
-              background: linear-gradient(45deg, #181818, #181818);
-            }
-          }
-        }
       }
 
       .ChannelMessageContent {

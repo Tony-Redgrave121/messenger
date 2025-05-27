@@ -212,13 +212,15 @@ class UserService {
                 'reply.message_id',
                 'reply->user.user_id'
             ]
-        }) as unknown as IMessagesResponse[]
+        })
 
         if (!messages) return ApiError.internalServerError("An error occurred while fetching the messages")
 
+        const messagesPlain = JSON.parse(JSON.stringify(messages)) as IMessagesResponse[]
+
         const updatedMessages = await Promise.all(
-            messages.map(async (message) => {
-                const reactions = await models.message_reactions.findAll({
+            messagesPlain.map(async (message) => {
+                message.reactions = await models.message_reactions.findAll({
                     attributes: [
                         [Sequelize.fn('COUNT', Sequelize.col('message_reactions.reaction_id')), 'reaction_count']
                     ],
@@ -226,16 +228,32 @@ class UserService {
                         model: models.reactions,
                     }],
                     group: ['reaction.reaction_id'],
-                    where: { message_id: message.message_id },
-                    raw: true
+                    where: {message_id: message.message_id},
+                    raw: true,
+                    nest: true,
+                    order: [['reaction_count', 'DESC']],
                 }) as unknown as {
                     reaction_count: string,
                     reaction: IReaction
                 }[]
 
-                console.log(message.reactions)
-                message.reactions = reactions
-                console.log(message.reactions)
+                const userReactions = await models.message_reactions.findAll({
+                    attributes: ['reaction_id'],
+                    where: {
+                        user_id: user_id,
+                        message_id: message.message_id,
+                    },
+                    raw: true,
+                    nest: true,
+                }) as unknown as {reaction_id: string}[]
+
+                const reactionsIds = userReactions.map(reaction => reaction.reaction_id)
+
+                message.reactions.map(message_reaction => {
+                    const reaction = message_reaction.reaction
+
+                    reaction.is_liked_by_user = reactionsIds.includes(reaction.reaction_id)
+                })
 
                 return message
             })

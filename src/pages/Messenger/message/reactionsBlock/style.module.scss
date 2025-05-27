@@ -1,0 +1,32 @@
+@use '../../../../styles/base/_variables.css' as v;
+
+.ReactionsBlock {
+  display: flex;
+  flex-wrap: wrap;
+  color: #a9a9a9;
+  font-weight: bold;
+  font-size: 15px;
+  gap: 5px;
+  margin-bottom: 5px;
+
+  button {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    background: linear-gradient(45deg, #323232, #181818);
+    padding: 1px 8px;
+    border-radius: 18px;
+
+    span {
+      font-size: 18px;
+    }
+
+    &:hover {
+      background: linear-gradient(45deg, #323232, #323232);
+    }
+  }
+
+  .OwnerReaction {
+    background: linear-gradient(45deg, #323232, #2d2d2d);
+  }
+}

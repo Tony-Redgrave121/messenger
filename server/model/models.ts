@@ -119,6 +119,9 @@ message.belongsTo(message, { as: 'post', foreignKey: 'parent_post_id' })
 message.hasMany(message_reactions, {foreignKey: {name: 'message_id', allowNull: false}, onDelete: 'CASCADE', onUpdate: 'CASCADE'})
 message_reactions.belongsTo(message, {foreignKey: 'message_id'})
 
+users.hasMany(message_reactions, {foreignKey: {name: 'user_id', allowNull: false}, onDelete: 'CASCADE', onUpdate: 'CASCADE'})
+message_reactions.belongsTo(users, {foreignKey: 'user_id'})
+
 reactions.hasMany(message_reactions, {foreignKey: {name: 'reaction_id', allowNull: false}, onDelete: 'CASCADE', onUpdate: 'CASCADE'})
 message_reactions.belongsTo(reactions, {foreignKey: 'reaction_id'})
 
@@ -129,7 +132,8 @@ messenger_settings.hasMany(messenger_reactions, {foreignKey: {name: 'messenger_s
 messenger_reactions.belongsTo(messenger_settings, {foreignKey: 'messenger_setting_id'})
 
 reactions.hasMany(messenger_reactions, {foreignKey: {name: 'reaction_id', allowNull: false}, onDelete: 'CASCADE', onUpdate: 'CASCADE'})
-messenger_reactions.belongsTo(reactions, {foreignKey: 'reaction_id'})
+
+messenger_reactions.belongsTo(reactions, { as: 'reaction', foreignKey: 'reaction_id' })
 
 users.hasMany(removed_users, {foreignKey: {name: 'user_id', allowNull: false}, onDelete: 'CASCADE', onUpdate: 'CASCADE'})
 removed_users.belongsTo(users, {foreignKey: 'user_id'})

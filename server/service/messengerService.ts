@@ -8,7 +8,6 @@ import IReaction from "../types/IReaction";
 import path from "path";
 import IMessenger from "../types/IMessenger";
 import changeOldImage from "../lib/changeOldImage";
-import IReactionResponse from "../types/IReactionResponse";
 
 interface IUserFiles {
     messenger_image?: UploadedFile
@@ -42,13 +41,31 @@ class MessengerService {
         let reactions
 
         if (messenger_id) {
-            reactions = await models.messenger_settings.findAll({
-                attributes: ['messenger_setting_id'],
+            const messenger_reactions = await models.messenger_settings.findAll({
                 include: [{
-                    model: models.messenger_reactions
+                    model: models.messenger_reactions,
+                    attributes: ['reaction_id'],
                 }],
-                where: {messenger_id: messenger_id}
-            }) as unknown as IReactionResponse[] | null
+                attributes: ['messenger_setting_id'],
+                where: {messenger_id: messenger_id},
+                raw: true,
+                nest: true
+            }) as unknown as {
+                messenger_setting_id: string,
+                messenger_reactions: {reaction_id: string}
+            }[] | null
+
+            const reactionsIds = messenger_reactions?.map(reaction => reaction.messenger_reactions.reaction_id)
+
+            if (!reactionsIds) return
+
+            reactions = await Promise.all(
+                reactionsIds.map(async (reactionId) => {
+                    return await models.reactions.findOne({
+                        where: {reaction_id: reactionId}
+                    })
+                })
+            )
         } else {
             reactions = await models.reactions.findAll()
             if (!reactions) return ApiError.internalServerError("No reactions found")
@@ -58,7 +75,7 @@ class MessengerService {
 
         if (!reactions) return ApiError.internalServerError("No reactions found")
 
-        return reactions.flatMap(reaction => reaction.messenger_reactions ?? [])
+        return reactions
     }
     async postMessenger(user_id: string, messenger_name: string, messenger_desc: string, messenger_type: string, messenger_members?: string[], messenger_files?: IUserFiles | null) {
         const messenger_id = uuid.v4()

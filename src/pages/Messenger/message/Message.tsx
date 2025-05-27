@@ -21,6 +21,7 @@ import checkRights from "@utils/logic/checkRights";
 import {LoadFile} from "@components/loadFile";
 import {clsx} from 'clsx'
 import getTitle from "@utils/logic/getTitle";
+import ReactionsBlock from "./reactionsBlock/ReactionsBlock";
 
 interface IMessageProps {
     message: IMessagesResponse,
@@ -38,7 +39,16 @@ const initialCurrMedia: IMessageFile = {
     message_file_path: ''
 }
 
-const Message: FC<IMessageProps> = ({message, setReply, socketRef, messenger, setComment, reactions}) => {
+const Message: FC<IMessageProps> = (
+    {
+        message,
+        setReply,
+        socketRef,
+        messenger,
+        setComment,
+        reactions
+    }
+) => {
     const {id} = useParams()
     const [contextMenu, setContextMenu] = useState(false)
     const [reactionMenu, setReactionMenu] = useState(false)
@@ -118,43 +128,43 @@ const Message: FC<IMessageProps> = ({message, setReply, socketRef, messenger, se
     const handleDropDown = () => {
         let list = []
 
+        const baseOptions = [
+            dropDownOptions.copy,
+        ]
+
+        reactions && baseOptions.push(dropDownOptions.react)
+
         switch (messenger.type) {
             case "chat":
                 if (message.user_id === user_id) list = [
-                    dropDownOptions.react,
-                    dropDownOptions.copy,
+                    ...baseOptions,
                     dropDownOptions.reply,
                     dropDownOptions.delete
                 ]
                 else list = [
-                    dropDownOptions.react,
-                    dropDownOptions.copy,
+                    ...baseOptions,
                     dropDownOptions.reply,
                 ]
                 break
             case "group":
                 if (message.user_id === user_id || checkRights(messenger.members!, user_id)) list = [
-                    dropDownOptions.react,
-                    dropDownOptions.copy,
+                    ...baseOptions,
                     dropDownOptions.reply,
                     dropDownOptions.delete
                 ]
                 else list = [
-                    dropDownOptions.react,
-                    dropDownOptions.copy,
+                    ...baseOptions,
                     dropDownOptions.reply,
                 ]
                 break
             case "channel":
                 if (checkRights(messenger.members!, user_id)) list = [
-                    dropDownOptions.react,
-                    dropDownOptions.copy,
+                    ...baseOptions,
                     dropDownOptions.report,
                     dropDownOptions.delete
                 ]
                 else list = [
-                    dropDownOptions.react,
-                    dropDownOptions.copy,
+                    ...baseOptions,
                     dropDownOptions.report
                 ]
                 break
@@ -169,6 +179,7 @@ const Message: FC<IMessageProps> = ({message, setReply, socketRef, messenger, se
     }
 
     const handleReactions = () => {
+        console.log(reactions);
         const reactionList = reactions?.map(reaction => ({
             liChildren: reaction.reaction_code,
             liFoo: () => {
@@ -224,7 +235,8 @@ const Message: FC<IMessageProps> = ({message, setReply, socketRef, messenger, se
                         </Link>
                     }
                     <div className={style.MessageWrapper}>
-                        <div className={clsx(style.MessageContent, isOwner && style.OwnerMessageContent, messenger.type === 'channel' && style.ChannelMessageContent)}>
+                        <div
+                            className={clsx(style.MessageContent, isOwner && style.OwnerMessageContent, messenger.type === 'channel' && style.ChannelMessageContent)}>
                             {message.reply &&
                                 <button className={style.ReplyBlock}>
                                     <h4>{message.reply.user.user_name}</h4>
@@ -251,25 +263,21 @@ const Message: FC<IMessageProps> = ({message, setReply, socketRef, messenger, se
                                 }
                                 {(message.message_files && message.message_type === 'document') &&
                                     <div className={style.DocumentBlock}>
-                                        {message.message_files.map(doc => <DocumentBlock doc={doc} key={doc.message_file_id}/>)}
+                                        {message.message_files.map(doc =>
+                                            <DocumentBlock
+                                                doc={doc}
+                                                key={doc.message_file_id}
+                                            />
+                                        )}
                                     </div>
                                 }
                                 <p>
                                     {message.message_text}
                                     <small>{getTime(message.message_date)}</small>
                                 </p>
-                                <ul className={style.ReactionsBlock}>
-                                    <li>
-                                        <button>
-                                            <span>😡</span> 1488
-                                        </button>
-                                    </li>
-                                    <li>
-                                        <button>
-                                            <span>😁</span> 234
-                                        </button>
-                                    </li>
-                                </ul>
+                                {message.reactions && message.reactions.length > 0 &&
+                                    <ReactionsBlock reactions={message.reactions}/>
+                                }
                                 {handleDropDown()}
                                 {handleReactions()}
                             </div>

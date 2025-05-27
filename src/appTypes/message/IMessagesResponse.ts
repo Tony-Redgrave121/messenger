@@ -14,7 +14,7 @@ export default interface IMessagesResponse {
     reactions?: {
         reaction_count: string,
         reaction: IReaction
-    },
+    }[],
     user: {
         user_id: string,
         user_name: string,

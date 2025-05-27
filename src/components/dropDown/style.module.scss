@@ -23,7 +23,7 @@
     z-index: -1;
     width: 100%;
     height: 100%;
-    background: linear-gradient(300deg, rgba(33, 33, 33, .4) 20%, rgba(70, 0, 0, .1) 100%);
+    background: linear-gradient(-45deg, rgba(0, 0, 0, .15) 0%, rgba(0, 0, 0, .55) 50%, rgba(0, 0, 0, .15) 100%);
   }
 
   li {
@@ -65,7 +65,9 @@
 .EmojiContainer {
   display: flex;
   flex-wrap: wrap;
-  width: 330px;
+  max-width: 330px;
+  min-width: 0;
+  width: max-content;
 
   li {
     justify-content: center;
