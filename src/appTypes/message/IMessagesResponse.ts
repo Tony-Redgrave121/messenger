@@ -12,6 +12,7 @@ export default interface IMessagesResponse {
     message_files?: IMessageFile[],
     comments_count?: number,
     reactions?: {
+        users_ids: string[],
         reaction_count: string,
         reaction: IReaction
     }[],

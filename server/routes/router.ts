@@ -11,7 +11,7 @@ import {
     PUT_MESSENGER_MODERATORS, POST_REMOVED,
     POST_CONTACTS_MEMBERS, POST_MEMBER,
     DELETE_REMOVED, DELETE_MEMBER,
-    PROFILE, PASSWORD
+    PROFILE, PASSWORD, REACTIONS
 } from "../utils/const"
 import express from "express"
 import UserController from "../controller/userController"
@@ -40,7 +40,11 @@ router.post(FETCH_MESSENGER, MessengerController.postMessenger)
 router.put(FETCH_MESSENGER, MessengerController.putMessenger)
 
 router.get(GET_MESSENGER_SETTINGS, MessengerController.getMessengerSettings)
+
 router.get(GET_REACTIONS, MessengerController.getReactions)
+router.post(REACTIONS, MessengerController.postMessageReaction)
+router.delete(REACTIONS, MessengerController.deleteMessageReaction)
+
 router.put(PUT_MESSENGER_TYPE, MessengerController.putMessengerType)
 router.put(PUT_MESSENGER_LINK, MessengerController.putMessengerLink)
 router.post(POST_MESSENGER_REACTIONS, MessengerController.postMessengerReactions)

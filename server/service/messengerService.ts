@@ -416,6 +416,31 @@ class MessengerService {
 
         return models.messenger.findOne({where: {messenger_id: messenger_id}})
     }
+    async postMessageReaction(message_id: string, user_id: string, reaction_id: string) {
+        await models.message_reactions.create({
+            message_reaction_id: uuid.v4(),
+            message_id,
+            user_id,
+            reaction_id,
+        })
+
+        const reaction = await models.reactions.findOne({
+            where: {reaction_id: reaction_id}
+        })
+
+        if (!reaction) return ApiError.internalServerError('An error occurred while posting a reaction')
+
+        return reaction
+    }
+    async deleteMessageReaction(message_id: string, user_id: string, reaction_id: string) {
+        await models.message_reactions.destroy({
+            where: {
+                message_id: message_id,
+                user_id: user_id,
+                reaction_id: reaction_id
+            }
+        })
+    }
 }
 
 export default new MessengerService()

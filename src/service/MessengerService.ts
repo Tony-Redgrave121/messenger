@@ -2,14 +2,13 @@ import {
     POST_MESSENGER,
     GET_CONTACTS,
     GET_MESSENGER_SETTINGS,
-    GET_REACTIONS,
     PUT_MESSENGER_TYPE,
     PUT_MESSENGER_LINK,
     POST_MESSENGER_REACTIONS,
     PUT_MESSENGER_MODERATORS,
     POST_REMOVED,
     POST_CONTACTS_MEMBERS,
-    POST_MEMBER
+    POST_MEMBER, REACTIONS
 } from "@utils/const/const"
 import $api from '@utils/http/index'
 import {AxiosResponse} from 'axios'
@@ -27,7 +26,7 @@ export default class MessengerService {
         return $api.get<IMessengerSettings>(`${GET_MESSENGER_SETTINGS}/${messenger_id}`)
     }
     static async getReactions(messenger_id?: string): Promise<AxiosResponse<IReaction[]>> {
-        return $api.get<IReaction[]>(`${GET_REACTIONS}${messenger_id ? `?messenger_id=${messenger_id}` : ''}`)
+        return $api.get<IReaction[]>(`${REACTIONS}${messenger_id ? `?messenger_id=${messenger_id}` : ''}`)
     }
     static async putMessengerType(type: string, messenger_id: string): Promise<AxiosResponse> {
         return $api.put(`${PUT_MESSENGER_TYPE}/${messenger_id}`, {messenger_type: type})
@@ -58,5 +57,14 @@ export default class MessengerService {
     }
     static async putMessenger(messenger: FormData): Promise<AxiosResponse<IMessengerResponse>> {
         return $api.put<IMessengerResponse>(POST_MESSENGER, messenger)
+    }
+    static async postMessageReaction(message_id: string, user_id: string, reaction_id: string): Promise<AxiosResponse<IReaction>> {
+        return $api.post(`${REACTIONS}/${message_id}`, {
+            reaction_id: reaction_id,
+            user_id: user_id,
+        })
+    }
+    static async deleteMessageReaction(message_id: string, user_id: string, reaction_id: string): Promise<AxiosResponse> {
+        return $api.delete(`${REACTIONS}/${message_id}?reaction_id=${reaction_id}&user_id=${user_id}`)
     }
 }

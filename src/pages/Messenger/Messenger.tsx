@@ -98,8 +98,6 @@ const Messenger= () => {
                     }
 
                     if (adaptMessenger.id !== '') {
-                        console.log(messages.data)
-
                         setMessenger(adaptMessenger)
                         setMessagesList(messages.data)
                         setReactions(reactions.data)

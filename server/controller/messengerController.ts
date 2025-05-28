@@ -206,6 +206,41 @@ class MessengerController {
             return res.json(ApiError.internalServerError("An error occurred while updating the messenger"))
         }
     }
+    async postMessageReaction(req: Request, res: Response): Promise<any> {
+        try {
+            const {message_id} = req.params
+            const {reaction_id, user_id} = req.body
+
+            if (!message_id || !reaction_id || !user_id)
+                return res.json(ApiError.internalServerError('An error occurred while posting a reaction'))
+
+            const reaction = await MessengerService.postMessageReaction(message_id, user_id, reaction_id)
+
+            return res.json(reaction)
+        } catch (e) {
+            return res.json(ApiError.internalServerError("An error occurred while posting a reaction"))
+        }
+    }
+    async deleteMessageReaction(req: Request, res: Response): Promise<any> {
+        try {
+            const {message_id} = req.params
+            const {reaction_id, user_id} = req.query
+
+            if (
+                !message_id ||
+                !reaction_id ||
+                !user_id ||
+                typeof reaction_id !== 'string' ||
+                typeof user_id !== 'string'
+            ) return res.json(ApiError.internalServerError('An error occurred while deleting a reaction'))
+
+            const reaction = await MessengerService.deleteMessageReaction(message_id, user_id, reaction_id)
+
+            return res.json(reaction)
+        } catch (e) {
+            return res.json(ApiError.internalServerError("An error occurred while deleting the messenger"))
+        }
+    }
 }
 
 export default new MessengerController()

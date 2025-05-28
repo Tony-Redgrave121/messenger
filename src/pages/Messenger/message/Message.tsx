@@ -1,4 +1,13 @@
-import React, {Dispatch, FC, RefObject, SetStateAction, useCallback, useEffect, useRef, useState} from 'react'
+import React, {
+    Dispatch,
+    FC,
+    RefObject,
+    SetStateAction,
+    useCallback,
+    useEffect,
+    useRef,
+    useState
+} from 'react'
 import style from "./style.module.css"
 import {Slider} from "@components/slider";
 import {MediaBlock} from "@components/media";
@@ -22,6 +31,7 @@ import {LoadFile} from "@components/loadFile";
 import {clsx} from 'clsx'
 import getTitle from "@utils/logic/getTitle";
 import ReactionsBlock from "./reactionsBlock/ReactionsBlock";
+import useReaction from "@utils/hooks/useReaction";
 
 interface IMessageProps {
     message: IMessagesResponse,
@@ -128,10 +138,7 @@ const Message: FC<IMessageProps> = (
     const handleDropDown = () => {
         let list = []
 
-        const baseOptions = [
-            dropDownOptions.copy,
-        ]
-
+        const baseOptions = [dropDownOptions.copy]
         reactions && baseOptions.push(dropDownOptions.react)
 
         switch (messenger.type) {
@@ -178,11 +185,14 @@ const Message: FC<IMessageProps> = (
         />
     }
 
+    const {reactionOnClick} = useReaction()
+
     const handleReactions = () => {
-        console.log(reactions);
         const reactionList = reactions?.map(reaction => ({
             liChildren: reaction.reaction_code,
-            liFoo: () => {
+            liFoo: async () => {
+                await reactionOnClick(message, reaction, socketRef)
+
                 setContextMenu(false)
                 setReactionMenu(false)
             }
@@ -214,6 +224,10 @@ const Message: FC<IMessageProps> = (
             setCurrMedia(message.message_files[0])
         }
     }, [message.message_files, message.message_type])
+
+    useEffect(() => {
+        console.log(message.reactions);
+    }, [])
 
     return (
         <CSSTransition
@@ -276,7 +290,7 @@ const Message: FC<IMessageProps> = (
                                     <small>{getTime(message.message_date)}</small>
                                 </p>
                                 {message.reactions && message.reactions.length > 0 &&
-                                    <ReactionsBlock reactions={message.reactions}/>
+                                    <ReactionsBlock message={message} socketRef={socketRef}/>
                                 }
                                 {handleDropDown()}
                                 {handleReactions()}

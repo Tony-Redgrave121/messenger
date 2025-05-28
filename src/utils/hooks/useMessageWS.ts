@@ -35,6 +35,83 @@ export const useMessageWS = (messenger_id?: string) => {
                 case 'REMOVE_MESSAGE':
                     setMessagesList(prev => prev.filter(msg => msg.message_id !== message.data))
                     break
+                case 'ADD_REACTION':
+                    setMessagesList(prev =>
+                        prev.map(msg => {
+                            if (msg.message_id === message.data.message_id) {
+                                const updatedReactions = msg.reactions?.map(react => {
+                                    if (react.reaction.reaction_id === message.data.reaction.reaction_id) {
+                                        return {
+                                            users_ids: [...message.data.users_ids, message.data.user_id],
+                                            reaction_count: (parseInt(react.reaction_count) + 1).toString(),
+                                            reaction: {
+                                                ...react.reaction,
+                                            }
+                                        }
+                                    }
+                                    return react
+                                }) ?? []
+
+                                const exists = updatedReactions.some(r =>
+                                    r.reaction.reaction_id === message.data.reaction.reaction_id
+                                )
+
+                                if (!exists) {
+                                    updatedReactions.push({
+                                        users_ids: [...message.data.users_ids, message.data.user_id],
+                                        reaction_count: "1",
+                                        reaction: {
+                                            ...message.data.reaction
+                                        }
+                                    })
+                                }
+
+                                return {
+                                    ...msg,
+                                    reactions: updatedReactions
+                                }
+                            }
+                            return msg
+                        })
+                    )
+                    break
+                case 'REMOVE_REACTION':
+                    setMessagesList(prev =>
+                        prev.map(msg => {
+                            if (msg.message_id === message.data.message_id) {
+                                const updatedReactions = msg.reactions?.map(react => {
+                                    if (react.reaction.reaction_id === message.data.reaction.reaction_id) {
+                                        const newCount = parseInt(react.reaction_count) - 1
+                                        if (newCount <= 0) return null
+
+                                        return {
+                                            users_ids: message.data.users_ids.filter((id: string) => id !== message.data.user_id),
+                                            reaction_count: newCount.toString(),
+                                            reaction: {
+                                                ...react.reaction
+                                            }
+                                        }
+                                    }
+                                    return react
+                                }).filter(Boolean) as typeof msg.reactions
+
+                                return {
+                                    ...msg,
+                                    reactions: updatedReactions
+                                }
+                            }
+
+                            return msg
+                        })
+                    )
+                    break
+                case 'EDIT_MESSAGE':
+                    setMessagesList(prev => prev.map(msg =>
+                        msg.message_id === message.data.message_id ?
+                            {...msg, message_text: message.data.message_text} :
+                            msg
+                    ))
+                    break
                 default:
                     break
             }
@@ -47,7 +124,7 @@ export const useMessageWS = (messenger_id?: string) => {
         return () => {
             if (socket.readyState === 1) socket.close()
         }
-    }, [user.userId])
+    }, [user.userId, messenger_id])
 
     return {
         socketRef,

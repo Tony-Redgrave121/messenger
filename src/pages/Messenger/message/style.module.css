@@ -106,11 +106,13 @@ h1, h2, h3, h4, p, a, button, input, textarea, small, time {
   font-family: "Roboto", -apple-system, apple color emoji, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
 }
 
+.MessageContainer {
+  transform-origin: bottom left;
+}
 .MessageContainer .MessageInnerBlock {
   display: flex;
   align-items: end;
   gap: 5px;
-  transform-origin: bottom left;
 }
 .MessageContainer .MessageInnerBlock .UserAvatarLink > * {
   width: 40px;

@@ -1,21 +1,24 @@
-import React, {FC} from 'react'
+import React, {FC, RefObject} from 'react'
 import style from "./style.module.css"
-import {IReaction} from "@appTypes"
+import {IMessagesResponse} from "@appTypes"
 import {clsx} from "clsx";
+import useReaction from "@utils/hooks/useReaction";
+import {useAppSelector} from "@hooks/useRedux";
 
 interface IReactionsBlockProps {
-    reactions: {
-        reaction_count: string,
-        reaction: IReaction
-    }[]
+    message: IMessagesResponse,
+    socketRef: RefObject<WebSocket | null>
 }
 
-const ReactionsBlock: FC<IReactionsBlockProps> = ({reactions}) => {
+const ReactionsBlock: FC<IReactionsBlockProps> = ({message, socketRef}) => {
+    const {reactionOnClick} = useReaction()
+    const user_id = useAppSelector(state => state.user.userId)
+
     return (
         <ul className={style.ReactionsBlock}>
-            {reactions.map(reaction => (
+            {message.reactions!.map(reaction => (
                 <li key={reaction.reaction.reaction_id}>
-                    <button className={clsx(reaction.reaction.is_liked_by_user && style.OwnerReaction)}>
+                    <button className={clsx(reaction.users_ids.includes(user_id) && style.OwnerReaction)} onClick={()=> reactionOnClick(message, reaction.reaction, socketRef)}>
                         <span>{reaction.reaction.reaction_code}</span> {reaction.reaction_count}
                     </button>
                 </li>

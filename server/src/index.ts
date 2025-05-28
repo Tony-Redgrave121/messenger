@@ -10,7 +10,7 @@ import cookieParser from "cookie-parser"
 import helmet from 'helmet'
 import compression from 'compression'
 import expressWs from "express-ws"
-import chatHandlerWS from "../middleware/chatHandlerWS";
+import messengerHandlerWS from "../middleware/messengerHandlerWS";
 import liveUpdatesHandlerWS from "../middleware/liveUpdatesHandlerWS";
 
 dotenv.config({path: "./.env"})
@@ -41,7 +41,7 @@ app.use(cookieParser())
 app.use(router)
 app.use(errorHandler)
 
-app.ws("/chat", chatHandlerWS(aWss))
+app.ws("/chat", messengerHandlerWS(aWss))
 app.ws("/live-updates", liveUpdatesHandlerWS(aWss))
 
 const startServer = async () => {

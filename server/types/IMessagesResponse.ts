@@ -10,6 +10,7 @@ export default interface IMessagesResponse {
     messenger_id?: string,
     recipient_user_id?: string,
     reactions?: {
+        users_ids: string[],
         reaction_count: string,
         reaction: IReaction
     }[],
@@ -28,7 +29,6 @@ export default interface IMessagesResponse {
     reply?: {
         message_id: string,
         message_text: string,
-
         user: {
             user_id: string,
             user_name: string,

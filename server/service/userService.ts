@@ -220,9 +220,10 @@ class UserService {
 
         const updatedMessages = await Promise.all(
             messagesPlain.map(async (message) => {
-                message.reactions = await models.message_reactions.findAll({
+                const reactions = await models.message_reactions.findAll({
                     attributes: [
-                        [Sequelize.fn('COUNT', Sequelize.col('message_reactions.reaction_id')), 'reaction_count']
+                        [Sequelize.fn('COUNT', Sequelize.col('message_reactions.reaction_id')), 'reaction_count'],
+                        [Sequelize.literal(`STRING_AGG("message_reactions"."user_id"::text, ',')`), 'users_ids']
                     ],
                     include: [{
                         model: models.reactions,
@@ -234,26 +235,14 @@ class UserService {
                     order: [['reaction_count', 'DESC']],
                 }) as unknown as {
                     reaction_count: string,
-                    reaction: IReaction
+                    reaction: IReaction,
+                    users_ids: string,
                 }[]
 
-                const userReactions = await models.message_reactions.findAll({
-                    attributes: ['reaction_id'],
-                    where: {
-                        user_id: user_id,
-                        message_id: message.message_id,
-                    },
-                    raw: true,
-                    nest: true,
-                }) as unknown as {reaction_id: string}[]
-
-                const reactionsIds = userReactions.map(reaction => reaction.reaction_id)
-
-                message.reactions.map(message_reaction => {
-                    const reaction = message_reaction.reaction
-
-                    reaction.is_liked_by_user = reactionsIds.includes(reaction.reaction_id)
-                })
+                message.reactions = reactions?.map((reaction) => ({
+                    ...reaction,
+                    users_ids: reaction.users_ids?.split(',') ?? []
+                }))
 
                 return message
             })

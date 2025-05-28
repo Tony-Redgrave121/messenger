@@ -1,7 +1,7 @@
 import { WebSocketServer, WebSocket } from "ws";
 import IMessagesResponse from "../types/IMessagesResponse";
 
-const chatHandlerWS = (aWss: WebSocketServer) => {
+const messengerHandlerWS = (aWss: WebSocketServer) => {
     interface IMessage {
         messenger_id: string,
         user_id: string,
@@ -44,6 +44,15 @@ const chatHandlerWS = (aWss: WebSocketServer) => {
                 case 'POST_MESSAGE':
                     handleMessage(data, 'POST_MESSAGE')
                     break
+                case 'ADD_REACTION':
+                    handleMessage(data, 'ADD_REACTION')
+                    break
+                case 'REMOVE_REACTION':
+                    handleMessage(data, 'REMOVE_REACTION')
+                    break
+                case 'EDIT_MESSAGE':
+                    handleMessage(data, 'EDIT_MESSAGE')
+                    break
                 case 'REMOVE_MESSAGE':
                     handleMessage(data, 'REMOVE_MESSAGE')
                     break
@@ -52,4 +61,4 @@ const chatHandlerWS = (aWss: WebSocketServer) => {
     }
 }
 
-export default chatHandlerWS
+export default messengerHandlerWS
