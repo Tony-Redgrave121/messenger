@@ -22,7 +22,7 @@ import {useAppSelector} from "@hooks/useRedux";
 import {DropDown} from "@components/dropDown";
 import {DocumentBlock} from "./index";
 import UserService from "@service/UserService";
-import {Link, useParams} from "react-router-dom";
+import {Link} from "react-router-dom";
 import handleContextMenu from "@utils/logic/handleContextMenu";
 import {CSSTransition} from 'react-transition-group'
 import '../animation.css'
@@ -35,6 +35,8 @@ import useReaction from "@utils/hooks/useReaction";
 
 interface IMessageProps {
     message: IMessagesResponse,
+    postId?: string
+    socketRoom?: string
     setReply: Dispatch<SetStateAction<IMessagesResponse | null>>,
     socketRef: RefObject<WebSocket | null>,
     messenger: IAdaptMessenger,
@@ -52,14 +54,15 @@ const initialCurrMedia: IMessageFile = {
 const Message: FC<IMessageProps> = (
     {
         message,
+        postId,
         setReply,
+        socketRoom,
         socketRef,
         messenger,
         setComment,
         reactions
     }
 ) => {
-    const {id} = useParams()
     const [contextMenu, setContextMenu] = useState(false)
     const [reactionMenu, setReactionMenu] = useState(false)
     const [animateMessage, setAnimateMessage] = useState(false)
@@ -80,18 +83,18 @@ const Message: FC<IMessageProps> = (
     })
 
     const handleDelete = useCallback(async () => {
-        if (!id) return
-        const messageDelete = await UserService.deleteMessage(message.message_id)
+        if (!socketRoom) return
+        const messageDelete = await UserService.deleteMessage(message.message_id, postId)
 
         if (messageDelete && socketRef.current?.readyState === WebSocket.OPEN) {
             socketRef.current.send(JSON.stringify({
-                messenger_id: id,
+                messenger_id: socketRoom,
                 user_id: user_id,
                 method: 'REMOVE_MESSAGE',
                 data: messageDelete.data
             }))
         }
-    }, [id, message.message_id, socketRef, user_id])
+    }, [socketRoom, postId, message.message_id, socketRef, user_id])
 
     const dropDownOptions = {
         react: {
@@ -225,10 +228,6 @@ const Message: FC<IMessageProps> = (
         }
     }, [message.message_files, message.message_type])
 
-    useEffect(() => {
-        console.log(message.reactions);
-    }, [])
-
     return (
         <CSSTransition
             in={animateMessage}
@@ -238,7 +237,7 @@ const Message: FC<IMessageProps> = (
             unmountOnExit
             onEntered={onEntered}
         >
-            <div className={clsx(style.MessageContainer, isOwner && style.OwnerMessageContainer)} ref={refMessage}>
+            <div className={clsx(style.MessageContainer, isOwner && style.OwnerMessageContainer)} ref={refMessage} id={message.message_id}>
                 <div className={clsx(style.MessageInnerBlock, isOwner && style.OwnerMessageInnerBlock)}>
                     {(!isOwner && !['chat', 'channel'].includes(messenger.type)) &&
                         <Link className={style.UserAvatarLink} to={`/chat/${message.user.user_id}`}>

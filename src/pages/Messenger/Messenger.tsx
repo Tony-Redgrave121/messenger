@@ -155,9 +155,11 @@ const Messenger= () => {
                                     {messagesList.map(message =>
                                         <Message
                                             message={message}
+                                            postId={message.message_id}
                                             messenger={messenger}
                                             key={message.message_id}
                                             setReply={setReply}
+                                            socketRoom={id}
                                             socketRef={socketRef}
                                             setComment={setComment}
                                             reactions={reactions}

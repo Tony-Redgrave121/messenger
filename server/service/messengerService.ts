@@ -140,6 +140,7 @@ class MessengerService {
                 model: models.messenger_reactions,
                 include: [{
                     model: models.reactions,
+                    as: 'reaction',
                     required: false
                 }],
                 required: false

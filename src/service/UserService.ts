@@ -21,8 +21,8 @@ export default class UserService {
     static async postMessage(message: FormData): Promise<AxiosResponse<IMessagesResponse>> {
         return $api.post<IMessagesResponse>(POST_MESSAGE, message)
     }
-    static async deleteMessage(message_id: string): Promise<AxiosResponse> {
-        return $api.delete(`${DELETE_MESSAGE}?message_id=${message_id}`)
+    static async deleteMessage(message_id: string, post_id?: string): Promise<AxiosResponse> {
+        return $api.delete(`${DELETE_MESSAGE}?message_id=${message_id}${post_id ? `&post_id=${post_id}` : ''}`)
     }
     static async getProfile(user_id: string): Promise<AxiosResponse<IProfileSettings>> {
         return $api.get(`${PROFILE}/${user_id}`)

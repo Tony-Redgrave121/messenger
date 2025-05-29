@@ -206,7 +206,7 @@ const EditMessenger: FC<IEditMessengerProps> = ({setState, setEntity, refSidebar
                                 id="messenger_name"
                                 placeholder="Channel name"
                                 {...register('messenger_name', {
-                                    required: 'Messenger name is required'
+                                    required: 'SearchList name is required'
                                 })}
                             />
                         </InputForm>

@@ -16,6 +16,7 @@ import {ContactList} from "@components/contacts";
 import Profile from "./profile/Profile";
 import useLeftSidebarLogic from "@utils/hooks/useLeftSidebarLogic"
 import Caption from "@components/caption/Caption";
+import SearchList from "@components/sidebar/leftSidebar/searchList/SearchList";
 
 const LeftSidebar = () => {
     const {
@@ -39,55 +40,54 @@ const LeftSidebar = () => {
     } = useLeftSidebarLogic()
 
     return (
-        <>
-            <CSSTransition
-                in={sidebarLeft}
-                nodeRef={refSidebar}
-                timeout={300}
-                classNames='left-sidebar-node'
-                unmountOnExit
-            >
-                <SidebarContainer styles={['LeftSidebarContainer']} ref={refSidebar}>
-                    <div className={style.TopBar}>
-                        <Buttons.DefaultButton foo={() => setSettings(!settings)}>
-                            <HiBars3/>
-                            <DropDown list={dropDownList} state={settings} setState={setSettings}/>
-                        </Buttons.DefaultButton>
-                        <SearchBlock ref={refSearch} foo={() => {
-                        }}/>
-                    </div>
-                    <ChatList/>
-                    {contacts.length > 0 &&
-                        <>
-                            <Caption/>
-                            <ContactList
-                                contacts={contacts}
-                                text='Contacts'
-                                onClick={navigateChat}
-                            />
-                        </>
-                    }
-                    <Buttons.CreateButton state={true} foo={() => setMessenger(!messenger)}>
-                        <HiOutlinePencil/>
-                        <DropDown list={messengersList} state={messenger} setState={setMessenger}/>
-                    </Buttons.CreateButton>
-                    {(messengerCreation.type && socketRef) &&
-                        <Messenger
-                            messengerCreation={messengerCreation}
-                            setMessengerCreation={setMessengerCreation}
-                            socketRef={socketRef}
+        <CSSTransition
+            in={sidebarLeft}
+            nodeRef={refSidebar}
+            timeout={300}
+            classNames='left-sidebar-node'
+            unmountOnExit
+        >
+            <SidebarContainer styles={['LeftSidebarContainer']} ref={refSidebar}>
+                <div className={style.TopBar}>
+                    <Buttons.DefaultButton foo={() => setSettings(!settings)}>
+                        <HiBars3/>
+                        <DropDown list={dropDownList} state={settings} setState={setSettings}/>
+                    </Buttons.DefaultButton>
+                    <SearchBlock ref={refSearch} foo={() => {
+                    }}/>
+                </div>
+                <ChatList/>
+                {contacts.length > 0 &&
+                    <>
+                        <Caption/>
+                        <ContactList
+                            contacts={contacts}
+                            text='Contacts'
+                            onClick={navigateChat}
                         />
-                    }
-                    {profile.mounted &&
-                        <Profile
-                            setState={setProfile}
-                            state={profile}
-                            refSidebar={refProfile}
-                        />
-                    }
-                </SidebarContainer>
-            </CSSTransition>
-        </>
+                    </>
+                }
+                <Buttons.CreateButton state={true} foo={() => setMessenger(!messenger)}>
+                    <HiOutlinePencil/>
+                    <DropDown list={messengersList} state={messenger} setState={setMessenger}/>
+                </Buttons.CreateButton>
+                {(messengerCreation.type && socketRef) &&
+                    <Messenger
+                        messengerCreation={messengerCreation}
+                        setMessengerCreation={setMessengerCreation}
+                        socketRef={socketRef}
+                    />
+                }
+                {profile.mounted &&
+                    <Profile
+                        setState={setProfile}
+                        state={profile}
+                        refSidebar={refProfile}
+                    />
+                }
+                <SearchList state={true}/>
+            </SidebarContainer>
+        </CSSTransition>
     )
 }
 

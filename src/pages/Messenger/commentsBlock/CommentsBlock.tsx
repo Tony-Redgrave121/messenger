@@ -61,7 +61,9 @@ const CommentsBlock: FC<ICommentsBlock> = memo(({channelPost, messenger, setStat
             <section className={style.MessageBlock}>
                 <Message
                     message={channelPost}
+                    postId={channelPost.message_id}
                     messenger={messenger}
+                    socketRoom={`${id}/${channelPost.message_id}`}
                     setReply={setReply}
                     socketRef={socketRef}
                     reactions={reactions}
@@ -75,6 +77,7 @@ const CommentsBlock: FC<ICommentsBlock> = memo(({channelPost, messenger, setStat
                         }}
                         key={message.message_id}
                         setReply={setReply}
+                        socketRoom={`${id}/${channelPost.message_id}`}
                         socketRef={socketRef}
                         reactions={reactions}
                     />

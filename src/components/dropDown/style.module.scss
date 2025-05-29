@@ -1,5 +1,4 @@
 @use '../../styles/base/_variables.css' as v;
-@use '../../styles/base/_normalize.scss';
 
 .DropDownContainer {
   position: absolute;
@@ -23,7 +22,7 @@
     z-index: -1;
     width: 100%;
     height: 100%;
-    background: linear-gradient(-45deg, rgba(0, 0, 0, .15) 0%, rgba(0, 0, 0, .55) 50%, rgba(0, 0, 0, .15) 100%);
+    background: linear-gradient(-45deg, rgba(0, 0, 0, .1) 0%, rgba(0, 0, 0, .3) 50%, rgba(0, 0, 0, .1) 100%);
   }
 
   li {
@@ -47,8 +46,8 @@
     }
 
     > div {
-      border: 2px solid rgba(0, 0, 0, 0);
-      outline: 3px solid rgb(33, 33, 33, .8);
+      border: 1px solid rgba(0, 0, 0, 0);
+      outline: 2px solid rgb(33, 33, 33, .8);
       background: none;
 
       h1 {

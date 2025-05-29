@@ -174,11 +174,11 @@ class UserService {
         const messages = await models.message.findAll({
             where:
                 type !== "chat" ?
-                {
-                    messenger_id: messenger_id,
-                    ...(post_id !== 'undefined' ? {parent_post_id: post_id} : {parent_post_id: null})
-                } :
-                {recipient_user_id: [messenger_id, user_id]},
+                    {
+                        messenger_id: messenger_id,
+                        ...(post_id !== 'undefined' ? {parent_post_id: post_id} : {parent_post_id: null})
+                    } :
+                    {recipient_user_id: [messenger_id, user_id]},
             include: [
                 {
                     model: models.message,
@@ -312,10 +312,19 @@ class UserService {
         }
     }
 
-    async deleteMessage(message_id: string) {
+    async deleteMessage(message_id: string, post_id?: string) {
         try {
+            const messagesIds = post_id ? await models.message.findAll({
+                where: {parent_post_id: post_id},
+                attributes: ['message_id'],
+                raw: true,
+            }) as unknown as {message_id: string}[] : []
+
+            const childMessageIds = messagesIds.map(msg => msg.message_id)
+            childMessageIds.push(message_id)
+
             const message_files = await models.message_file.findAll({
-                where: {message_id: message_id},
+                where: {message_id: childMessageIds},
                 attributes: ['message_file_name', 'message_file_path'],
                 raw: true
             }) as unknown as {
@@ -323,13 +332,22 @@ class UserService {
                 message_file_path: string,
             }[]
 
-            await models.message.destroy({where: {message_id: message_id}})
-
             for (const file of message_files) {
                 const filePath = path.resolve(__dirname + "/../src/static/messengers", file.message_file_path, file.message_file_name)
 
                 if (fs.existsSync(filePath)) fs.unlinkSync(filePath)
             }
+
+            await models.message.destroy(
+                {
+                    where: {
+                        [Op.or]: [
+                            {message_id: message_id},
+                            ...(post_id ? [{parent_post_id: post_id}] : [])
+                        ]
+                    }
+                }
+            )
         } catch (e) {
             console.log(e)
         }

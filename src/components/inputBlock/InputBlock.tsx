@@ -99,8 +99,6 @@ const InputBlock: FC<IInputBlock> = ({post_id, reply, setReply, socketRoom, sock
             const newMessage = await UserService.postMessage(message).catch(error => console.log(error))
 
             if (newMessage && socketRef.current?.readyState === WebSocket.OPEN) {
-                console.log(newMessage.data)
-
                 socketRef.current.send(JSON.stringify({
                     messenger_id: socketRoom,
                     user_id: user_id,

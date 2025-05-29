@@ -92,17 +92,21 @@ class UserController {
 
     async deleteMessage(req: Request, res: Response): Promise<any> {
         try {
-            const {message_id} = req.query
 
-            if (!message_id || typeof message_id !== 'string')
-                return res.json(ApiError.badRequest('Missing required fields'))
-
-            await UserService.deleteMessage(message_id)
-
-            return res.json(message_id)
         } catch (e) {
             return res.json(ApiError.internalServerError('An error occurred while deleting the message'))
         }
+        const {message_id, post_id} = req.query
+
+        if (
+            !message_id ||
+            typeof message_id !== 'string' ||
+            (typeof post_id !== 'string' && typeof post_id !== 'undefined')
+        ) return res.json(ApiError.badRequest('Missing required fields'))
+
+        await UserService.deleteMessage(message_id, post_id)
+
+        return res.json(message_id)
     }
 
     async getProfile(req: Request, res: Response): Promise<any> {
