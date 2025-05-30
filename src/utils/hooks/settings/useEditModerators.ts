@@ -19,7 +19,8 @@ const useEditModerators = (
 
     const refForm = useRef<HTMLDivElement>(null)
     const searchRef = useRef<HTMLDivElement>(null)
-    const {filteredArr, handleInput, filter} = useSearch(moderators, 'user_id')
+
+    const {filteredArr, handleInput, filter} = useSearch<IContact, 'user_name'>(moderators, 'user_name')
 
     useEffect(() => {
         setNewMembers(moderators)

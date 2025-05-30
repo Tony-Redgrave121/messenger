@@ -40,7 +40,7 @@ const PopupEditMembers: FC<IPopupEditModeratorsProps> = (
         filteredArr,
         handleInput,
         filter
-    } = useSearch(unrated, 'user_name')
+    } = useSearch<IContact, 'user_name'>(unrated, 'user_name')
 
     const {id} = useParams()
 

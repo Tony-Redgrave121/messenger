@@ -44,6 +44,11 @@
 .SearchListContainer nav ul .ActiveButton:after {
   background-color: white;
 }
+.SearchListContainer .ListBlock {
+  display: flex;
+  flex-direction: column;
+  padding: 0 8px 8px;
+}
 .SearchListContainer .ListBlock > p {
   color: #aaaaaa;
   font-weight: 600;

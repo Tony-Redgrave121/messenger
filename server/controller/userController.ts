@@ -1,73 +1,73 @@
 import ApiError from "../error/ApiError"
-import {Request, Response} from "express"
+import {NextFunction, Request, Response} from "express"
 import UserService from "../service/userService"
 
 class UserController {
-    async fetchMessenger(req: Request, res: Response): Promise<any> {
+    fetchMessenger = async(req: Request, res: Response, next: NextFunction) => {
         try {
             const {type, user_id, messenger_id} = req.query
 
-            if (!type || !user_id || !messenger_id || typeof type !== "string" || typeof user_id !== "string" || typeof messenger_id !== "string")
-                return res.json(ApiError.badRequest('Missing required fields'))
+            if (
+                !type ||
+                !user_id ||
+                !messenger_id ||
+                typeof type !== "string" ||
+                typeof user_id !== "string" ||
+                typeof messenger_id !== "string"
+            ) return next(ApiError.badRequest('Missing required fields'))
 
-            const messengers = await UserService.fetchMessenger(type, user_id, messenger_id)
+            const messenger = await UserService.fetchMessenger(type, user_id, messenger_id)
 
-            if (messengers instanceof ApiError) return res.json(ApiError.internalServerError('An error occurred while fetching the messenger'))
-
-            return res.json(messengers)
+            res.json(messenger)
         } catch (e) {
-            return res.json(ApiError.internalServerError("An error occurred while fetching the messenger"))
+            return next(e)
         }
-    }
+    };
 
-    async fetchMessengersList(req: Request, res: Response): Promise<any> {
+    fetchMessengersList = async(req: Request, res: Response, next: NextFunction)=> {
         try {
             const user_id = req.params.user_id
-            if (!user_id) return res.json(ApiError.badRequest('Missing required fields'))
+            if (!user_id) return next(ApiError.badRequest('Missing required fields'))
 
             const messengers = await UserService.fetchMessengersList(user_id)
 
             if (messengers instanceof ApiError)
-                return res.json(ApiError.internalServerError('An error occurred while fetching messengers list'))
+                return next(ApiError.internalServerError('An error occurred while fetching messengers list'))
 
-            return res.json(messengers)
+            res.json(messengers)
         } catch (e) {
-            return res.json(ApiError.internalServerError("An error occurred while fetching messengers list"))
+            return next(e)
         }
-    }
+    };
 
-    async fetchMessages(req: Request, res: Response): Promise<any> {
+    fetchMessages = async(req: Request, res: Response, next: NextFunction) => {
         try {
+            const {type, user_id, messenger_id, post_id} = req.query
 
+            if (
+                !user_id ||
+                !type ||
+                !messenger_id ||
+                typeof type !== 'string' ||
+                typeof post_id !== 'string' ||
+                typeof user_id !== 'string' ||
+                typeof messenger_id !== 'string'
+            )
+                return next(ApiError.badRequest('Missing required fields'))
+            const messages = await UserService.fetchMessages(type, user_id, messenger_id, post_id)
+
+            res.json(messages)
         } catch (e) {
-            return res.json(ApiError.internalServerError("An error occurred while fetching the messages"))
+            return next(e)
         }
-        const {type, user_id, messenger_id, post_id} = req.query
+    };
 
-        if (
-            !user_id ||
-            !type ||
-            !messenger_id ||
-            typeof type !== 'string' ||
-            typeof post_id !== 'string' ||
-            typeof user_id !== 'string' ||
-            typeof messenger_id !== 'string'
-        )
-            return res.json(ApiError.badRequest('Missing required fields'))
-        const messages = await UserService.fetchMessages(type, user_id, messenger_id, post_id)
-
-        if (messages instanceof ApiError) return res.json(ApiError.internalServerError('An error occurred while fetching messages'))
-
-        return res.json(messages)
-
-    }
-
-    async postMessage(req: Request, res: Response): Promise<any> {
+    postMessage = async (req: Request, res: Response, next: NextFunction) => {
         try {
             const {user_id, messenger_id, reply_id, message_text, message_type, recipient_user_id, post_id} = req.body
 
             if (!user_id || !message_type)
-                return res.json(ApiError.badRequest('Missing required fields'))
+                return next(ApiError.badRequest('Missing required fields'))
 
             const message = {
                 user_id: user_id,
@@ -82,84 +82,86 @@ class UserController {
             const data = await UserService.postMessage(message, req.files)
 
             if (data instanceof ApiError)
-                return res.json(ApiError.internalServerError('An error occurred while posting the message'))
+                return next(ApiError.internalServerError('An error occurred while posting the message'))
 
-            return res.json(data)
+            res.json(data)
         } catch (e) {
-            return res.json(ApiError.internalServerError('An error occurred while posting the message'))
+            return next(e)
         }
-    }
+    };
 
-    async deleteMessage(req: Request, res: Response): Promise<any> {
+    deleteMessage = async (req: Request, res: Response, next: NextFunction) => {
         try {
+            const {message_id, post_id} = req.query
 
+            if (
+                !message_id ||
+                typeof message_id !== 'string' ||
+                (typeof post_id !== 'string' && typeof post_id !== 'undefined')
+            ) return next(ApiError.badRequest('Missing required fields'))
+
+            await UserService.deleteMessage(message_id, post_id)
+
+            res.json(message_id)
         } catch (e) {
-            return res.json(ApiError.internalServerError('An error occurred while deleting the message'))
+            return next(e)
         }
-        const {message_id, post_id} = req.query
+    };
 
-        if (
-            !message_id ||
-            typeof message_id !== 'string' ||
-            (typeof post_id !== 'string' && typeof post_id !== 'undefined')
-        ) return res.json(ApiError.badRequest('Missing required fields'))
-
-        await UserService.deleteMessage(message_id, post_id)
-
-        return res.json(message_id)
-    }
-
-    async getProfile(req: Request, res: Response): Promise<any> {
+    getProfile = async (req: Request, res: Response, next: NextFunction) => {
         try {
             const {user_id} = req.params
 
             if (!user_id)
-                return res.json(ApiError.badRequest('Missing required fields'))
+                return next(ApiError.badRequest('Missing required fields'))
 
             const profile = await UserService.getProfile(user_id)
 
-            return res.json(profile)
+            res.json(profile)
         } catch (e) {
-            return res.json(ApiError.internalServerError("An error occurred while fetching a profile"))
+            return next(e)
         }
-    }
+    };
 
-    async putProfile(req: Request, res: Response): Promise<any> {
+    putProfile = async (req: Request, res: Response, next: NextFunction) => {
         try {
             const {user_id} = req.params
             const {user_name, user_bio} = req.body
 
             if (!user_id || !user_name)
-                return res.json(ApiError.badRequest('Missing required fields'))
+                return next(ApiError.badRequest('Missing required fields'))
 
             const profile = await UserService.putProfile(user_id, user_name, user_bio, req.files)
 
-            return res.json(profile)
+            res.json(profile)
         } catch (e) {
-            return res.json(ApiError.internalServerError("An error occurred while updating a profile"))
+            return next(e)
         }
-    }
+    };
 
-    async putPassword(req: Request, res: Response): Promise<any> {
+    putPassword = async (req: Request, res: Response, next: NextFunction) => {
         try {
             const {user_id} = req.params
             const {user_password, user_password_new} = req.body
 
             if (!user_id || !user_password || !user_password_new)
-                return res.json(ApiError.badRequest('Missing required fields'))
+                return next(ApiError.badRequest('Missing required fields'))
 
             const password = await UserService.putPassword(user_id, user_password, user_password_new)
 
-            if (password instanceof ApiError) return res.json(password)
+            if (password instanceof ApiError) {
+                res.json(password)
+                return
+            }
 
-            return res.json({
+            res.json({
                 status: 200,
                 message: password
             })
         } catch (e) {
-            return res.json(ApiError.internalServerError("An error occurred while updating a password"))
+            return next(e)
         }
-    }
+    };
 }
 
 export default new UserController()

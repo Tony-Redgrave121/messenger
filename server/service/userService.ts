@@ -63,7 +63,10 @@ class UserService {
                 attributes: {
                     include: [[Sequelize.fn("COUNT", Sequelize.col("members.member_id")), "members_count"]]
                 },
-                where: {messenger_id: messenger_id},
+                where: {
+                    messenger_id: messenger_id,
+                    messenger_type: type
+                },
                 group: [
                     'messenger.messenger_id',
                     'user_member.member_id',
@@ -76,13 +79,13 @@ class UserService {
             })
         }
 
-        if (!messenger) return ApiError.internalServerError("An error occurred while fetching the messenger")
+        if (!messenger) throw ApiError.notFound("Messenger not found")
 
         return messenger
     }
 
     async fetchMessengersList(user_id: string) {
-        if (!user_id) return ApiError.internalServerError("An error occurred while fetching messengers list")
+        if (!user_id) throw ApiError.internalServerError("An error occurred while fetching messengers list")
         const messages = await models.message.findAll({
             where: {
                 [Op.or]: [
@@ -165,7 +168,7 @@ class UserService {
             ],
             attributes: ['messenger_id', 'messenger_name', 'messenger_image', 'messenger_type']
         })
-        if (!messengersList) return ApiError.internalServerError("An error occurred while fetching messengers list")
+        if (!messengersList) throw ApiError.internalServerError("An error occurred while fetching messengers list")
 
         return [...transformedChats, ...messengersList]
     }
@@ -214,7 +217,7 @@ class UserService {
             ]
         })
 
-        if (!messages) return ApiError.internalServerError("An error occurred while fetching the messages")
+        if (!messages) throw ApiError.internalServerError("An error occurred while fetching the messages")
 
         const messagesPlain = JSON.parse(JSON.stringify(messages)) as IMessagesResponse[]
 
@@ -248,7 +251,7 @@ class UserService {
             })
         )
 
-        if (!updatedMessages) return ApiError.internalServerError("An error occurred while fetching the messages")
+        if (!updatedMessages) throw ApiError.internalServerError("An error occurred while fetching the messages")
 
         return updatedMessages
     }
@@ -275,7 +278,7 @@ class UserService {
                 const message_file_id = uuid.v4()
 
                 const filesPost = await filesUploadingService(`messengers/${message.messenger_id ? message.messenger_id : message.recipient_user_id}`, file, message.message_type)
-                if (!filesPost || filesPost instanceof ApiError) return ApiError.badRequest(`Error with files uploading`)
+                if (!filesPost || filesPost instanceof ApiError) throw ApiError.badRequest(`Error with files uploading`)
 
                 const message_file = await models.message_file.create({
                     message_file_id: message_file_id,
@@ -359,7 +362,7 @@ class UserService {
             attributes: ['user_id', 'user_name', 'user_img', 'user_bio']
         }) as IProfileSettings | null
 
-        if (!userData) return ApiError.internalServerError("No user settings found")
+        if (!userData) throw ApiError.internalServerError("No user settings found")
 
         const user_img = userData?.user_img ? fs.readFileSync(__dirname + `/../src/static/users/${user_id}/${userData.user_img}`) : null
 
@@ -374,7 +377,7 @@ class UserService {
     async putProfile(user_id: string, user_name: string, user_bio?: string, user_files?: IUserFiles | null) {
         const oldProfile = await models.users.findOne({where: {user_id: user_id}}) as IUser | null
 
-        if (!oldProfile) return ApiError.notFound(`Profile not found`)
+        if (!oldProfile) throw ApiError.notFound(`Profile not found`)
         let user_img = null
 
         if (user_files?.user_img) {
@@ -391,7 +394,7 @@ class UserService {
                 user_img: user_img ? user_img.file : oldProfile.user_img
             }, {where: {user_id: user_id}})
         } catch (error) {
-            return ApiError.internalServerError(`Error with profile updating`)
+            throw ApiError.internalServerError(`Error with profile updating`)
         }
 
         return models.users.findOne({

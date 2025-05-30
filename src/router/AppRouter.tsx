@@ -23,7 +23,7 @@ const AppRouter = () => {
                 {UserRoutes.map(({path, Component}) => (
                     <Route key={path} path={path} element={<Component/>}/>
                 ))}
-                <Route path="*" element={<Navigate to={UserRoutes[0]?.path || "/"}/>}/>
+                <Route path="*" element={<Navigate to={"/"}/>}/>
             </Route>
         </Routes>
     )

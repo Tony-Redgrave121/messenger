@@ -1,9 +1,10 @@
 import React, {useEffect, useMemo, useState} from "react";
 import debounce from "debounce";
-import {IContact} from "@appTypes";
+import {IContact, IUnifiedMessenger} from "@appTypes";
 
-const useSearch = (arr: any[], field: string) => {
-    const [filteredArr, setFilteredArr] = useState<IContact[]>([])
+const useSearch = <T extends IContact | IUnifiedMessenger, K extends keyof T>
+(arr: T[], field: K) => {
+    const [filteredArr, setFilteredArr] = useState<T[]>([])
     const [filter, setFilter] = useState('')
 
     useEffect(() => {
@@ -12,7 +13,12 @@ const useSearch = (arr: any[], field: string) => {
 
     const searchDebounce = useMemo(() =>
         debounce((query: string) => (
-            setFilteredArr(arr.filter(el => el[field].toLowerCase().includes(query)))
+            setFilteredArr(
+                arr.filter(el => {
+                    const value = el[field]
+                    return typeof value === "string" && value.toLowerCase().includes(query)
+                })
+            )
         ), 200), [arr, field]
     )
 

@@ -33,7 +33,7 @@ class MessengerService {
             attributes: []
         }) as unknown as IContacts[]
 
-        if (!contacts) return ApiError.internalServerError("No contacts found")
+        if (!contacts) throw ApiError.internalServerError("No contacts found")
 
         return contacts.map(contact => contact.user)
     }
@@ -68,12 +68,12 @@ class MessengerService {
             )
         } else {
             reactions = await models.reactions.findAll()
-            if (!reactions) return ApiError.internalServerError("No reactions found")
+            if (!reactions) throw ApiError.internalServerError("No reactions found")
 
             return reactions
         }
 
-        if (!reactions) return ApiError.internalServerError("No reactions found")
+        if (!reactions) throw ApiError.internalServerError("No reactions found")
 
         return reactions
     }
@@ -83,7 +83,7 @@ class MessengerService {
 
         if (messenger_files && messenger_files.messenger_image)
             messenger_image = await filesUploadingService(`messengers/${messenger_id}`, messenger_files.messenger_image, 'media')
-        if (messenger_image instanceof ApiError) return ApiError.badRequest(`Error with user image creation`)
+        if (messenger_image instanceof ApiError) throw ApiError.badRequest(`Error with user image creation`)
 
         const messenger = await models.messenger.create({
             messenger_id,
@@ -93,7 +93,7 @@ class MessengerService {
             messenger_type
         })
 
-        if (messenger instanceof ApiError) return ApiError.badRequest(`Error with messenger creation`)
+        if (messenger instanceof ApiError) throw ApiError.badRequest(`Error with messenger creation`)
 
         const member = await models.members.create({
             member_id: uuid.v4(),
@@ -102,7 +102,7 @@ class MessengerService {
             messenger_id
         })
 
-        if (member instanceof ApiError) return ApiError.badRequest(`Error adding users to the messenger`)
+        if (member instanceof ApiError) throw ApiError.badRequest(`Error adding users to the messenger`)
 
         const messengerSettings = await models.messenger_settings.create({
             messenger_setting_id: uuid.v4(),
@@ -110,7 +110,7 @@ class MessengerService {
             messenger_id: messenger_id,
         })
 
-        if (messengerSettings instanceof ApiError) return ApiError.badRequest(`Error adding settings to the messenger`)
+        if (messengerSettings instanceof ApiError) throw ApiError.badRequest(`Error adding settings to the messenger`)
 
         if (messenger_members) {
             if (!Array.isArray(messenger_members)) messenger_members = [messenger_members]
@@ -191,7 +191,7 @@ class MessengerService {
         const setting = messengerSettings[0]?.dataValues
         const data = messengerData[0]?.dataValues
 
-        if (!setting || !data) return ApiError.internalServerError("No messenger settings found")
+        if (!setting || !data) throw ApiError.internalServerError("No messenger settings found")
 
         const messenger_image = data?.messenger_image ? fs.readFileSync(__dirname + `/../src/static/messengers/${messenger_id}/${data.messenger_image}`) : null
 
@@ -217,7 +217,7 @@ class MessengerService {
             {messenger_setting_type: messenger_type},
             {where: {messenger_id: messenger_id}}
         )
-        if (!updateRes) return ApiError.internalServerError("No messenger settings found")
+        if (!updateRes) throw ApiError.internalServerError("No messenger settings found")
 
         return updateRes
     }
@@ -228,13 +228,13 @@ class MessengerService {
             {messenger_id: messengerLink},
             {where: {messenger_id: messenger_id}}
         )
-        if (!updateRes) return ApiError.internalServerError("No messenger found")
+        if (!updateRes) throw ApiError.internalServerError("No messenger found")
 
         const messengerPath = path.resolve(__dirname + "/../src/static/messengers", messenger_id)
         const newMessengerPath = path.resolve(__dirname + "/../src/static/messengers", messengerLink)
 
         fs.rename(messengerPath, newMessengerPath, () => {
-            return ApiError.internalServerError("Error when changing the path to the messenger")
+            throw ApiError.internalServerError("Error when changing the path to the messenger")
         })
 
         return {
@@ -395,7 +395,7 @@ class MessengerService {
     async putMessenger(messenger_id: string, messenger_name: string, messenger_desc?: string, messenger_files?: IUserFiles | null) {
         const oldMessenger = await models.messenger.findOne({where: {messenger_id: messenger_id}}) as IMessenger | null
 
-        if (!oldMessenger) return ApiError.notFound(`Messenger not found`)
+        if (!oldMessenger) throw ApiError.notFound(`Messenger not found`)
         let messenger_image = null
 
         if (messenger_files?.messenger_image) {
@@ -412,7 +412,7 @@ class MessengerService {
                 messenger_desc: messenger_desc
             }, {where: {messenger_id: messenger_id}})
         } catch (error) {
-            return ApiError.internalServerError(`Error with messenger updating`)
+            throw ApiError.internalServerError(`Error with messenger updating`)
         }
 
         return models.messenger.findOne({where: {messenger_id: messenger_id}})
@@ -429,7 +429,7 @@ class MessengerService {
             where: {reaction_id: reaction_id}
         })
 
-        if (!reaction) return ApiError.internalServerError('An error occurred while posting a reaction')
+        if (!reaction) throw ApiError.internalServerError('An error occurred while posting a reaction')
 
         return reaction
     }

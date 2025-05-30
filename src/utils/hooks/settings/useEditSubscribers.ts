@@ -13,7 +13,7 @@ const useEditSubscribers = (
 
     const refForm = useRef<HTMLDivElement>(null)
     const searchRef = useRef<HTMLDivElement>(null)
-    const {filteredArr, handleInput, filter} = useSearch(members, 'user_id')
+    const {filteredArr, handleInput, filter} = useSearch<IContact, 'user_name'>(members, 'user_name')
 
     return {
         animation,

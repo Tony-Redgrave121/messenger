@@ -4,15 +4,17 @@ import {InputBlock} from "@components/inputBlock"
 import {RightSidebar} from "@components/sidebar"
 import {Message} from "./message"
 import UserService from "@service/UserService"
-import {useAppSelector} from "@hooks/useRedux"
+import {useAppDispatch, useAppSelector} from "@hooks/useRedux"
 import {useNavigate, useParams} from "react-router-dom"
-import {IMessagesResponse, IAdaptMessenger, ICommentState, IReaction} from "@appTypes"
+import {IMessagesResponse, IAdaptMessenger, ICommentState, IReaction, isServerError} from "@appTypes"
 import MessengerHeader from "./messengerHeader/MessengerHeader"
 import {useMessageWS} from "@utils/hooks/useMessageWS";
 import checkRights from "@utils/logic/checkRights";
 import CommentsBlock from "./commentsBlock/CommentsBlock";
 import {CSSTransition} from "react-transition-group";
 import MessengerService from "@service/MessengerService";
+import {setPopupMessageChildren, setPopupMessageState} from "@store/reducers/appReducer";
+import isMember from "@utils/logic/isMember";
 
 const InitialMessenger: IAdaptMessenger = {
     id: '',
@@ -44,6 +46,7 @@ const Messenger= () => {
     const {id, type} = useParams()
     const user = useAppSelector(state => state.user)
     const navigate = useNavigate()
+    const dispatch = useAppDispatch()
 
     const {
         socketRef,
@@ -54,7 +57,7 @@ const Messenger= () => {
     useEffect(() => {
         if (!id || !type) return
 
-        if (!types.includes(type)) {
+        if (!types.includes(type) || !id) {
             navigate("/")
             return
         }
@@ -72,43 +75,45 @@ const Messenger= () => {
                     MessengerService.getReactions((type === 'channel' && id) ? id : undefined)
                 ])
 
-                if (messenger.status === 200 && messages.status === 200 && reactions.status === 200) {
-                    const messengerData = messenger.data
-                    let adaptMessenger = InitialMessenger
+                const messengerData = messenger.data
+                let adaptMessenger = InitialMessenger
 
-                    if ("user_id" in messengerData) {
-                        adaptMessenger = {
-                            id: messengerData.user_id,
-                            name: messengerData.user_name,
-                            image: messengerData.user_img,
-                            desc: messengerData.user_bio,
-                            type: 'chat',
-                            last_seen: messengerData.user_last_seen,
-                        }
-                    } else if ("messenger_id" in messengerData) {
-                        adaptMessenger = {
-                            id: messengerData.messenger_id,
-                            name: messengerData.messenger_name,
-                            image: messengerData.messenger_image,
-                            desc: messengerData.messenger_desc,
-                            type: messengerData.messenger_type,
-                            members: messengerData.user_member,
-                            members_count: messengerData.members_count,
-                        }
+                if ("user_id" in messengerData) {
+                    adaptMessenger = {
+                        id: messengerData.user_id,
+                        name: messengerData.user_name,
+                        image: messengerData.user_img,
+                        desc: messengerData.user_bio,
+                        type: 'chat',
+                        last_seen: messengerData.user_last_seen,
                     }
+                } else if ("messenger_id" in messengerData) {
+                    adaptMessenger = {
+                        id: messengerData.messenger_id,
+                        name: messengerData.messenger_name,
+                        image: messengerData.messenger_image,
+                        desc: messengerData.messenger_desc,
+                        type: messengerData.messenger_type,
+                        members: messengerData.user_member,
+                        members_count: messengerData.members_count,
+                    }
+                }
 
-                    if (adaptMessenger.id !== '') {
-                        setMessenger(adaptMessenger)
-                        setMessagesList(messages.data)
-                        setReactions(reactions.data)
-                    }
-                } else navigate('/')
+                if (!!adaptMessenger.id) {
+                    setMessenger(adaptMessenger)
+                    setMessagesList(messages.data)
+                    setReactions(reactions.data)
+                }
             } catch (error) {
-                console.log(error)
+                const message = isServerError(error)
+
+                dispatch(setPopupMessageState(true))
+                dispatch(setPopupMessageChildren(message))
+                navigate('/')
             }
         }
 
-        handleMessageList().catch(error => console.log(error))
+        handleMessageList()
 
         return () => controller.abort()
     }, [user.userId, id, navigate, setMessagesList])
@@ -137,6 +142,17 @@ const Messenger= () => {
             timer && clearTimeout(timer)
         }
     }, [comment.commentState])
+
+    const subscribeToMessenger = async () => {
+        if (!id) return
+
+        try {
+            const newMembers = await MessengerService.postContactsMembers([user.userId], id)
+            if (newMembers.data.message) return
+        } catch (error) {
+            console.log(error)
+        }
+    }
 
     return (
         <>
@@ -167,13 +183,17 @@ const Messenger= () => {
                                     )}
                                     <div ref={refEnd}/>
                                 </section>
-                                {(messenger.type === "channel" ? checkRights(messenger.members!, user.userId) : true) && id &&
+                                {isMember(messenger.members!, user.userId) ?
+                                    (messenger.type === "channel" ? checkRights(messenger.members!, user.userId) : true) && id &&
                                     <InputBlock
                                         setReply={setReply}
                                         reply={reply}
                                         socketRef={socketRef}
                                         socketRoom={id}
-                                    />
+                                    /> :
+                                    <button className={style.SubscribeButton} onClick={subscribeToMessenger}>
+                                        Subscribe
+                                    </button>
                                 }
                             </div>
                             {comment.comment &&

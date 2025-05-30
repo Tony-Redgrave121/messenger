@@ -7,10 +7,11 @@ import {
 import $api from '@utils/http/index'
 import {AxiosResponse} from 'axios'
 import {IMessengerResponse, IMessagesResponse, IMessengersListResponse, IProfileSettings, IContact} from "@appTypes"
+import ApiError from "../../server/error/ApiError";
 
 export default class UserService {
-    static async fetchMessenger(user_id: string, type: string, messenger_id: string, signal: AbortSignal): Promise<AxiosResponse<IMessengerResponse | IContact>> {
-        return $api.get<IMessengerResponse | IContact>(`/messenger/?type=${type}&user_id=${user_id}&messenger_id=${messenger_id}`, {signal})
+    static async fetchMessenger(user_id: string, type: string, messenger_id: string, signal: AbortSignal): Promise<AxiosResponse<IMessengerResponse | IContact | ApiError>> {
+        return $api.get<IMessengerResponse | IContact | ApiError>(`/messenger/?type=${type}&user_id=${user_id}&messenger_id=${messenger_id}`, {signal})
     }
     static async fetchMessengersList(user_id: string, signal: AbortSignal): Promise<AxiosResponse<IMessengersListResponse[]>> {
         return $api.get<IMessengersListResponse[]>(`/messengers-list/${user_id}`, {signal})

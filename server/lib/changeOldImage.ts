@@ -11,12 +11,12 @@ const changeOldImage = async (oldImageName: string | undefined, folder: string, 
 
             await fs.promises.rm(filePath, {force: true})
         } catch (error) {
-            return ApiError.badRequest(`Error with image deleting`)
+            throw ApiError.badRequest(`Error with image deleting`)
         }
     }
 
     const image = await filesUploadingService(folder, newImage, 'media')
-    if (image instanceof ApiError) return ApiError.badRequest(`Error with image creation`)
+    if (image instanceof ApiError) throw ApiError.badRequest(`Error with image creation`)
 
     return image
 }

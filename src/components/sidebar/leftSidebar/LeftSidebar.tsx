@@ -1,4 +1,3 @@
-import React from 'react'
 import {
     HiBars3,
     HiOutlinePencil
@@ -36,7 +35,12 @@ const LeftSidebar = () => {
         profile,
         setProfile,
         refProfile,
-        navigateChat
+        navigateChat,
+        searchRes,
+        active,
+        setActive,
+        handleInput,
+        search
     } = useLeftSidebarLogic()
 
     return (
@@ -53,8 +57,7 @@ const LeftSidebar = () => {
                         <HiBars3/>
                         <DropDown list={dropDownList} state={settings} setState={setSettings}/>
                     </Buttons.DefaultButton>
-                    <SearchBlock ref={refSearch} foo={() => {
-                    }}/>
+                    <SearchBlock ref={refSearch} foo={handleInput}/>
                 </div>
                 <ChatList/>
                 {contacts.length > 0 &&
@@ -85,7 +88,12 @@ const LeftSidebar = () => {
                         refSidebar={refProfile}
                     />
                 }
-                <SearchList state={true}/>
+                <SearchList
+                    animationState={search}
+                    active={active}
+                    setActive={setActive}
+                    searchRes={searchRes}
+                />
             </SidebarContainer>
         </CSSTransition>
     )

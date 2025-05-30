@@ -1,6 +1,6 @@
 import React, {ChangeEvent, FC, RefObject} from 'react'
 import style from './style.module.css'
-import { HiOutlineMagnifyingGlass } from "react-icons/hi2"
+import {HiOutlineMagnifyingGlass} from "react-icons/hi2"
 
 interface ISearchBlock {
     ref: RefObject<HTMLDivElement | null>,

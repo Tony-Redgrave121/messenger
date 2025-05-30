@@ -11,11 +11,10 @@ interface ICheckboxContactProps {
     members: IContact[],
     contacts: IContact[],
     setMembers: Dispatch<SetStateAction<IContact[]>>
-    onClick: () => void
 }
 
-const AddContacts: FC<ICheckboxContactProps> = ({members, contacts, setMembers, onClick}) => {
-    const {filteredArr, handleInput, filter} = useSearch(contacts, 'user_name')
+const AddContacts: FC<ICheckboxContactProps> = ({members, contacts, setMembers}) => {
+    const {filteredArr, handleInput, filter} = useSearch<IContact, 'user_name'>(contacts, 'user_name')
 
     const handleCheck = (contact: IContact, members: IContact[]) => {
         return members.some(el => el.user_id === contact.user_id)
@@ -42,7 +41,7 @@ const AddContacts: FC<ICheckboxContactProps> = ({members, contacts, setMembers, 
             {filteredArr.length > 0 ?
                 filteredArr.map((contact) =>
                     <Buttons.Checkbox key={contact.user_id} foo={() => handleAddMember(contact)} state={handleCheck(contact, members)}>
-                        <Contact contact={contact} onClick={() => onClick()}/>
+                        <Contact contact={contact}/>
                     </Buttons.Checkbox>
                 ) : <NoResult filter={filter}/>
             }

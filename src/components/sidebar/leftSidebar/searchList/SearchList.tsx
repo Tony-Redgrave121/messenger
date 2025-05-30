@@ -1,41 +1,46 @@
-import React, {FC, useRef, useState} from 'react'
+import React, {Dispatch, FC, SetStateAction, useRef} from 'react'
 import {CSSTransition} from "react-transition-group";
 import '../animation.css'
 import style from "./style.module.css";
+import contactStyles from "@components/contacts/style.module.css";
 import {clsx} from "clsx";
-import {ContactList} from "@components/contacts";
 import {useNavigate} from "react-router";
+import {Buttons} from "@components/buttons";
+import {IUnifiedMessenger, ListKeys} from "@appTypes";
+import {LoadFile} from "@components/loadFile";
+import {getDate} from "@utils/logic/getDate";
+import {useAppSelector} from "@hooks/useRedux";
 
 interface ISearchListProps {
-    state: boolean
+    animationState: boolean,
+    active: 'chat' | 'group' | 'channel',
+    setActive: Dispatch<SetStateAction<ListKeys>>,
+    searchRes: IUnifiedMessenger[],
 }
 
-type ListKeys = 'chat' | 'group' | 'channel'
-
-const SearchList: FC<ISearchListProps> = ({state}) => {
+const SearchList: FC<ISearchListProps> = ({animationState, active, setActive, searchRes}) => {
     const searchListRef = useRef<HTMLDivElement>(null)
-    const [active, setActive] = useState<ListKeys>('chat')
-
-    const buttonsList: ListKeys[] = ['chat', 'group', 'channel']
     const navigate = useNavigate()
+    const buttonsList: ListKeys[] = ['chat', 'group', 'channel']
+    const userId = useAppSelector(state => state.user.userId)
 
     const buttonOnClick = (newActive: ListKeys) => {
         setActive(newActive)
     }
 
-    const navigateChat = (user_id: string) => {
-        return navigate(`/${active}/${user_id}`)
+    const navigateMessenger = (messenger_id: string) => {
+        return userId !== messenger_id && navigate(`/${active}/${messenger_id}`)
     }
 
     return (
         <CSSTransition
-            in={state}
+            in={animationState}
             nodeRef={searchListRef}
             timeout={300}
             classNames='left-sidebar-node'
             unmountOnExit
         >
-            <div className={style.SearchListContainer}>
+            <div className={style.SearchListContainer} ref={searchListRef}>
                 <nav>
                     <ul>
                         {buttonsList.map(item => (
@@ -50,13 +55,27 @@ const SearchList: FC<ISearchListProps> = ({state}) => {
                         ))}
                     </ul>
                 </nav>
-                <div className={style.ListBlock}>
-                    <p>Global search</p>
-                    <ContactList
-                        contacts={[]}
-                        onClick={navigateChat}
-                    />
-                </div>
+                {searchRes.length > 0 &&
+                    <div className={style.ListBlock}>
+                        <p>Global search</p>
+                        {searchRes.map(item => (
+                            <Buttons.ContactButton key={item.id} foo={() => navigateMessenger(item.id)}>
+                                <div className={contactStyles.ContactBlock}>
+                                <span>
+                                    <LoadFile
+                                        imagePath={item.img ? `${active === 'chat' ? 'users' : 'messengers'}/${item.id}/${item.img}` : ''}
+                                        imageTitle={item.name}
+                                    />
+                                </span>
+                                    <div className={contactStyles.ContactInfo}>
+                                        <h4>{item.name}</h4>
+                                        <p>{!Number(item.desc) ? getDate(item.desc) : `${item.desc} ${active === 'group' ? 'members' : 'subscribers'}`}</p>
+                                    </div>
+                                </div>
+                            </Buttons.ContactButton>
+                        ))}
+                    </div>
+                }
             </div>
         </CSSTransition>
     )

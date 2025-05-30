@@ -53,6 +53,10 @@
   }
 
   .ListBlock {
+    display: flex;
+    flex-direction: column;
+    padding: 0 8px 8px;
+
     > p {
       color: #aaaaaa;
       font-weight: 600;

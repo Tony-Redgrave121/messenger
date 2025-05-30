@@ -58,7 +58,7 @@ const EditMembers: FC<IEditMemberProps> = (
     const RemovedDropDown = (user_id: string) => [
         {
             liChildren: <HiOutlineUserPlus/>,
-            liText: 'Add to SearchList',
+            liText: 'Add to Messenger',
             liFoo: () => addToGroup(user_id)
         },
         {

@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from "react";
+import React, {useEffect, useMemo, useRef, useState} from "react";
 import {useAppDispatch, useAppSelector} from "@hooks/useRedux";
 import {useMessengerWS} from "@utils/hooks/useMessengerWS";
 import useGetContacts from "@hooks/useGetContacts";
@@ -14,10 +14,14 @@ import {
 } from "react-icons/hi2";
 import {LoadFile} from "@components/loadFile";
 import {useNavigate} from "react-router";
+import SearchService from "@service/SearchService";
+import {isChatArray, isMessengerArray, IUnifiedMessenger, ListKeys} from "@appTypes";
 
 const useLeftSidebarLogic = () => {
     const [settings, setSettings] = useState(false)
     const [messenger, setMessenger] = useState(false)
+    const [search, setSearch] = useState(false)
+    const [filter, setFilter] = useState('')
     const [profile, setProfile] = useState({
         state: false,
         mounted: false
@@ -35,6 +39,9 @@ const useLeftSidebarLogic = () => {
     const socketRef = useMessengerWS()
     const {contacts} = useGetContacts()
     const navigate = useNavigate()
+
+    const [searchRes, setSearchRes] = useState<IUnifiedMessenger[]>([])
+    const [active, setActive] = useState<ListKeys>('chat')
 
     const handleResize = debounce(() => {
         if (window.innerWidth >= 940) dispatch(setSidebarLeft(true))
@@ -117,6 +124,61 @@ const useLeftSidebarLogic = () => {
         return navigate(`/chat/${user_id}`)
     }
 
+    const searchDebounce = useMemo(() =>
+        debounce(async (query: string, type: string) => {
+            try {
+                if (!query) return
+
+                const controller = new AbortController()
+                const signal = controller.signal
+
+                const res = await SearchService.getMessengers(query, type, signal)
+
+                if (res.status === 200) {
+                    const messengersData = res.data
+                    let unifiedMessengers: IUnifiedMessenger[] = []
+
+                    if (isChatArray(messengersData)) {
+                        unifiedMessengers = messengersData.map(item => ({
+                            id: item.user_id,
+                            name: item.user_name,
+                            img: item.user_img,
+                            desc: item.user_last_seen
+                        }))
+                    } else if (isMessengerArray(messengersData)) {
+                        unifiedMessengers = messengersData.map(item => ({
+                            id: item.messenger_id,
+                            name: item.messenger_name,
+                            img: item.messenger_image,
+                            desc: item.count
+                        }))
+                    }
+
+                    setSearchRes(unifiedMessengers)
+                }
+            } catch (e) {
+                console.error(e)
+            }
+        }, 200), []
+    )
+
+    const handleInput = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const query = event.currentTarget.value.toLowerCase()
+        setFilter(query)
+
+        searchDebounce(query, active)
+    }
+
+    useEffect(() => {
+        setSearchRes([])
+        searchDebounce(filter, active)
+    }, [active])
+
+    useEffect(() => {
+        if (filter) setSearch(true)
+        else setSearch(false)
+    }, [filter])
+
     return {
         sidebarLeft,
         refSidebar,
@@ -134,7 +196,12 @@ const useLeftSidebarLogic = () => {
         profile,
         setProfile,
         refProfile,
-        navigateChat
+        navigateChat,
+        searchRes,
+        active,
+        setActive,
+        handleInput,
+        search
     }
 }
 

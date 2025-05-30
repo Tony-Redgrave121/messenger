@@ -28,6 +28,6 @@ export default async function filesUploadingService(folder: string, file: Upload
             size: file.size
         }
     } catch (e) {
-        return ApiError.internalServerError('An error occurred while uploading the file')
+        return  ApiError.internalServerError('An error occurred while uploading the file')
     }
 }

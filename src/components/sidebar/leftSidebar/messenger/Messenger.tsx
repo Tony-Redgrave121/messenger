@@ -187,7 +187,7 @@ const Messenger: FC<IMessengerProps> = ({messengerCreation, setMessengerCreation
                             </InputForm>
                         }
                         {(members && contacts.length > 0) &&
-                            <AddContacts members={members} contacts={contacts} setMembers={setMembers} onClick={() => {}}/>
+                            <AddContacts members={members} contacts={contacts} setMembers={setMembers}/>
                         }
                         {errorForm && <small>{errorForm}</small>}
                     </form>

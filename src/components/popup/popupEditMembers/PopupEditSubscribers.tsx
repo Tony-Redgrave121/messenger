@@ -54,7 +54,6 @@ const PopupEditSubscribers: FC<IPopupEditSubscribersProps> = ({handleCancel, set
                     members={members}
                     setMembers={setMembers}
                     contacts={contacts}
-                    onClick={() => {}}
                 />
             </div>
             <Buttons.CreateButton state={members.length > 0} foo={handleAddMembers}>
