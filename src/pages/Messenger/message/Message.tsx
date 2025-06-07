@@ -25,7 +25,7 @@ import UserService from "@service/UserService";
 import {Link} from "react-router-dom";
 import handleContextMenu from "@utils/logic/handleContextMenu";
 import {CSSTransition} from 'react-transition-group'
-import '../animation.css'
+import './animation.css'
 import checkRights from "@utils/logic/checkRights";
 import {LoadFile} from "@components/loadFile";
 import {clsx} from 'clsx'
@@ -228,12 +228,16 @@ const Message: FC<IMessageProps> = (
         }
     }, [message.message_files, message.message_type])
 
+    const scrollInto = (id: string) => {
+        document.getElementById(id)?.scrollIntoView({block: 'center'})
+    }
+
     return (
         <CSSTransition
             in={animateMessage}
             nodeRef={refMessage}
             timeout={200}
-            classNames='scale-node'
+            classNames='message-scale-node'
             unmountOnExit
             onEntered={onEntered}
         >
@@ -251,8 +255,8 @@ const Message: FC<IMessageProps> = (
                         <div
                             className={clsx(style.MessageContent, isOwner && style.OwnerMessageContent, messenger.type === 'channel' && style.ChannelMessageContent)}>
                             {message.reply &&
-                                <button className={style.ReplyBlock}>
-                                    <h4>{message.reply.user.user_name}</h4>
+                                <button className={style.ReplyBlock} onClick={() => scrollInto(message.reply!.message_id)}>
+                                    <p>{message.reply.user.user_name}</p>
                                     <p>{message.reply.message_text}</p>
                                 </button>
                             }

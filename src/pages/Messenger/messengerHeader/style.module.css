@@ -52,6 +52,60 @@
   font-weight: 600;
   margin: auto 0;
 }
+.ChatHeader .SearchBlock {
+  position: absolute;
+  z-index: 9;
+  display: flex;
+  gap: 8px;
+  flex-direction: column;
+  width: calc(100% - 80px);
+  left: 62px;
+}
+.ChatHeader .SearchBlock .SearchTopBar {
+  display: flex;
+  background-color: #212121;
+}
+.ChatHeader .SearchBlock .SearchList {
+  background-color: #212121;
+  border: 1px solid #2f2f2f;
+  border-radius: 16px;
+  padding: 8px;
+}
+.ChatHeader .SearchBlock .SearchList .SearchedMessage {
+  justify-content: space-between;
+  padding: 8px 12px;
+  width: calc(100% - 24px);
+}
+.ChatHeader .SearchBlock .SearchList .SearchedMessage, .ChatHeader .SearchBlock .SearchList .SearchedMessage .MessageInfo {
+  display: flex;
+}
+.ChatHeader .SearchBlock .SearchList .SearchedMessage .MessageInfo {
+  align-items: center;
+  gap: 16px;
+  color: white;
+}
+.ChatHeader .SearchBlock .SearchList .SearchedMessage .MessageInfo > :first-child {
+  width: 42px;
+  height: 42px;
+}
+.ChatHeader .SearchBlock .SearchList .SearchedMessage .MessageInfo .MessageDetail {
+  line-height: 1.4;
+}
+.ChatHeader .SearchBlock .SearchList .SearchedMessage .MessageInfo .MessageDetail > :first-child {
+  font-weight: 600;
+}
+.ChatHeader .SearchBlock .SearchList .SearchedMessage .MessageInfo .MessageDetail > :last-child {
+  color: #aaaaaa;
+  font-size: 14px;
+}
+.ChatHeader .SearchBlock .SearchList .SearchedMessage > p {
+  color: #aaaaaa;
+  font-size: 12px;
+}
+.ChatHeader .SearchBlock .SearchList .SearchedMessage:hover {
+  background-color: #2f2f2f;
+  border-radius: 10px;
+}
 
 .MainHeader > :first-child {
   display: none;

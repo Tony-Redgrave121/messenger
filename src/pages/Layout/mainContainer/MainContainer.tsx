@@ -1,6 +1,6 @@
 import React, {FC, ReactNode} from 'react'
 import style from './style.module.css'
-import img from './backgrounds/pattern.svg'
+import img from './backgrounds/pattern.webp'
 
 interface IMainContainer {
     children?: ReactNode

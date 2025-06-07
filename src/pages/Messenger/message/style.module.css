@@ -42,6 +42,9 @@
 .MessageContainer .MessageInnerBlock .MessageWrapper .MessageContent .ReplyBlock:hover {
   background-color: #353535;
 }
+.MessageContainer .MessageInnerBlock .MessageWrapper .MessageContent .ReplyBlock > :first-child {
+  font-weight: 600;
+}
 .MessageContainer .MessageInnerBlock .MessageWrapper .MessageContent, .MessageContainer .MessageInnerBlock .MessageWrapper .MessageContent .MessageBlock {
   display: flex;
   flex-direction: column;
