@@ -49,14 +49,17 @@ class UserController {
                 !type ||
                 !messenger_id ||
                 typeof type !== 'string' ||
-                typeof post_id !== 'string' ||
                 typeof user_id !== 'string' ||
                 typeof messenger_id !== 'string'
-            )
-                return next(ApiError.badRequest('Missing required fields'))
-            const messages = await UserService.fetchMessages(type, user_id, messenger_id, post_id)
+            ) return next(ApiError.badRequest('Missing required fields'))
 
-            res.json(messages)
+            if (typeof post_id === 'string' || typeof post_id === 'undefined') {
+                const messages = await UserService.fetchMessages(type, user_id, messenger_id, post_id)
+
+                res.json(messages)
+            } else {
+                return next(ApiError.badRequest('Missing required fields'))
+            }
         } catch (e) {
             return next(e)
         }

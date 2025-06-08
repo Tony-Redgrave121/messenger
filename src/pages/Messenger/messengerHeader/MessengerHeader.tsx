@@ -1,4 +1,4 @@
-import React, {FC, memo, useRef, useState} from 'react'
+import {FC, memo, useState} from 'react'
 import style from './style.module.css'
 import '../animation.css'
 import {LoadFile} from "@components/loadFile";
@@ -9,18 +9,16 @@ import {
     HiOutlineTrash,
     HiOutlineBellSlash,
     HiOutlineLockClosed,
-    HiOutlineXMark,
     HiOutlineArrowLeft
 } from "react-icons/hi2"
 import {Buttons} from "@components/buttons"
 import {DropDown} from "@components/dropDown"
-import {SearchBlock} from "@components/searchBlock"
-import {CSSTransition} from 'react-transition-group'
 import {useAppDispatch, useAppSelector} from "@hooks/useRedux"
 import {setSidebarLeft} from "@store/reducers/appReducer";
-import {IAdaptMessenger, IMessagesResponse} from "@appTypes";
+import {IAdaptMessenger} from "@appTypes";
 import {getDate} from "@utils/logic/getDate";
 import {clsx} from "clsx";
+import SearchMessage from "../searchMessage/SearchMessage";
 
 const HeaderLists = {
     chat: [
@@ -87,10 +85,6 @@ interface IChatHeader {
 const MessengerHeader: FC<IChatHeader> = memo(({messenger, setSidebarState}) => {
     const [settings, setSettings] = useState(false)
     const [inputState, setInputState] = useState(false)
-    const [searchRes, setSearchRes] = useState<IMessagesResponse[]>([])
-
-    const searchRef = useRef<HTMLDivElement>(null)
-    const animationRef = useRef<HTMLDivElement>(null)
 
     const sidebarLeft = useAppSelector(state => state.app.sidebarLeft)
     const dispatch = useAppDispatch()
@@ -121,41 +115,10 @@ const MessengerHeader: FC<IChatHeader> = memo(({messenger, setSidebarState}) => 
                     <p>{getHeaderDesc()}</p>
                 </div>
             </button>
-            <CSSTransition
-                in={inputState}
-                nodeRef={animationRef}
-                timeout={300}
-                classNames='scale-node'
-                unmountOnExit
-            >
-                <div className={style.SearchBlock} ref={animationRef}>
-                    <div className={style.SearchTopBar}>
-                        <SearchBlock ref={searchRef} foo={() => {}}/>
-                        <Buttons.DefaultButton foo={() => setInputState(false)}>
-                            <HiOutlineXMark/>
-                        </Buttons.DefaultButton>
-                    </div>
-                    {searchRes.length > 0 &&
-                        <div className={style.SearchList}>
-                            {searchRes.map(message => (
-                                <button key={message.user.user_id + message.message_id} className={style.SearchedMessage}>
-                                    <div className={style.MessageInfo}>
-                                        <LoadFile
-                                            imagePath={message.user.user_img && `users/${message.user.user_id}/${message.user.user_img}`}
-                                            imageTitle={message.user.user_name}
-                                        />
-                                        <div className={style.MessageDetail}>
-                                            <p>{message.user.user_name}</p>
-                                            <p>{message.message_text}</p>
-                                        </div>
-                                    </div>
-                                    <p>{getDate(message.message_date)}</p>
-                                </button>
-                            ))}
-                        </div>
-                    }
-                </div>
-            </CSSTransition>
+            <SearchMessage
+                state={inputState}
+                setState={setInputState}
+            />
             <span>
                 <Buttons.DefaultButton foo={() => setInputState(true)}>
                     <HiOutlineMagnifyingGlass/>

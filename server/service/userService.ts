@@ -12,6 +12,7 @@ import changeOldImage from "../lib/changeOldImage";
 import bcrypt from "bcrypt";
 import IMessagesResponse from "../types/IMessagesResponse";
 import IReaction from "../types/IReaction";
+import findAllMessagesQuery from "../lib/querys/findAllMessagesQuery";
 
 interface IPostMessage {
     user_id: string,
@@ -174,47 +175,20 @@ class UserService {
     }
 
     async fetchMessages(type: string, user_id: string, messenger_id: string, post_id?: string) {
+        const whereBase = type !== "chat" ?
+            {
+                messenger_id: messenger_id,
+                parent_post_id: post_id ? post_id : null
+            } :
+            {recipient_user_id: [messenger_id, user_id]}
+
         const messages = await models.message.findAll({
-            where:
-                type !== "chat" ?
-                    {
-                        messenger_id: messenger_id,
-                        ...(post_id !== 'undefined' ? {parent_post_id: post_id} : {parent_post_id: null})
-                    } :
-                    {recipient_user_id: [messenger_id, user_id]},
-            include: [
-                {
-                    model: models.message,
-                    as: 'comments',
-                    attributes: [],
-                    required: false
-                },
-                {
-                    model: models.message_file,
-                    attributes: ['message_file_id', 'message_file_name', 'message_file_size', 'message_file_path']
-                },
-                {
-                    model: models.users,
-                    attributes: ['user_id', 'user_name', 'user_img']
-                },
-                {
-                    model: models.message,
-                    as: 'reply',
-                    attributes: ['message_id', 'message_text'],
-                    include: [{model: models.users, attributes: ['user_id', 'user_name', 'user_img']}]
-                }
-            ],
+            where: whereBase,
+            ...findAllMessagesQuery,
             attributes: {
                 include: [[Sequelize.fn("COUNT", Sequelize.col("comments.parent_post_id")), "comments_count"]]
             },
             order: [['message_date', 'ASC']],
-            group: [
-                'message.message_id',
-                'message_files.message_file_id',
-                'user.user_id',
-                'reply.message_id',
-                'reply->user.user_id'
-            ]
         })
 
         if (!messages) throw ApiError.internalServerError("An error occurred while fetching the messages")
@@ -321,7 +295,7 @@ class UserService {
                 where: {parent_post_id: post_id},
                 attributes: ['message_id'],
                 raw: true,
-            }) as unknown as {message_id: string}[] : []
+            }) as unknown as { message_id: string }[] : []
 
             const childMessageIds = messagesIds.map(msg => msg.message_id)
             childMessageIds.push(message_id)

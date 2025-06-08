@@ -9,11 +9,6 @@
     transition: opacity .3s ease-in-out, transform .2s ease-in-out;
 }
 
-.message-scale-node-enter-done {
-    opacity: 1;
-    transform: scale(1);
-}
-
 .message-scale-node-exit {
     opacity: 1;
 }
@@ -28,3 +23,4 @@
     opacity: 0;
     transform: scale(0);
 }
+
