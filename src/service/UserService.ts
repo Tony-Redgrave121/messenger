@@ -1,8 +1,9 @@
 import {
     DELETE_MESSAGE,
     FETCH_MESSAGES,
-    POST_MESSAGE,
-    PROFILE, PASSWORD,
+    PROFILE,
+    PASSWORD,
+    MESSAGE,
 } from "@utils/const/const"
 import $api from '@utils/http/index'
 import {AxiosResponse} from 'axios'
@@ -19,8 +20,11 @@ export default class UserService {
     static async fetchMessages(user_id: string, type: string, messenger_id: string, post_id: string | undefined, signal: AbortSignal): Promise<AxiosResponse<IMessagesResponse[]>> {
         return $api.get<IMessagesResponse[]>(`${FETCH_MESSAGES}?type=${type}&user_id=${user_id}&messenger_id=${messenger_id}${post_id ? `&post_id=${post_id}` : ''}`, {signal})
     }
+    static async fetchMessage(messenger_id: string, message_id: string | undefined, signal: AbortSignal): Promise<AxiosResponse<IMessagesResponse>> {
+        return $api.get<IMessagesResponse>(`${MESSAGE}?messenger_id=${messenger_id}&message_id=${message_id}`, {signal})
+    }
     static async postMessage(message: FormData): Promise<AxiosResponse<IMessagesResponse>> {
-        return $api.post<IMessagesResponse>(POST_MESSAGE, message)
+        return $api.post<IMessagesResponse>(MESSAGE, message)
     }
     static async deleteMessage(message_id: string, post_id?: string): Promise<AxiosResponse> {
         return $api.delete(`${DELETE_MESSAGE}?message_id=${message_id}${post_id ? `&post_id=${post_id}` : ''}`)

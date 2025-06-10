@@ -86,7 +86,7 @@ const EditMessenger: FC<IEditMessengerProps> = ({setState, setEntity, refSidebar
     const refEditSubscribers = useRef<HTMLDivElement>(null)
     const refEditRemoved = useRef<HTMLDivElement>(null)
 
-    const {id} = useParams()
+    const {messengerId} = useParams()
     useAnimation(isLoaded, setAnimation, setState)
 
     const handleImageChange = (file: FileList | null, onChange: (value: File) => void) => {
@@ -106,10 +106,10 @@ const EditMessenger: FC<IEditMessengerProps> = ({setState, setEntity, refSidebar
     } = useForm({defaultValues: InitialValues})
 
     useEffect(() => {
-        if (!id) return
+        if (!messengerId) return
 
         const getSettings = async () => {
-            messengerService.getMessengerSettings(id)
+            messengerService.getMessengerSettings(messengerId)
                 .then(res => res.data)
                 .then(data => {
                     if (!data.messenger_name) throw data
@@ -128,15 +128,15 @@ const EditMessenger: FC<IEditMessengerProps> = ({setState, setEntity, refSidebar
         }
 
         getSettings().catch(e => console.log(e))
-    }, [id, setValue])
+    }, [messengerId, setValue])
 
     const handleChange: SubmitHandler<IEditMessengerForm> = async (data) => {
-        if (!id) return
+        if (!messengerId) return
 
         try {
             const formData = new FormData()
 
-            formData.append('messenger_id', id)
+            formData.append('messenger_id', messengerId)
             formData.append('messenger_name', data.messenger_name)
             formData.append('messenger_image', data.messenger_image as File)
             formData.append('messenger_desc', data.messenger_desc)

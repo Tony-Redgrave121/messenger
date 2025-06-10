@@ -1,97 +1,95 @@
-import React, {Dispatch, FC, memo, SetStateAction, useEffect, useState} from 'react'
+import {useEffect, useRef, useState} from 'react'
 import style from '../style.module.css'
 import '../animationWrapper.css'
-import {IAdaptMessenger, ICommentState, IMessagesResponse, IReaction} from "@appTypes";
+import {IMessagesResponse} from "@appTypes";
 import {Message} from "../message";
 import {InputBlock} from "@components/inputBlock";
 import CommentsHeader from "../messengerHeader/CommentsHeader";
 import userService from "@service/UserService";
-import {useAppSelector} from "@hooks/useRedux";
 import {useParams} from "react-router-dom";
-import {useMessageWS} from "@utils/hooks/useMessageWS";
+import useFetchInitialData from "@hooks/useFetchInitialData";
 
-interface ICommentsBlock {
-    channelPost: IMessagesResponse,
-    messenger: IAdaptMessenger,
-    setState: Dispatch<SetStateAction<ICommentState>>,
-    reactions?: IReaction[]
-}
-
-const CommentsBlock: FC<ICommentsBlock> = memo(({channelPost, messenger, setState, reactions}) => {
+const CommentsBlock = () => {
     const [reply, setReply] = useState<IMessagesResponse | null>(null)
-    const userId = useAppSelector(state => state.user.userId)
-    const {type, id} = useParams()
+    const [channelPost, setChannelPost] = useState<IMessagesResponse | null>(null)
+    const {type, messengerId, postId} = useParams()
+    const [animation, setAnimation] = useState(false)
+
 
     const {
-        socketRef,
+        messenger,
+        reactions,
         messagesList,
         setMessagesList,
-    } = useMessageWS(`${id}/${channelPost.message_id}`)
+        socketRef
+    } = useFetchInitialData()
 
     useEffect(() => {
-        if (!channelPost || !type || !id) return
-        let timer: NodeJS.Timeout | null
+        if (!type || !messengerId || !postId) return
 
         const controller = new AbortController()
         const signal = controller.signal
 
-        const handleComments = async () => {
-            const data = await userService.fetchMessages(userId, type, id, channelPost.message_id, signal)
+        const handlePostFetching = async () => {
+            const data = await userService.fetchMessage(messengerId, postId, signal)
 
             if (data.status === 200) {
-                setMessagesList(data.data)
+                setChannelPost(data.data)
             }
         }
-
-        timer = setTimeout(() => handleComments(), 300)
+        handlePostFetching()
 
         return () => {
             controller.abort()
-            timer && clearTimeout(timer)
         }
-    }, [channelPost])
+    }, [])
 
     return (
-        <div className={style.ChatContainer}>
-            <CommentsHeader
-                comments_count={channelPost ? channelPost.comments_count : 0}
-                setState={setState}
-                setCommentsList={setMessagesList}
-            />
-            <section className={style.MessageBlock}>
-                <Message
-                    message={channelPost}
-                    postId={channelPost.message_id}
-                    messenger={messenger}
-                    socketRoom={`${id}/${channelPost.message_id}`}
-                    setReply={setReply}
-                    socketRef={socketRef}
-                    reactions={reactions}
-                />
-                {messagesList.map(message =>
-                    <Message
-                        message={message}
-                        messenger={{
-                            ...messenger,
-                            type: 'group',
-                        }}
-                        key={message.message_id}
-                        setReply={setReply}
-                        socketRoom={`${id}/${channelPost.message_id}`}
-                        socketRef={socketRef}
-                        reactions={reactions}
+        <>
+            {messenger &&
+                <div className={style.ChatContainer}>
+                    <CommentsHeader
+                        comments_count={channelPost ? channelPost.comments_count : 0}
+                        messenger={messenger}
+                        setCommentsList={setMessagesList}
                     />
-                )}
-            </section>
-            <InputBlock
-                socketRoom={`${id}/${channelPost.message_id}`}
-                post_id={channelPost.message_id}
-                setReply={setReply}
-                reply={reply}
-                socketRef={socketRef}
-            />
-        </div>
+                    <section className={style.MessageBlock}>
+                        {channelPost &&
+                            <Message
+                                message={channelPost}
+                                messenger={messenger}
+                                socketRoom={`${messengerId}/${postId}`}
+                                setReply={setReply}
+                                socketRef={socketRef}
+                                reactions={reactions}
+                            />
+                        }
+                        {(channelPost && messagesList.length) && messagesList.map(message =>
+                            <Message
+                                message={message}
+                                messenger={{
+                                    ...messenger,
+                                    type: 'group',
+                                }}
+                                key={message.message_id}
+                                setReply={setReply}
+                                socketRoom={`${messengerId}/${postId}`}
+                                socketRef={socketRef}
+                                reactions={reactions}
+                            />
+                        )}
+                    </section>
+                    <InputBlock
+                        socketRoom={`${messengerId}/${postId}`}
+                        post_id={postId}
+                        setReply={setReply}
+                        reply={reply}
+                        socketRef={socketRef}
+                    />
+                </div>
+            }
+        </>
     )
-})
+}
 
 export default CommentsBlock

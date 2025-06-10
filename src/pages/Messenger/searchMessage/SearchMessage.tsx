@@ -1,4 +1,4 @@
-import React, {Dispatch, FC, memo, SetStateAction, useMemo, useRef, useState} from 'react'
+import React, {Dispatch, FC, memo, SetStateAction, useEffect, useMemo, useRef, useState} from 'react'
 import style from './style.module.css'
 import '../animation.css'
 import {LoadFile} from "@components/loadFile";
@@ -8,31 +8,33 @@ import {
 import {Buttons} from "@components/buttons"
 import {SearchBlock} from "@components/searchBlock"
 import {CSSTransition} from 'react-transition-group'
-import {IMessagesResponse} from "@appTypes"
+import {IAdaptMessenger, IMessagesResponse} from "@appTypes"
 import {getDate} from "@utils/logic/getDate"
 import debounce from "debounce";
 import SearchService from "@service/SearchService";
 import {useParams} from "react-router-dom";
 import {useAppSelector} from "@hooks/useRedux";
+import scrollInto from "@utils/logic/scrollInto";
 
 interface IChatHeader {
+    messenger: IAdaptMessenger,
     state: boolean,
     setState: Dispatch<SetStateAction<boolean>>
 }
 
-const SearchMessage: FC<IChatHeader> = memo(({state, setState}) => {
+const SearchMessage: FC<IChatHeader> = memo(({messenger, state, setState}) => {
     const [searchRes, setSearchRes] = useState<IMessagesResponse[]>([])
     const [filter, setFilter] = useState('')
 
     const searchRef = useRef<HTMLDivElement>(null)
     const animationRef = useRef<HTMLDivElement>(null)
-    const {type, id} = useParams()
-    const user_id = useAppSelector(state => state.user.userId)
+    const {type, messengerId, postId} = useParams()
+    const userId = useAppSelector(state => state.user.userId)
 
     const searchDebounce = useMemo(() =>
         debounce(async (query: string) => {
             try {
-                if (!query || !id || !type) return
+                if (!query || !messengerId || !type) return setSearchRes([])
 
                 const controller = new AbortController()
                 const signal = controller.signal
@@ -40,24 +42,21 @@ const SearchMessage: FC<IChatHeader> = memo(({state, setState}) => {
                 const params = {
                     query: query,
                     type: type,
-                    user_id: user_id,
-                    messenger_id: id,
-                    post_id: undefined,
+                    user_id: userId,
+                    messenger_id: messengerId,
+                    post_id: postId,
                 }
 
                 const res = await SearchService.getMessages(params, signal)
 
                 if (res.status === 200) {
                     const messagesData = res.data
-
-                    console.log(messagesData)
-
                     setSearchRes(messagesData)
                 }
             } catch (e) {
                 console.error(e)
             }
-        }, 200), [id, user_id]
+        }, 200), [messengerId, userId]
     )
 
     const handleInput = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -84,6 +83,16 @@ const SearchMessage: FC<IChatHeader> = memo(({state, setState}) => {
         )
     }
 
+    useEffect(() => {
+        setSearchRes([])
+    }, [messengerId])
+
+    const onClick = (message_id: string) => {
+        setState(false)
+        scrollInto(message_id)
+        setSearchRes([])
+    }
+
     return (
         <CSSTransition
             in={state}
@@ -95,21 +104,33 @@ const SearchMessage: FC<IChatHeader> = memo(({state, setState}) => {
             <div className={style.SearchBlock} ref={animationRef}>
                 <div className={style.SearchTopBar}>
                     <SearchBlock ref={searchRef} foo={handleInput}/>
-                    <Buttons.DefaultButton foo={() => setState(false)}>
+                    <Buttons.DefaultButton foo={() => {
+                        setState(false)
+                        setSearchRes([])
+                    }}>
                         <HiOutlineXMark/>
                     </Buttons.DefaultButton>
                 </div>
                 {searchRes.length > 0 &&
                     <div className={style.SearchList}>
                         {searchRes.map(message => (
-                            <button key={message.user.user_id + message.message_id} className={style.SearchedMessage}>
+                            <button key={message.user.user_id + message.message_id} className={style.SearchedMessage} onClick={() => onClick(message.message_id)}>
                                 <div className={style.MessageInfo}>
-                                    <LoadFile
-                                        imagePath={message.user.user_img && `users/${message.user.user_id}/${message.user.user_img}`}
-                                        imageTitle={message.user.user_name}
-                                    />
+                                    {messenger.type === 'channel' ?
+                                        <LoadFile
+                                            imagePath={messenger.image && `messengers/${messenger.id}/${messenger.image}`}
+                                            imageTitle={messenger.name}
+                                        /> :
+                                        <LoadFile
+                                            imagePath={message.user.user_img && `users/${message.user.user_id}/${message.user.user_img}`}
+                                            imageTitle={message.user.user_name}
+                                        />
+                                    }
                                     <div className={style.MessageDetail}>
-                                        <p>{message.user.user_name}</p>
+                                        {messenger.type === 'channel' ?
+                                            <p>{messenger.name}</p> :
+                                            <p>{message.user.user_name}</p>
+                                        }
                                         {message.message_text &&
                                             <p>{highlightWord(message.message_text, filter)}</p>
                                         }

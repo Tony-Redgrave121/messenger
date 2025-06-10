@@ -38,13 +38,13 @@ const PopupEditRemoved: FC<IPopupEditModeratorsProps> = (
         filter
     } = useSearch(userToRemove, 'user_name')
 
-    const {id} = useParams()
+    const {messengerId} = useParams()
 
-    const handleRemoveMember = async (user_id: string) => {
-        if (!id) return
+    const handleRemoveMember = async (userId: string) => {
+        if (!messengerId) return
 
         try {
-            const newRemovedMember = await MessengerService.postRemoved(user_id, id)
+            const newRemovedMember = await MessengerService.postRemoved(userId, messengerId)
             if (newRemovedMember.data.message) return
 
             setSettings(prev => ({

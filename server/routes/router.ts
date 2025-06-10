@@ -3,7 +3,7 @@ import {
     DELETE_ACCOUNT_ROUTE, DELETE_MESSAGE,
     FETCH_MESSAGES, FETCH_MESSENGER,
     FETCH_MESSENGERS_LIST, LOGIN_ROUTE,
-    LOGOUT_ROUTE, POST_MESSAGE,
+    LOGOUT_ROUTE, MESSAGE,
     REFRESH_ROUTE, REGISTRATION_ROUTE,
     GET_CONTACTS, GET_MESSENGER_SETTINGS,
     GET_REACTIONS, PUT_MESSENGER_TYPE,
@@ -11,7 +11,7 @@ import {
     PUT_MESSENGER_MODERATORS, POST_REMOVED,
     POST_CONTACTS_MEMBERS, POST_MEMBER,
     DELETE_REMOVED, DELETE_MEMBER,
-    PROFILE, PASSWORD, REACTIONS, SEARCH_MESSENGERS, SEARCH_MESSAGES
+    PROFILE, PASSWORD, REACTIONS, SEARCH_MESSENGERS, SEARCH_MESSAGES,
 } from "../utils/const"
 import express from "express"
 import UserController from "../controller/userController"
@@ -33,7 +33,8 @@ router.post(CONFIRM_EMAIL, AuthController.confirmEmail)
 router.get(FETCH_MESSENGER, UserController.fetchMessenger)
 router.get(FETCH_MESSENGERS_LIST, UserController.fetchMessengersList)
 router.get(FETCH_MESSAGES, UserController.fetchMessages)
-router.post(POST_MESSAGE, UserController.postMessage)
+router.post(MESSAGE, UserController.postMessage)
+router.get(MESSAGE, UserController.fetchMessage)
 router.delete(DELETE_MESSAGE, UserController.deleteMessage)
 
 router.get(GET_CONTACTS, MessengerController.getContacts)

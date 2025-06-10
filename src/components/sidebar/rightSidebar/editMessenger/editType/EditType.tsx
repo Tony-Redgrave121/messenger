@@ -36,16 +36,16 @@ const EditType: FC<IEditTypeProps> = (
     const refForm = useRef<HTMLDivElement>(null)
     useSettingsAnimation(state.state, setAnimation, setState, 'channelType')
 
-    const {id} = useParams()
+    const {messengerId} = useParams()
     const navigate = useNavigate()
     const {handleCopy} = useCopy()
 
     useEffect(() => {
-        if (!id) return
+        if (!messengerId) return
 
         setNewMessengerType(messengerType)
-        setNewMessengerLink(id)
-    }, [messengerType, id])
+        setNewMessengerLink(messengerId)
+    }, [messengerType, messengerId])
 
     const handleMessengerType = async (type: string) => {
         if (!newMessengerLink) return

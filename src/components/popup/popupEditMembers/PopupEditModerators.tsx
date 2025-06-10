@@ -42,13 +42,13 @@ const PopupEditMembers: FC<IPopupEditModeratorsProps> = (
         filter
     } = useSearch<IContact, 'user_name'>(unrated, 'user_name')
 
-    const {id} = useParams()
+    const {messengerId} = useParams()
 
-    const handleAddModerator = async (user_id: string) => {
-        if (!id) return
+    const handleAddModerator = async (userId: string) => {
+        if (!messengerId) return
 
         try {
-            const newModerators = await MessengerService.putMessengerModerator('moderator', user_id, id)
+            const newModerators = await MessengerService.putMessengerModerator('moderator', userId, messengerId)
 
             if (newModerators.data.message) return
 

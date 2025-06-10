@@ -1,4 +1,4 @@
-import React, {Dispatch, FC, memo, SetStateAction, useRef, useState} from 'react'
+import {Dispatch, FC, memo, SetStateAction, useState} from 'react'
 import style from './style.module.css'
 import '../animation.css'
 import {
@@ -7,27 +7,24 @@ import {
     HiOutlineArrowLeft
 } from "react-icons/hi2"
 import {Buttons} from "@components/buttons"
-import {SearchBlock} from "@components/searchBlock"
-import {CSSTransition} from 'react-transition-group'
-import {ICommentState, IMessagesResponse} from "@appTypes";
+import {IAdaptMessenger, IMessagesResponse} from "@appTypes";
+import SearchMessage from "../searchMessage/SearchMessage";
+import {useNavigate} from "react-router-dom";
 
 interface ICommentsHeader {
     comments_count?: number,
-    setState: Dispatch<SetStateAction<ICommentState>>,
+    messenger: IAdaptMessenger,
     setCommentsList: Dispatch<SetStateAction<IMessagesResponse[]>>,
 }
 
-const CommentsHeader: FC<ICommentsHeader> = memo(({comments_count, setState, setCommentsList}) => {
+const CommentsHeader: FC<ICommentsHeader> = memo(({comments_count, messenger, setCommentsList}) => {
     const [inputState, setInputState] = useState(false)
-    const refSearch = useRef<HTMLDivElement>(null)
+    const navigate = useNavigate()
 
     const handleClose = () => {
         let timer: NodeJS.Timeout | null
 
-        setState(prev => ({
-            ...prev,
-            commentState: false
-        }))
+        navigate(`/channel/${messenger.id}`)
 
         timer = setTimeout(() => setCommentsList([]), 300)
 
@@ -42,16 +39,12 @@ const CommentsHeader: FC<ICommentsHeader> = memo(({comments_count, setState, set
                 <HiOutlineArrowLeft/>
             </Buttons.DefaultButton>
             <p>{comments_count} Comments</p>
+            <SearchMessage
+                messenger={messenger}
+                state={inputState}
+                setState={setInputState}
+            />
             <span>
-                <CSSTransition
-                    in={inputState}
-                    nodeRef={refSearch}
-                    timeout={300}
-                    classNames='scale-node'
-                    unmountOnExit
-                >
-                    <SearchBlock ref={refSearch} foo={() => {}}/>
-                </CSSTransition>
                 <Buttons.DefaultButton foo={() => setInputState(!inputState)}>
                     {inputState ? <HiOutlineXMark/> : <HiOutlineMagnifyingGlass/>}
                 </Buttons.DefaultButton>

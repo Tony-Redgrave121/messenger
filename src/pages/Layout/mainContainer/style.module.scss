@@ -21,11 +21,23 @@
     //background: linear-gradient(-45deg, rgba(0, 0, 0, .75) 0%, rgba(0, 0, 0, .85) 50%, rgba(0, 0, 0, .75) 100%);
     background: linear-gradient(-45deg, rgba(0, 0, 0, .25) 0%, rgba(0, 0, 0, .55) 50%, rgba(0, 0, 0, .25) 100%);
   }
+
+  .Wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: calc(100vw - 420px);
+    min-width: 500px;
+  }
 }
 
 @media screen and (max-width: 940px) {
   .MainContainer {
     width: 100vw;
     justify-content: start;
+
+    .Wrapper {
+      width: 100%;
+    }
   }
 }

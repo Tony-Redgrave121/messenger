@@ -93,6 +93,28 @@ class UserController {
         }
     };
 
+    fetchMessage = async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            const {messenger_id, message_id} = req.query
+
+            if (
+                !message_id ||
+                !messenger_id ||
+                typeof message_id !== 'string' ||
+                typeof messenger_id !== 'string'
+            ) return next(ApiError.badRequest('Missing required fields'))
+
+            const data = await UserService.fetchMessage(message_id, messenger_id)
+
+            if (data instanceof ApiError)
+                return next(ApiError.internalServerError('An error occurred while fetching a message'))
+
+            res.json(data)
+        } catch (e) {
+            return next(e)
+        }
+    };
+
     deleteMessage = async (req: Request, res: Response, next: NextFunction) => {
         try {
             const {message_id, post_id} = req.query

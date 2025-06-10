@@ -1,13 +1,5 @@
 @use '../../styles/base/_variables.css' as v;
 
-.Wrapper {
-  position: relative;
-  display: flex;
-  align-items: center;
-  width: calc(100vw - 420px);
-  min-width: 500px;
-}
-
 .ChatContainer {
   display: flex;
   align-items: center;
@@ -52,11 +44,5 @@
 
   > :last-child {
     max-width: 700px;
-  }
-}
-
-@media screen and (max-width: 940px) {
-  .Wrapper {
-    width: 100%;
   }
 }

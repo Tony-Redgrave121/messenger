@@ -6,7 +6,7 @@ import {IMessengerSettings} from "@appTypes";
 const useEditSettings = (
     setSettings: Dispatch<SetStateAction<IMessengerSettings>>
 ) => {
-    const {id} = useParams()
+    const {messengerId} = useParams()
     const [popup, setPopup] = useState(false)
 
     const handleCancel = () => {
@@ -14,11 +14,11 @@ const useEditSettings = (
         setTimeout(() => setPopup(false), 300)
     }
 
-    const dismissModerator = async (user_id: string) => {
-        if (!id) return
+    const dismissModerator = async (userId: string) => {
+        if (!messengerId) return
 
         try {
-            const newModerators = await MessengerService.putMessengerModerator('member', user_id, id)
+            const newModerators = await MessengerService.putMessengerModerator('member', userId, messengerId)
 
             if (newModerators.data.message) return
 
@@ -35,11 +35,11 @@ const useEditSettings = (
         }
     }
 
-    const addToGroup = async (user_id: string) => {
-        if (!id) return
+    const addToGroup = async (userId: string) => {
+        if (!messengerId) return
 
         try {
-            const newMembers = await MessengerService.postMember(user_id, id)
+            const newMembers = await MessengerService.postMember(userId, messengerId)
             if (newMembers.data.message) return
 
             setSettings(prev => ({
@@ -49,23 +49,23 @@ const useEditSettings = (
 
             setSettings(prev => ({
                 ...prev,
-                removed_users: [...prev.removed_users.filter(({user}) => user.user_id !== user_id)]
+                removed_users: [...prev.removed_users.filter(({user}) => user.user_id !== userId)]
             }))
         } catch (error) {
             console.log(error)
         }
     }
 
-    const deleteFromRemoved = async (user_id: string) => {
-        if (!id) return
+    const deleteFromRemoved = async (userId: string) => {
+        if (!messengerId) return
 
         try {
-            const deletedRemoved = await MessengerService.deleteRemoved(user_id, id)
+            const deletedRemoved = await MessengerService.deleteRemoved(userId, messengerId)
 
             if (deletedRemoved.status === 200) {
                 setSettings(prev => ({
                     ...prev,
-                    removed_users: [...prev.removed_users.filter(({user}) => user.user_id !== user_id)]
+                    removed_users: [...prev.removed_users.filter(({user}) => user.user_id !== userId)]
                 }))
             }
         } catch (error) {
@@ -73,21 +73,21 @@ const useEditSettings = (
         }
     }
 
-    const deleteFromGroup = async (user_id: string) => {
-        if (!id) return
+    const deleteFromGroup = async (userId: string) => {
+        if (!messengerId) return
 
         try {
-            const deletedMember = await MessengerService.deleteMember(user_id, id)
+            const deletedMember = await MessengerService.deleteMember(userId, messengerId)
 
             if (deletedMember.status === 200) {
                 setSettings(prev => ({
                     ...prev,
-                    members: [...prev.members.filter(({user}) => user.user_id !== user_id)]
+                    members: [...prev.members.filter(({user}) => user.user_id !== userId)]
                 }))
 
                 setSettings(prev => ({
                     ...prev,
-                    moderators: [...prev.moderators.filter(({user}) => user.user_id !== user_id)]
+                    moderators: [...prev.moderators.filter(({user}) => user.user_id !== userId)]
                 }))
             }
         } catch (error) {

@@ -11,8 +11,8 @@ import IUser from "../types/IUser";
 import changeOldImage from "../lib/changeOldImage";
 import bcrypt from "bcrypt";
 import IMessagesResponse from "../types/IMessagesResponse";
-import IReaction from "../types/IReaction";
 import findAllMessagesQuery from "../lib/querys/findAllMessagesQuery";
+import normalizeMessage from "../lib/normalizeMessage";
 
 interface IPostMessage {
     user_id: string,
@@ -191,43 +191,38 @@ class UserService {
             order: [['message_date', 'ASC']],
         })
 
-        if (!messages) throw ApiError.internalServerError("An error occurred while fetching the messages")
-
+        if (!messages) throw ApiError.internalServerError("An error occurred while fetching messages")
         const messagesPlain = JSON.parse(JSON.stringify(messages)) as IMessagesResponse[]
 
         const updatedMessages = await Promise.all(
-            messagesPlain.map(async (message) => {
-                const reactions = await models.message_reactions.findAll({
-                    attributes: [
-                        [Sequelize.fn('COUNT', Sequelize.col('message_reactions.reaction_id')), 'reaction_count'],
-                        [Sequelize.literal(`STRING_AGG("message_reactions"."user_id"::text, ',')`), 'users_ids']
-                    ],
-                    include: [{
-                        model: models.reactions,
-                    }],
-                    group: ['reaction.reaction_id'],
-                    where: {message_id: message.message_id},
-                    raw: true,
-                    nest: true,
-                    order: [['reaction_count', 'DESC']],
-                }) as unknown as {
-                    reaction_count: string,
-                    reaction: IReaction,
-                    users_ids: string,
-                }[]
-
-                message.reactions = reactions?.map((reaction) => ({
-                    ...reaction,
-                    users_ids: reaction.users_ids?.split(',') ?? []
-                }))
-
-                return message
-            })
+            messagesPlain.map(async (message) => normalizeMessage(message))
         )
 
-        if (!updatedMessages) throw ApiError.internalServerError("An error occurred while fetching the messages")
+        if (!updatedMessages) throw ApiError.internalServerError("An error occurred while fetching messages")
 
         return updatedMessages
+    }
+
+    async fetchMessage(message_id: string, messenger_id: string) {
+        const message = await models.message.findOne({
+            where: {
+                messenger_id: messenger_id,
+                message_id: message_id
+            },
+            ...findAllMessagesQuery,
+            attributes: {
+                include: [[Sequelize.fn("COUNT", Sequelize.col("comments.parent_post_id")), "comments_count"]]
+            },
+            order: [['message_date', 'ASC']],
+        })
+
+        if (!message) throw ApiError.internalServerError("An error occurred while fetching a message")
+        const messagePlain = JSON.parse(JSON.stringify(message)) as IMessagesResponse
+        const updatedMessage = normalizeMessage(messagePlain)
+
+        if (!updatedMessage) throw ApiError.internalServerError("An error occurred while fetching a message")
+
+        return updatedMessage
     }
 
     async postMessage(message: IPostMessage, files: FileArray | null | undefined) {

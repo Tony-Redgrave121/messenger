@@ -41,7 +41,7 @@ app.use(cookieParser())
 app.use(router)
 app.use(errorHandler)
 
-app.ws("/chat", messengerHandlerWS(aWss))
+app.ws("/messenger", messengerHandlerWS(aWss))
 app.ws("/live-updates", liveUpdatesHandlerWS(aWss))
 
 const startServer = async () => {

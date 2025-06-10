@@ -17,14 +17,14 @@ const PopupEditSubscribers: FC<IPopupEditSubscribersProps> = ({handleCancel, set
     const {contacts} = useGetContacts()
     const [members, setMembers] = useState<IContact[]>([])
 
-    const {id} = useParams()
+    const {messengerId} = useParams()
 
     const handleAddMembers = async () => {
-        if (!id) return
+        if (!messengerId) return
 
         try {
             const membersId = members.map(member => member.user_id)
-            const newMembers = await MessengerService.postContactsMembers(membersId, id)
+            const newMembers = await MessengerService.postContactsMembers(membersId, messengerId)
 
             if (newMembers.data.message) return
 

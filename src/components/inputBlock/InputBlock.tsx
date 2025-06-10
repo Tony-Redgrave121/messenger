@@ -64,11 +64,11 @@ const InputBlock: FC<IInputBlock> = ({post_id, reply, setReply, socketRoom, sock
         }
     }
 
-    const {type, id} = useParams()
+    const {type, messengerId} = useParams()
     const user_id = useAppSelector(state => state.user.userId)
 
     const handleSubmit = async () => {
-        if (!type || !id) return
+        if (!type || !messengerId) return
 
         if ((filesState.files || inputText) && socketRef.current) {
             const message = new FormData()
@@ -78,8 +78,8 @@ const InputBlock: FC<IInputBlock> = ({post_id, reply, setReply, socketRoom, sock
             post_id && message.append('post_id', post_id)
             message.append('user_id', user_id)
             type !== "chat" ?
-                message.append('messenger_id',  id) :
-                message.append('recipient_user_id', id)
+                message.append('messenger_id',  messengerId) :
+                message.append('recipient_user_id', messengerId)
 
             if (filesRef && filesRef.current) {
                 filesRef.current.forEach((file: File) => message.append('message_files', file))

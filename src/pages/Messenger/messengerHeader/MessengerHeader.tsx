@@ -109,13 +109,22 @@ const MessengerHeader: FC<IChatHeader> = memo(({messenger, setSidebarState}) => 
                 <HiOutlineArrowLeft/>
             </Buttons.DefaultButton>
             <button className={style.DeskBlock} onClick={() => setSidebarState(true)}>
-                <LoadFile imagePath={messenger.image ? `${messenger.type !== "chat" ? "messengers" : "users"}/${messenger.id}/${messenger.image}` : ''} imageTitle={messenger.type} key={messenger.id}/>
+                <LoadFile
+                    imagePath={
+                        messenger.image ?
+                            `${messenger.type !== "chat" ? "messengers" : "users"}/${messenger.id}/${messenger.image}` :
+                            ''
+                    }
+                    imageTitle={messenger.name}
+                    key={messenger.id}
+                />
                 <div>
                     <h3>{messenger.name}</h3>
                     <p>{getHeaderDesc()}</p>
                 </div>
             </button>
             <SearchMessage
+                messenger={messenger}
                 state={inputState}
                 setState={setInputState}
             />

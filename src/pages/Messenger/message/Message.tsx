@@ -22,7 +22,7 @@ import {useAppSelector} from "@hooks/useRedux";
 import {DropDown} from "@components/dropDown";
 import {DocumentBlock} from "./index";
 import UserService from "@service/UserService";
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import handleContextMenu from "@utils/logic/handleContextMenu";
 import {CSSTransition} from 'react-transition-group'
 import './animation.css'
@@ -32,6 +32,7 @@ import {clsx} from 'clsx'
 import getTitle from "@utils/logic/getTitle";
 import ReactionsBlock from "./reactionsBlock/ReactionsBlock";
 import useReaction from "@utils/hooks/useReaction";
+import scrollInto from "@utils/logic/scrollInto";
 
 interface IMessageProps {
     message: IMessagesResponse,
@@ -59,7 +60,6 @@ const Message: FC<IMessageProps> = (
         socketRoom,
         socketRef,
         messenger,
-        setComment,
         reactions
     }
 ) => {
@@ -81,6 +81,8 @@ const Message: FC<IMessageProps> = (
         state: false,
         mounted: false
     })
+
+    const navigate = useNavigate()
 
     const handleDelete = useCallback(async () => {
         if (!socketRoom) return
@@ -228,10 +230,6 @@ const Message: FC<IMessageProps> = (
         }
     }, [message.message_files, message.message_type])
 
-    const scrollInto = (id: string) => {
-        document.getElementById(id)?.scrollIntoView({block: 'center'})
-    }
-
     return (
         <CSSTransition
             in={animateMessage}
@@ -299,11 +297,8 @@ const Message: FC<IMessageProps> = (
                                 {handleReactions()}
                             </div>
                         </div>
-                        {messenger.type === 'channel' && setComment &&
-                            <div className={style.CommentsContainer} onClick={() => setComment({
-                                comment: message,
-                                commentState: true
-                            })}>
+                        {messenger.type === 'channel' &&
+                            <div className={style.CommentsContainer} onClick={() => navigate(`/channel/${messenger.id}/post/${message.message_id}`)}>
                                 <p>{message.comments_count} Comments</p>
                                 <HiOutlineChevronRight/>
                             </div>

@@ -6,6 +6,7 @@ interface IAppState {
     newMessenger: IMessengersListResponse[] | null,
     popupMessageChildren: string,
     popupMessageState: boolean,
+    wrapperState: boolean,
 }
 
 const initialState: IAppState = {
@@ -13,6 +14,7 @@ const initialState: IAppState = {
     newMessenger: null,
     popupMessageChildren: '',
     popupMessageState: false,
+    wrapperState: false,
 }
 
 const appSlice = createSlice({
@@ -31,6 +33,9 @@ const appSlice = createSlice({
         },
         setPopupMessageState(state, action) {
             state.popupMessageState = action.payload
+        },
+        setWrapperState(state, action) {
+            state.wrapperState = action.payload
         }
     }
 })
@@ -40,5 +45,6 @@ export const {
     setSidebarLeft,
     setMessengersList,
     setPopupMessageChildren,
-    setPopupMessageState
+    setPopupMessageState,
+    setWrapperState
 } = appSlice.actions
