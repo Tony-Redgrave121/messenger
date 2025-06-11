@@ -1,32 +1,30 @@
-import {useEffect, useState} from "react"
+import {useEffect} from "react"
 import messengerService from "../service/MessengerService"
-import {useAppSelector} from "@hooks/useRedux"
-import {IContact} from "@appTypes";
+import {useAppDispatch, useAppSelector} from "@hooks/useRedux"
+import {setContacts} from "@store/reducers/liveUpdatesReducer";
 
 const useGetContacts = () => {
     const userId = useAppSelector(state => state.user.userId)
-    const [contacts, setContacts] = useState<IContact[]>([])
+    const dispatch = useAppDispatch()
 
     useEffect(() => {
         const controller = new AbortController()
 
         const getContacts = async () => {
-            const contacts = await messengerService.getContacts(userId, controller.signal) as any
-            const payload = contacts.payload
+            try {
+                const contacts = await messengerService.getContacts(userId, controller.signal)
 
-            if (payload && payload.message) return console.log(payload.message)
-            setContacts(contacts.data)
+                if (contacts.status === 200) {
+                    dispatch(setContacts(contacts.data))
+                }
+            } catch (error) {
+                console.log(error)
+            }
         }
-
-        getContacts().catch(error => console.log(error))
+        getContacts()
 
         return () => controller.abort()
     }, [userId])
-
-    return {
-        setContacts,
-        contacts
-    }
 }
 
 export default useGetContacts

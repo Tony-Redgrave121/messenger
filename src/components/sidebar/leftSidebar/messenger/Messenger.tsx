@@ -15,7 +15,7 @@ import {useNavigate} from "react-router-dom";
 import {IMessenger, IContact} from "@appTypes";
 import messengerService from "@service/MessengerService"
 import {useAppDispatch, useAppSelector} from "@hooks/useRedux";
-import {setMessengersList} from "@store/reducers/appReducer";
+import {setMessengersList} from "@store/reducers/liveUpdatesReducer";
 import useGetContacts from "@hooks/useGetContacts"
 import {SearchBlock} from "@components/searchBlock"
 import {ContactList, AddContacts} from "@components/contacts";
@@ -46,7 +46,8 @@ const Messenger: FC<IMessengerProps> = ({messengerCreation, setMessengerCreation
     const [members, setMembers] = useState<IContact[]>([])
     const [picture, setPicture] = useState<File | null>(null)
     const [animationState, setAnimationState] = useState(false)
-    const {contacts} = useGetContacts()
+    const contacts = useAppSelector(state => state.live.contacts)
+
     const {filteredArr, handleInput} = useSearch(contacts, 'user_name')
 
     const refSidebar = useRef(null)
@@ -187,7 +188,7 @@ const Messenger: FC<IMessengerProps> = ({messengerCreation, setMessengerCreation
                             </InputForm>
                         }
                         {(members && contacts.length > 0) &&
-                            <AddContacts members={members} contacts={contacts} setMembers={setMembers}/>
+                            <AddContacts members={members} setMembers={setMembers}/>
                         }
                         {errorForm && <small>{errorForm}</small>}
                     </form>

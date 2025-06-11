@@ -1,9 +1,7 @@
 import {createSlice} from "@reduxjs/toolkit"
-import {IMessengersListResponse} from "@appTypes"
 
 interface IAppState {
     sidebarLeft: boolean,
-    newMessenger: IMessengersListResponse[] | null,
     popupMessageChildren: string,
     popupMessageState: boolean,
     wrapperState: boolean,
@@ -11,10 +9,9 @@ interface IAppState {
 
 const initialState: IAppState = {
     sidebarLeft: true,
-    newMessenger: null,
     popupMessageChildren: '',
     popupMessageState: false,
-    wrapperState: false,
+    wrapperState: true,
 }
 
 const appSlice = createSlice({
@@ -23,10 +20,6 @@ const appSlice = createSlice({
     reducers: {
         setSidebarLeft(state, action) {
             state.sidebarLeft = action.payload
-        },
-        setMessengersList(state, action) {
-            if (Array.isArray(action.payload)) state.newMessenger = action.payload
-            else state.newMessenger = [action.payload]
         },
         setPopupMessageChildren(state, action) {
             state.popupMessageChildren = action.payload
@@ -43,7 +36,6 @@ const appSlice = createSlice({
 export default appSlice.reducer
 export const {
     setSidebarLeft,
-    setMessengersList,
     setPopupMessageChildren,
     setPopupMessageState,
     setWrapperState

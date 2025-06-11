@@ -7,7 +7,7 @@ import {IMessengersListResponse} from "@appTypes"
 
 const ChatList = memo(() => {
     const user_id = useAppSelector(state => state.user.userId)
-    const newMessenger = useAppSelector(state => state.app.newMessenger)
+    const newMessenger = useAppSelector(state => state.live.newMessenger)
 
     const [messengersList, setMessengersList] = useState<IMessengersListResponse[]>([])
 

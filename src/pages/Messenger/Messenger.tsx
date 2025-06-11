@@ -56,24 +56,21 @@ const Messenger = () => {
                             {messagesList.map(message =>
                                 <Message
                                     message={message}
-                                    postId={message.message_id}
                                     messenger={messenger}
                                     key={message.message_id}
                                     setReply={setReply}
-                                    socketRoom={messengerId}
                                     socketRef={socketRef}
                                     reactions={reactions}
                                 />
                             )}
                             <div ref={refEnd}/>
                         </section>
-                        {isMember(messenger.members!, user.userId) ?
-                            (messenger.type === "channel" ? checkRights(messenger.members!, user.userId) : true) && messengerId &&
+                        {messenger.type === 'chat' || isMember(messenger.members!, user.userId) ?
+                            (messenger.type === "channel" ? checkRights(messenger.members!, user.userId) : true) &&
                             <InputBlock
                                 setReply={setReply}
                                 reply={reply}
                                 socketRef={socketRef}
-                                socketRoom={messengerId}
                             /> :
                             <button className={style.SubscribeButton} onClick={subscribeToMessenger}>
                                 Subscribe

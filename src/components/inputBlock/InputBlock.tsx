@@ -22,13 +22,11 @@ import getFileObject from "../../utils/logic/getFileObject";
 
 interface IInputBlock {
     reply: IMessagesResponse | null,
-    post_id?: string,
     setReply: Dispatch<SetStateAction<IMessagesResponse | null>>,
-    socketRoom: string,
     socketRef: RefObject<WebSocket | null>
 }
 
-const InputBlock: FC<IInputBlock> = ({post_id, reply, setReply, socketRoom, socketRef}) => {
+const InputBlock: FC<IInputBlock> = ({reply, setReply, socketRef}) => {
     const [inputText, setInputText] = useState('')
     const refTextarea = useRef<HTMLTextAreaElement>(null)
 
@@ -64,7 +62,7 @@ const InputBlock: FC<IInputBlock> = ({post_id, reply, setReply, socketRoom, sock
         }
     }
 
-    const {type, messengerId} = useParams()
+    const {type, messengerId, postId} = useParams()
     const user_id = useAppSelector(state => state.user.userId)
 
     const handleSubmit = async () => {
@@ -75,7 +73,7 @@ const InputBlock: FC<IInputBlock> = ({post_id, reply, setReply, socketRoom, sock
             message.append('message_text', inputText)
             message.append('message_type', filesState.files ? filesState.type : 'message')
             reply && message.append('reply_id', reply.message_id)
-            post_id && message.append('post_id', post_id)
+            postId && message.append('post_id', postId)
             message.append('user_id', user_id)
             type !== "chat" ?
                 message.append('messenger_id',  messengerId) :
@@ -100,7 +98,7 @@ const InputBlock: FC<IInputBlock> = ({post_id, reply, setReply, socketRoom, sock
 
             if (newMessage && socketRef.current?.readyState === WebSocket.OPEN) {
                 socketRef.current.send(JSON.stringify({
-                    messenger_id: socketRoom,
+                    messenger_id: `${messengerId}${postId ? `/${postId}` : ''}`,
                     user_id: user_id,
                     method: 'POST_MESSAGE',
                     data: newMessage.data
@@ -184,7 +182,8 @@ const InputBlock: FC<IInputBlock> = ({post_id, reply, setReply, socketRoom, sock
                     type="file"
                     accept='image/*, video/*'
                     onChange={(event) => uploadFiles(event, 'media')}
-                    multiple/>
+                    multiple
+                />
             </label>
             <label htmlFor="documentInput">
                 <input
@@ -193,7 +192,8 @@ const InputBlock: FC<IInputBlock> = ({post_id, reply, setReply, socketRoom, sock
                     id='documentInput'
                     type="file"
                     onChange={(event) => uploadFiles(event, 'document')}
-                    multiple/>
+                    multiple
+                />
             </label>
         </div>
     )

@@ -1,4 +1,4 @@
-import {Dispatch, FC, memo, SetStateAction, useState} from 'react'
+import {FC, memo, useState} from 'react'
 import style from './style.module.css'
 import '../animation.css'
 import {
@@ -7,26 +7,30 @@ import {
     HiOutlineArrowLeft
 } from "react-icons/hi2"
 import {Buttons} from "@components/buttons"
-import {IAdaptMessenger, IMessagesResponse} from "@appTypes";
+import {IAdaptMessenger} from "@appTypes";
 import SearchMessage from "../searchMessage/SearchMessage";
 import {useNavigate} from "react-router-dom";
+import {setWrapperState} from "@store/reducers/appReducer";
+import {useAppDispatch} from "@hooks/useRedux";
 
 interface ICommentsHeader {
     comments_count?: number,
-    messenger: IAdaptMessenger,
-    setCommentsList: Dispatch<SetStateAction<IMessagesResponse[]>>,
+    messenger: IAdaptMessenger
 }
 
-const CommentsHeader: FC<ICommentsHeader> = memo(({comments_count, messenger, setCommentsList}) => {
+const CommentsHeader: FC<ICommentsHeader> = memo(({comments_count, messenger}) => {
     const [inputState, setInputState] = useState(false)
     const navigate = useNavigate()
+    const dispatch = useAppDispatch()
 
     const handleClose = () => {
         let timer: NodeJS.Timeout | null
+        dispatch(setWrapperState(false))
 
-        navigate(`/channel/${messenger.id}`)
-
-        timer = setTimeout(() => setCommentsList([]), 300)
+        timer = setTimeout(() => {
+            navigate(`/channel/${messenger.id}`)
+            dispatch(setWrapperState(true))
+        }, 300)
 
         return () => {
             timer && clearTimeout(timer)

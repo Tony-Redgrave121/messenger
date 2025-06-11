@@ -1,4 +1,4 @@
-import {FC, memo, useState} from 'react'
+import {Dispatch, FC, memo, SetStateAction, useState} from 'react'
 import style from './style.module.css'
 import '../animation.css'
 import {LoadFile} from "@components/loadFile";
@@ -8,8 +8,7 @@ import {
     HiOutlineUserPlus,
     HiOutlineTrash,
     HiOutlineBellSlash,
-    HiOutlineLockClosed,
-    HiOutlineArrowLeft
+    HiOutlineArrowLeft, HiOutlineUserMinus
 } from "react-icons/hi2"
 import {Buttons} from "@components/buttons"
 import {DropDown} from "@components/dropDown"
@@ -19,67 +18,13 @@ import {IAdaptMessenger} from "@appTypes";
 import {getDate} from "@utils/logic/getDate";
 import {clsx} from "clsx";
 import SearchMessage from "../searchMessage/SearchMessage";
-
-const HeaderLists = {
-    chat: [
-        {
-            liChildren: <HiOutlineBellSlash/>,
-            liText: 'Mute',
-            liFoo: () => {
-            }
-        },
-        {
-            liChildren: <HiOutlineUserPlus/>,
-            liText: 'Add to contacts',
-            liFoo: () => {
-            }
-        },
-        {
-            liChildren: <HiOutlineLockClosed/>,
-            liText: 'Block user',
-            liFoo: () => {
-            }
-        },
-        {
-            liChildren: <HiOutlineTrash/>,
-            liText: 'Delete Chat',
-            liFoo: () => {
-            }
-        }
-    ],
-    group: [
-        {
-            liChildren: <HiOutlineBellSlash/>,
-            liText: 'Mute',
-            liFoo: () => {
-            }
-        },
-        {
-            liChildren: <HiOutlineTrash/>,
-            liText: 'Leave Group',
-            liFoo: () => {
-            }
-        }
-    ],
-    channel: [
-        {
-            liChildren: <HiOutlineBellSlash/>,
-            liText: 'Mute',
-            liFoo: () => {
-            }
-        },
-        {
-            liChildren: <HiOutlineTrash/>,
-            liText: 'Leave Channel',
-            liFoo: () => {
-            }
-        }
-    ]
-}
+import MessengerService from "@service/MessengerService";
+import {useParams} from "react-router-dom";
+import {deleteContact, setContacts} from "@store/reducers/liveUpdatesReducer";
 
 interface IChatHeader {
     messenger: IAdaptMessenger,
-    setSidebarState: (state: boolean) => void
+    setSidebarState: Dispatch<SetStateAction<boolean>>
 }
 
 const MessengerHeader: FC<IChatHeader> = memo(({messenger, setSidebarState}) => {
@@ -87,6 +32,10 @@ const MessengerHeader: FC<IChatHeader> = memo(({messenger, setSidebarState}) => 
     const [inputState, setInputState] = useState(false)
 
     const sidebarLeft = useAppSelector(state => state.app.sidebarLeft)
+    const userId = useAppSelector(state => state.user.userId)
+    const {contacts} = useAppSelector(state => state.live)
+
+    const {messengerId} = useParams()
     const dispatch = useAppDispatch()
 
     const getHeaderDesc = () => {
@@ -101,6 +50,92 @@ const MessengerHeader: FC<IChatHeader> = memo(({messenger, setSidebarState}) => 
                 const exhaustiveCheck: never = messenger.type
                 return exhaustiveCheck
         }
+    }
+
+    const HeaderLists = {
+        chat: [
+            {
+                liChildren: <HiOutlineBellSlash/>,
+                liText: 'Mute',
+                liFoo: () => {
+                }
+            },
+            contacts.some(el => el.user_id === messengerId) ?
+                {
+                    liChildren: <HiOutlineUserMinus/>,
+                    liText: 'Remove from contacts',
+                    liFoo: async () => {
+                        if (!messengerId) return
+
+                        const controller = new AbortController()
+                        const signal = controller.signal
+
+                        try {
+                            const res = await MessengerService.deleteContact(userId, messengerId, signal)
+
+                            if (res.status === 200) dispatch(deleteContact(messengerId))
+                        } catch (error) {
+                            console.log(error)
+                        }
+
+                        return () => controller.abort()
+                    }
+                } :
+                {
+                    liChildren: <HiOutlineUserPlus/>,
+                    liText: 'Add to contacts',
+                    liFoo: async () => {
+                        if (!messengerId) return
+
+                        const controller = new AbortController()
+                        const signal = controller.signal
+
+                        try {
+                            const newContact = await MessengerService.postContact(userId, messengerId, signal)
+
+                            if (newContact.status === 200) dispatch(setContacts([newContact.data]))
+                        } catch (error) {
+                            console.log(error)
+                        }
+
+                        return () => controller.abort()
+                    }
+                },
+            {
+                liChildren: <HiOutlineTrash/>,
+                liText: 'Delete Chat',
+                liFoo: () => {
+                }
+            }
+        ],
+        group: [
+            {
+                liChildren: <HiOutlineBellSlash/>,
+                liText: 'Mute',
+                liFoo: () => {
+                }
+            },
+            {
+                liChildren: <HiOutlineTrash/>,
+                liText: 'Leave Group',
+                liFoo: () => {
+                }
+            }
+        ],
+        channel: [
+            {
+                liChildren: <HiOutlineBellSlash/>,
+                liText: 'Mute',
+                liFoo: () => {
+                }
+            },
+            {
+                liChildren: <HiOutlineTrash/>,
+                liText: 'Leave Channel',
+                liFoo: () => {
+                }
+            }
+        ]
     }
 
     return (

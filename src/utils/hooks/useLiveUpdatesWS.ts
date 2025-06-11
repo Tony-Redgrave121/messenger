@@ -1,8 +1,8 @@
 import {useEffect, useRef} from "react";
 import {useAppDispatch, useAppSelector} from "@hooks/useRedux";
-import {setMessengersList} from "@store/reducers/appReducer";
+import {setMessengersList} from "@store/reducers/liveUpdatesReducer";
 
-export const useMessengerWS = () => {
+export const useLiveUpdatesWS = () => {
     const socketRef = useRef<WebSocket | null>(null)
     const userId = useAppSelector(state => state.user.userId)
     const dispatch = useAppDispatch()
@@ -28,9 +28,10 @@ export const useMessengerWS = () => {
             switch (message.method) {
                 case 'CONNECTION':
                     break
-                case 'GET_MESSENGERS':
+                case 'JOIN_TO_MESSENGER':
                     dispatch(setMessengersList(message.data))
                     break
+
                 default:
                     break
             }

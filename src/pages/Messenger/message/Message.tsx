@@ -1,4 +1,4 @@
-import React, {
+import {
     Dispatch,
     FC,
     RefObject,
@@ -17,12 +17,12 @@ import {
     HiOutlineDocumentDuplicate,
     HiOutlineTrash, HiOutlineFlag, HiOutlineChevronRight, HiOutlineFire
 } from "react-icons/hi2"
-import {IMessagesResponse, IMessageFile, IAdaptMessenger, ICommentState, IReaction} from "@appTypes";
-import {useAppSelector} from "@hooks/useRedux";
+import {IMessagesResponse, IMessageFile, IAdaptMessenger, IReaction} from "@appTypes";
+import {useAppDispatch, useAppSelector} from "@hooks/useRedux";
 import {DropDown} from "@components/dropDown";
 import {DocumentBlock} from "./index";
 import UserService from "@service/UserService";
-import {Link, useNavigate} from "react-router-dom";
+import {Link, useNavigate, useParams} from "react-router-dom";
 import handleContextMenu from "@utils/logic/handleContextMenu";
 import {CSSTransition} from 'react-transition-group'
 import './animation.css'
@@ -33,15 +33,13 @@ import getTitle from "@utils/logic/getTitle";
 import ReactionsBlock from "./reactionsBlock/ReactionsBlock";
 import useReaction from "@utils/hooks/useReaction";
 import scrollInto from "@utils/logic/scrollInto";
+import {setWrapperState} from "@store/reducers/appReducer";
 
 interface IMessageProps {
     message: IMessagesResponse,
-    postId?: string
-    socketRoom?: string
     setReply: Dispatch<SetStateAction<IMessagesResponse | null>>,
     socketRef: RefObject<WebSocket | null>,
     messenger: IAdaptMessenger,
-    setComment?: Dispatch<SetStateAction<ICommentState>>,
     reactions?: IReaction[],
 }
 
@@ -55,9 +53,7 @@ const initialCurrMedia: IMessageFile = {
 const Message: FC<IMessageProps> = (
     {
         message,
-        postId,
         setReply,
-        socketRoom,
         socketRef,
         messenger,
         reactions
@@ -77,26 +73,29 @@ const Message: FC<IMessageProps> = (
 
     const [mediaArr, setMediaArr] = useState<IMessageFile[]>([])
     const user_id = useAppSelector(state => state.user.userId)
+    const dispatch = useAppDispatch()
+    const navigate = useNavigate()
+
+    const {messengerId, postId} = useParams()
+
     const [slider, setSlider] = useState({
         state: false,
         mounted: false
     })
 
-    const navigate = useNavigate()
-
     const handleDelete = useCallback(async () => {
-        if (!socketRoom) return
+        if (!messengerId) return
         const messageDelete = await UserService.deleteMessage(message.message_id, postId)
 
         if (messageDelete && socketRef.current?.readyState === WebSocket.OPEN) {
             socketRef.current.send(JSON.stringify({
-                messenger_id: socketRoom,
+                messenger_id: `${messengerId}${postId ? `/${postId}` : ''}`,
                 user_id: user_id,
                 method: 'REMOVE_MESSAGE',
                 data: messageDelete.data
             }))
         }
-    }, [socketRoom, postId, message.message_id, socketRef, user_id])
+    }, [messengerId, postId, message.message_id, socketRef, user_id])
 
     const dropDownOptions = {
         react: {
@@ -212,6 +211,15 @@ const Message: FC<IMessageProps> = (
         />
     }
 
+    const commentsOnClick = () => {
+        dispatch(setWrapperState(false))
+
+        setTimeout(() => {
+            navigate(`/channel/${messenger.id}/post/${message.message_id}`)
+            dispatch(setWrapperState(true))
+        }, 200)
+    }
+
     useEffect(() => {
         const timeout = setTimeout(() => setAnimateMessage(true), 200)
         setIsOwner(message.user_id === user_id && messenger.type !== "channel")
@@ -239,29 +247,45 @@ const Message: FC<IMessageProps> = (
             unmountOnExit
             onEntered={onEntered}
         >
-            <div className={clsx(style.MessageContainer, isOwner && style.OwnerMessageContainer)} ref={refMessage} id={message.message_id}>
+            <div className={clsx(style.MessageContainer, isOwner && style.OwnerMessageContainer)} ref={refMessage}
+                 id={message.message_id}>
                 <div className={clsx(style.MessageInnerBlock, isOwner && style.OwnerMessageInnerBlock)}>
-                    {(!isOwner && !['chat', 'channel'].includes(messenger.type)) &&
-                        <Link className={style.UserAvatarLink} to={`/chat/${message.user.user_id}`}>
-                            <LoadFile
-                                imagePath={message.user.user_img && `users/${message.user.user_id}/${message.user.user_img}`}
-                                imageTitle={message.user.user_name}
-                            />
+                    {!isOwner &&
+                        <Link className={style.UserAvatarLink}
+                              to={messenger.type !== 'channel' ? `/chat/${message.user.user_id}` : ''}>
+                            {messenger.type === 'channel' ?
+                                <LoadFile
+                                    imagePath={messenger.image && `messengers/${messenger.id}/${messenger.image}`}
+                                    imageTitle={messenger.name}
+                                /> :
+                                <LoadFile
+                                    imagePath={message.user.user_img && `users/${message.user.user_id}/${message.user.user_img}`}
+                                    imageTitle={message.user.user_name}
+                                />
+                            }
                         </Link>
                     }
                     <div className={style.MessageWrapper}>
                         <div
-                            className={clsx(style.MessageContent, isOwner && style.OwnerMessageContent, messenger.type === 'channel' && style.ChannelMessageContent)}>
+                            className={clsx(style.MessageContent, isOwner && style.OwnerMessageContent, (messenger.type === 'channel' && !postId) && style.ChannelMessageContent)}>
                             {message.reply &&
-                                <button className={style.ReplyBlock} onClick={() => scrollInto(message.reply!.message_id)}>
+                                <button className={style.ReplyBlock}
+                                        onClick={() => scrollInto(message.reply!.message_id)}>
                                     <p>{message.reply.user.user_name}</p>
                                     <p>{message.reply.message_text}</p>
                                 </button>
                             }
-                            {(!isOwner && !['chat', 'channel'].includes(messenger.type)) &&
-                                <Link to={`/chat/${message.user.user_id}`} ref={refLink}>
-                                    {message.user.user_name}
-                                </Link>
+                            {!isOwner &&
+                                <>
+                                    {messenger.type !== 'channel' ?
+                                        <Link to={`/chat/${message.user.user_id}`} ref={refLink}>
+                                            {message.user.user_name}
+                                        </Link> :
+                                        <Link to={''} ref={refLink}>
+                                            {messenger.name}
+                                        </Link>
+                                    }
+                                </>
                             }
                             <div className={style.MessageBlock} onContextMenu={(event) => handleContextMenu({
                                 event,
@@ -297,8 +321,8 @@ const Message: FC<IMessageProps> = (
                                 {handleReactions()}
                             </div>
                         </div>
-                        {messenger.type === 'channel' &&
-                            <div className={style.CommentsContainer} onClick={() => navigate(`/channel/${messenger.id}/post/${message.message_id}`)}>
+                        {messenger.type === 'channel' && !postId &&
+                            <div className={style.CommentsContainer} onClick={commentsOnClick}>
                                 <p>{message.comments_count} Comments</p>
                                 <HiOutlineChevronRight/>
                             </div>

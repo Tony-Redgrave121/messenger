@@ -6,7 +6,7 @@ import {useParams} from "react-router-dom";
 
 const useReaction = () => {
     const user_id = useAppSelector(state => state.user.userId)
-    const {messengerId} = useParams()
+    const {messengerId, postId} = useParams()
 
     const reactionOnClick = async (
         message: IMessagesResponse,
@@ -20,7 +20,7 @@ const useReaction = () => {
 
             if (socketRef.current?.readyState === WebSocket.OPEN) {
                 socketRef.current.send(JSON.stringify({
-                    messenger_id: messengerId,
+                    messenger_id: `${messengerId}${postId ? `/${postId}` : ''}`,
                     user_id: user_id,
                     method: 'REMOVE_REACTION',
                     data: {
@@ -37,7 +37,7 @@ const useReaction = () => {
             if (reactionResponse.status === 200) {
                 if (socketRef.current?.readyState === WebSocket.OPEN) {
                     socketRef.current.send(JSON.stringify({
-                        messenger_id: messengerId,
+                        messenger_id: `${messengerId}${postId ? `/${postId}` : ''}`,
                         user_id: user_id,
                         method: 'ADD_REACTION',
                         data: {

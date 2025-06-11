@@ -1,6 +1,6 @@
 import React, {useEffect, useMemo, useRef, useState} from "react";
 import {useAppDispatch, useAppSelector} from "@hooks/useRedux";
-import {useMessengerWS} from "@utils/hooks/useMessengerWS";
+import {useLiveUpdatesWS} from "@utils/hooks/useLiveUpdatesWS";
 import useGetContacts from "@hooks/useGetContacts";
 import debounce from "debounce";
 import {setSidebarLeft} from "@store/reducers/appReducer";
@@ -35,11 +35,11 @@ const useLeftSidebarLogic = () => {
     const refProfile = useRef<HTMLDivElement>(null)
     const sidebarLeft = useAppSelector(state => state.app.sidebarLeft)
     const {userImg, userName, userId} = useAppSelector(state => state.user)
+    const contacts = useAppSelector(state => state.live.contacts)
     const dispatch = useAppDispatch()
-    const socketRef = useMessengerWS()
-    const {contacts} = useGetContacts()
-    const navigate = useNavigate()
+    const socketRef = useLiveUpdatesWS()
 
+    const navigate = useNavigate()
     const [searchRes, setSearchRes] = useState<IUnifiedMessenger[]>([])
     const [active, setActive] = useState<ListKeys>('chat')
 
@@ -53,6 +53,8 @@ const useLeftSidebarLogic = () => {
 
         return () => window.removeEventListener('resize', handleResize)
     }, [dispatch, handleResize])
+
+    useGetContacts()
 
     const messengersList = [
         {
@@ -73,7 +75,7 @@ const useLeftSidebarLogic = () => {
         },
         {
             liChildren: <HiOutlineUser/>,
-            liText: 'New Private SearchList',
+            liText: 'New Private Chat',
             liFoo: () => setMessengerCreation(prev => ({
                 state: !prev.state,
                 type: 'chat'
@@ -186,7 +188,6 @@ const useLeftSidebarLogic = () => {
         settings,
         dropDownList,
         refSearch,
-        contacts,
         setMessenger,
         messenger,
         messengersList,
@@ -201,7 +202,8 @@ const useLeftSidebarLogic = () => {
         active,
         setActive,
         handleInput,
-        search
+        search,
+        contacts
     }
 }
 

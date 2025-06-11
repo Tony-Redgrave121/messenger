@@ -19,28 +19,17 @@ import SearchList from "@components/sidebar/leftSidebar/searchList/SearchList";
 
 const LeftSidebar = () => {
     const {
-        sidebarLeft,
-        refSidebar,
-        setSettings,
-        settings,
-        dropDownList,
-        refSearch,
-        contacts,
-        setMessenger,
-        messenger,
-        messengersList,
-        messengerCreation,
-        socketRef,
-        setMessengerCreation,
-        profile,
-        setProfile,
-        refProfile,
-        navigateChat,
-        searchRes,
-        active,
-        setActive,
-        handleInput,
-        search
+        sidebarLeft, refSidebar,
+        setSettings, settings,
+        dropDownList, refSearch,
+        setMessenger, contacts,
+        messenger, messengersList,
+        messengerCreation, socketRef,
+        setMessengerCreation, profile,
+        setProfile, refProfile,
+        navigateChat, searchRes,
+        active, setActive,
+        handleInput, search
     } = useLeftSidebarLogic()
 
     return (

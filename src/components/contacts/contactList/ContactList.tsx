@@ -14,7 +14,7 @@ const ContactList: FC<ContactListProps> = ({contacts, text, onClick}) => {
     return (
         <section className={style.ContactListContainer}>
             {text && <p>{text}</p>}
-            {contacts.map(contact =>
+            {contacts.length && contacts.map(contact =>
                 <Buttons.ContactButton key={contact.user_id} foo={() => onClick(contact.user_id)}>
                     <Contact contact={contact}/>
                 </Buttons.ContactButton>

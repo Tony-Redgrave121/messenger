@@ -6,14 +6,15 @@ import style from "./style.module.css";
 import {LoadFile} from "@components/loadFile";
 import useSearch from "@hooks/useSearch";
 import NoResult from "@components/noResult/NoResult";
+import {useAppSelector} from "@hooks/useRedux";
 
 interface ICheckboxContactProps {
     members: IContact[],
-    contacts: IContact[],
     setMembers: Dispatch<SetStateAction<IContact[]>>
 }
 
-const AddContacts: FC<ICheckboxContactProps> = ({members, contacts, setMembers}) => {
+const AddContacts: FC<ICheckboxContactProps> = ({members, setMembers}) => {
+    const contacts = useAppSelector(state => state.live.contacts)
     const {filteredArr, handleInput, filter} = useSearch<IContact, 'user_name'>(contacts, 'user_name')
 
     const handleCheck = (contact: IContact, members: IContact[]) => {

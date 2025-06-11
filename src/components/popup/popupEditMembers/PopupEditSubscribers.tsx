@@ -4,7 +4,6 @@ import {Buttons} from "@components/buttons";
 import {HiOutlineArrowRight, HiOutlineXMark} from "react-icons/hi2";
 import {IContact, IMessengerSettings} from "@appTypes";
 import {AddContacts} from "@components/contacts";
-import useGetContacts from "@hooks/useGetContacts";
 import MessengerService from "@service/MessengerService";
 import {useParams} from "react-router-dom";
 
@@ -14,9 +13,7 @@ interface IPopupEditSubscribersProps {
 }
 
 const PopupEditSubscribers: FC<IPopupEditSubscribersProps> = ({handleCancel, setSettings}) => {
-    const {contacts} = useGetContacts()
     const [members, setMembers] = useState<IContact[]>([])
-
     const {messengerId} = useParams()
 
     const handleAddMembers = async () => {
@@ -53,7 +50,6 @@ const PopupEditSubscribers: FC<IPopupEditSubscribersProps> = ({handleCancel, set
                 <AddContacts
                     members={members}
                     setMembers={setMembers}
-                    contacts={contacts}
                 />
             </div>
             <Buttons.CreateButton state={members.length > 0} foo={handleAddMembers}>

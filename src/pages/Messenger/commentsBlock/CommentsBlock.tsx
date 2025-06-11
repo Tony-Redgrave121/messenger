@@ -1,4 +1,4 @@
-import {useEffect, useRef, useState} from 'react'
+import {useEffect, useState} from 'react'
 import style from '../style.module.css'
 import '../animationWrapper.css'
 import {IMessagesResponse} from "@appTypes";
@@ -13,8 +13,6 @@ const CommentsBlock = () => {
     const [reply, setReply] = useState<IMessagesResponse | null>(null)
     const [channelPost, setChannelPost] = useState<IMessagesResponse | null>(null)
     const {type, messengerId, postId} = useParams()
-    const [animation, setAnimation] = useState(false)
-
 
     const {
         messenger,
@@ -35,6 +33,7 @@ const CommentsBlock = () => {
 
             if (data.status === 200) {
                 setChannelPost(data.data)
+                setMessagesList(prev => [data.data, ...prev])
             }
         }
         handlePostFetching()
@@ -42,7 +41,7 @@ const CommentsBlock = () => {
         return () => {
             controller.abort()
         }
-    }, [])
+    }, [postId])
 
     return (
         <>
@@ -51,37 +50,23 @@ const CommentsBlock = () => {
                     <CommentsHeader
                         comments_count={channelPost ? channelPost.comments_count : 0}
                         messenger={messenger}
-                        setCommentsList={setMessagesList}
                     />
                     <section className={style.MessageBlock}>
-                        {channelPost &&
-                            <Message
-                                message={channelPost}
-                                messenger={messenger}
-                                socketRoom={`${messengerId}/${postId}`}
-                                setReply={setReply}
-                                socketRef={socketRef}
-                                reactions={reactions}
-                            />
-                        }
-                        {(channelPost && messagesList.length) && messagesList.map(message =>
+                        {(channelPost && messagesList.length) && messagesList.map((message, index) =>
                             <Message
                                 message={message}
                                 messenger={{
                                     ...messenger,
-                                    type: 'group',
+                                    type: index ? 'group' : 'channel',
                                 }}
                                 key={message.message_id}
                                 setReply={setReply}
-                                socketRoom={`${messengerId}/${postId}`}
                                 socketRef={socketRef}
                                 reactions={reactions}
                             />
                         )}
                     </section>
                     <InputBlock
-                        socketRoom={`${messengerId}/${postId}`}
-                        post_id={postId}
                         setReply={setReply}
                         reply={reply}
                         socketRef={socketRef}

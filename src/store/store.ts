@@ -2,10 +2,12 @@ import {combineReducers, configureStore} from "@reduxjs/toolkit"
 import userReducer from "./reducers/userReducer"
 import appReducer from "./reducers/appReducer"
 import sliderReducer from "./reducers/sliderReducer"
+import liveUpdatesReducer from "@store/reducers/liveUpdatesReducer";
 
 const rootReducer = combineReducers({
     user: userReducer,
     app: appReducer,
+    live: liveUpdatesReducer,
     slider: sliderReducer
 })
 

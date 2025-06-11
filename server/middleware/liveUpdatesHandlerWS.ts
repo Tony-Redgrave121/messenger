@@ -27,7 +27,7 @@ const liveUpdatesHandlerWS = (aWss: WebSocketServer) => {
         })
     }
 
-    const handleLiveUpdate  = (messenger: IUpdateConfig, method: string) => {
+    const handleMessengerJoining  = (messenger: IUpdateConfig, method: string) => {
         aWss.clients.forEach((client: UserWebSocket) => {
             if (!client.user_id || !messenger.data.messenger_members) return
 
@@ -48,8 +48,8 @@ const liveUpdatesHandlerWS = (aWss: WebSocketServer) => {
                 case 'CONNECTION':
                     connectionUpdateHandler(ws, data)
                     break
-                case 'GET_MESSENGERS':
-                    handleLiveUpdate(data, 'GET_MESSENGERS')
+                case 'JOIN_TO_MESSENGER':
+                    handleMessengerJoining(data, 'JOIN_TO_MESSENGER')
                     break
             }
         })

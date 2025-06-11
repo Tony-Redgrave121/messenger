@@ -5,7 +5,7 @@ import {
     FETCH_MESSENGERS_LIST, LOGIN_ROUTE,
     LOGOUT_ROUTE, MESSAGE,
     REFRESH_ROUTE, REGISTRATION_ROUTE,
-    GET_CONTACTS, GET_MESSENGER_SETTINGS,
+    CONTACTS, GET_MESSENGER_SETTINGS,
     GET_REACTIONS, PUT_MESSENGER_TYPE,
     PUT_MESSENGER_LINK, POST_MESSENGER_REACTIONS,
     PUT_MESSENGER_MODERATORS, POST_REMOVED,
@@ -37,7 +37,10 @@ router.post(MESSAGE, UserController.postMessage)
 router.get(MESSAGE, UserController.fetchMessage)
 router.delete(DELETE_MESSAGE, UserController.deleteMessage)
 
-router.get(GET_CONTACTS, MessengerController.getContacts)
+router.get(CONTACTS, MessengerController.getContacts)
+router.post(CONTACTS, MessengerController.postContact)
+router.delete(CONTACTS, MessengerController.deleteContact)
+
 router.post(FETCH_MESSENGER, MessengerController.postMessenger)
 router.put(FETCH_MESSENGER, MessengerController.putMessenger)
 

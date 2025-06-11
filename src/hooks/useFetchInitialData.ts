@@ -82,7 +82,7 @@ const useFetchInitialData = () => {
 
                 if (!!adaptMessenger.id) {
                     setMessenger(adaptMessenger)
-                    setMessagesList(messages.data)
+                    setMessagesList(prev => [...prev, ...messages.data])
                     setReactions(reactions.data)
                 }
             } catch (error) {
@@ -97,7 +97,7 @@ const useFetchInitialData = () => {
         handleMessageList()
 
         return () => controller.abort()
-    }, [user.userId, messengerId, navigate, setMessagesList])
+    }, [user.userId, messengerId, postId, navigate, setMessagesList])
 
     return {
         messenger,

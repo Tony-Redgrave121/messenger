@@ -5,15 +5,48 @@ import MessengerService from "../service/messengerService";
 class MessengerController {
     getContacts = async (req: Request, res: Response, next: NextFunction) => {
         try {
-            const {id} = req.params
+            const {userId} = req.params
 
-            if (!id) return next(ApiError.internalServerError('An error occurred while fetching the messenger'))
-            const contacts = await MessengerService.fetchContacts(id)
+            if (!userId) return next(ApiError.internalServerError('An error occurred while fetching contacts'))
+            const contacts = await MessengerService.fetchContacts(userId)
 
             res.json(contacts)
         } catch (e) {
             return next(e)
         }
+    };
+    postContact = async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            const {userId} = req.params
+            const contactId = req.body.contactId
+
+            if (!userId || !contactId) return next(ApiError.internalServerError('An error occurred while posting a contact'))
+            const contact = await MessengerService.postContact(userId, contactId)
+
+            res.json(contact)
+        } catch (e) {
+            return next(e)
+        }
+    };
+    deleteContact = async (req: Request, res: Response, next: NextFunction) => {
+        try {
+
+        } catch (e) {
+            return next(e)
+        }
+
+        const {userId} = req.params
+        const {contactId} = req.query
+
+        if (
+            !userId ||
+            !contactId ||
+            typeof contactId !== 'string'
+        ) return next(ApiError.internalServerError('An error occurred while posting a contact'))
+
+        await MessengerService.deleteContact(userId, contactId)
+
+        res.sendStatus(200)
     };
     postMessenger = async (req: Request, res: Response, next: NextFunction) => {
         try {

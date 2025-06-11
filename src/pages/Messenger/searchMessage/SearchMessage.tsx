@@ -116,7 +116,7 @@ const SearchMessage: FC<IChatHeader> = memo(({messenger, state, setState}) => {
                         {searchRes.map(message => (
                             <button key={message.user.user_id + message.message_id} className={style.SearchedMessage} onClick={() => onClick(message.message_id)}>
                                 <div className={style.MessageInfo}>
-                                    {messenger.type === 'channel' ?
+                                    {messenger.type === 'channel' && !postId ?
                                         <LoadFile
                                             imagePath={messenger.image && `messengers/${messenger.id}/${messenger.image}`}
                                             imageTitle={messenger.name}
@@ -127,7 +127,7 @@ const SearchMessage: FC<IChatHeader> = memo(({messenger, state, setState}) => {
                                         />
                                     }
                                     <div className={style.MessageDetail}>
-                                        {messenger.type === 'channel' ?
+                                        {messenger.type === 'channel' && !postId ?
                                             <p>{messenger.name}</p> :
                                             <p>{message.user.user_name}</p>
                                         }
