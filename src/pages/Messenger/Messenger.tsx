@@ -50,7 +50,7 @@ const Messenger = () => {
         <>
             {messenger &&
                 <>
-                    <div className={style.ChatContainer}>
+                    <div className={style.MessengerContainer}>
                         <MessengerHeader messenger={messenger} setSidebarState={setSidebarState}/>
                         <section className={style.MessageBlock} key={messengerId}>
                             {messagesList.map(message =>
@@ -65,7 +65,7 @@ const Messenger = () => {
                             )}
                             <div ref={refEnd}/>
                         </section>
-                        {messenger.type === 'chat' || isMember(messenger.members!, user.userId) ?
+                        {(messenger.type === 'chat' && messagesList.length > 0) || isMember(messenger.members!, user.userId) ?
                             (messenger.type === "channel" ? checkRights(messenger.members!, user.userId) : true) &&
                             <InputBlock
                                 setReply={setReply}
@@ -73,7 +73,7 @@ const Messenger = () => {
                                 socketRef={socketRef}
                             /> :
                             <button className={style.SubscribeButton} onClick={subscribeToMessenger}>
-                                Subscribe
+                                {messenger.type === 'chat' ? 'Start conversation' : 'Subscribe'}
                             </button>
                         }
                     </div>

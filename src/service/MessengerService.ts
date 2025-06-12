@@ -8,7 +8,7 @@ import {
     PUT_MESSENGER_MODERATORS,
     POST_REMOVED,
     POST_CONTACTS_MEMBERS,
-    POST_MEMBER, REACTIONS
+    POST_MEMBER, REACTIONS, CHAT
 } from "@utils/const/const"
 import $api from '@utils/http/index'
 import {AxiosResponse} from 'axios'
@@ -72,5 +72,9 @@ export default class MessengerService {
     }
     static async deleteMessageReaction(message_id: string, user_id: string, reaction_id: string): Promise<AxiosResponse> {
         return $api.delete(`${REACTIONS}/${message_id}?reaction_id=${reaction_id}&user_id=${user_id}`)
+    }
+
+    static async deleteChat(userId: string, recipientId: string, signal: AbortSignal): Promise<AxiosResponse> {
+        return $api.delete(`${CHAT}/${userId}?recipientId=${recipientId}`, {signal})
     }
 }

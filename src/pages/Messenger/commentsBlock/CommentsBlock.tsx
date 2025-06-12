@@ -46,7 +46,7 @@ const CommentsBlock = () => {
     return (
         <>
             {messenger &&
-                <div className={style.ChatContainer}>
+                <div className={style.MessengerContainer}>
                     <CommentsHeader
                         comments_count={channelPost ? channelPost.comments_count : 0}
                         messenger={messenger}

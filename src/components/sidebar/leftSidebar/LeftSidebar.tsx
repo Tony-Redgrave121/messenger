@@ -49,7 +49,7 @@ const LeftSidebar = () => {
                     <SearchBlock ref={refSearch} foo={handleInput}/>
                 </div>
                 <ChatList/>
-                {contacts.length > 0 &&
+                {contacts.length &&
                     <>
                         <Caption/>
                         <ContactList

@@ -10,6 +10,7 @@ import NoResult from "@components/noResult/NoResult";
 import {useAppSelector} from "@hooks/useRedux";
 import {useParams} from "react-router-dom";
 import MessengerService from "@service/MessengerService";
+import {useLiveUpdatesWS} from "@utils/hooks/useLiveUpdatesWS";
 
 interface IPopupEditModeratorsProps {
     handleCancel: () => void,
@@ -28,6 +29,9 @@ const PopupEditRemoved: FC<IPopupEditModeratorsProps> = (
     const [userToRemove, setUserToRemove] = useState<IContact[]>([])
     const owner_id = useAppSelector(state => state.user.userId)
 
+    const socketRef = useLiveUpdatesWS()
+    const {messengerId} = useParams()
+
     useEffect(() => {
         setUserToRemove(members.filter(member => member.user_id !== owner_id))
     }, [members, owner_id])
@@ -37,8 +41,6 @@ const PopupEditRemoved: FC<IPopupEditModeratorsProps> = (
         handleInput,
         filter
     } = useSearch(userToRemove, 'user_name')
-
-    const {messengerId} = useParams()
 
     const handleRemoveMember = async (userId: string) => {
         if (!messengerId) return
@@ -56,6 +58,14 @@ const PopupEditRemoved: FC<IPopupEditModeratorsProps> = (
                 ...prev,
                 members: [...prev.members.filter(member => member.user.user_id !== newRemovedMember.data.user.user_id)],
             }))
+
+            if (socketRef.current?.readyState === WebSocket.OPEN) {
+                socketRef.current.send(JSON.stringify({
+                    user_id: userId,
+                    method: 'REMOVE_FROM_MESSENGER',
+                    data: messengerId
+                }))
+            }
 
             handleCancel()
         } catch (error) {

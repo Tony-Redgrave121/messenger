@@ -15,8 +15,7 @@ import {useNavigate} from "react-router-dom";
 import {IMessenger, IContact} from "@appTypes";
 import messengerService from "@service/MessengerService"
 import {useAppDispatch, useAppSelector} from "@hooks/useRedux";
-import {setMessengersList} from "@store/reducers/liveUpdatesReducer";
-import useGetContacts from "@hooks/useGetContacts"
+import {addMessenger} from "@store/reducers/liveUpdatesReducer";
 import {SearchBlock} from "@components/searchBlock"
 import {ContactList, AddContacts} from "@components/contacts";
 import useSearch from "@hooks/useSearch";
@@ -114,13 +113,13 @@ const Messenger: FC<IMessengerProps> = ({messengerCreation, setMessengerCreation
             if (res.data && socketRef.current?.readyState === WebSocket.OPEN) {
                 socketRef.current.send(JSON.stringify({
                     user_id: userId,
-                    method: 'GET_MESSENGERS',
+                    method: 'JOIN_TO_MESSENGER',
                     data: res.data
                 }))
             }
 
             setAnimationState(false)
-            dispatch(setMessengersList(res.data))
+            dispatch(addMessenger(res.data))
 
             return setMessengerCreation(prev => ({
                 ...prev,

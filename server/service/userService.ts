@@ -122,14 +122,23 @@ class UserService {
                 const lastMsg = await models.message.findOne({
                     where: {
                         [Op.or]: [
-                            {user_id: user_id, recipient_user_id: companion.user_id},
-                            {user_id: companion.user_id, recipient_user_id: user_id}
+                            {
+                                user_id: user_id,
+                                recipient_user_id: companion.user_id
+                            },
+                            {
+                                user_id: companion.user_id,
+                                recipient_user_id: user_id
+                            }
                         ]
                     },
                     limit: 1,
                     order: [['message_date', 'DESC']],
                     attributes: ['message_text', 'message_date'],
-                }) as { message_text: string | null; message_date: Date } | null;
+                }) as {
+                    message_text: string | null;
+                    message_date: Date
+                } | null
 
                 return {
                     companion_id: companion.user_id,
@@ -162,6 +171,9 @@ class UserService {
                 },
                 {
                     model: models.message,
+                    where: {
+                      parent_post_id: null
+                    },
                     limit: 1,
                     order: [['message_date', 'DESC']],
                     attributes: ['message_text', 'message_date']
@@ -284,19 +296,19 @@ class UserService {
         }
     }
 
-    async deleteMessage(message_id: string, post_id?: string) {
+    async deleteMessage(message_id: string) {
         try {
-            const messagesIds = post_id ? await models.message.findAll({
-                where: {parent_post_id: post_id},
+            const commentsIds = await models.message.findAll({
+                where: {parent_post_id: message_id},
                 attributes: ['message_id'],
                 raw: true,
-            }) as unknown as { message_id: string }[] : []
+            }) as unknown as { message_id: string }[] | null
 
-            const childMessageIds = messagesIds.map(msg => msg.message_id)
-            childMessageIds.push(message_id)
+            const childCommentIds = commentsIds?.map(msg => msg.message_id) || []
+            childCommentIds.push(message_id)
 
             const message_files = await models.message_file.findAll({
-                where: {message_id: childMessageIds},
+                where: {message_id: childCommentIds},
                 attributes: ['message_file_name', 'message_file_path'],
                 raw: true
             }) as unknown as {
@@ -315,7 +327,7 @@ class UserService {
                     where: {
                         [Op.or]: [
                             {message_id: message_id},
-                            ...(post_id ? [{parent_post_id: post_id}] : [])
+                            ...(commentsIds ? [{parent_post_id: message_id}] : [])
                         ]
                     }
                 }

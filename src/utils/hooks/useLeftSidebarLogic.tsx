@@ -1,7 +1,6 @@
 import React, {useEffect, useMemo, useRef, useState} from "react";
 import {useAppDispatch, useAppSelector} from "@hooks/useRedux";
 import {useLiveUpdatesWS} from "@utils/hooks/useLiveUpdatesWS";
-import useGetContacts from "@hooks/useGetContacts";
 import debounce from "debounce";
 import {setSidebarLeft} from "@store/reducers/appReducer";
 import {
@@ -16,6 +15,7 @@ import {LoadFile} from "@components/loadFile";
 import {useNavigate} from "react-router";
 import SearchService from "@service/SearchService";
 import {isChatArray, isMessengerArray, IUnifiedMessenger, ListKeys} from "@appTypes";
+import useGetContacts from "@hooks/useGetContacts";
 
 const useLeftSidebarLogic = () => {
     const [settings, setSettings] = useState(false)

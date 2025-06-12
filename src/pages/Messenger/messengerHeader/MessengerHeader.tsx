@@ -19,8 +19,8 @@ import {getDate} from "@utils/logic/getDate";
 import {clsx} from "clsx";
 import SearchMessage from "../searchMessage/SearchMessage";
 import MessengerService from "@service/MessengerService";
-import {useParams} from "react-router-dom";
-import {deleteContact, setContacts} from "@store/reducers/liveUpdatesReducer";
+import {useNavigate, useParams} from "react-router-dom";
+import {deleteContact, deleteMessenger, setContacts} from "@store/reducers/liveUpdatesReducer";
 
 interface IChatHeader {
     messenger: IAdaptMessenger,
@@ -37,6 +37,7 @@ const MessengerHeader: FC<IChatHeader> = memo(({messenger, setSidebarState}) => 
 
     const {messengerId} = useParams()
     const dispatch = useAppDispatch()
+    const navigate = useNavigate()
 
     const getHeaderDesc = () => {
         switch (messenger.type) {
@@ -104,7 +105,24 @@ const MessengerHeader: FC<IChatHeader> = memo(({messenger, setSidebarState}) => 
             {
                 liChildren: <HiOutlineTrash/>,
                 liText: 'Delete Chat',
-                liFoo: () => {
+                liFoo: async () => {
+                    if (!messengerId) return
+
+                    const controller = new AbortController()
+                    const signal = controller.signal
+
+                    try {
+                        const res = await MessengerService.deleteChat(userId, messengerId, signal)
+
+                        if (res.status === 200) {
+                            dispatch(deleteMessenger(messengerId))
+                            navigate('/')
+                        }
+                    } catch (error) {
+                        console.log(error)
+                    }
+
+                    return () => controller.abort()
                 }
             }
         ],

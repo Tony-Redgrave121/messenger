@@ -1,48 +1,38 @@
-import React, {memo, useEffect, useState} from 'react'
+import {memo, useEffect} from 'react'
 import {ChatBlock} from "./"
 import UserService from '../../service/UserService'
-import {useAppSelector} from "@hooks/useRedux"
+import {useAppDispatch, useAppSelector} from "@hooks/useRedux"
 import style from './style.module.css'
-import {IMessengersListResponse} from "@appTypes"
+import {setMessengers} from "@store/reducers/liveUpdatesReducer";
 
 const ChatList = memo(() => {
     const user_id = useAppSelector(state => state.user.userId)
-    const newMessenger = useAppSelector(state => state.live.newMessenger)
-
-    const [messengersList, setMessengersList] = useState<IMessengersListResponse[]>([])
+    const messengers = useAppSelector(state => state.live.messengers)
+    const dispatch = useAppDispatch()
 
     useEffect(() => {
         const constructor = new AbortController()
+        const signal = constructor.signal
 
         const handleMessengerList = async () => {
-            const messengers = await UserService.fetchMessengersList(user_id, constructor.signal)
+            try {
+                const messengers = await UserService.fetchMessengersList(user_id, signal)
 
-            setMessengersList(messengers.data)
+                dispatch(setMessengers(messengers.data))
+            } catch (e) {
+                console.error(e)
+            }
         }
 
-        handleMessengerList().catch(error => console.log(error))
+        handleMessengerList()
     }, [user_id])
-
-    useEffect(() => {
-        if (newMessenger) {
-            setMessengersList(prev => {
-                const updatedList = [...prev]
-
-                newMessenger.forEach(messenger => {
-                    const exists = prev.some(prevMessenger => prevMessenger.messenger_id === messenger.messenger_id)
-
-                    if (!exists) updatedList.push(messenger)
-                })
-
-                return updatedList
-            })
-        }
-    }, [newMessenger])
 
     return (
         <ul className={style.ChatList}>
-            {messengersList.length > 0 &&
-                messengersList.map(chat => <ChatBlock messenger={chat} key={chat.messenger_id}/>)
+            {messengers.length &&
+                messengers.map(messenger =>
+                    <ChatBlock messenger={messenger} key={messenger.messenger_id}/>
+                )
             }
         </ul>
     )

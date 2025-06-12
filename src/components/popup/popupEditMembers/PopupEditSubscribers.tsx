@@ -6,6 +6,8 @@ import {IContact, IMessengerSettings} from "@appTypes";
 import {AddContacts} from "@components/contacts";
 import MessengerService from "@service/MessengerService";
 import {useParams} from "react-router-dom";
+import {useLiveUpdatesWS} from "@utils/hooks/useLiveUpdatesWS";
+import {useAppSelector} from "@hooks/useRedux";
 
 interface IPopupEditSubscribersProps {
     handleCancel: () => void,
@@ -15,6 +17,9 @@ interface IPopupEditSubscribersProps {
 const PopupEditSubscribers: FC<IPopupEditSubscribersProps> = ({handleCancel, setSettings}) => {
     const [members, setMembers] = useState<IContact[]>([])
     const {messengerId} = useParams()
+    const socketRef = useLiveUpdatesWS()
+    const messengers = useAppSelector(state => state.live.messengers)
+    const userId = useAppSelector(state => state.user.userId)
 
     const handleAddMembers = async () => {
         if (!messengerId) return
@@ -29,6 +34,17 @@ const PopupEditSubscribers: FC<IPopupEditSubscribersProps> = ({handleCancel, set
                 ...prev,
                 members: [...prev.members, ...newMembers.data]
             }))
+
+            if (socketRef.current?.readyState === WebSocket.OPEN) {
+                socketRef.current.send(JSON.stringify({
+                    user_id: userId,
+                    method: 'JOIN_TO_MESSENGER',
+                    data: {
+                        ...messengers.find(messenger => messenger.messenger_id === messengerId),
+                        messenger_members: membersId
+                    }
+                }))
+            }
 
             handleCancel()
         } catch (error) {

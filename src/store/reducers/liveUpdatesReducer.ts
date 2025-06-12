@@ -2,35 +2,48 @@ import {createSlice} from "@reduxjs/toolkit"
 import {IContact, IMessengersListResponse} from "@appTypes"
 
 interface ILiveUpdatesState {
-    newMessenger: IMessengersListResponse[] | null,
+    messengers: IMessengersListResponse[],
     contacts: IContact[]
 }
 
 const initialState: ILiveUpdatesState = {
-    newMessenger: null,
+    messengers: [],
     contacts: []
 }
 
 const liveUpdatesSlice = createSlice({
-    name: "app",
+    name: "liveUpdates",
     initialState,
     reducers: {
-        setMessengersList(state, action) {
-            if (Array.isArray(action.payload)) state.newMessenger = action.payload
-            else state.newMessenger = [action.payload]
+        setMessengers(state, action) {
+            state.messengers = action.payload
+        },
+        addMessenger(state, action) {
+            const exists = state.messengers.some(messenger => messenger.messenger_id === action.payload.messenger_id)
+            if (!exists) state.messengers.push(action.payload)
+        },
+        deleteMessenger(state, action) {
+            state.messengers = state.messengers.filter(messenger => messenger.messenger_id !== action.payload)
         },
         setContacts(state, action) {
-            state.contacts = [...state.contacts, ...action.payload]
+            state.contacts = action.payload
+        },
+        addContact(state, action) {
+            const exists = state.contacts.some(contact => contact.user_id === action.payload.user_id)
+            if (!exists) state.contacts.push(action.payload)
         },
         deleteContact(state, action) {
-            state.contacts = [...state.contacts.filter(contact => contact.user_id !== action.payload)]
+            state.contacts = state.contacts.filter(contact => contact.user_id !== action.payload)
         },
     }
 })
 
 export default liveUpdatesSlice.reducer
 export const {
-    setMessengersList,
+    setMessengers,
+    addMessenger,
+    deleteMessenger,
     setContacts,
+    addContact,
     deleteContact
 } = liveUpdatesSlice.actions

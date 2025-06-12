@@ -1,6 +1,6 @@
 import {useEffect, useRef} from "react";
 import {useAppDispatch, useAppSelector} from "@hooks/useRedux";
-import {setMessengersList} from "@store/reducers/liveUpdatesReducer";
+import {addMessenger, deleteMessenger} from "@store/reducers/liveUpdatesReducer";
 
 export const useLiveUpdatesWS = () => {
     const socketRef = useRef<WebSocket | null>(null)
@@ -29,9 +29,11 @@ export const useLiveUpdatesWS = () => {
                 case 'CONNECTION':
                     break
                 case 'JOIN_TO_MESSENGER':
-                    dispatch(setMessengersList(message.data))
+                    dispatch(addMessenger(message.data))
                     break
-
+                case 'REMOVE_FROM_MESSENGER':
+                    dispatch(deleteMessenger(message.data))
+                    break
                 default:
                     break
             }

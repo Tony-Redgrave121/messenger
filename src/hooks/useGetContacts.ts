@@ -24,7 +24,7 @@ const useGetContacts = () => {
         getContacts()
 
         return () => controller.abort()
-    }, [userId])
+    }, [])
 }
 
 export default useGetContacts

@@ -30,23 +30,39 @@ class MessengerController {
     };
     deleteContact = async (req: Request, res: Response, next: NextFunction) => {
         try {
+            const {userId} = req.params
+            const {contactId} = req.query
 
+            if (
+                !userId ||
+                !contactId ||
+                typeof contactId !== 'string'
+            ) return next(ApiError.internalServerError('An error occurred while posting a contact'))
+
+            await MessengerService.deleteContact(userId, contactId)
+
+            res.sendStatus(200)
         } catch (e) {
             return next(e)
         }
+    };
+    deleteChat = async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            const {userId} = req.params
+            const {recipientId} = req.query
 
-        const {userId} = req.params
-        const {contactId} = req.query
+            if (
+                !userId ||
+                !recipientId ||
+                typeof recipientId !== 'string'
+            ) return next(ApiError.internalServerError('An error occurred while deleting a chat'))
 
-        if (
-            !userId ||
-            !contactId ||
-            typeof contactId !== 'string'
-        ) return next(ApiError.internalServerError('An error occurred while posting a contact'))
+            await MessengerService.deleteChat(userId, recipientId)
 
-        await MessengerService.deleteContact(userId, contactId)
-
-        res.sendStatus(200)
+            res.sendStatus(200)
+        } catch (e) {
+            return next(e)
+        }
     };
     postMessenger = async (req: Request, res: Response, next: NextFunction) => {
         try {

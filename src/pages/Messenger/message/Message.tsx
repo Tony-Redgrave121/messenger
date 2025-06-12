@@ -85,7 +85,7 @@ const Message: FC<IMessageProps> = (
 
     const handleDelete = useCallback(async () => {
         if (!messengerId) return
-        const messageDelete = await UserService.deleteMessage(message.message_id, postId)
+        const messageDelete = await UserService.deleteMessage(message.message_id)
 
         if (messageDelete && socketRef.current?.readyState === WebSocket.OPEN) {
             socketRef.current.send(JSON.stringify({

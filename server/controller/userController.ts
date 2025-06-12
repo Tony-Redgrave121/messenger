@@ -117,15 +117,12 @@ class UserController {
 
     deleteMessage = async (req: Request, res: Response, next: NextFunction) => {
         try {
-            const {message_id, post_id} = req.query
+            const {message_id} = req.query
 
-            if (
-                !message_id ||
-                typeof message_id !== 'string' ||
-                (typeof post_id !== 'string' && typeof post_id !== 'undefined')
-            ) return next(ApiError.badRequest('Missing required fields'))
+            if (!message_id || typeof message_id !== 'string')
+                return next(ApiError.badRequest('Missing required fields'))
 
-            await UserService.deleteMessage(message_id, post_id)
+            await UserService.deleteMessage(message_id)
 
             res.json(message_id)
         } catch (e) {

@@ -30,7 +30,7 @@ interface IRightSidebar {
     setEntity: Dispatch<SetStateAction<IAdaptMessenger>>,
     ref: RefObject<HTMLDivElement | null>,
     state: boolean,
-    setState: (state: boolean) => void
+    setState: Dispatch<SetStateAction<boolean>>
 }
 
 const RightSidebar: FC<IRightSidebar> = (

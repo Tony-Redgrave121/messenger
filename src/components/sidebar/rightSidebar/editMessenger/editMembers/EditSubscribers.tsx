@@ -52,11 +52,11 @@ const EditSubscribers: FC<IEditSubscribersProps> = (
         popup
     } = useEditSettings(setSettings)
 
-    const SubscribersDropDown = (user_id: string) => [
+    const SubscribersDropDown = (userId: string) => [
         {
             liChildren: <HiOutlineMinusCircle/>,
             liText: 'Remove from group',
-            liFoo: () => deleteFromGroup(user_id)
+            liFoo: () => deleteFromGroup(userId)
         }
     ]
 

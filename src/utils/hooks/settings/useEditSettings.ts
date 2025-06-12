@@ -2,12 +2,16 @@ import {Dispatch, SetStateAction, useState} from "react";
 import {useParams} from "react-router-dom";
 import MessengerService from "@service/MessengerService";
 import {IMessengerSettings} from "@appTypes";
+import {useLiveUpdatesWS} from "@utils/hooks/useLiveUpdatesWS";
+import {useAppSelector} from "@hooks/useRedux";
 
 const useEditSettings = (
     setSettings: Dispatch<SetStateAction<IMessengerSettings>>
 ) => {
     const {messengerId} = useParams()
     const [popup, setPopup] = useState(false)
+    const socketRef = useLiveUpdatesWS()
+    const messengers = useAppSelector(state => state.live.messengers)
 
     const handleCancel = () => {
         setPopup(false)
@@ -51,6 +55,17 @@ const useEditSettings = (
                 ...prev,
                 removed_users: [...prev.removed_users.filter(({user}) => user.user_id !== userId)]
             }))
+
+            if (socketRef.current?.readyState === WebSocket.OPEN) {
+                socketRef.current.send(JSON.stringify({
+                    user_id: userId,
+                    method: 'JOIN_TO_MESSENGER',
+                    data: {
+                        ...messengers.find(messenger => messenger.messenger_id === messengerId),
+                        messenger_members: [userId]
+                    }
+                }))
+            }
         } catch (error) {
             console.log(error)
         }
@@ -89,6 +104,14 @@ const useEditSettings = (
                     ...prev,
                     moderators: [...prev.moderators.filter(({user}) => user.user_id !== userId)]
                 }))
+
+                if (socketRef.current?.readyState === WebSocket.OPEN) {
+                    socketRef.current.send(JSON.stringify({
+                        user_id: userId,
+                        method: 'REMOVE_FROM_MESSENGER',
+                        data: messengerId
+                    }))
+                }
             }
         } catch (error) {
             console.log(error)

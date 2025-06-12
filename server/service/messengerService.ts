@@ -69,6 +69,15 @@ class MessengerService {
         })
     }
 
+    async deleteChat(userId: string, recipientId: string) {
+        await models.message.destroy({
+            where: {
+                recipient_user_id: [recipientId, userId],
+                user_id: [recipientId, userId],
+            }
+        })
+    }
+
     async getReactions(messenger_id?: string) {
         let reactions
 

@@ -1,4 +1,4 @@
-import React, {FC} from 'react'
+import React, {FC, memo} from 'react'
 import style from './style.module.css'
 import {Contact} from "../"
 import {Buttons} from "@components/buttons"
@@ -10,7 +10,7 @@ interface ContactListProps {
     onClick: (user_id: string) => void
 }
 
-const ContactList: FC<ContactListProps> = ({contacts, text, onClick}) => {
+const ContactList: FC<ContactListProps> = memo(({contacts, text, onClick}) => {
     return (
         <section className={style.ContactListContainer}>
             {text && <p>{text}</p>}
@@ -21,6 +21,6 @@ const ContactList: FC<ContactListProps> = ({contacts, text, onClick}) => {
             )}
         </section>
     )
-}
+})
 
 export default ContactList
