@@ -24,7 +24,7 @@ interface IRegistrationResponseExtend extends IRegistrationResponse {
 }
 
 class AuthService {
-    async registration(user_body: IUser, user_files?: IUserFiles | null): Promise<IRegistrationResponseExtend | ApiError> {
+    public registration = async (user_body: IUser, user_files?: IUserFiles | null): Promise<IRegistrationResponseExtend | ApiError> => {
         const {user_name, user_email, user_password, user_bio} = user_body
         const userCheck = await models.users.findOne({where: {user_email: user_email}})
         if(userCheck) throw ApiError.badRequest(`User with email already exists`)
@@ -53,7 +53,7 @@ class AuthService {
         }
     }
 
-    async login(user_email: string, user_password: string) {
+    public login = async (user_email: string, user_password: string)=> {
         const user = await models.users.findOne({where: {user_email: user_email}}) as IUser | null
 
         if (!user) throw ApiError.notFound("User account not found")
@@ -75,7 +75,7 @@ class AuthService {
         }
     }
 
-    async sendCode(user_code_email: string) {
+    public sendCode = async (user_code_email: string)=> {
         const user_code_body = getRandomCryptoValue(100000, 999999)
         const user_code_id = uuid.v4()
 
@@ -84,7 +84,7 @@ class AuthService {
         return await models.user_code.create({user_code_id, user_code_email, user_code_body})
     }
 
-    async confirmEmail(user_code: number, user_email: string) {
+    public confirmEmail = async (user_code: number, user_email: string) => {
         const resData = await models.user_code.findOne({where: {user_code_email: user_email, user_code_body: user_code}})
 
         if (!resData) throw ApiError.notFound("You entered an incorrect code")
@@ -92,11 +92,11 @@ class AuthService {
         return resData
     }
 
-    async logout(refreshToken: string) {
+    public logout = async (refreshToken: string)=> {
         return await tokenService.deleteToken(refreshToken)
     }
 
-    async deleteAccount(refreshToken: string, user_id: string) {
+    public deleteAccount = async (refreshToken: string, user_id: string) => {
         await models.users.destroy({where: {user_id: user_id}})
 
         const folderPath = path.resolve(__dirname + "/../src/static/users", user_id)
@@ -105,7 +105,7 @@ class AuthService {
         return await tokenService.deleteToken(refreshToken)
     }
 
-    async refresh(refreshToken: string) {
+    public refresh = async (refreshToken: string) => {
         if (!refreshToken) throw ApiError.unauthorized("Unauthorized")
         const userData = tokenService.validateRefreshToken(refreshToken)
         const tokenDB = tokenService.findToken(refreshToken)
@@ -117,7 +117,7 @@ class AuthService {
 
         const tokens = tokenService.generateToken({user_id: user.user_id, user_email: user.user_email} )
 
-        await tokenService.saveToken(user.user_id, tokens!.refreshToken)
+        await tokenService.saveToken(user.user_id, tokens.refreshToken)
         await tokenService.deleteToken(refreshToken)
 
         return {
@@ -132,4 +132,4 @@ class AuthService {
     }
 }
 
-export default new AuthService()
+export default AuthService

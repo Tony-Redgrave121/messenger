@@ -1,81 +1,94 @@
 import {WebSocketServer, WebSocket} from "ws";
 import IFullMessenger from "../types/IFullMessenger";
 
+type WebSocketMethod =
+    | "CONNECTION"
+    | "JOIN_TO_MESSENGER"
+    | "REMOVE_FROM_MESSENGER"
+    | "UPDATE_LAST_MESSAGE"
+
+interface IMessage<T, M extends WebSocketMethod> {
+    user_id: string,
+    method: M,
+    data: T
+}
+
+interface ExtendedWebSocket extends WebSocket {
+    user_id?: string
+}
+
+type ConnectionMessage = IMessage<IFullMessenger, "CONNECTION">
+type JoinMessage = IMessage<IFullMessenger, "JOIN_TO_MESSENGER">
+type RemoveMessage = IMessage<string, "REMOVE_FROM_MESSENGER">
+type UpdateLastMessage = IMessage<IFullMessenger, "UPDATE_LAST_MESSAGE">
+
+type IncomingMessage = | ConnectionMessage | JoinMessage | RemoveMessage | UpdateLastMessage
+
 const liveUpdatesHandlerWS = (aWss: WebSocketServer) => {
-    type ILiveUpdateConfig<T> = {
-        user_id: string,
-        method: string,
-        data: T
+    const onConnection = (ws: ExtendedWebSocket, message: ConnectionMessage) => {
+        ws.user_id = message.user_id
+        handleBroadcast(message)
     }
 
-    interface UserWebSocket extends WebSocket {
-        user_id?: string
-    }
+    const handleBroadcastToMembers = (message: JoinMessage | UpdateLastMessage) => {
+        const {messenger_members, ...restData} = message.data
+        if (!messenger_members || messenger_members.length <= 0) return
 
-    const connectionUpdateHandler = (ws: UserWebSocket, config: ILiveUpdateConfig<IFullMessenger>) => {
-        ws.user_id = config.user_id
-        broadcastUpdate(config)
-    }
+        const payload = JSON.stringify({
+            method: message.method,
+            data: restData
+        })
 
-    const broadcastUpdate = (config: ILiveUpdateConfig<IFullMessenger>) => {
-        aWss.clients.forEach((client: UserWebSocket) => {
+        aWss.clients.forEach((client: ExtendedWebSocket) => {
             if (!client.user_id) return
 
-            if (client.user_id === config.user_id) {
-                client.send(JSON.stringify(config))
+            if (messenger_members.includes(client.user_id)) {
+                client.send(payload)
             }
         })
     }
 
-    const joinToMessenger = (messenger: ILiveUpdateConfig<IFullMessenger>, method: string) => {
-        aWss.clients.forEach((client: UserWebSocket) => {
-            const {messenger_members, ...restData} = messenger.data
-            if (!messenger_members.length) return
+    const handleBroadcast = (message: RemoveMessage | ConnectionMessage) => {
+        const payload = JSON.stringify({
+            method: message.method,
+            data: message.data
+        })
 
-            messenger.data.messenger_members.map(memberId => {
-                if (!client.user_id) return
+        aWss.clients.forEach((client: ExtendedWebSocket) => {
+            if (!client.user_id) return
 
-                if (client.user_id === memberId) {
-                    client.send(JSON.stringify({
-                        method: method,
-                        data: restData
-                    }))
+            if (client.user_id === message.user_id) {
+                client.send(payload)
+            }
+        })
+    }
+
+    return (ws: ExtendedWebSocket) => {
+        ws.on('message', (messageBuffer: Buffer) => {
+            try {
+                const message: IncomingMessage = JSON.parse(messageBuffer.toString())
+
+                switch (message.method) {
+                    case 'CONNECTION':
+                        onConnection(ws, message)
+                        break
+                    case "JOIN_TO_MESSENGER":
+                        handleBroadcastToMembers(message)
+                        break
+                    case "UPDATE_LAST_MESSAGE":
+                        handleBroadcastToMembers(message)
+                        break
+                    case "REMOVE_FROM_MESSENGER":
+                        handleBroadcast(message)
+                        break
+                    default:
+                        const exhaustiveCheck: never = message
+                        return exhaustiveCheck
                 }
-            })
-        })
-    }
-
-    const removeFromMessenger = (messenger: ILiveUpdateConfig<string>, method: string) => {
-        aWss.clients.forEach((client: UserWebSocket) => {
-            if (!client.user_id) return
-
-            if (client.user_id === messenger.user_id) {
-                client.send(JSON.stringify({
-                    method: method,
-                    data: messenger.data
-                }))
+            } catch (e) {
+                console.error("Live Updates WebSocket message handling error: ", e);
             }
         })
-    }
-
-    return (ws: WebSocket) => {
-        ws.on('message', (message: Buffer) => {
-            const data = JSON.parse(message.toString())
-
-            switch (data.method) {
-                case 'CONNECTION':
-                    connectionUpdateHandler(ws, data)
-                    break
-                case 'JOIN_TO_MESSENGER':
-                    joinToMessenger(data, 'JOIN_TO_MESSENGER')
-                    break
-                case 'REMOVE_FROM_MESSENGER':
-                    removeFromMessenger(data, 'REMOVE_FROM_MESSENGER')
-                    break
-            }
-        })
-
-        ws.on('error', (err) => console.error('WebSocket помилка: ', err));
     }
 }
 

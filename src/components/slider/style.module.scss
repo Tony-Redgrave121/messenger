@@ -20,14 +20,24 @@
     display: flex;
     justify-content: space-between;
 
-    > button {
+    > a {
       display: flex;
       gap: 16px;
       opacity: .5;
       transition: .2s opacity ease-in-out;
 
-      p {
-        font-size: 14px;
+      .OwnerInfo {
+        color: white;
+        line-height: 1.4;
+
+        p {
+          font-size: 14px;
+        }
+
+        & > :first-child {
+          font-size: 16px;
+          font-weight: 600;
+        }
       }
 
       > :first-child {

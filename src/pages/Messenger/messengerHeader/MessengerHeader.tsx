@@ -20,7 +20,7 @@ import {clsx} from "clsx";
 import SearchMessage from "../searchMessage/SearchMessage";
 import MessengerService from "@service/MessengerService";
 import {useNavigate, useParams} from "react-router-dom";
-import {deleteContact, deleteMessenger, setContacts} from "@store/reducers/liveUpdatesReducer";
+import {addContact, deleteContact, deleteMessenger} from "@store/reducers/liveUpdatesReducer";
 
 interface IChatHeader {
     messenger: IAdaptMessenger,
@@ -94,7 +94,7 @@ const MessengerHeader: FC<IChatHeader> = memo(({messenger, setSidebarState}) => 
                         try {
                             const newContact = await MessengerService.postContact(userId, messengerId, signal)
 
-                            if (newContact.status === 200) dispatch(setContacts([newContact.data]))
+                            if (newContact.status === 200) dispatch(addContact(newContact.data))
                         } catch (error) {
                             console.log(error)
                         }
@@ -136,7 +136,24 @@ const MessengerHeader: FC<IChatHeader> = memo(({messenger, setSidebarState}) => 
             {
                 liChildren: <HiOutlineTrash/>,
                 liText: 'Leave Group',
-                liFoo: () => {
+                liFoo: async () => {
+                    if (!messengerId) return
+
+                    const controller = new AbortController()
+                    const signal = controller.signal
+
+                    try {
+                        const res = await MessengerService.deleteMember(userId, messengerId, signal)
+
+                        if (res.status === 200) {
+                            dispatch(deleteMessenger(messengerId))
+                            navigate('/')
+                        }
+                    } catch (error) {
+                        console.log(error)
+                    }
+
+                    return () => controller.abort()
                 }
             }
         ],
@@ -150,7 +167,24 @@ const MessengerHeader: FC<IChatHeader> = memo(({messenger, setSidebarState}) => 
             {
                 liChildren: <HiOutlineTrash/>,
                 liText: 'Leave Channel',
-                liFoo: () => {
+                liFoo: async () => {
+                    if (!messengerId) return
+
+                    const controller = new AbortController()
+                    const signal = controller.signal
+
+                    try {
+                        const res = await MessengerService.deleteMember(userId, messengerId, signal)
+
+                        if (res.status === 200) {
+                            dispatch(deleteMessenger(messengerId))
+                            navigate('/')
+                        }
+                    } catch (error) {
+                        console.log(error)
+                    }
+
+                    return () => controller.abort()
                 }
             }
         ]

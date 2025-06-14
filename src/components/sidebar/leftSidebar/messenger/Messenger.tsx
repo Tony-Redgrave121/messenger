@@ -1,4 +1,4 @@
-import React, {Dispatch, FC, RefObject, SetStateAction, useEffect, useRef, useState} from 'react'
+import React, {Dispatch, FC, SetStateAction, useEffect, useRef, useState} from 'react'
 import {SidebarContainer} from "@components/sidebar";
 import {CSSTransition} from "react-transition-group";
 import '../animation.css'
@@ -29,7 +29,7 @@ interface IMessengerProps {
         state: boolean,
         type: string
     }>>,
-    socketRef: RefObject<WebSocket | null>
+    socketRef: WebSocket | null
 }
 
 const InitialValues: IMessenger = {
@@ -110,12 +110,14 @@ const Messenger: FC<IMessengerProps> = ({messengerCreation, setMessengerCreation
         else {
             navigate('/')
 
-            if (res.data && socketRef.current?.readyState === WebSocket.OPEN) {
-                socketRef.current.send(JSON.stringify({
-                    user_id: userId,
-                    method: 'JOIN_TO_MESSENGER',
-                    data: res.data
-                }))
+            if (members) {
+                if (res.data && socketRef?.readyState === WebSocket.OPEN) {
+                    socketRef.send(JSON.stringify({
+                        user_id: userId,
+                        method: 'JOIN_TO_MESSENGER',
+                        data: res.data
+                    }))
+                }
             }
 
             setAnimationState(false)

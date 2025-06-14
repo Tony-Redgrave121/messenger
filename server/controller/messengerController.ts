@@ -5,10 +5,10 @@ import MessengerService from "../service/messengerService";
 class MessengerController {
     getContacts = async (req: Request, res: Response, next: NextFunction) => {
         try {
-            const {userId} = req.params
+            const {user_id} = req.params
 
-            if (!userId) return next(ApiError.internalServerError('An error occurred while fetching contacts'))
-            const contacts = await MessengerService.fetchContacts(userId)
+            if (!user_id) return next(ApiError.internalServerError('An error occurred while fetching contacts'))
+            const contacts = await MessengerService.fetchContacts(user_id)
 
             res.json(contacts)
         } catch (e) {
@@ -17,11 +17,11 @@ class MessengerController {
     };
     postContact = async (req: Request, res: Response, next: NextFunction) => {
         try {
-            const {userId} = req.params
-            const contactId = req.body.contactId
+            const {user_id} = req.params
+            const contact_id = req.body.contact_id
 
-            if (!userId || !contactId) return next(ApiError.internalServerError('An error occurred while posting a contact'))
-            const contact = await MessengerService.postContact(userId, contactId)
+            if (!user_id || !contact_id) return next(ApiError.internalServerError('An error occurred while posting a contact'))
+            const contact = await MessengerService.postContact(user_id, contact_id)
 
             res.json(contact)
         } catch (e) {
@@ -30,16 +30,16 @@ class MessengerController {
     };
     deleteContact = async (req: Request, res: Response, next: NextFunction) => {
         try {
-            const {userId} = req.params
-            const {contactId} = req.query
+            const {user_id} = req.params
+            const {contact_id} = req.query
 
             if (
-                !userId ||
-                !contactId ||
-                typeof contactId !== 'string'
+                !user_id ||
+                !contact_id ||
+                typeof contact_id !== 'string'
             ) return next(ApiError.internalServerError('An error occurred while posting a contact'))
 
-            await MessengerService.deleteContact(userId, contactId)
+            await MessengerService.deleteContact(user_id, contact_id)
 
             res.sendStatus(200)
         } catch (e) {
@@ -48,16 +48,16 @@ class MessengerController {
     };
     deleteChat = async (req: Request, res: Response, next: NextFunction) => {
         try {
-            const {userId} = req.params
-            const {recipientId} = req.query
+            const {user_id} = req.params
+            const {recipient_id} = req.query
 
             if (
-                !userId ||
-                !recipientId ||
-                typeof recipientId !== 'string'
+                !user_id ||
+                !recipient_id ||
+                typeof recipient_id !== 'string'
             ) return next(ApiError.internalServerError('An error occurred while deleting a chat'))
 
-            await MessengerService.deleteChat(userId, recipientId)
+            await MessengerService.deleteChat(user_id, recipient_id)
 
             res.sendStatus(200)
         } catch (e) {
@@ -74,6 +74,20 @@ class MessengerController {
             const messenger = await MessengerService.postMessenger(user_id, messenger_name, messenger_desc, messenger_type, messenger_members, req.files)
 
             res.json(messenger)
+        } catch (e) {
+            return next(e)
+        }
+    };
+    deleteMessenger = async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            const {messenger_id} = req.query
+
+            if (!messenger_id || typeof messenger_id !== 'string')
+                return next(ApiError.internalServerError('An error occurred while deleting a messenger'))
+
+            await MessengerService.deleteMessenger(messenger_id)
+
+            res.sendStatus(200)
         } catch (e) {
             return next(e)
         }
@@ -124,17 +138,19 @@ class MessengerController {
     };
     putMessengerLink = async (req: Request, res: Response, next: NextFunction) => {
         try {
-            const {messenger_id} = req.params
 
-            if (!messenger_id)
-                return next(ApiError.internalServerError('An error occurred while updating the messenger link'))
-
-            const updateRes = await MessengerService.updateMessengerLink(messenger_id)
-
-            res.json(updateRes)
         } catch (e) {
             return next(e)
         }
+
+        const {messenger_id} = req.params
+
+        if (!messenger_id)
+            return next(ApiError.internalServerError('An error occurred while updating the messenger link'))
+
+        const updateRes = await MessengerService.updateMessengerLink(messenger_id)
+
+        res.json(updateRes)
     };
     postMessengerReactions = async (req: Request, res: Response, next: NextFunction) => {
         try {

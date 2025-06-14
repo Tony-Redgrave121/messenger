@@ -27,13 +27,15 @@ import style from "./style.module.css";
 import InputFile from "@components/inputForm/inputFile/InputFile";
 import Caption from "@components/caption/Caption";
 import messengerService from "@service/MessengerService";
-import {useParams} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import EditReactions from "@components/sidebar/rightSidebar/editMessenger/editReactions/EditReactions";
 import EditType from "@components/sidebar/rightSidebar/editMessenger/editType/EditType";
 import EditModerators from "@components/sidebar/rightSidebar/editMessenger/editMembers/EditModerators";
 import EditSubscribers from "@components/sidebar/rightSidebar/editMessenger/editMembers/EditSubscribers";
 import openForm from "@utils/logic/openForm";
 import EditRemoved from "@components/sidebar/rightSidebar/editMessenger/editMembers/EditRemoved";
+import {deleteMessenger} from "@store/reducers/liveUpdatesReducer";
+import {useAppDispatch} from "@hooks/useRedux";
 
 interface IEditMessengerProps {
     setState: Dispatch<SetStateAction<IAnimationState>>,
@@ -170,6 +172,27 @@ const EditMessenger: FC<IEditMessengerProps> = ({setState, setEntity, refSidebar
         }
     }
 
+    const navigate = useNavigate()
+    const dispatch = useAppDispatch()
+
+    const handleDelete = async () => {
+        if (!messengerId) return
+
+        try {
+            const controller = new AbortController()
+            const signal = controller.signal
+
+            const res = await messengerService.deleteMessenger(messengerId, signal)
+
+            if (res.status === 200) {
+                navigate('/')
+                dispatch(deleteMessenger(messengerId))
+            }
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
     return (
         <CSSTransition
             in={animation}
@@ -220,7 +243,8 @@ const EditMessenger: FC<IEditMessengerProps> = ({setState, setEntity, refSidebar
                         </InputForm>
                     </div>
                     <Caption>
-                        You can provide an optional description for your {settings.messenger_type === "group" ? 'group' : 'channel'}.
+                        You can provide an optional description for
+                        your {settings.messenger_type === "group" ? 'group' : 'channel'}.
                     </Caption>
                     <div className={style.Form}>
                         <Buttons.SettingButton
@@ -265,8 +289,11 @@ const EditMessenger: FC<IEditMessengerProps> = ({setState, setEntity, refSidebar
                         {settings.messenger_type !== "group" ? 'You can control access to the channel.' : ''}
                     </Caption>
                     <div className={style.Form}>
-                        <Buttons.SettingButton foo={() => {
-                        }} text={`Delete ${settings.messenger_type === "group" ? "and Leave Group" : "Channel"}`} isRed>
+                        <Buttons.SettingButton
+                            foo={handleDelete}
+                            text={`Delete ${settings.messenger_type === "group" ? "and Leave Group" : "Channel"}`}
+                            isRed
+                        >
                             <HiOutlineTrash/>
                         </Buttons.SettingButton>
                     </div>

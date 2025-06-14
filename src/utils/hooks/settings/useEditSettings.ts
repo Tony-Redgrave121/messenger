@@ -56,8 +56,8 @@ const useEditSettings = (
                 removed_users: [...prev.removed_users.filter(({user}) => user.user_id !== userId)]
             }))
 
-            if (socketRef.current?.readyState === WebSocket.OPEN) {
-                socketRef.current.send(JSON.stringify({
+            if (socketRef?.readyState === WebSocket.OPEN) {
+                socketRef.send(JSON.stringify({
                     user_id: userId,
                     method: 'JOIN_TO_MESSENGER',
                     data: {
@@ -90,9 +90,11 @@ const useEditSettings = (
 
     const deleteFromGroup = async (userId: string) => {
         if (!messengerId) return
+        const controller = new AbortController()
+        const signal = controller.signal
 
         try {
-            const deletedMember = await MessengerService.deleteMember(userId, messengerId)
+            const deletedMember = await MessengerService.deleteMember(userId, messengerId, signal)
 
             if (deletedMember.status === 200) {
                 setSettings(prev => ({
@@ -105,8 +107,8 @@ const useEditSettings = (
                     moderators: [...prev.moderators.filter(({user}) => user.user_id !== userId)]
                 }))
 
-                if (socketRef.current?.readyState === WebSocket.OPEN) {
-                    socketRef.current.send(JSON.stringify({
+                if (socketRef?.readyState === WebSocket.OPEN) {
+                    socketRef.send(JSON.stringify({
                         user_id: userId,
                         method: 'REMOVE_FROM_MESSENGER',
                         data: messengerId

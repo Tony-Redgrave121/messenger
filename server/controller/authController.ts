@@ -1,13 +1,15 @@
 import ApiError from "../error/ApiError"
 import models from "../model/models"
 import {NextFunction, Request, Response} from "express"
-import authService from "../service/authService"
-import AuthService from "../service/authService";
+import AuthService from '../service/authService'
+import {COOKIE_OPTIONS} from "../utils/cookieOptions";
 
 class AuthController {
-    registration = async (req: Request, res: Response, next: NextFunction) => {
+    constructor(private readonly authService: AuthService) {}
+
+    public registration = async (req: Request, res: Response, next: NextFunction) => {
         try {
-            const userData = await authService.registration(req.body, req.files)
+            const userData = await this.authService.registration(req.body, req.files)
             if (userData instanceof ApiError) {
                 res.json(userData)
                 return
@@ -19,15 +21,15 @@ class AuthController {
         } catch (e) {
             next(ApiError.internalServerError('An error occurred while registration'))
         }
-    };
+    }
 
-    login = async (req: Request, res: Response, next: NextFunction) => {
+    public login = async (req: Request, res: Response, next: NextFunction) => {
         try {
             const {user_email, user_password} = req.body
             const isExisting = await models.users.findOne({where: {user_email: user_email}})
 
             if (isExisting) {
-                const userData = await authService.login(user_email, user_password)
+                const userData = await this.authService.login(user_email, user_password)
 
                 res.cookie('refreshToken', userData.refreshToken, {maxAge: 7 * 24 * 60 * 60 * 1000, httpOnly: true})
 
@@ -38,71 +40,78 @@ class AuthController {
         } catch (e) {
             next(ApiError.internalServerError('An error occurred while login'))
         }
-    };
+    }
 
-    logout = async (req: Request, res: Response, next: NextFunction) => {
+    public logout = async (req: Request, res: Response, next: NextFunction) => {
         try {
             const {refreshToken} = req.cookies
-            const token = await authService.logout(refreshToken)
+            const token = await this.authService.logout(refreshToken)
             res.clearCookie('refreshToken')
 
             res.json(token)
         } catch (e) {
             next(ApiError.internalServerError("An error occurred while logging out"))
         }
-    };
+    }
 
-    deleteAccount = async (req: Request, res: Response, next: NextFunction) => {
+    public deleteAccount = async (req: Request, res: Response, next: NextFunction) => {
         try {
             const {refreshToken} = req.cookies
-            const token = await authService.deleteAccount(refreshToken, req.body.user_id)
+            const token = await this.authService.deleteAccount(refreshToken, req.body.user_id)
             res.clearCookie('refreshToken')
 
             res.json(token)
         } catch (e) {
             next(ApiError.internalServerError("An error occurred while deleting account"))
         }
-    };
+    }
 
-    sendCode = async (req: Request, res: Response, next: NextFunction) => {
+    public sendCode = async (req: Request, res: Response, next: NextFunction) => {
         try {
             const email = req.body.email
 
             if (!email) return next(ApiError.internalServerError('An error occurred while sending the email'))
-            const resData = await authService.sendCode(email)
+            const resData = await this.authService.sendCode(email)
 
             res.json(resData)
         } catch (e) {
             next(ApiError.internalServerError('An error occurred while activating account'))
         }
-    };
+    }
 
-    confirmEmail = async (req: Request, res: Response, next: NextFunction) => {
+    public confirmEmail = async (req: Request, res: Response, next: NextFunction) => {
         try {
             const {user_code, user_email} = req.body
 
             if (!user_code || !user_email) return next(ApiError.internalServerError("An error occurred while confirming an email"))
 
-            const resData = await AuthService.confirmEmail(user_code, user_email)
+            const resData = await this.authService.confirmEmail(user_code, user_email)
 
             res.json(resData)
         } catch (e) {
             next(ApiError.internalServerError('An error occurred while activating account'))
         }
-    };
+    }
 
-    refresh = async (req: Request, res: Response, next: NextFunction) => {
+    public refresh = async (req: Request, res: Response, next: NextFunction) => {
         try {
             const {refreshToken} = req.cookies
-            const userData = await authService.refresh(refreshToken)
+            const userData = await this.authService.refresh(refreshToken)
 
-
-            res.cookie('refreshToken', userData.refreshToken, {maxAge: 7 * 24 * 60 * 60 * 1000, httpOnly: true})
+            this.setRefreshToken(res, userData.refreshToken)
             res.json(userData)
         } catch (e) {
             next(ApiError.internalServerError("An error occurred while refreshing"))
         }
-    };
+    }
+
+    private setRefreshToken(res: Response, token: string) {
+        res.cookie('refreshToken', token, COOKIE_OPTIONS)
+    }
+
+    private clearRefreshToken(res: Response) {
+        res.clearCookie('refreshToken', COOKIE_OPTIONS)
+    }
 }
 
-export default new AuthController()
+export default AuthController

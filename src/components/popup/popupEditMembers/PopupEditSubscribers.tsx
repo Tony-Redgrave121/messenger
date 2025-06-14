@@ -35,8 +35,8 @@ const PopupEditSubscribers: FC<IPopupEditSubscribersProps> = ({handleCancel, set
                 members: [...prev.members, ...newMembers.data]
             }))
 
-            if (socketRef.current?.readyState === WebSocket.OPEN) {
-                socketRef.current.send(JSON.stringify({
+            if (socketRef?.readyState === WebSocket.OPEN) {
+                socketRef.send(JSON.stringify({
                     user_id: userId,
                     method: 'JOIN_TO_MESSENGER',
                     data: {

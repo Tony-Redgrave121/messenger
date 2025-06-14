@@ -29,7 +29,7 @@ const ChatList = memo(() => {
 
     return (
         <ul className={style.ChatList}>
-            {messengers.length &&
+            {messengers.length > 0 &&
                 messengers.map(messenger =>
                     <ChatBlock messenger={messenger} key={messenger.messenger_id}/>
                 )

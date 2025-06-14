@@ -1,61 +1,66 @@
-import { WebSocketServer, WebSocket } from "ws";
+import {WebSocketServer, WebSocket} from "ws";
 import IMessagesResponse from "../types/IMessagesResponse";
 
+type WebSocketMethod =
+    | "CONNECTION"
+    | "POST_MESSAGE"
+    | "ADD_REACTION"
+    | "REMOVE_REACTION"
+    | "EDIT_MESSAGE"
+    | "REMOVE_MESSAGE"
+
+interface IMessage {
+    messenger_id: string,
+    user_id: string,
+    method: WebSocketMethod,
+    data: IMessagesResponse
+}
+
+interface ExtendedWebSocket extends WebSocket {
+    messenger_id?: string;
+}
+
 const messengerHandlerWS = (aWss: WebSocketServer) => {
-    interface IMessage {
-        messenger_id: string,
-        user_id: string,
-        method: string,
-        data: IMessagesResponse
+    const onConnection = (ws: ExtendedWebSocket, message: IMessage) => {
+        ws.messenger_id = message.messenger_id
+        handleBroadcast(message)
     }
 
-    const connectionChatHandler = (ws: any, message: IMessage) => {
-        ws.id = message.messenger_id
-        broadcastChatConnection(message)
-    }
+    const handleBroadcast = (message: IMessage) => {
+        const payload = JSON.stringify({
+            method: message.method,
+            data: message.data
+        })
 
-    const broadcastChatConnection = (message: IMessage) => {
-        aWss.clients.forEach((client: any) => {
-            if (client.id === message.messenger_id || client.id === message.user_id) {
-                client.send(JSON.stringify(message))
+        aWss.clients.forEach((client: ExtendedWebSocket) => {
+            if (client.messenger_id === message.messenger_id || client.messenger_id === message.user_id) {
+                client.send(payload)
             }
         })
     }
 
-    const handleMessage = (message: IMessage, method: string) => {
-        aWss.clients.forEach((client: any) => {
-            if (client.id === message.messenger_id || client.id === message.user_id) {
-                client.send(JSON.stringify({
-                    method: method,
-                    data: message.data
-                }))
-            }
-        })
-    }
+    return (ws: ExtendedWebSocket) => {
+        ws.on('message', (messageBuffer: Buffer) => {
+            try {
+                const message: IMessage = JSON.parse(messageBuffer.toString())
 
-    return (ws: WebSocket) => {
-        ws.on('message', (message: Buffer) => {
-            const data = JSON.parse(message.toString())
-
-            switch (data.method) {
-                case 'CONNECTION':
-                    connectionChatHandler(ws, data)
-                    break
-                case 'POST_MESSAGE':
-                    handleMessage(data, 'POST_MESSAGE')
-                    break
-                case 'ADD_REACTION':
-                    handleMessage(data, 'ADD_REACTION')
-                    break
-                case 'REMOVE_REACTION':
-                    handleMessage(data, 'REMOVE_REACTION')
-                    break
-                case 'EDIT_MESSAGE':
-                    handleMessage(data, 'EDIT_MESSAGE')
-                    break
-                case 'REMOVE_MESSAGE':
-                    handleMessage(data, 'REMOVE_MESSAGE')
-                    break
+                switch (message.method) {
+                    case "CONNECTION":
+                        onConnection(ws, message);
+                        break
+                    case "POST_MESSAGE":
+                    case "ADD_REACTION":
+                    case "REMOVE_REACTION":
+                    case "EDIT_MESSAGE":
+                    case "REMOVE_MESSAGE":
+                        handleBroadcast(message)
+                        break
+                    default:
+                        const exhaustiveCheck: never = message.method
+                        return exhaustiveCheck
+                }
+            } catch (e) {
+                console.error("Messenger WebSocket message handling error: ", e);
             }
         })
     }

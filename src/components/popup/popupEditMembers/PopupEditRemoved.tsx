@@ -59,8 +59,8 @@ const PopupEditRemoved: FC<IPopupEditModeratorsProps> = (
                 members: [...prev.members.filter(member => member.user.user_id !== newRemovedMember.data.user.user_id)],
             }))
 
-            if (socketRef.current?.readyState === WebSocket.OPEN) {
-                socketRef.current.send(JSON.stringify({
+            if (socketRef?.readyState === WebSocket.OPEN) {
+                socketRef.send(JSON.stringify({
                     user_id: userId,
                     method: 'REMOVE_FROM_MESSENGER',
                     data: messengerId

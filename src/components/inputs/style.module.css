@@ -2,45 +2,73 @@
 .RangeInput, .WideInput {
   cursor: pointer;
   border-radius: 5px;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background: transparent;
 }
 .RangeInput::-webkit-slider-thumb, .WideInput::-webkit-slider-thumb {
   -webkit-appearance: none;
-  background: #a8a8a8;
   height: 12px;
   width: 12px;
+  background: #a8a8a8;
   border-radius: 50%;
   transition: 0.2s all ease-in-out;
   margin-top: -5px;
 }
 .RangeInput::-webkit-slider-thumb:hover, .WideInput::-webkit-slider-thumb:hover {
-  transform: scale(110%);
+  transform: scale(1.1);
   background-color: white;
 }
+.RangeInput::-moz-range-thumb, .WideInput::-moz-range-thumb {
+  height: 12px;
+  width: 12px;
+  background: #a8a8a8;
+  border-radius: 50%;
+  border: none;
+  transition: 0.2s all ease-in-out;
+}
+.RangeInput::-moz-range-thumb:hover, .WideInput::-moz-range-thumb:hover {
+  transform: scale(1.1);
+  background-color: white;
+}
+.RangeInput::-ms-thumb, .WideInput::-ms-thumb {
+  height: 12px;
+  width: 12px;
+  background: #a8a8a8;
+  border-radius: 50%;
+  border: none;
+}
 .RangeInput::-webkit-slider-runnable-track, .WideInput::-webkit-slider-runnable-track {
-  border-radius: 5px;
-}
-
-.RangeInput {
-  width: 180px;
-}
-.RangeInput::-webkit-slider-runnable-track {
   height: 2px;
   border-radius: 5px;
   background-color: #a8a8a8;
   transition: 0.2s background-color ease-in-out;
 }
-.RangeInput::-webkit-slider-runnable-track:hover {
+.RangeInput::-webkit-slider-runnable-track:hover, .WideInput::-webkit-slider-runnable-track:hover {
   background-color: white;
+}
+.RangeInput::-moz-range-track, .WideInput::-moz-range-track {
+  height: 2px;
+  border-radius: 5px;
+  background-color: #a8a8a8;
+  transition: 0.2s background-color ease-in-out;
+}
+.RangeInput::-ms-track, .WideInput::-ms-track {
+  height: 2px;
+  border-radius: 5px;
+  background-color: #a8a8a8;
+  border-color: transparent;
+  color: transparent;
+}
+
+.RangeInput {
+  width: 180px;
 }
 
 .WideInput {
   width: 100%;
-  background-color: #a8a8a8;
-  background-image: linear-gradient(white, white);
-  background-size: 0;
-  background-repeat: no-repeat;
   height: 3px;
-  -webkit-appearance: none;
 }
 .WideInput::-webkit-slider-thumb {
   height: 14px;
@@ -48,9 +76,16 @@
   margin-top: -5.5px;
   background: white;
 }
-.WideInput::-webkit-slider-runnable-track {
+.WideInput::-moz-range-thumb {
+  height: 14px;
+  width: 14px;
+  background: white;
+  border: none;
+}
+.WideInput::-webkit-slider-runnable-track, .WideInput::-moz-range-track, .WideInput::-ms-track {
   height: 3px;
-  background-color: unset;
+  background-color: #a8a8a8;
+  border-radius: 5px;
 }
 
 .VolumeBlock {

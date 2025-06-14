@@ -9,10 +9,11 @@ const useGetContacts = () => {
 
     useEffect(() => {
         const controller = new AbortController()
+        const signal = controller.signal
 
         const getContacts = async () => {
             try {
-                const contacts = await messengerService.getContacts(userId, controller.signal)
+                const contacts = await messengerService.getContacts(userId, signal)
 
                 if (contacts.status === 200) {
                     dispatch(setContacts(contacts.data))

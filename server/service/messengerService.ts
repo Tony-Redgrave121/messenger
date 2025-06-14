@@ -8,6 +8,8 @@ import IReaction from "../types/IReaction";
 import path from "path";
 import IMessenger from "../types/IMessenger";
 import changeOldImage from "../lib/changeOldImage";
+import {Op} from "sequelize";
+import deleteAllMessages from "../lib/deleteAllMessages";
 
 interface IUserFiles {
     messenger_image?: UploadedFile
@@ -70,12 +72,26 @@ class MessengerService {
     }
 
     async deleteChat(userId: string, recipientId: string) {
-        await models.message.destroy({
+        const messages = await models.message.findAll({
             where: {
-                recipient_user_id: [recipientId, userId],
-                user_id: [recipientId, userId],
-            }
-        })
+                [Op.or]: [
+                    {user_id: userId, recipient_user_id: recipientId},
+                    {user_id: recipientId, recipient_user_id: userId}
+                ]
+            },
+            attributes: ['message_id'],
+            raw: true,
+        }) as unknown as { message_id: string }[]
+
+        const messageIds = await deleteAllMessages(messages)
+        await models.message.destroy({where: {message_id: messageIds}})
+    }
+
+    async deleteMessenger(messengerId: string) {
+        const messengerPath = path.resolve(__dirname + "/../src/static/messengers", messengerId)
+        if (fs.existsSync(messengerPath)) await fs.promises.rm(messengerPath, {recursive: true, force: true})
+
+        await models.messenger.destroy({where: {messenger_id: messengerId}})
     }
 
     async getReactions(messenger_id?: string) {
@@ -100,13 +116,9 @@ class MessengerService {
 
             if (!reactionsIds) return
 
-            reactions = await Promise.all(
-                reactionsIds.map(async (reactionId) => {
-                    return await models.reactions.findOne({
-                        where: {reaction_id: reactionId}
-                    })
-                })
-            )
+            reactions = await models.reactions.findAll({
+                where: {reaction_id: reactionsIds}
+            })
         } else {
             reactions = await models.reactions.findAll()
             if (!reactions) throw ApiError.internalServerError("No reactions found")
@@ -267,24 +279,39 @@ class MessengerService {
     }
 
     async updateMessengerLink(messenger_id: string) {
-        const messengerLink = uuid.v4()
+        const newMessengerId = uuid.v4()
+
+        const messages = await models.message.findAll({
+            where: {messenger_id: messenger_id},
+            attributes: ['message_id'],
+            raw: true,
+        }) as unknown as { message_id: string }[]
 
         const updateRes = await models.messenger.update(
-            {messenger_id: messengerLink},
+            {messenger_id: newMessengerId},
             {where: {messenger_id: messenger_id}}
         )
         if (!updateRes) throw ApiError.internalServerError("No messenger found")
 
-        const messengerPath = path.resolve(__dirname + "/../src/static/messengers", messenger_id)
-        const newMessengerPath = path.resolve(__dirname + "/../src/static/messengers", messengerLink)
+        const oldPath = path.resolve(__dirname + "/../src/static/messengers", messenger_id)
+        const newPath = path.resolve(__dirname + "/../src/static/messengers", newMessengerId)
 
-        fs.rename(messengerPath, newMessengerPath, () => {
-            throw ApiError.internalServerError("Error when changing the path to the messenger")
-        })
+        const messageIds = messages.map(m => m.message_id)
 
-        return {
-            messenger_id: messengerLink
+        if (messageIds.length > 0) {
+            await models.message_file.update(
+                {message_file_path: newMessengerId},
+                {where: {message_id: messageIds}}
+            )
         }
+
+        try {
+            await fs.promises.rename(oldPath, newPath)
+        } catch (err) {
+            throw ApiError.internalServerError("Failed to rename messenger folder")
+        }
+
+        return {messenger_id: newMessengerId}
     }
 
     async postMessengerReactions(messenger_setting_id: string, newReactions: string[]) {

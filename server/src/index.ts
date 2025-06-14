@@ -24,16 +24,20 @@ app.use(compression())
 app.use(express.json())
 app.use(helmet({
     contentSecurityPolicy: false,
-    xXssProtection: false,
-    xContentTypeOptions: true
+    crossOriginResourcePolicy: {policy: "cross-origin"},
+    referrerPolicy: {policy: "no-referrer"},
+    xContentTypeOptions: true,
+    xDnsPrefetchControl: true,
+    hidePoweredBy: true
 }))
 app.use(cors({
     credentials: true,
     origin: process.env.CLIENT_URL
 }))
 app.use('/static', express.static(path.resolve(__dirname, 'static'), {
-    setHeaders: (res, _) => {
-        res.setHeader('Cache-Control', 'no-cache')
+    maxAge: '0',
+    setHeaders: (res) => {
+        res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate')
     }
 }))
 app.use(fileUpload({}))
@@ -45,9 +49,14 @@ app.ws("/messenger", messengerHandlerWS(aWss))
 app.ws("/live-updates", liveUpdatesHandlerWS(aWss))
 
 const startServer = async () => {
-    await sequelize.authenticate()
-    await sequelize.sync()
-    app.listen(PORT, () => console.log(`Server started on port ${PORT}`))
+    try {
+        await sequelize.authenticate()
+        await sequelize.sync()
+        app.listen(PORT, () => console.log(`Server started on port ${PORT}`))
+    } catch (e) {
+        console.error(e)
+        process.exit(1)
+    }
 }
 
 startServer()

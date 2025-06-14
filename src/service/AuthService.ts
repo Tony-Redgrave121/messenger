@@ -4,7 +4,8 @@ import {
     REFRESH_ROUTE,
     REGISTRATION_ROUTE,
     DELETE_ACCOUNT_ROUTE,
-    SEND_CODE_ROUTE, CONFIRM_EMAIL_ROUTE
+    SEND_CODE_ROUTE,
+    CONFIRM_EMAIL_ROUTE
 } from "@utils/const/const"
 import $api from '@utils/http/index'
 import {AxiosResponse} from 'axios'

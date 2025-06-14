@@ -21,19 +21,39 @@
 .ChatContainer .DescContainer p {
   color: #a9a9a9;
 }
-.ChatContainer .DescContainer h3, .ChatContainer .DescContainer > p {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-.ChatContainer .DescContainer span {
+.ChatContainer .DescContainer .MessengerInfo, .ChatContainer .DescContainer .MessageInfo {
   display: flex;
   justify-content: space-between;
 }
-.ChatContainer .DescContainer span p {
+.ChatContainer .DescContainer .MessengerInfo > :first-child {
+  font-size: 16px;
+  font-weight: 600;
+  margin-left: unset;
+  color: white;
+}
+.ChatContainer .DescContainer .MessengerInfo p {
   font-size: 12px;
   white-space: nowrap;
   margin-left: 15px;
+}
+.ChatContainer .DescContainer .MessageInfo {
+  position: relative;
+}
+.ChatContainer .DescContainer .MessageInfo > p {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 95%;
+}
+.ChatContainer .DescContainer .MessageInfo b {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  min-width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background-color: #707579;
 }
 .ChatContainer:hover {
   background-color: #2d2d2d;

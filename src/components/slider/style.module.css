@@ -19,23 +19,31 @@
   display: flex;
   justify-content: space-between;
 }
-.SliderContainer .ToolsBlock > button {
+.SliderContainer .ToolsBlock > a {
   display: flex;
   gap: 16px;
   opacity: 0.5;
   transition: 0.2s opacity ease-in-out;
 }
-.SliderContainer .ToolsBlock > button p {
+.SliderContainer .ToolsBlock > a .OwnerInfo {
+  color: white;
+  line-height: 1.4;
+}
+.SliderContainer .ToolsBlock > a .OwnerInfo p {
   font-size: 14px;
 }
-.SliderContainer .ToolsBlock > button > :first-child {
+.SliderContainer .ToolsBlock > a .OwnerInfo > :first-child {
+  font-size: 16px;
+  font-weight: 600;
+}
+.SliderContainer .ToolsBlock > a > :first-child {
   width: 44px;
   height: 44px;
 }
-.SliderContainer .ToolsBlock > button > :first-child h1 {
+.SliderContainer .ToolsBlock > a > :first-child h1 {
   font-size: 15px;
 }
-.SliderContainer .ToolsBlock > button:hover {
+.SliderContainer .ToolsBlock > a:hover {
   opacity: 1;
 }
 .SliderContainer .ToolsBlock > span {

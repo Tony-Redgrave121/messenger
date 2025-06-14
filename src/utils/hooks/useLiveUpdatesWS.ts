@@ -1,28 +1,25 @@
-import {useEffect, useRef} from "react";
+import {useEffect} from "react";
 import {useAppDispatch, useAppSelector} from "@hooks/useRedux";
-import {addMessenger, deleteMessenger} from "@store/reducers/liveUpdatesReducer";
+import {addMessenger, deleteMessenger, updateMessenger} from "@store/reducers/liveUpdatesReducer";
+
+let socketInstance: WebSocket | null = null
 
 export const useLiveUpdatesWS = () => {
-    const socketRef = useRef<WebSocket | null>(null)
     const userId = useAppSelector(state => state.user.userId)
     const dispatch = useAppDispatch()
 
     useEffect(() => {
-        if (socketRef.current && socketRef.current.readyState === WebSocket.OPEN) socketRef.current.close()
+        if (socketInstance && socketInstance.readyState <= 1) return
+        socketInstance = new WebSocket("ws://localhost:5000/live-updates")
 
-        socketRef.current = new WebSocket("ws://localhost:5000/live-updates")
-        const socket = socketRef.current
-
-        if (!socket) return
-
-        socket.onopen = () => {
-            socket.send(JSON.stringify({
+        socketInstance.onopen = () => {
+            socketInstance?.send(JSON.stringify({
                 user_id: userId,
                 method: 'CONNECTION'
             }))
         }
 
-        socket.onmessage = (event) => {
+        socketInstance.onmessage = (event) => {
             let message = JSON.parse(event.data)
 
             switch (message.method) {
@@ -34,19 +31,26 @@ export const useLiveUpdatesWS = () => {
                 case 'REMOVE_FROM_MESSENGER':
                     dispatch(deleteMessenger(message.data))
                     break
+                case 'UPDATE_LAST_MESSAGE':
+                    const messageData = message.data
+                    const currentMessengerId = window.location.pathname.split('/').pop()
+
+                    dispatch(updateMessenger({
+                        messenger_id: messageData.messenger_id,
+                        message_text: messageData.message_text,
+                        message_date: messageData.message_date,
+                        isCurrentMessenger: messageData.messenger_id === currentMessengerId
+                    }))
+                    break
                 default:
                     break
             }
         }
 
-        socket.onerror = (error) => {
+        socketInstance.onerror = (error) => {
             console.error("WebSocket Error:", error)
-        }
-
-        return () => {
-            if (socket.readyState === 1) socket.close()
         }
     }, [dispatch, userId])
 
-    return socketRef
+    return socketInstance
 }

@@ -19,14 +19,16 @@ import UserService from "../../service/UserService"
 import {useParams} from "react-router-dom";
 import {useAppSelector} from "@hooks/useRedux";
 import getFileObject from "../../utils/logic/getFileObject";
+import {useLiveUpdatesWS} from "@utils/hooks/useLiveUpdatesWS";
 
 interface IInputBlock {
     reply: IMessagesResponse | null,
     setReply: Dispatch<SetStateAction<IMessagesResponse | null>>,
-    socketRef: RefObject<WebSocket | null>
+    socketRef: RefObject<WebSocket | null>,
+    members?: string[]
 }
 
-const InputBlock: FC<IInputBlock> = ({reply, setReply, socketRef}) => {
+const InputBlock: FC<IInputBlock> = ({reply, setReply, socketRef, members}) => {
     const [inputText, setInputText] = useState('')
     const refTextarea = useRef<HTMLTextAreaElement>(null)
 
@@ -63,7 +65,8 @@ const InputBlock: FC<IInputBlock> = ({reply, setReply, socketRef}) => {
     }
 
     const {type, messengerId, postId} = useParams()
-    const user_id = useAppSelector(state => state.user.userId)
+    const userId = useAppSelector(state => state.user.userId)
+    const liveSocketRef = useLiveUpdatesWS()
 
     const handleSubmit = async () => {
         if (!type || !messengerId) return
@@ -74,7 +77,7 @@ const InputBlock: FC<IInputBlock> = ({reply, setReply, socketRef}) => {
             message.append('message_type', filesState.files ? filesState.type : 'message')
             reply && message.append('reply_id', reply.message_id)
             postId && message.append('post_id', postId)
-            message.append('user_id', user_id)
+            message.append('user_id', userId)
             type !== "chat" ?
                 message.append('messenger_id',  messengerId) :
                 message.append('recipient_user_id', messengerId)
@@ -99,9 +102,22 @@ const InputBlock: FC<IInputBlock> = ({reply, setReply, socketRef}) => {
             if (newMessage && socketRef.current?.readyState === WebSocket.OPEN) {
                 socketRef.current.send(JSON.stringify({
                     messenger_id: `${messengerId}${postId ? `/${postId}` : ''}`,
-                    user_id: user_id,
+                    user_id: userId,
                     method: 'POST_MESSAGE',
                     data: newMessage.data
+                }))
+            }
+
+            if (!postId && newMessage && liveSocketRef?.readyState === WebSocket.OPEN) {
+                liveSocketRef.send(JSON.stringify({
+                    user_id: userId,
+                    method: 'UPDATE_LAST_MESSAGE',
+                    data: {
+                        messenger_id: type !== 'chat' ? messengerId : userId,
+                        message_date: newMessage.data.message_date,
+                        message_text: newMessage.data.message_text,
+                        messenger_members: members
+                    }
                 }))
             }
         }

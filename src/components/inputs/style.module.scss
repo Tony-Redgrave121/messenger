@@ -3,51 +3,83 @@
 .RangeInput, .WideInput {
   cursor: pointer;
   border-radius: 5px;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background: transparent;
 
   &::-webkit-slider-thumb {
     -webkit-appearance: none;
-    background: #a8a8a8;
     height: 12px;
     width: 12px;
+    background: #a8a8a8;
     border-radius: 50%;
-    transition: .2s all ease-in-out;
+    transition: 0.2s all ease-in-out;
     margin-top: -5px;
 
     &:hover {
-      transform: scale(110%);
+      transform: scale(1.1);
       background-color: white;
     }
   }
 
-  &::-webkit-slider-runnable-track {
-    border-radius: 5px;
-  }
-}
+  &::-moz-range-thumb {
+    height: 12px;
+    width: 12px;
+    background: #a8a8a8;
+    border-radius: 50%;
+    border: none;
+    transition: 0.2s all ease-in-out;
 
-.RangeInput {
-  width: 180px;
+    &:hover {
+      transform: scale(1.1);
+      background-color: white;
+    }
+  }
+
+  &::-ms-thumb {
+    height: 12px;
+    width: 12px;
+    background: #a8a8a8;
+    border-radius: 50%;
+    border: none;
+  }
 
   &::-webkit-slider-runnable-track {
     height: 2px;
     border-radius: 5px;
     background-color: #a8a8a8;
-    transition: .2s background-color ease-in-out;
+    transition: 0.2s background-color ease-in-out;
 
     &:hover {
       background-color: white;
     }
   }
+
+  &::-moz-range-track {
+    height: 2px;
+    border-radius: 5px;
+    background-color: #a8a8a8;
+    transition: 0.2s background-color ease-in-out;
+  }
+
+  &::-ms-track {
+    height: 2px;
+    border-radius: 5px;
+    background-color: #a8a8a8;
+    border-color: transparent;
+    color: transparent;
+  }
+}
+
+.RangeInput {
+  width: 180px;
 }
 
 .WideInput {
   width: 100%;
-  background-color: #a8a8a8;
-  background-image: linear-gradient(#ffff, #ffff);
-  background-size: 0;
-  background-repeat: no-repeat;
   height: 3px;
-  -webkit-appearance: none;
-  
+
   &::-webkit-slider-thumb {
     height: 14px;
     width: 14px;
@@ -55,9 +87,17 @@
     background: white;
   }
 
-  &::-webkit-slider-runnable-track {
+  &::-moz-range-thumb {
+    height: 14px;
+    width: 14px;
+    background: white;
+    border: none;
+  }
+
+  &::-webkit-slider-runnable-track, &::-moz-range-track, &::-ms-track {
     height: 3px;
-    background-color: unset;
+    background-color: #a8a8a8;
+    border-radius: 5px;
   }
 }
 

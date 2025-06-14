@@ -22,6 +22,7 @@ import useAnimation from "@hooks/useAnimation";
 import Inputs from "@components/inputs/Inputs";
 import {useAppDispatch, useAppSelector} from "@hooks/useRedux";
 import {setZoom} from "@store/reducers/sliderReducer";
+import {Link} from "react-router-dom";
 
 interface ISlider {
     animation: {
@@ -84,13 +85,13 @@ const Slider: FC<ISlider> = ({animation, media, user}) => {
         >
             <div className={style.SliderContainer} ref={animation.ref}>
                 <div onClick={event => event.stopPropagation()} className={style.ToolsBlock}>
-                    <button>
+                    <Link to={`/chat/${user.owner_id}`}>
                         <LoadFile imagePath={user.owner_image ? `users/${user.owner_id}/${user.owner_image}` : ''} imageTitle={user.owner_name}/>
-                        <div>
-                            <h4>{user.owner_name}</h4>
+                        <div className={style.OwnerInfo}>
+                            <p>{user.owner_name}</p>
                             <p>{getDate(user.message_date)}</p>
                         </div>
-                    </button>
+                    </Link>
                     <span>
                         <Buttons.WhiteButton foo={() => deleteMedia()}>
                             <HiOutlineTrash/>
