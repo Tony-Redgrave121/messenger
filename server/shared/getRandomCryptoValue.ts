@@ -1,4 +1,6 @@
 export default function getRandomCryptoValue(min: number, max: number) {
+    if (min > max) throw new Error("Minimum value cannot be greater than maximum value")
+
     const buffer = new Uint32Array(1)
     global.crypto.getRandomValues(buffer)
 

@@ -95,38 +95,42 @@ const Messenger: FC<IMessengerProps> = ({messengerCreation, setMessengerCreation
     }
 
     const handleCreation: SubmitHandler<IMessenger> = async (data) => {
-        const formData = new FormData()
+        try {
+            const formData = new FormData()
 
-        formData.append('user_id', userId)
-        formData.append('messenger_name', data.messenger_name)
-        formData.append('messenger_image', data.messenger_image as File)
-        formData.append('messenger_desc', data.messenger_desc)
-        formData.append('messenger_type', messengerCreation.type)
+            formData.append('user_id', userId)
+            formData.append('messenger_name', data.messenger_name)
+            formData.append('messenger_image', data.messenger_image as File)
+            formData.append('messenger_desc', data.messenger_desc)
+            formData.append('messenger_type', messengerCreation.type)
 
-        if (members) members.map(member => formData.append('messenger_members', member.user_id))
-        const res = await messengerService.postMessenger(formData) as any
+            if (members) members.map(member => formData.append('messenger_members', member.user_id))
+            const res = await messengerService.postMessenger(formData) as any
 
-        if (res.data.message) setErrorForm(res.data.message)
-        else {
-            navigate('/')
+            if (res.data.message) setErrorForm(res.data.message)
+            else {
+                navigate('/')
 
-            if (members) {
-                if (res.data && socketRef?.readyState === WebSocket.OPEN) {
-                    socketRef.send(JSON.stringify({
-                        user_id: userId,
-                        method: 'JOIN_TO_MESSENGER',
-                        data: res.data
-                    }))
+                if (members) {
+                    if (res.data && socketRef?.readyState === WebSocket.OPEN) {
+                        socketRef.send(JSON.stringify({
+                            user_id: userId,
+                            method: 'JOIN_TO_MESSENGER',
+                            data: res.data
+                        }))
+                    }
                 }
+
+                setAnimationState(false)
+                dispatch(addMessenger(res.data))
+
+                return setMessengerCreation(prev => ({
+                    ...prev,
+                    state: false,
+                }))
             }
-
-            setAnimationState(false)
-            dispatch(addMessenger(res.data))
-
-            return setMessengerCreation(prev => ({
-                ...prev,
-                state: false,
-            }))
+        } catch (e) {
+            console.log(e)
         }
     }
 

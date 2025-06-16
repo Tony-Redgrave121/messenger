@@ -26,6 +26,7 @@ export default class UserService {
 
     static async fetchMessages(user_id: string, type: string, messenger_id: string, post_id: string | undefined, signal: AbortSignal): Promise<AxiosResponse<IMessagesResponse[]>> {
         const query = `?type=${type}&user_id=${user_id}&messenger_id=${messenger_id}${post_id ? `&post_id=${post_id}` : ""}`
+
         return $api.get<IMessagesResponse[]>(`${GET_MESSAGES_ROUTE.replace(":messenger_id", messenger_id)}${query}`, {signal})
     }
 

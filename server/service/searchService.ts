@@ -1,14 +1,12 @@
 import models from "../model/models"
 import ApiError from "../error/ApiError";
 import {Op, Sequelize} from "sequelize";
-import findAllMessagesQuery from "../lib/querys/findAllMessagesQuery";
+import findAllMessagesQuery from "../shared/sequelizeQueries/findAllMessagesQuery";
 
 class SearchService {
-    async getMessengers(query: string, type: string) {
-        let messengers
-
+    public async getMessengers(query: string, type: string) {
         if (type !== "chat") {
-            messengers = await models.messenger.findAll({
+            const chat = await models.messenger.findAll({
                 include: [
                     {
                         model: models.members,
@@ -34,8 +32,11 @@ class SearchService {
                 limit: 10,
                 subQuery: false
             })
+
+            if (!chat) throw ApiError.internalServerError("No chats found")
+            return chat
         } else {
-            messengers = await models.users.findAll({
+            const messengers = await models.users.findAll({
                 attributes: [
                     'user_id',
                     'user_name',
@@ -45,17 +46,16 @@ class SearchService {
                 limit: 10,
                 where: {user_name: {[Op.iLike]: `%${query}%`}},
             })
+
+            if (!messengers) throw ApiError.internalServerError("No messengers found")
+            return messengers
         }
-
-        if (!messengers) throw ApiError.internalServerError("No messengers found")
-
-        return messengers
     }
-    async getMessages(query: string, type: string, user_id: string, messenger_id: string, post_id?: string) {
+    public async getMessages(query: string, type: string, user_id: string, messenger_id: string, post_id?: string) {
         const whereBase = type !== "chat" ?
             {
                 messenger_id: messenger_id,
-                parent_post_id: post_id ? post_id : null,
+                parent_post_id: post_id ?? null,
                 message_text: {[Op.iLike]: `%${query}%`}
             } :
             {
@@ -63,7 +63,7 @@ class SearchService {
                 message_text: {[Op.iLike]: `%${query}%`}
             }
 
-        const messages = await models.message.findAll({
+        return await models.message.findAll({
             where: whereBase,
             ...findAllMessagesQuery,
             attributes: {
@@ -71,11 +71,7 @@ class SearchService {
             },
             order: [['message_date', 'ASC']],
         })
-
-        if (!messages) throw ApiError.internalServerError("No messages found")
-
-        return messages
     }
 }
 
-export default new SearchService()
+export default SearchService

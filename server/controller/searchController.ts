@@ -1,53 +1,42 @@
 import ApiError from "../error/ApiError"
 import {NextFunction, Request, Response} from "express"
 import SearchService from "../service/searchService";
+import validateQueryParams from "../shared/validation/validateQueryParams";
 
 class SearchController {
+    constructor(private readonly searchService: SearchService) {}
+
     async getMessengers(req: Request, res: Response, next: NextFunction) {
         try {
-            const {query, type} = req.query
+            const validatedData = validateQueryParams(req.query, ['query', 'type'])
+            if (validatedData instanceof ApiError) return next(validatedData)
 
-            if (
-                !query ||
-                !type ||
-                typeof query !== 'string' ||
-                typeof type !== 'string'
-            ) return next(ApiError.internalServerError('An error occurred while fetching messengers'))
+            const {query, type} = validatedData
 
-            const messengers = await SearchService.getMessengers(query, type)
-
+            const messengers = await this.searchService.getMessengers(query, type)
             res.json(messengers)
         } catch (e) {
-            return next(ApiError.internalServerError("An error occurred while fetching messengers"))
+            return next(e)
         }
     }
     async getMessages(req: Request, res: Response, next: NextFunction) {
         try {
+            const validatedData = validateQueryParams(req.query, ['query', 'type', 'user_id', 'messenger_id'])
+            if (validatedData instanceof ApiError) return next(validatedData)
 
-        } catch (e) {
-            return next(ApiError.internalServerError("An error occurred while fetching messages"))
-        }
-        const {query, type, user_id, messenger_id, post_id} = req.query
+            const {query, type, user_id, messenger_id} = validatedData
+            const {post_id} = req.query
 
-        if (
-            !query ||
-            !type ||
-            typeof query !== 'string' ||
-            typeof type !== 'string' ||
-            !user_id ||
-            !messenger_id ||
-            typeof user_id !== 'string' ||
-            typeof messenger_id !== 'string'
-        ) return next(ApiError.internalServerError('An error occurred while fetching messages'))
+            if (typeof post_id !== "undefined" && typeof post_id !== "string") {
+                return next(ApiError.badRequest('Missing required fields'))
+            }
 
-        if (typeof post_id === 'string' || typeof post_id === 'undefined') {
-            const messages = await SearchService.getMessages(query, type, user_id, messenger_id, post_id)
-
+            const messages = await this.searchService.getMessages(query, type, user_id, messenger_id, post_id)
             res.json(messages)
-        } else {
-            return next(ApiError.internalServerError("An error occurred while fetching messages"))
+        } catch (e) {
+            return next(e)
         }
     }
 }
 
-export default new SearchController()
+export default SearchController

@@ -1,195 +1,19 @@
 import models from "../model/models"
 import ApiError from "../error/ApiError";
 import * as uuid from "uuid";
-import filesUploadingService from "./filesUploadingService";
-import {UploadedFile} from "express-fileupload";
 import * as fs from "fs";
 import IReaction from "../types/IReaction";
 import path from "path";
 import IMessenger from "../types/IMessenger";
-import changeOldImage from "../lib/changeOldImage";
-import {Op} from "sequelize";
-import deleteAllMessages from "../lib/deleteAllMessages";
+import changeOldImage from "../shared/changeOldImage";
+import {UploadedFile} from "express-fileupload";
 
 interface IUserFiles {
     messenger_image?: UploadedFile
 }
 
-interface IContacts {
-    user: {
-        user_id: string,
-        user_name: string,
-        user_img: string,
-        user_last_seen: string
-    }
-}
-
-class MessengerService {
-    async fetchContacts(id: string) {
-        const contacts = await models.contacts.findAll({
-            where: {owner_id: id},
-            include: [{
-                model: models.users,
-                attributes: ['user_id', 'user_name', 'user_img', 'user_last_seen']
-            }],
-            attributes: []
-        }) as unknown as IContacts[]
-
-        if (!contacts) throw ApiError.internalServerError("No contacts found")
-
-        return contacts.map(contact => contact.user)
-    }
-
-    async postContact(userId: string, contactId: string) {
-        const newContactId = uuid.v4()
-
-        const contact = await models.contacts.create({
-            contact_id: newContactId,
-            user_id: contactId,
-            owner_id: userId
-        })
-        if (!contact) throw ApiError.internalServerError("Error with contact creation")
-
-        const newContact = await models.contacts.findOne({
-            where: {contact_id: newContactId},
-            include: [{
-                model: models.users,
-                attributes: ['user_id', 'user_name', 'user_img', 'user_last_seen']
-            }],
-            attributes: []
-        }) as unknown as IContacts
-
-        return newContact.user
-    }
-
-    async deleteContact(userId: string, contactId: string) {
-        await models.contacts.destroy({
-            where: {
-                owner_id: userId,
-                user_id: contactId,
-            }
-        })
-    }
-
-    async deleteChat(userId: string, recipientId: string) {
-        const messages = await models.message.findAll({
-            where: {
-                [Op.or]: [
-                    {user_id: userId, recipient_user_id: recipientId},
-                    {user_id: recipientId, recipient_user_id: userId}
-                ]
-            },
-            attributes: ['message_id'],
-            raw: true,
-        }) as unknown as { message_id: string }[]
-
-        const messageIds = await deleteAllMessages(messages)
-        await models.message.destroy({where: {message_id: messageIds}})
-    }
-
-    async deleteMessenger(messengerId: string) {
-        const messengerPath = path.resolve(__dirname + "/../src/static/messengers", messengerId)
-        if (fs.existsSync(messengerPath)) await fs.promises.rm(messengerPath, {recursive: true, force: true})
-
-        await models.messenger.destroy({where: {messenger_id: messengerId}})
-    }
-
-    async getReactions(messenger_id?: string) {
-        let reactions
-
-        if (messenger_id) {
-            const messenger_reactions = await models.messenger_settings.findAll({
-                include: [{
-                    model: models.messenger_reactions,
-                    attributes: ['reaction_id'],
-                }],
-                attributes: ['messenger_setting_id'],
-                where: {messenger_id: messenger_id},
-                raw: true,
-                nest: true
-            }) as unknown as {
-                messenger_setting_id: string,
-                messenger_reactions: { reaction_id: string }
-            }[] | null
-
-            const reactionsIds = messenger_reactions?.map(reaction => reaction.messenger_reactions.reaction_id)
-
-            if (!reactionsIds) return
-
-            reactions = await models.reactions.findAll({
-                where: {reaction_id: reactionsIds}
-            })
-        } else {
-            reactions = await models.reactions.findAll()
-            if (!reactions) throw ApiError.internalServerError("No reactions found")
-
-            return reactions
-        }
-
-        if (!reactions) throw ApiError.internalServerError("No reactions found")
-
-        return reactions
-    }
-
-    async postMessenger(user_id: string, messenger_name: string, messenger_desc: string, messenger_type: string, messenger_members?: string[], messenger_files?: IUserFiles | null) {
-        const messenger_id = uuid.v4()
-        let messenger_image = null
-
-        if (messenger_files && messenger_files.messenger_image)
-            messenger_image = await filesUploadingService(`messengers/${messenger_id}`, messenger_files.messenger_image, 'media')
-        if (messenger_image instanceof ApiError) throw ApiError.badRequest(`Error with user image creation`)
-
-        const messenger = await models.messenger.create({
-            messenger_id,
-            messenger_name,
-            messenger_image: messenger_image ? messenger_image.file : null,
-            messenger_desc,
-            messenger_type
-        })
-
-        if (messenger instanceof ApiError) throw ApiError.badRequest(`Error with messenger creation`)
-
-        const member = await models.members.create({
-            member_id: uuid.v4(),
-            member_status: "moderator",
-            user_id,
-            messenger_id
-        })
-
-        if (member instanceof ApiError) throw ApiError.badRequest(`Error adding users to the messenger`)
-
-        const messengerSettings = await models.messenger_settings.create({
-            messenger_setting_id: uuid.v4(),
-            messenger_setting_type: "private",
-            messenger_id: messenger_id,
-        })
-
-        if (messengerSettings instanceof ApiError) throw ApiError.badRequest(`Error adding settings to the messenger`)
-
-        if (messenger_members) {
-            if (!Array.isArray(messenger_members)) messenger_members = [messenger_members]
-
-            for (const user_id of messenger_members) {
-                await models.members.create({
-                    member_id: uuid.v4(),
-                    member_status: "member",
-                    user_id: user_id,
-                    messenger_id
-                })
-            }
-        }
-
-        return {
-            messenger_id: messenger_id,
-            messenger_name: messenger_name,
-            messenger_image: messenger_image ? messenger_image.file : null,
-            messenger_type: messenger_type,
-            messenger_members: messenger_members,
-            messages: []
-        }
-    }
-
-    async fetchMessengerSettings(messenger_id: string) {
+class MessengerSettingsService {
+    public async fetchMessengerSettings(messenger_id: string) {
         const messengerSettings = await models.messenger_settings.findAll({
             include: [{
                 model: models.messenger_reactions,
@@ -268,7 +92,7 @@ class MessengerService {
         }
     }
 
-    async updateMessengerType(messenger_id: string, messenger_type: string) {
+    public async updateMessengerType(messenger_id: string, messenger_type: string) {
         const updateRes = await models.messenger_settings.update(
             {messenger_setting_type: messenger_type},
             {where: {messenger_id: messenger_id}}
@@ -278,7 +102,7 @@ class MessengerService {
         return updateRes
     }
 
-    async updateMessengerLink(messenger_id: string) {
+    public async updateMessengerLink(messenger_id: string) {
         const newMessengerId = uuid.v4()
 
         const messages = await models.message.findAll({
@@ -314,7 +138,7 @@ class MessengerService {
         return {messenger_id: newMessengerId}
     }
 
-    async postMessengerReactions(messenger_setting_id: string, newReactions: string[]) {
+    public async postMessengerReactions(messenger_setting_id: string, newReactions: string[]) {
         const reactions = await models.messenger_reactions.findAll({
             where: {messenger_setting_id: messenger_setting_id},
             attributes: ['reaction_id'],
@@ -341,12 +165,10 @@ class MessengerService {
         }))
 
         await Promise.all([...createPromise, ...deletePromise])
-
         return await models.messenger_reactions.findAll({where: {messenger_setting_id: messenger_setting_id}})
     }
 
-    async updateMessengerModerators(member_status: string, user_id: string, messenger_id: string) {
-
+    public async updateMessengerModerators(member_status: string, user_id: string, messenger_id: string) {
         await models.members.update(
             {member_status: member_status},
             {where: {messenger_id: messenger_id, user_id: user_id}}
@@ -362,7 +184,7 @@ class MessengerService {
         })
     }
 
-    async addContactsMembers(members: string[], messenger_id: string) {
+    public async addContactsMembers(members: string[], messenger_id: string) {
         const [existingMembers, removedMembers] = await Promise.all([
             await models.members.findAll({
                 attributes: ['user_id'],
@@ -407,7 +229,7 @@ class MessengerService {
         return await Promise.all(getPromise)
     }
 
-    async addMember(user_id: string, messenger_id: string) {
+    public async addMember(user_id: string, messenger_id: string) {
         await models.removed_users.destroy({where: {messenger_id: messenger_id, user_id: user_id}})
 
         await models.members.create({
@@ -427,7 +249,7 @@ class MessengerService {
         })
     }
 
-    async postRemoved(user_id: string, messenger_id: string) {
+    public async postRemoved(user_id: string, messenger_id: string) {
         await models.removed_users.create({
             removed_user_id: uuid.v4(),
             user_id,
@@ -454,25 +276,7 @@ class MessengerService {
         })
     }
 
-    async deleteRemoved(user_id: string, messenger_id: string) {
-        await models.removed_users.destroy({
-            where: {
-                messenger_id: messenger_id,
-                user_id: user_id
-            }
-        })
-    }
-
-    async deleteMember(user_id: string, messenger_id: string) {
-        await models.members.destroy({
-            where: {
-                messenger_id: messenger_id,
-                user_id: user_id
-            }
-        })
-    }
-
-    async putMessenger(messenger_id: string, messenger_name: string, messenger_desc?: string, messenger_files?: IUserFiles | null) {
+    public async putMessenger(messenger_id: string, messenger_name: string, messenger_desc?: string, messenger_files?: IUserFiles | null) {
         const oldMessenger = await models.messenger.findOne({where: {messenger_id: messenger_id}}) as IMessenger | null
 
         if (!oldMessenger) throw ApiError.notFound(`Messenger not found`)
@@ -498,32 +302,23 @@ class MessengerService {
         return models.messenger.findOne({where: {messenger_id: messenger_id}})
     }
 
-    async postMessageReaction(message_id: string, user_id: string, reaction_id: string) {
-        await models.message_reactions.create({
-            message_reaction_id: uuid.v4(),
-            message_id,
-            user_id,
-            reaction_id,
+    public async deleteRemoved(user_id: string, messenger_id: string) {
+        await models.removed_users.destroy({
+            where: {
+                messenger_id: messenger_id,
+                user_id: user_id
+            }
         })
-
-        const reaction = await models.reactions.findOne({
-            where: {reaction_id: reaction_id}
-        })
-
-        if (!reaction) throw ApiError.internalServerError('An error occurred while posting a reaction')
-
-        return reaction
     }
 
-    async deleteMessageReaction(message_id: string, user_id: string, reaction_id: string) {
-        await models.message_reactions.destroy({
+    public async deleteMember(user_id: string, messenger_id: string) {
+        await models.members.destroy({
             where: {
-                message_id: message_id,
-                user_id: user_id,
-                reaction_id: reaction_id
+                messenger_id: messenger_id,
+                user_id: user_id
             }
         })
     }
 }
 
-export default new MessengerService()
+export default MessengerSettingsService

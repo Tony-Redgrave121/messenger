@@ -40,15 +40,15 @@ import {
     PRIVATE_CHAT_ROUTE,
 } from "../utils/const"
 import express from "express"
-import UserController from "../controller/userController"
-import AuthController from "../controller/authController"
-import AuthService from "../service/authService"
-import MessengerController from "../controller/messengerController"
-import SearchController from "../controller/searchController"
+
+import authController from "../configs/authConfig"
+import messageController from "../configs/messageConfig";
+import userController from "../configs/userConfig";
+import messengerManagementController from "../configs/messengerManagementConfig";
+import messengerSettingsController from "../configs/messengerSettingsConfig";
+import searchController from "../configs/searchConfig"
 
 const router = express.Router()
-const authService = new AuthService()
-const authController = new AuthController(authService)
 
 // Auth
 router.post(REGISTRATION_ROUTE, authController.registration)
@@ -60,48 +60,48 @@ router.post(SEND_CODE_ROUTE, authController.sendCode)
 router.post(CONFIRM_EMAIL_ROUTE, authController.confirmEmail)
 
 // Messenger
-router.get(GET_MESSENGERS_ROUTE, UserController.fetchMessengersList)
-router.get(GET_MESSAGES_ROUTE, UserController.fetchMessages)
-router.post(CREATE_MESSAGE_ROUTE, UserController.postMessage)
-router.get(CREATE_MESSAGE_ROUTE, UserController.fetchMessage)
-router.delete(DELETE_MESSAGE_ROUTE, UserController.deleteMessage)
+router.get(GET_MESSENGERS_ROUTE, messengerManagementController.fetchMessengersList)
+router.get(GET_MESSAGES_ROUTE, messageController.fetchMessages)
+router.post(CREATE_MESSAGE_ROUTE, messageController.postMessage)
+router.get(CREATE_MESSAGE_ROUTE, messageController.fetchMessage)
+router.delete(DELETE_MESSAGE_ROUTE, messageController.deleteMessage)
 
-router.get(GET_CONTACTS_ROUTE, MessengerController.getContacts)
-router.post(GET_CONTACTS_ROUTE, MessengerController.postContact)
-router.delete(GET_CONTACTS_ROUTE, MessengerController.deleteContact)
+router.get(GET_CONTACTS_ROUTE, userController.getContacts)
+router.post(GET_CONTACTS_ROUTE, userController.postContact)
+router.delete(GET_CONTACTS_ROUTE, userController.deleteContact)
 
-router.get(MESSENGER_ROUTE, UserController.fetchMessenger)
-router.post(MESSENGER_ROUTE, MessengerController.postMessenger)
-router.put(MESSENGER_ROUTE, MessengerController.putMessenger)
-router.delete(MESSENGER_ROUTE, MessengerController.deleteMessenger)
+router.get(MESSENGER_ROUTE, messengerManagementController.fetchMessenger)
+router.post(MESSENGER_ROUTE, messengerManagementController.postMessenger)
+router.put(MESSENGER_ROUTE, messengerSettingsController.putMessenger)
+router.delete(MESSENGER_ROUTE, messengerManagementController.deleteMessenger)
 
-router.get(GET_MESSENGER_SETTINGS_ROUTE, MessengerController.getMessengerSettings)
+router.get(GET_MESSENGER_SETTINGS_ROUTE, messengerSettingsController.getMessengerSettings)
 
-router.get(GET_REACTIONS_ROUTE, MessengerController.getReactions)
-router.post(MESSAGE_REACTIONS_ROUTE, MessengerController.postMessageReaction)
-router.delete(MESSAGE_REACTIONS_ROUTE, MessengerController.deleteMessageReaction)
+router.get(GET_REACTIONS_ROUTE, messengerManagementController.getReactions)
+router.post(MESSAGE_REACTIONS_ROUTE, messageController.postMessageReaction)
+router.delete(MESSAGE_REACTIONS_ROUTE, messageController.deleteMessageReaction)
 
-router.put(UPDATE_MESSENGER_TYPE_ROUTE, MessengerController.putMessengerType)
-router.put(UPDATE_MESSENGER_LINK_ROUTE, MessengerController.putMessengerLink)
-router.post(MESSENGER_REACTIONS_ROUTE, MessengerController.postMessengerReactions)
-router.put(UPDATE_MESSENGER_MODERATORS_ROUTE, MessengerController.putMessengerModerators)
+router.put(UPDATE_MESSENGER_TYPE_ROUTE, messengerSettingsController.putMessengerType)
+router.put(UPDATE_MESSENGER_LINK_ROUTE, messengerSettingsController.putMessengerLink)
+router.post(MESSENGER_REACTIONS_ROUTE, messengerSettingsController.postMessengerReactions)
+router.put(UPDATE_MESSENGER_MODERATORS_ROUTE, messengerSettingsController.putMessengerModerators)
 
-router.post(ADD_CONTACTS_TO_MESSENGER_ROUTE, MessengerController.postContactsMembers)
-router.post(ADD_MEMBER_ROUTE, MessengerController.postMember)
-router.delete(DELETE_MEMBER_ROUTE, MessengerController.deleteMember)
-router.post(ADD_REMOVED_USER_ROUTE, MessengerController.postRemoved)
-router.delete(DELETE_REMOVED_USER_ROUTE, MessengerController.deleteRemoved)
+router.post(ADD_CONTACTS_TO_MESSENGER_ROUTE, messengerSettingsController.postContactsMembers)
+router.post(ADD_MEMBER_ROUTE, messengerSettingsController.postMember)
+router.delete(DELETE_MEMBER_ROUTE, messengerSettingsController.deleteMember)
+router.post(ADD_REMOVED_USER_ROUTE, messengerSettingsController.postRemoved)
+router.delete(DELETE_REMOVED_USER_ROUTE, messengerSettingsController.deleteRemoved)
 
 // Profile
-router.get(GET_PROFILE_ROUTE, UserController.getProfile)
-router.put(GET_PROFILE_ROUTE, UserController.putProfile)
-router.put(UPDATE_PASSWORD_ROUTE, UserController.putPassword)
+router.get(GET_PROFILE_ROUTE, userController.getProfile)
+router.put(GET_PROFILE_ROUTE, userController.putProfile)
+router.put(UPDATE_PASSWORD_ROUTE, userController.putPassword)
 
 // Search
-router.get(SEARCH_MESSENGERS_ROUTE, SearchController.getMessengers)
-router.get(SEARCH_MESSAGES_ROUTE, SearchController.getMessages)
+router.get(SEARCH_MESSENGERS_ROUTE, searchController.getMessengers)
+router.get(SEARCH_MESSAGES_ROUTE, searchController.getMessages)
 
 // Chat
-router.delete(PRIVATE_CHAT_ROUTE, MessengerController.deleteChat)
+router.delete(PRIVATE_CHAT_ROUTE, messengerManagementController.deleteChat)
 
 export default router

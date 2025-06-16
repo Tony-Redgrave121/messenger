@@ -1,382 +1,83 @@
 import ApiError from "../error/ApiError"
 import models from "../model/models"
-import {FileArray, UploadedFile} from "express-fileupload"
-import * as uuid from "uuid"
-import filesUploadingService from "./filesUploadingService"
+import {UploadedFile} from "express-fileupload"
 import path from "path"
 import fs from "fs"
-import {Op, Sequelize} from "sequelize";
 import IProfileSettings from "../types/IProfileSettings";
 import IUser from "../types/IUser";
-import changeOldImage from "../lib/changeOldImage";
+import changeOldImage from "../shared/changeOldImage";
 import bcrypt from "bcrypt";
-import IMessagesResponse from "../types/IMessagesResponse";
-import findAllMessagesQuery from "../lib/querys/findAllMessagesQuery";
-import normalizeMessage from "../lib/normalizeMessage";
-
-interface IPostMessage {
-    user_id: string,
-    messenger_id: string | null,
-    reply_id: string,
-    post_id?: string,
-    message_text: string,
-    message_type: string,
-    recipient_user_id: string | null,
-}
-
-interface IMessageFiles {
-    message_file_id: string,
-    message_file_name: string,
-    message_file_size: number
-}
+import convertToPlain from "../shared/convertToPlain";
+import * as uuid from "uuid";
 
 interface IUserFiles {
     user_img?: UploadedFile
 }
 
+interface IContacts {
+    user: {
+        user_id: string,
+        user_name: string,
+        user_img: string,
+        user_last_seen: string
+    }
+}
+
 class UserService {
-    async fetchMessenger(type: string, user_id: string, messenger_id: string) {
-        let messenger
-
-        if (type === "chat") {
-            messenger = await models.users.findOne({
-                attributes: ['user_id', 'user_name', 'user_img', 'user_bio', 'user_last_seen'],
-                where: {user_id: messenger_id}
-            })
-        } else {
-            messenger = await models.messenger.findOne({
-                include: [
-                    {
-                        model: models.members,
-                        attributes: []
-                    },
-                    {
-                        model: models.members,
-                        as: "user_member",
-                        include: [
-                            {
-                                model: models.users,
-                                attributes: ['user_id', 'user_name', 'user_img', 'user_bio', 'user_last_seen'],
-                            }
-                        ]
-                    }
-                ],
-                attributes: {
-                    include: [[Sequelize.fn("COUNT", Sequelize.col("members.member_id")), "members_count"]]
-                },
-                where: {
-                    messenger_id: messenger_id,
-                    messenger_type: type
-                },
-                group: [
-                    'messenger.messenger_id',
-                    'user_member.member_id',
-                    'user_member.user.user_id',
-                    'user_member.user.user_name',
-                    'user_member.user.user_img',
-                    'user_member.user.user_bio',
-                    'user_member.user.user_last_seen'
-                ]
-            })
-        }
-
-        if (!messenger) throw ApiError.notFound("Messenger not found")
-
-        return messenger
-    }
-
-    async fetchMessengersList(user_id: string) {
-        if (!user_id) throw ApiError.internalServerError("An error occurred while fetching messengers list")
-        const messages = await models.message.findAll({
-            where: {
-                [Op.or]: [
-                    {user_id},
-                    {recipient_user_id: user_id}
-                ]
-            },
-            attributes: ['user_id', 'recipient_user_id'],
-            raw: true,
-        }) as unknown as {
-            user_id: string,
-            recipient_user_id: string | null,
-        }[]
-
-        const privatesIds = new Set<string>()
-
-        messages.forEach(msg => {
-            if (msg.user_id === user_id && msg.recipient_user_id) privatesIds.add(msg.recipient_user_id)
-            else if (msg.recipient_user_id === user_id) privatesIds.add(msg.user_id)
-        })
-
-        const companionUsers = await models.users.findAll({
-            where: {user_id: Array.from(privatesIds)},
-            attributes: ['user_id', 'user_name', 'user_img']
-        }) as unknown as {
-            user_id: string,
-            user_name: string,
-            user_img?: string,
-        }[]
-
-        const lastMessages = await Promise.all(
-            companionUsers.map(async (companion) => {
-                const lastMsg = await models.message.findOne({
-                    where: {
-                        [Op.or]: [
-                            {
-                                user_id: user_id,
-                                recipient_user_id: companion.user_id
-                            },
-                            {
-                                user_id: companion.user_id,
-                                recipient_user_id: user_id
-                            }
-                        ]
-                    },
-                    limit: 1,
-                    order: [['message_date', 'DESC']],
-                    attributes: ['message_text', 'message_date'],
-                }) as {
-                    message_text: string | null;
-                    message_date: Date
-                } | null
-
-                return {
-                    companion_id: companion.user_id,
-                    message: lastMsg ? {
-                        message_text: lastMsg.message_text,
-                        message_date: lastMsg.message_date
-                    } : null
-                };
-            })
-        )
-
-        const transformedChats = companionUsers.map(user => {
-            const last_message = lastMessages.find(message => user.user_id === message.companion_id)
-
-            return {
-                messenger_id: user.user_id,
-                messenger_name: user.user_name,
-                messenger_image: user.user_img,
-                messenger_type: "chat",
-                messages: [last_message?.message]
-            }
-        })
-
-        const messengersList = await models.messenger.findAll({
-            include: [
-                {
-                    model: models.members,
-                    where: {user_id: user_id},
-                    attributes: []
-                },
-                {
-                    model: models.message,
-                    where: {
-                      parent_post_id: null
-                    },
-                    limit: 1,
-                    order: [['message_date', 'DESC']],
-                    attributes: ['message_text', 'message_date']
-                }
-            ],
-            attributes: ['messenger_id', 'messenger_name', 'messenger_image', 'messenger_type']
-        })
-        if (!messengersList) throw ApiError.internalServerError("An error occurred while fetching messengers list")
-
-        return [...transformedChats, ...messengersList]
-    }
-
-    async fetchMessages(type: string, user_id: string, messenger_id: string, post_id?: string) {
-        const whereBase = type !== "chat" ?
-            {
-                messenger_id: messenger_id,
-                parent_post_id: post_id ? post_id : null
-            } :
-            {recipient_user_id: [messenger_id, user_id]}
-
-        const messages = await models.message.findAll({
-            where: whereBase,
-            ...findAllMessagesQuery,
-            attributes: {
-                include: [[Sequelize.fn("COUNT", Sequelize.col("comments.parent_post_id")), "comments_count"]]
-            },
-            order: [['message_date', 'ASC']],
-        })
-
-        if (!messages) throw ApiError.internalServerError("An error occurred while fetching messages")
-        const messagesPlain = JSON.parse(JSON.stringify(messages)) as IMessagesResponse[]
-
-        const updatedMessages = await Promise.all(
-            messagesPlain.map(async (message) => normalizeMessage(message))
-        )
-
-        if (!updatedMessages) throw ApiError.internalServerError("An error occurred while fetching messages")
-
-        return updatedMessages
-    }
-
-    async fetchMessage(message_id: string, messenger_id: string) {
-        const message = await models.message.findOne({
-            where: {
-                messenger_id: messenger_id,
-                message_id: message_id
-            },
-            ...findAllMessagesQuery,
-            attributes: {
-                include: [[Sequelize.fn("COUNT", Sequelize.col("comments.parent_post_id")), "comments_count"]]
-            },
-            order: [['message_date', 'ASC']],
-        })
-
-        if (!message) throw ApiError.internalServerError("An error occurred while fetching a message")
-        const messagePlain = JSON.parse(JSON.stringify(message)) as IMessagesResponse
-        const updatedMessage = normalizeMessage(messagePlain)
-
-        if (!updatedMessage) throw ApiError.internalServerError("An error occurred while fetching a message")
-
-        return updatedMessage
-    }
-
-    async postMessage(message: IPostMessage, files: FileArray | null | undefined) {
-        const message_id = uuid.v4()
-        let message_files: IMessageFiles[] = []
-
-        const messagePost = await models.message.create({
-            message_id: message_id,
-            message_text: message.message_text,
-            message_type: message.message_type,
-            reply_id: message.reply_id,
-            parent_post_id: message.post_id,
-            user_id: message.user_id,
-            messenger_id: message.messenger_id,
-            recipient_user_id: message.recipient_user_id
-        })
-
-        if (files && files.message_files) {
-            const fileArray = Array.isArray(files.message_files) ? files.message_files : [files.message_files]
-
-            for (const file of fileArray) {
-                const message_file_id = uuid.v4()
-
-                const filesPost = await filesUploadingService(`messengers/${message.messenger_id ? message.messenger_id : message.recipient_user_id}`, file, message.message_type)
-                if (!filesPost || filesPost instanceof ApiError) throw ApiError.badRequest(`Error with files uploading`)
-
-                const message_file = await models.message_file.create({
-                    message_file_id: message_file_id,
-                    message_file_name: filesPost.file,
-                    message_file_size: filesPost.size,
-                    message_id: message_id,
-                    message_file_path: message.messenger_id ? message.messenger_id : message.recipient_user_id
-                })
-
-                message_files.push(message_file.dataValues)
-            }
-        }
-
-        const reply = await models.message.findOne({
-            where: [{message_id: message.reply_id}],
-            include: [{
-                model: models.users,
-                as: 'user',
-                attributes: ['user_id', 'user_name', 'user_img']
-            }],
-            attributes: ['message_id', 'message_text']
-        })
-
+    public async getProfile(user_id: string) {
         const user = await models.users.findOne({
-            where: [{user_id: message.user_id}],
-            attributes: ['user_id', 'user_name', 'user_img']
-        })
-
-        return {
-            ...messagePost.dataValues,
-            message_files: message_files,
-            reply: reply,
-            user: user
-        }
-    }
-
-    async deleteMessage(message_id: string) {
-        try {
-            const commentsIds = await models.message.findAll({
-                where: {parent_post_id: message_id},
-                attributes: ['message_id'],
-                raw: true,
-            }) as unknown as { message_id: string }[] | null
-
-            const childCommentIds = commentsIds?.map(msg => msg.message_id) || []
-            childCommentIds.push(message_id)
-
-            const message_files = await models.message_file.findAll({
-                where: {message_id: childCommentIds},
-                attributes: ['message_file_name', 'message_file_path'],
-                raw: true
-            }) as unknown as {
-                message_file_name: string,
-                message_file_path: string,
-            }[]
-
-            for (const file of message_files) {
-                const filePath = path.resolve(__dirname + "/../src/static/messengers", file.message_file_path, file.message_file_name)
-
-                if (fs.existsSync(filePath)) fs.unlinkSync(filePath)
-            }
-
-            await models.message.destroy(
-                {
-                    where: {
-                        [Op.or]: [
-                            {message_id: message_id},
-                            ...(commentsIds ? [{parent_post_id: message_id}] : [])
-                        ]
-                    }
-                }
-            )
-        } catch (e) {
-            console.log(e)
-        }
-    }
-
-    async getProfile(user_id: string) {
-        const userData = await models.users.findOne({
             where: {user_id: user_id},
             attributes: ['user_id', 'user_name', 'user_img', 'user_bio']
-        }) as IProfileSettings | null
+        })
+        if (!user) throw ApiError.internalServerError("No user settings found")
 
-        if (!userData) throw ApiError.internalServerError("No user settings found")
+        const userPlain = convertToPlain<IProfileSettings>(user)
+        let user_img_base64: string | null = null
 
-        const user_img = userData?.user_img ? fs.readFileSync(__dirname + `/../src/static/users/${user_id}/${userData.user_img}`) : null
+        if (userPlain.user_img) {
+            const imagePath = path.join(__dirname, '/../src/static/users', user_id, userPlain.user_img)
+
+            try {
+                const imageBuffer = await fs.promises.readFile(imagePath)
+                user_img_base64 = imageBuffer.toString('base64')
+            } catch (e) {
+                user_img_base64 = null
+            }
+        }
 
         return {
-            user_id: userData.user_id,
-            user_name: userData.user_name,
-            user_bio: userData.user_bio,
-            user_img: user_img ? user_img.toString('base64') : null,
+            user_id: userPlain.user_id,
+            user_name: userPlain.user_name,
+            user_bio: userPlain.user_bio,
+            user_img: user_img_base64
         }
     }
 
-    async putProfile(user_id: string, user_name: string, user_bio?: string, user_files?: IUserFiles | null) {
-        const oldProfile = await models.users.findOne({where: {user_id: user_id}}) as IUser | null
+    public async putProfile(
+        user_id: string,
+        user_name: string,
+        user_bio?: string,
+        user_files?: IUserFiles | null
+    ) {
+        const user = await models.users.findOne({where: {user_id: user_id}})
+        if (!user) throw ApiError.notFound(`Profile not found`)
 
-        if (!oldProfile) throw ApiError.notFound(`Profile not found`)
-        let user_img = null
+        const userPlain = convertToPlain<IUser>(user)
+        let user_img = userPlain.user_img
 
         if (user_files?.user_img) {
             const folder = `users/${user_id}`
-            user_img = await changeOldImage(oldProfile.user_img, folder, user_files.user_img)
+            const newImage = await changeOldImage(userPlain.user_img, folder, user_files.user_img)
 
-            if (user_img instanceof ApiError) return user_img
+            if (newImage instanceof ApiError) throw newImage
+            user_img = newImage.file
         }
 
-        try {
-            await models.users.update({
-                user_name: user_name,
-                user_bio: user_bio,
-                user_img: user_img ? user_img.file : oldProfile.user_img
-            }, {where: {user_id: user_id}})
-        } catch (error) {
-            throw ApiError.internalServerError(`Error with profile updating`)
-        }
+        await models.users.update({
+            user_name: user_name,
+            user_bio: user_bio,
+            user_img: user_img
+        }, {where: {user_id: user_id}})
 
         return models.users.findOne({
             where: {user_id: user_id},
@@ -384,23 +85,73 @@ class UserService {
         })
     }
 
-    async putPassword(user_id: string, user_password: string, user_password_new: string) {
-        const user = await models.users.findOne({
+    public async putPassword(user_id: string, user_password: string, user_password_new: string) {
+        const userPassword = await models.users.findOne({
             where: {user_id: user_id},
             attributes: ['user_password']
-        }) as { user_password: string } | null
+        })
 
-        if (!user) return ApiError.notFound("User account not found")
-        let comparePassword = bcrypt.compareSync(user_password, user.user_password)
+        if (!userPassword) return ApiError.notFound("User account not found")
+        const userPasswordPlain = convertToPlain<{ user_password: string }>(userPassword)
 
+        let comparePassword = await bcrypt.compare(user_password, userPasswordPlain.user_password)
         if (!comparePassword) return ApiError.forbidden('Old password is incorrect')
-        const hash_user_password = await bcrypt.hash(user_password_new, 5)
 
+        const hashedPassword = await bcrypt.hash(user_password_new, 5)
         await models.users.update({
-            user_password: hash_user_password,
+            user_password: hashedPassword,
         }, {where: {user_id: user_id}})
 
-        return "Password successfully updated"
+        return {
+            status: 200,
+            message: "Password successfully updated"
+        }
+    }
+
+    public async fetchContacts(id: string) {
+        const contacts = await models.contacts.findAll({
+            where: {owner_id: id},
+            include: [{
+                model: models.users,
+                attributes: ['user_id', 'user_name', 'user_img', 'user_last_seen']
+            }],
+            attributes: []
+        }) as unknown as IContacts[]
+
+        if (!contacts) throw ApiError.internalServerError("No contacts found")
+
+        return contacts.map(contact => contact.user)
+    }
+
+    public async postContact(userId: string, contactId: string) {
+        const newContactId = uuid.v4()
+
+        const contact = await models.contacts.create({
+            contact_id: newContactId,
+            user_id: contactId,
+            owner_id: userId
+        })
+        if (!contact) throw ApiError.internalServerError("Error with contact creation")
+
+        const newContact = await models.contacts.findOne({
+            where: {contact_id: newContactId},
+            include: [{
+                model: models.users,
+                attributes: ['user_id', 'user_name', 'user_img', 'user_last_seen']
+            }],
+            attributes: []
+        }) as unknown as IContacts
+
+        return newContact.user
+    }
+
+    public async deleteContact(userId: string, contactId: string) {
+        await models.contacts.destroy({
+            where: {
+                owner_id: userId,
+                user_id: contactId,
+            }
+        })
     }
 }
 

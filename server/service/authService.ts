@@ -1,68 +1,74 @@
-import tokenService from "./tokenService"
 import ApiError from "../error/ApiError"
 import models from "../model/models"
 import * as uuid from "uuid"
 import IUser from "../types/IUser"
 import bcrypt from "bcrypt"
-import filesUploadingService from "./filesUploadingService"
-import {UploadedFile} from 'express-fileupload'
-import IRegistrationResponse from "../types/IRegistrationResponse";
-import path from "path";
-import * as fs from "fs";
-import getRandomCryptoValue from "../lib/getRandomCryptoValue";
-import mailService from "./mailService";
+import {UploadedFile} from "express-fileupload"
+import path from "path"
+import * as fs from "fs"
+import getRandomCryptoValue from "../shared/getRandomCryptoValue"
+import uploadFile from "../shared/uploadFile"
+import MailService from "./mailService"
+import TokenService from "./tokenService"
 
 interface IUserFiles {
     user_image?: UploadedFile
 }
 
-interface IRegistrationResponseExtend extends IRegistrationResponse {
-    user_id: string
-    user_email: string
-    user_state: boolean
-    user_bio?: string
-}
-
 class AuthService {
-    public registration = async (user_body: IUser, user_files?: IUserFiles | null): Promise<IRegistrationResponseExtend | ApiError> => {
-        const {user_name, user_email, user_password, user_bio} = user_body
-        const userCheck = await models.users.findOne({where: {user_email: user_email}})
-        if(userCheck) throw ApiError.badRequest(`User with email already exists`)
+    constructor(
+        private readonly tokenService: TokenService,
+        private readonly mailService: MailService,
+    ) {}
 
-        let userImg = null
-        const user_id = uuid.v4(), user_activation_code = uuid.v4()
+    public registration = async (
+        user_name: string,
+        user_email: string,
+        user_password: string,
+        user_bio: string,
+        user_files?: IUserFiles | null
+    ) => {
+        const existingUser = await models.users.findOne({where: {user_email: user_email}})
+        if (existingUser) throw ApiError.badRequest(`User already exists`)
 
-        if (user_files && user_files.user_image) userImg = await filesUploadingService(`users/${user_id}`, user_files.user_image, 'media')
+        const user_id = uuid.v4()
+        const activationCode = uuid.v4()
+        const hashedPassword = await bcrypt.hash(user_password, 5)
+        const user_img = await this.uploadUserImage(user_id, user_files?.user_image)
 
-        if (userImg instanceof ApiError) throw ApiError.badRequest(`Error with user image creation`)
+        await models.users.create({
+            user_id: user_id,
+            user_name,
+            user_email,
+            user_password: hashedPassword,
+            user_img,
+            user_activation_code: activationCode,
+            user_bio: user_bio
+        })
 
-        const hash_user_password = await bcrypt.hash(user_password, 5)
-        await models.users.create({user_id: user_id, user_name, user_email, user_password: hash_user_password, user_img: userImg ? userImg.file : null, user_activation_code: user_activation_code, user_bio: user_bio})
-
-        const tokens = tokenService.generateToken({user_id, user_email, user_name})
-        await tokenService.saveToken(user_id, tokens!.refreshToken)
+        const tokens = await this.handleTokenSaving(user_id, {user_id, user_email, user_name})
 
         return {
             ...tokens,
-            user_id: user_id,
-            user_name: user_name,
-            user_email: user_email,
+            user_id,
+            user_name,
+            user_email,
             user_state: false,
-            user_bio: user_bio,
-            user_img: userImg ? userImg.file : null
+            user_bio,
+            user_img
         }
     }
 
-    public login = async (user_email: string, user_password: string)=> {
-        const user = await models.users.findOne({where: {user_email: user_email}}) as IUser | null
+    public login = async (user_email: string, user_password: string) => {
+        const user = await this.getUser({user_email})
 
-        if (!user) throw ApiError.notFound("User account not found")
+        let isPasswordValid = await bcrypt.compare(user_password, user.user_password)
+        if (!isPasswordValid) return ApiError.forbidden('Password is incorrect')
 
-        let comparePassword = bcrypt.compareSync(user_password, user.user_password)
-        if (!comparePassword) throw ApiError.forbidden('Password is incorrect')
-
-        const tokens = tokenService.generateToken({user_id: user.user_id, user_email})
-        await tokenService.saveToken(user.user_id, tokens!.refreshToken)
+        const tokens = await this.handleTokenSaving(user.user_id, {
+            user_id: user.user_id,
+            user_email: user.user_email,
+        })
 
         return {
             ...tokens,
@@ -75,50 +81,57 @@ class AuthService {
         }
     }
 
-    public sendCode = async (user_code_email: string)=> {
+    public sendCode = async (user_code_email: string) => {
         const user_code_body = getRandomCryptoValue(100000, 999999)
         const user_code_id = uuid.v4()
 
-        await mailService.sendMail(user_code_email, user_code_body)
+        await this.mailService.sendMail(user_code_email, user_code_body)
 
         return await models.user_code.create({user_code_id, user_code_email, user_code_body})
     }
 
     public confirmEmail = async (user_code: number, user_email: string) => {
-        const resData = await models.user_code.findOne({where: {user_code_email: user_email, user_code_body: user_code}})
+        const userCode = await models.user_code.findOne({
+            where: {
+                user_code_email: user_email,
+                user_code_body: user_code
+            }
+        })
 
-        if (!resData) throw ApiError.notFound("You entered an incorrect code")
+        if (!userCode) return ApiError.notFound("Invalid code")
 
-        return resData
+        return userCode
     }
 
-    public logout = async (refreshToken: string)=> {
-        return await tokenService.deleteToken(refreshToken)
+    public logout = async (refreshToken: string) => {
+        return await this.tokenService.deleteToken(refreshToken)
     }
 
     public deleteAccount = async (refreshToken: string, user_id: string) => {
         await models.users.destroy({where: {user_id: user_id}})
 
         const folderPath = path.resolve(__dirname + "/../src/static/users", user_id)
-        fs.rmSync(folderPath, { recursive: true, force: true })
+        await fs.promises.rm(folderPath, {recursive: true, force: true})
 
-        return await tokenService.deleteToken(refreshToken)
+        return await this.tokenService.deleteToken(refreshToken)
     }
 
     public refresh = async (refreshToken: string) => {
-        if (!refreshToken) throw ApiError.unauthorized("Unauthorized")
-        const userData = tokenService.validateRefreshToken(refreshToken)
-        const tokenDB = tokenService.findToken(refreshToken)
-        if (!userData || !tokenDB || typeof userData === "string") throw ApiError.unauthorized("Unauthorized")
+        if (!refreshToken) throw ApiError.unauthorized("No token provided")
 
-        const user: IUser | null = await models.users.findOne({where: {user_id: userData.user_id}}) as IUser | null
+        const userData = this.tokenService.validateRefreshToken(refreshToken)
+        const tokenDB = this.tokenService.findToken(refreshToken)
 
-        if (!user) throw ApiError.unauthorized("Unauthorized")
+        if (!userData || !tokenDB || typeof userData === "string") {
+            throw ApiError.unauthorized("Invalid token")
+        }
 
-        const tokens = tokenService.generateToken({user_id: user.user_id, user_email: user.user_email} )
+        const user = await this.getUser({user_id: userData.user_id})
 
-        await tokenService.saveToken(user.user_id, tokens.refreshToken)
-        await tokenService.deleteToken(refreshToken)
+        const user_id = user.user_id, user_email = user.user_email
+        const tokens = await this.handleTokenSaving(user_id, {user_id, user_email})
+
+        await this.tokenService.deleteToken(refreshToken)
 
         return {
             ...tokens,
@@ -129,6 +142,32 @@ class AuthService {
             user_bio: user.user_bio,
             user_img: user.user_img,
         }
+    }
+
+    private async getUser(where: Partial<IUser>): Promise<IUser> {
+        const user = await models.users.findOne({where}) as IUser | null
+        if (!user) throw ApiError.notFound("User not found")
+
+        return user
+    }
+
+    private async uploadUserImage(user_id: string, file?: UploadedFile | null): Promise<string | null> {
+        if (!file) return null
+
+        const uploadResult = await uploadFile(`users/${user_id}`, file, 'media')
+        if (!uploadResult || uploadResult instanceof ApiError) {
+            throw ApiError.badRequest("Failed to upload user image")
+        }
+
+        return uploadResult.file || null
+    }
+
+    private handleTokenSaving = async (user_id: string, payload: object) => {
+        const tokens = this.tokenService.generateToken(payload)
+        if (!tokens) throw ApiError.internalServerError("Token generation failed")
+
+        await this.tokenService.saveToken(user_id, tokens.refreshToken)
+        return tokens
     }
 }
 
