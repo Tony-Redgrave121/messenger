@@ -1,7 +1,7 @@
 import ApiError from "../error/ApiError"
 import models from "../model/models"
 import * as uuid from "uuid"
-import IUser from "../types/IUser"
+import IUser from "../types/userTypes/IUser"
 import bcrypt from "bcrypt"
 import {UploadedFile} from "express-fileupload"
 import path from "path"
@@ -10,10 +10,7 @@ import getRandomCryptoValue from "../shared/getRandomCryptoValue"
 import uploadFile from "../shared/uploadFile"
 import MailService from "./mailService"
 import TokenService from "./tokenService"
-
-interface IUserFiles {
-    user_image?: UploadedFile
-}
+import IUserFiles from "../types/fileTypes/IUserFiles";
 
 class AuthService {
     constructor(
@@ -34,7 +31,7 @@ class AuthService {
         const user_id = uuid.v4()
         const activationCode = uuid.v4()
         const hashedPassword = await bcrypt.hash(user_password, 5)
-        const user_img = await this.uploadUserImage(user_id, user_files?.user_image)
+        const user_img = await this.uploadUserImage(user_id, user_files?.user_img)
 
         await models.users.create({
             user_id: user_id,
@@ -61,6 +58,7 @@ class AuthService {
 
     public login = async (user_email: string, user_password: string) => {
         const user = await this.getUser({user_email})
+        if (user instanceof ApiError) return true
 
         let isPasswordValid = await bcrypt.compare(user_password, user.user_password)
         if (!isPasswordValid) return ApiError.forbidden('Password is incorrect')
@@ -128,6 +126,8 @@ class AuthService {
 
         const user = await this.getUser({user_id: userData.user_id})
 
+        if (user instanceof ApiError) throw user
+
         const user_id = user.user_id, user_email = user.user_email
         const tokens = await this.handleTokenSaving(user_id, {user_id, user_email})
 
@@ -144,9 +144,9 @@ class AuthService {
         }
     }
 
-    private async getUser(where: Partial<IUser>): Promise<IUser> {
+    private async getUser(where: Partial<IUser>): Promise<IUser | ApiError> {
         const user = await models.users.findOne({where}) as IUser | null
-        if (!user) throw ApiError.notFound("User not found")
+        if (!user) return ApiError.notFound("User not found")
 
         return user
     }

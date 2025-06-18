@@ -1,17 +1,20 @@
-import React, {useEffect, useRef, useState} from 'react'
+import React, {lazy, useEffect, useRef, useState} from 'react'
 import style from './style.module.css'
 import {InputBlock} from "@components/inputBlock"
-import {RightSidebar} from "@components/sidebar"
 import {Message} from "./message"
 import {useAppDispatch, useAppSelector} from "@hooks/useRedux"
 import {useParams} from "react-router-dom"
 import {IMessagesResponse} from "@appTypes"
 import MessengerHeader from "./messengerHeader/MessengerHeader"
 import checkRights from "@utils/logic/checkRights";
-import MessengerService from "@service/MessengerService";
+import MessengerSettingsService from "@service/MessengerSettingsService";
 import isMember from "@utils/logic/isMember";
 import useFetchInitialData from "@hooks/useFetchInitialData";
-import {addMessenger, clearNotification} from "@store/reducers/liveUpdatesReducer";
+import {addMessenger} from "@store/reducers/liveUpdatesReducer";
+import {clearNotification} from "@store/thunks/liveUpdatesThunks";
+import {useAbortController} from "@hooks/useAbortController";
+
+const RightSidebar = lazy(() => import("./sidebar/rightSidebar/RightSidebar"))
 
 const Messenger = () => {
     const [sidebarState, setSidebarState] = useState(false)
@@ -22,6 +25,8 @@ const Messenger = () => {
     const refRightSidebar = useRef<HTMLDivElement>(null)
 
     const {messengerId} = useParams()
+    const {getSignal} = useAbortController()
+
     const userId = useAppSelector(state => state.user.userId)
     const dispatch = useAppDispatch()
 
@@ -40,6 +45,7 @@ const Messenger = () => {
 
     const subscribeToMessenger = async () => {
         if (!messengerId) return
+        const signal = getSignal()
 
         const adaptMessenger = () => {
             const lastMessage = messagesList[messagesList.length - 1]
@@ -61,7 +67,7 @@ const Messenger = () => {
         try {
             if (messenger.type === 'chat') adaptMessenger()
             else {
-                const newMembers = await MessengerService.postContactsMembers([userId], messengerId)
+                const newMembers = await MessengerSettingsService.postContactsMembers([userId], messengerId, signal)
 
                 if (newMembers.status === 200) adaptMessenger()
             }

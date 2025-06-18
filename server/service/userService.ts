@@ -1,27 +1,15 @@
 import ApiError from "../error/ApiError"
 import models from "../model/models"
-import {UploadedFile} from "express-fileupload"
 import path from "path"
 import fs from "fs"
-import IProfileSettings from "../types/IProfileSettings";
-import IUser from "../types/IUser";
+import IProfileSettings from "../types/settingTypes/IProfileSettings";
+import IUser from "../types/userTypes/IUser";
 import changeOldImage from "../shared/changeOldImage";
 import bcrypt from "bcrypt";
 import convertToPlain from "../shared/convertToPlain";
 import * as uuid from "uuid";
-
-interface IUserFiles {
-    user_img?: UploadedFile
-}
-
-interface IContacts {
-    user: {
-        user_id: string,
-        user_name: string,
-        user_img: string,
-        user_last_seen: string
-    }
-}
+import IContact from "../types/userTypes/IContact";
+import IUserFiles from "../types/fileTypes/IUserFiles";
 
 class UserService {
     public async getProfile(user_id: string) {
@@ -116,11 +104,12 @@ class UserService {
                 attributes: ['user_id', 'user_name', 'user_img', 'user_last_seen']
             }],
             attributes: []
-        }) as unknown as IContacts[]
+        })
 
-        if (!contacts) throw ApiError.internalServerError("No contacts found")
+        const contactsPlain = convertToPlain<IContact>(contacts)
+        if (!contactsPlain) throw ApiError.internalServerError("No contacts found")
 
-        return contacts.map(contact => contact.user)
+        return contactsPlain.map(contact => contact.user)
     }
 
     public async postContact(userId: string, contactId: string) {
@@ -140,19 +129,26 @@ class UserService {
                 attributes: ['user_id', 'user_name', 'user_img', 'user_last_seen']
             }],
             attributes: []
-        }) as unknown as IContacts
+        })
 
-        return newContact.user
+        if (!newContact) throw ApiError.internalServerError("Contact not found")
+
+        const newContactPlain = convertToPlain<IContact>(newContact)
+        return newContactPlain.user
     }
 
     public async deleteContact(userId: string, contactId: string) {
-        await models.contacts.destroy({
+        const deleted = await models.contacts.destroy({
             where: {
                 owner_id: userId,
                 user_id: contactId,
             }
         })
+
+        if (deleted === 0) {
+            throw ApiError.notFound('Contact not found')
+        }
     }
 }
 
-export default new UserService()
+export default UserService

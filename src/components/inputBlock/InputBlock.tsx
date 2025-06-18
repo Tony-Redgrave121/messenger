@@ -15,11 +15,11 @@ import {PopupContainer} from "@components/popup";
 import {IFilesState, IMessagesResponse} from "@appTypes"
 import {TextareaBlock} from "@components/textareaBlock";
 import {PopupInputBlock} from "@components/popup";
-import UserService from "../../service/UserService"
 import {useParams} from "react-router-dom";
 import {useAppSelector} from "@hooks/useRedux";
 import getFileObject from "../../utils/logic/getFileObject";
-import {useLiveUpdatesWS} from "@utils/hooks/useLiveUpdatesWS";
+import {useLiveUpdatesWS} from "@hooks/useLiveUpdatesWS";
+import MessageService from "@service/MessageService";
 
 interface IInputBlock {
     reply: IMessagesResponse | null,
@@ -97,7 +97,7 @@ const InputBlock: FC<IInputBlock> = ({reply, setReply, socketRef, members}) => {
             if (refTextarea && refTextarea.current) refTextarea.current.value = ''
             setReply(null)
 
-            const newMessage = await UserService.postMessage(message).catch(error => console.log(error))
+            const newMessage = await MessageService.postMessage(message).catch(error => console.log(error))
 
             if (newMessage && socketRef.current?.readyState === WebSocket.OPEN) {
                 socketRef.current.send(JSON.stringify({
@@ -164,7 +164,7 @@ const InputBlock: FC<IInputBlock> = ({reply, setReply, socketRef, members}) => {
                         <HiOutlineFaceSmile/>
                         <DropDown list={emojis} state={emoji} setState={setEmoji} styles={['EmojiContainer']}/>
                     </Buttons.DefaultButton>
-                    <TextareaBlock ref={refTextarea} inputText={inputText} setInputText={setInputText}/>
+                    <TextareaBlock textareaRef={refTextarea} inputText={inputText} setInputText={setInputText}/>
                     <Buttons.DefaultButton foo={() => setUpload(!upload)}>
                         <HiMiniPaperClip/>
                         <DropDown list={dropDownUpload} state={upload} setState={setUpload}/>

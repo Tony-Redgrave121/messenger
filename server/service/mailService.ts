@@ -54,9 +54,7 @@ class MailService {
                     <h1 style="color:#ffffff;">Messenger</h1>
                     <h2>Email Confirmation</h2>
                     <p style="color:#aaa;">Enter this code to confirm your email:</p>
-                    <p style="font-size:24px; letter-spacing:5px; border:1px solid #282828; border-radius:10px; padding:14px 24px; display:inline-block;">
-                        ${code}
-                    </p>
+                    <p style="font-size:24px; letter-spacing:5px; border:1px solid #282828; border-radius:10px; padding:14px 24px; display:inline-block;">${code}</p>
                     <p style="color:#888; margin-top:20px;">If you didn’t request this, please ignore this email.</p>
                 </div>
             </body>

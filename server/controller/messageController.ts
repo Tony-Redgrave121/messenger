@@ -1,17 +1,15 @@
 import ApiError from "../error/ApiError"
 import {NextFunction, Request, Response} from "express"
 import validateQueryParams from "../shared/validation/validateQueryParams";
-import messageService from "../service/messageService";
+import MessageService from "../service/messageService";
 import ensureRequiredFields from "../shared/validation/ensureRequiredFields";
 
 class MessageController {
-    constructor(private readonly messageService: messageService) {}
+    constructor(private readonly messageService: MessageService) {}
 
     public fetchMessages = async (req: Request, res: Response, next: NextFunction) => {
         try {
             const validatedData = validateQueryParams(req.query, ['type', 'user_id', 'messenger_id'])
-            if (validatedData instanceof ApiError) return next(validatedData)
-
             const {type, user_id, messenger_id} = validatedData
             const {post_id} = req.query
 
@@ -29,8 +27,6 @@ class MessageController {
     public fetchMessage = async (req: Request, res: Response, next: NextFunction) => {
         try {
             const validatedData = validateQueryParams(req.query, ['message_id', 'messenger_id'])
-            if (validatedData instanceof ApiError) return next(validatedData)
-
             const {messenger_id, message_id} = validatedData
 
             const message = await this.messageService.fetchMessage(message_id, messenger_id)
@@ -93,7 +89,6 @@ class MessageController {
             const {message_id} = req.params
             const validatedData = validateQueryParams(req.query, ['reaction_id', 'user_id'])
 
-            if (validatedData instanceof ApiError) return next(validatedData)
             ensureRequiredFields([message_id])
 
             const {reaction_id, user_id} = validatedData

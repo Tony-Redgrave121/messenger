@@ -1,8 +1,10 @@
 import axios from 'axios'
 
+const SERVER_URL = process.env.REACT_APP_SERVER_URL
+
 const $api = axios.create({
     withCredentials: true,
-    baseURL: "http://localhost:5000/",
+    baseURL: SERVER_URL,
 })
 
 $api.interceptors.request.use(config => {

@@ -1,5 +1,7 @@
-import Messenger from "../pages/Messenger/Messenger";
-import CommentsBlock from "../pages/Messenger/commentsBlock/CommentsBlock";
+import {lazy} from "react"
+
+const Messenger = lazy(() => import("../pages/Messenger/Messenger"))
+const CommentsBlock = lazy(() => import("../pages/Messenger/commentsBlock/CommentsBlock"))
 
 const UserRoutes = [
     {

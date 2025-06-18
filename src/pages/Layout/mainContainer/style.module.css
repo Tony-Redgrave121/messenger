@@ -29,11 +29,15 @@
 
 @media screen and (max-width: 940px) {
   .MainContainer {
-    width: 100vw;
     justify-content: start;
   }
   .MainContainer .Wrapper {
     width: 100%;
+  }
+}
+@media screen and (max-width: 600px) {
+  .MainContainer .Wrapper {
+    min-width: 100%;
   }
 }
 

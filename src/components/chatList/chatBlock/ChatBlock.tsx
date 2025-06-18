@@ -5,6 +5,7 @@ import {Link} from "react-router-dom";
 import {getDate} from "@utils/logic/getDate";
 import {IMessengersListResponse} from "@appTypes";
 import {useAppSelector} from "@hooks/useRedux";
+import useCloseLeftSidebar from "@hooks/useCloseLeftSidebar";
 
 interface IChatBlock {
     messenger: IMessengersListResponse
@@ -12,8 +13,9 @@ interface IChatBlock {
 
 const ChatBlock: React.FC<IChatBlock> = memo(({messenger}) => {
     const [notificationCount, setNotificationCount] = useState(0)
-
     const notifications = useAppSelector(state => state.live.notifications)
+
+    const {closeSidebar} = useCloseLeftSidebar()
 
     useEffect(() => {
         const count = notifications?.[messenger.messenger_id] ?? 0
@@ -21,7 +23,7 @@ const ChatBlock: React.FC<IChatBlock> = memo(({messenger}) => {
     }, [notifications, messenger.messenger_id])
 
     return (
-        <Link to={`${messenger.messenger_type}/${messenger.messenger_id}`} className={style.ChatContainer}>
+        <Link to={`${messenger.messenger_type}/${messenger.messenger_id}`} onClick={closeSidebar} className={style.ChatContainer}>
             <LoadFile imagePath={
                 messenger.messenger_image ? `${messenger.messenger_type !== "chat" ? "messengers" : "users"}/${messenger.messenger_id}/${messenger.messenger_image}` : ''
             } imageTitle={messenger.messenger_name}/>

@@ -5,6 +5,6 @@ export default interface IMessengersListResponse {
     messenger_type: string,
     messages: {
         message_date: Date,
-        message_text: string
+        message_text?: string
     }[]
 }

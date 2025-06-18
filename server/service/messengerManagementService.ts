@@ -2,43 +2,17 @@ import models from "../model/models"
 import ApiError from "../error/ApiError";
 import * as uuid from "uuid";
 import uploadFile from "../shared/uploadFile";
-import {UploadedFile} from "express-fileupload";
 import {Op, Sequelize} from "sequelize";
 import deleteAllMessages from "../shared/deleteAllMessages";
 import MessengerKeys from "../types/keys/MessengerKeys";
 import convertToPlain from "../shared/convertToPlain";
 import deleteLocalFiles from "../shared/deleteLocalFiles";
-
-interface IUserFiles {
-    messenger_image?: UploadedFile
-}
-
-interface IMessageId {
-    message_id: string
-}
-
-interface IChatMessage {
-    user_id: string,
-    recipient_user_id: string | null
-}
-
-interface IChatUser {
-    user_id: string,
-    user_name: string,
-    user_img?: string
-}
-
-interface IMessage {
-    message_text: string | null,
-    message_date: Date
-}
-
-interface IMessengerReaction {
-    messenger_setting_id: string,
-    messenger_reactions: {
-        reaction_id: string
-    }[]
-}
+import IMessageId from "../types/idTypes/IMessageId";
+import IMessengerFiles from "../types/fileTypes/IMessengerFiles";
+import ISettingReaction from "../types/settingTypes/ISettingReaction";
+import ILastMessage from "../types/messageTypes/ILastMessage";
+import IChatId from "../types/idTypes/IChatId";
+import IShortUser from "../types/userTypes/IShortUser";
 
 class MessengerManagementService {
     public async fetchMessenger(type: MessengerKeys, messenger_id: string) {
@@ -150,7 +124,7 @@ class MessengerManagementService {
                 where: {messenger_id: messenger_id},
             })
             if (!messengerReactions) return
-            const messengerReactionsPlain = convertToPlain<IMessengerReaction>(messengerReactions)
+            const messengerReactionsPlain = convertToPlain<ISettingReaction>(messengerReactions)
 
             const reactionsIds = messengerReactionsPlain.messenger_reactions.flatMap(r => r.reaction_id)
 
@@ -169,7 +143,7 @@ class MessengerManagementService {
         messenger_desc: string,
         messenger_type: string,
         messenger_members?: string[],
-        messenger_files?: IUserFiles | null
+        messenger_files?: IMessengerFiles | null
     ) {
         const messenger_id = uuid.v4()
         let messenger_image = null
@@ -239,7 +213,7 @@ class MessengerManagementService {
             attributes: ['user_id', 'recipient_user_id'],
         })
 
-        const messagesPlain = convertToPlain<IChatMessage>(messages)
+        const messagesPlain = convertToPlain<IChatId>(messages)
         const chatIds = new Set<string>()
 
         messagesPlain.forEach(m => {
@@ -255,7 +229,7 @@ class MessengerManagementService {
             attributes: ['user_id', 'user_name', 'user_img']
         })
 
-        const chatUsersPlain = convertToPlain<IChatUser>(chatUsers)
+        const chatUsersPlain = convertToPlain<IShortUser>(chatUsers)
         const lastMessages = await models.message.findAll({
             where: {
                 [Op.or]: [
@@ -274,7 +248,7 @@ class MessengerManagementService {
             attributes: ['message_text', 'message_date']
         })
 
-        const lastMessagesPlain = convertToPlain<IMessage>(lastMessages)
+        const lastMessagesPlain = convertToPlain<ILastMessage>(lastMessages)
         const fullLastMessages = lastMessagesPlain.map((l, i) => ({
             message: l,
             companion_id: chatUsersPlain[i].user_id

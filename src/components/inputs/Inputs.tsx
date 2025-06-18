@@ -2,7 +2,7 @@ import React, {ChangeEvent, Dispatch, FC, RefObject, SetStateAction, useEffect, 
 import style from "./style.module.css"
 import Buttons from "@components/buttons/Buttons";
 import {useAppDispatch, useAppSelector} from "@hooks/useRedux";
-import {setVolume} from "@store/reducers/sliderReducer"
+import {setVolume} from "@store/reducers/videoReducer"
 import {handleRangeProgress} from "@utils/logic/handleRangeProgress";
 import {getStyles} from "@utils/logic/getStyles";
 import {CSSTransition} from "react-transition-group";
@@ -61,7 +61,7 @@ namespace Inputs {
         )
     }
     export const VolumeInput: FC<IMediaInput> = ({mediaRef}) => {
-        const volume = useAppSelector(state => state.slider.volume)
+        const volume = useAppSelector(state => state.video.volume)
         const dispatch = useAppDispatch()
         const inputRef = useRef<HTMLInputElement>(null)
         const [isEnter, setIsEnter] = useState(false)

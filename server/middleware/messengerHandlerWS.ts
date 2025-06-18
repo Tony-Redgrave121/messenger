@@ -1,5 +1,5 @@
 import {WebSocketServer, WebSocket} from "ws";
-import IMessagesResponse from "../types/IMessagesResponse";
+import IMessagesResponse from "../types/messageTypes/IMessagesResponse";
 
 type WebSocketMethod =
     | "CONNECTION"

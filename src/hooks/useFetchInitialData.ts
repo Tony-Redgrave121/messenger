@@ -1,11 +1,13 @@
 import {useEffect, useState} from "react"
 import {IAdaptMessenger, IReaction, isServerError} from "@appTypes";
-import UserService from "@service/UserService";
-import MessengerService from "@service/MessengerService";
 import {setPopupMessageChildren, setPopupMessageState} from "@store/reducers/appReducer";
 import {useNavigate, useParams} from "react-router-dom";
 import {useAppDispatch, useAppSelector} from "@hooks/useRedux";
-import {useMessageWS} from "@utils/hooks/useMessageWS";
+import {useMessageWS} from "@hooks/useMessageWS";
+import MessageService from "@service/MessageService";
+import MessengerManagementService from "@service/MessengerManagementService";
+import {useAbortController} from "@hooks/useAbortController";
+import axios from "axios";
 
 const types = ['chat', 'channel', 'group']
 
@@ -35,25 +37,25 @@ const useFetchInitialData = () => {
         setMessagesList,
     } = useMessageWS()
 
+    const {getSignal} = useAbortController()
+
     useEffect(() => {
         if (!messengerId || !type) return
+        const signal = getSignal()
 
         if (!types.includes(type) || !messengerId) {
             navigate("/")
             return
         }
 
-        const controller = new AbortController()
-        const signal = controller.signal
-
         const handleMessageList = async () => {
             setMessagesList([])
 
             try {
                 const [messenger, messages, reactions] = await Promise.all([
-                    UserService.fetchMessenger(user.userId, type, messengerId, signal),
-                    UserService.fetchMessages(user.userId, type, messengerId, postId, signal),
-                    MessengerService.getReactions((type === 'channel' && messengerId) ? messengerId : undefined)
+                    MessengerManagementService.fetchMessenger(user.userId, type, messengerId, signal),
+                    MessageService.fetchMessages(user.userId, type, messengerId, postId, signal),
+                    MessengerManagementService.getReactions((type === 'channel' && messengerId) ? messengerId : undefined, signal)
                 ])
 
                 const messengerData = messenger.data
@@ -95,9 +97,7 @@ const useFetchInitialData = () => {
         }
 
         handleMessageList()
-
-        return () => controller.abort()
-    }, [user.userId, messengerId, postId, navigate, setMessagesList])
+    }, [user.userId, messengerId, postId])
 
     return {
         messenger,

@@ -1,16 +1,20 @@
 import {Dispatch, SetStateAction, useState} from "react";
 import {useParams} from "react-router-dom";
-import MessengerService from "@service/MessengerService";
+import MessengerSettingsService from "@service/MessengerSettingsService";
 import {IMessengerSettings} from "@appTypes";
-import {useLiveUpdatesWS} from "@utils/hooks/useLiveUpdatesWS";
+import {useLiveUpdatesWS} from "@hooks/useLiveUpdatesWS";
 import {useAppSelector} from "@hooks/useRedux";
+import {useAbortController} from "@hooks/useAbortController";
 
 const useEditSettings = (
     setSettings: Dispatch<SetStateAction<IMessengerSettings>>
 ) => {
     const {messengerId} = useParams()
+    const {getSignal} = useAbortController()
+
     const [popup, setPopup] = useState(false)
     const socketRef = useLiveUpdatesWS()
+
     const messengers = useAppSelector(state => state.live.messengers)
 
     const handleCancel = () => {
@@ -22,7 +26,7 @@ const useEditSettings = (
         if (!messengerId) return
 
         try {
-            const newModerators = await MessengerService.putMessengerModerator('member', userId, messengerId)
+            const newModerators = await MessengerSettingsService.putMessengerModerator('member', userId, messengerId)
 
             if (newModerators.data.message) return
 
@@ -43,7 +47,9 @@ const useEditSettings = (
         if (!messengerId) return
 
         try {
-            const newMembers = await MessengerService.postMember(userId, messengerId)
+            const signal = getSignal()
+
+            const newMembers = await MessengerSettingsService.postMember(userId, messengerId, signal)
             if (newMembers.data.message) return
 
             setSettings(prev => ({
@@ -75,7 +81,9 @@ const useEditSettings = (
         if (!messengerId) return
 
         try {
-            const deletedRemoved = await MessengerService.deleteRemoved(userId, messengerId)
+            const signal = getSignal()
+
+            const deletedRemoved = await MessengerSettingsService.deleteRemoved(userId, messengerId, signal)
 
             if (deletedRemoved.status === 200) {
                 setSettings(prev => ({
@@ -90,11 +98,10 @@ const useEditSettings = (
 
     const deleteFromGroup = async (userId: string) => {
         if (!messengerId) return
-        const controller = new AbortController()
-        const signal = controller.signal
+        const signal = getSignal()
 
         try {
-            const deletedMember = await MessengerService.deleteMember(userId, messengerId, signal)
+            const deletedMember = await MessengerSettingsService.deleteMember(userId, messengerId, signal)
 
             if (deletedMember.status === 200) {
                 setSettings(prev => ({

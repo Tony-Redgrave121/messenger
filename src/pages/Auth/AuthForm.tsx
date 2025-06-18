@@ -1,7 +1,7 @@
 import React, {useRef, useState} from 'react'
 import style from './style.module.css'
 import {useForm} from "react-hook-form";
-import {login} from "@store/reducers/userReducer";
+import {login} from "@store/thunks/userThunks";
 import {useNavigate} from 'react-router-dom'
 import {useAppDispatch} from "@hooks/useRedux";
 import {CSSTransition} from "react-transition-group"
@@ -25,7 +25,6 @@ const AuthForm = () => {
     const [formNumber, setFormNumber] = useState(0)
     const [formState, setFormState] = useState(true)
     const refForm = useRef<HTMLDivElement>(null)
-    const navigate = useNavigate()
 
     const dispatch = useAppDispatch()
     const {
@@ -57,14 +56,13 @@ const AuthForm = () => {
                 formData.append('user_email', watch('user_email'))
                 formData.append('user_password', watch('user_password'))
 
-                const res = await dispatch(login({formData: formData})) as any
+                const res = await dispatch(login({formData: formData}))
                 const payload = res.payload
 
-                if (payload.message) {
+                if (!payload && typeof payload === "string") {
                     dispatch(setPopupMessageState(true))
-                    return dispatch(setPopupMessageChildren(payload.message))
+                    return dispatch(setPopupMessageChildren(payload))
                 }
-                else if (!payload.registration) return navigate('/')
             }
 
             setFormState(false)

@@ -1,14 +1,8 @@
 import models from "../model/models";
 import {Sequelize} from "sequelize";
-import IReaction from "../types/IReaction";
-import IMessagesResponse from "../types/IMessagesResponse";
+import IMessagesResponse from "../types/messageTypes/IMessagesResponse";
 import convertToPlain from "./convertToPlain";
-
-interface IUsersReaction {
-    reaction_count: string,
-    reaction: IReaction,
-    users_ids: string,
-}
+import IUserReaction from "../types/reactionTypes/IUserReaction";
 
 const normalizeMessage = async (message: IMessagesResponse) => {
     const reactionsRaw = await models.message_reactions.findAll({
@@ -24,7 +18,7 @@ const normalizeMessage = async (message: IMessagesResponse) => {
         order: [['reaction_count', 'DESC']],
     })
 
-    const reactionsPlain = convertToPlain<IUsersReaction>(reactionsRaw)
+    const reactionsPlain = convertToPlain<IUserReaction>(reactionsRaw)
     const reactions = reactionsPlain?.map(r => ({
         ...r,
         users_ids: r.users_ids?.split(',') ?? []

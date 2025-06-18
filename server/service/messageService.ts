@@ -6,37 +6,15 @@ import uploadFile from "../shared/uploadFile"
 import path from "path"
 import fs from "fs"
 import {Op, Sequelize} from "sequelize";
-import IMessagesResponse from "../types/IMessagesResponse";
+import IMessagesResponse from "../types/messageTypes/IMessagesResponse";
 import findAllMessagesQuery from "../shared/sequelizeQueries/findAllMessagesQuery";
 import normalizeMessage from "../shared/normalizeMessage";
 import convertToPlain from "../shared/convertToPlain";
+import IMessageId from "../types/idTypes/IMessageId";
+import IPostMessage from "../types/messageTypes/IPostMessage";
+import IFile from "../types/fileTypes/IFile";
 
-interface IPostMessage {
-    user_id: string,
-    messenger_id: string | null,
-    reply_id: string,
-    post_id?: string,
-    message_text: string,
-    message_type: 'media' | 'document',
-    recipient_user_id: string | null,
-}
-
-interface IMessageFiles {
-    message_file_id: string,
-    message_file_name: string,
-    message_file_size: number
-}
-
-interface IMessageId {
-    message_id: string
-}
-
-interface ICommentFile {
-    message_file_name: string,
-    message_file_path: string
-}
-
-class UserService {
+class MessageService {
     public async fetchMessages(type: string, user_id: string, messenger_id: string, post_id?: string) {
         const whereBase = type !== "chat" ?
             {
@@ -80,7 +58,7 @@ class UserService {
 
     public async postMessage(message: IPostMessage, files: FileArray | null | undefined) {
         const message_id = uuid.v4()
-        let message_files: IMessageFiles[] = []
+        let message_files: IFile[] = []
 
         const messagePost = await models.message.create({
             message_id,
@@ -164,7 +142,7 @@ class UserService {
             attributes: ['message_file_name', 'message_file_path'],
         })
 
-        const filesPlain = convertToPlain<ICommentFile>(messageFiles) ?? []
+        const filesPlain = convertToPlain<IFile>(messageFiles) ?? []
         for (const file of filesPlain) {
             const filePath = path.resolve(__dirname + "/../src/static/messengers", file.message_file_path, file.message_file_name)
 
@@ -220,4 +198,4 @@ class UserService {
     }
 }
 
-export default UserService
+export default MessageService

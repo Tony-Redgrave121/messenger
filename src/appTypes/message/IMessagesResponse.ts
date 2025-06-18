@@ -1,5 +1,5 @@
 import IMessageFile from "./IMessageFile";
-import IReaction from "../../../server/types/IReaction";
+import IReaction from "../../../server/types/reactionTypes/IReaction";
 
 export default interface IMessagesResponse {
     message_id: string,

@@ -1,10 +1,10 @@
 import {FC, ReactNode, useEffect, useRef} from 'react'
 import style from './style.module.css'
 import './animation.css'
-import img from './backgrounds/pattern.webp'
+import img from '@assets/images/pattern.webp'
 import {CSSTransition} from 'react-transition-group'
 import {useAppDispatch, useAppSelector} from "@hooks/useRedux";
-import {syncNotifications} from "@store/reducers/liveUpdatesReducer";
+import {syncNotifications} from "@store/thunks/liveUpdatesThunks";
 
 interface IMainContainer {
     children?: ReactNode

@@ -64,20 +64,6 @@
       width: 100%;
       min-height: 42px;
 
-      textarea {
-        align-self: center;
-        caret-color: #656565;
-        width: 100%;
-        color: white;
-        line-height: 1.5;
-        padding: 0 8px;
-        overflow-wrap: break-word;
-
-        &::placeholder {
-          color: #989898;
-        }
-      }
-
       &:first-child, &:last-child {
         ul {
           top: unset;

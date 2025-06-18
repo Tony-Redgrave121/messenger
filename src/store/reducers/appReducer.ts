@@ -1,4 +1,4 @@
-import {createSlice} from "@reduxjs/toolkit"
+import {createSlice, PayloadAction} from "@reduxjs/toolkit"
 
 interface IAppState {
     sidebarLeft: boolean,
@@ -18,16 +18,16 @@ const appSlice = createSlice({
     name: "app",
     initialState,
     reducers: {
-        setSidebarLeft(state, action) {
+        setSidebarLeft(state, action: PayloadAction<boolean>) {
             state.sidebarLeft = action.payload
         },
-        setPopupMessageChildren(state, action) {
+        setPopupMessageChildren(state, action: PayloadAction<string>) {
             state.popupMessageChildren = action.payload
         },
-        setPopupMessageState(state, action) {
+        setPopupMessageState(state, action: PayloadAction<boolean>) {
             state.popupMessageState = action.payload
         },
-        setWrapperState(state, action) {
+        setWrapperState(state, action: PayloadAction<boolean>) {
             state.wrapperState = action.payload
         }
     }

@@ -1,36 +1,24 @@
-import {createSlice} from "@reduxjs/toolkit"
+import {createSlice, PayloadAction} from "@reduxjs/toolkit"
 
-interface IAppState {
-    currVideo: string,
+interface ISliderState {
     zoom: boolean,
-    volume: number,
 }
 
-const initialState: IAppState = {
-    currVideo: '',
+const initialState: ISliderState = {
     zoom: false,
-    volume: 80
 }
 
 const appSlice = createSlice({
-    name: "app",
+    name: "slider",
     initialState,
     reducers: {
-        setCurrVideo(state, action) {
-            state.currVideo = action.payload
-        },
-        setZoom(state, action) {
+        setZoom(state, action: PayloadAction<boolean>) {
             state.zoom = action.payload
-        },
-        setVolume(state, action) {
-            state.volume = action.payload
         }
     }
 })
 
 export default appSlice.reducer
 export const {
-    setCurrVideo,
-    setZoom,
-    setVolume
+    setZoom
 } = appSlice.actions

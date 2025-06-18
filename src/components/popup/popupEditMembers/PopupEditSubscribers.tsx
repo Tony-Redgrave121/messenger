@@ -4,10 +4,11 @@ import {Buttons} from "@components/buttons";
 import {HiOutlineArrowRight, HiOutlineXMark} from "react-icons/hi2";
 import {IContact, IMessengerSettings} from "@appTypes";
 import {AddContacts} from "@components/contacts";
-import MessengerService from "@service/MessengerService";
+import MessengerSettingsService from "@service/MessengerSettingsService";
 import {useParams} from "react-router-dom";
-import {useLiveUpdatesWS} from "@utils/hooks/useLiveUpdatesWS";
+import {useLiveUpdatesWS} from "@hooks/useLiveUpdatesWS";
 import {useAppSelector} from "@hooks/useRedux";
+import {useAbortController} from "@hooks/useAbortController";
 
 interface IPopupEditSubscribersProps {
     handleCancel: () => void,
@@ -17,16 +18,20 @@ interface IPopupEditSubscribersProps {
 const PopupEditSubscribers: FC<IPopupEditSubscribersProps> = ({handleCancel, setSettings}) => {
     const [members, setMembers] = useState<IContact[]>([])
     const {messengerId} = useParams()
+    const {getSignal} = useAbortController()
+
     const socketRef = useLiveUpdatesWS()
     const messengers = useAppSelector(state => state.live.messengers)
     const userId = useAppSelector(state => state.user.userId)
 
     const handleAddMembers = async () => {
         if (!messengerId) return
+        const signal = getSignal()
 
         try {
             const membersId = members.map(member => member.user_id)
-            const newMembers = await MessengerService.postContactsMembers(membersId, messengerId)
+
+            const newMembers = await MessengerSettingsService.postContactsMembers(membersId, messengerId, signal)
 
             if (newMembers.data.message) return
 

@@ -18,9 +18,13 @@ import {IAdaptMessenger} from "@appTypes";
 import {getDate} from "@utils/logic/getDate";
 import {clsx} from "clsx";
 import SearchMessage from "../searchMessage/SearchMessage";
-import MessengerService from "@service/MessengerService";
+import MessengerSettingsService from "@service/MessengerSettingsService";
 import {useNavigate, useParams} from "react-router-dom";
-import {addContact, deleteContact, deleteMessenger} from "@store/reducers/liveUpdatesReducer";
+import {addContact, deleteContact} from "@store/reducers/liveUpdatesReducer";
+import {deleteMessenger} from "@store/thunks/liveUpdatesThunks";
+import UserService from "@service/UserService";
+import MessengerManagementService from "@service/MessengerManagementService";
+import {useAbortController} from "@hooks/useAbortController";
 
 interface IChatHeader {
     messenger: IAdaptMessenger,
@@ -36,6 +40,8 @@ const MessengerHeader: FC<IChatHeader> = memo(({messenger, setSidebarState}) => 
     const {contacts} = useAppSelector(state => state.live)
 
     const {messengerId} = useParams()
+    const {getSignal} = useAbortController()
+
     const dispatch = useAppDispatch()
     const navigate = useNavigate()
 
@@ -67,19 +73,15 @@ const MessengerHeader: FC<IChatHeader> = memo(({messenger, setSidebarState}) => 
                     liText: 'Remove from contacts',
                     liFoo: async () => {
                         if (!messengerId) return
-
-                        const controller = new AbortController()
-                        const signal = controller.signal
+                        const signal = getSignal()
 
                         try {
-                            const res = await MessengerService.deleteContact(userId, messengerId, signal)
+                            const res = await UserService.deleteContact(userId, messengerId, signal)
 
                             if (res.status === 200) dispatch(deleteContact(messengerId))
                         } catch (error) {
                             console.log(error)
                         }
-
-                        return () => controller.abort()
                     }
                 } :
                 {
@@ -87,19 +89,15 @@ const MessengerHeader: FC<IChatHeader> = memo(({messenger, setSidebarState}) => 
                     liText: 'Add to contacts',
                     liFoo: async () => {
                         if (!messengerId) return
-
-                        const controller = new AbortController()
-                        const signal = controller.signal
+                        const signal = getSignal()
 
                         try {
-                            const newContact = await MessengerService.postContact(userId, messengerId, signal)
+                            const newContact = await UserService.postContact(userId, messengerId, signal)
 
                             if (newContact.status === 200) dispatch(addContact(newContact.data))
                         } catch (error) {
                             console.log(error)
                         }
-
-                        return () => controller.abort()
                     }
                 },
             {
@@ -107,12 +105,10 @@ const MessengerHeader: FC<IChatHeader> = memo(({messenger, setSidebarState}) => 
                 liText: 'Delete Chat',
                 liFoo: async () => {
                     if (!messengerId) return
-
-                    const controller = new AbortController()
-                    const signal = controller.signal
+                    const signal = getSignal()
 
                     try {
-                        const res = await MessengerService.deleteChat(userId, messengerId, signal)
+                        const res = await MessengerManagementService.deleteChat(userId, messengerId, signal)
 
                         if (res.status === 200) {
                             dispatch(deleteMessenger(messengerId))
@@ -121,8 +117,6 @@ const MessengerHeader: FC<IChatHeader> = memo(({messenger, setSidebarState}) => 
                     } catch (error) {
                         console.log(error)
                     }
-
-                    return () => controller.abort()
                 }
             }
         ],
@@ -138,12 +132,10 @@ const MessengerHeader: FC<IChatHeader> = memo(({messenger, setSidebarState}) => 
                 liText: 'Leave Group',
                 liFoo: async () => {
                     if (!messengerId) return
-
-                    const controller = new AbortController()
-                    const signal = controller.signal
+                    const signal = getSignal()
 
                     try {
-                        const res = await MessengerService.deleteMember(userId, messengerId, signal)
+                        const res = await MessengerSettingsService.deleteMember(userId, messengerId, signal)
 
                         if (res.status === 200) {
                             dispatch(deleteMessenger(messengerId))
@@ -152,8 +144,6 @@ const MessengerHeader: FC<IChatHeader> = memo(({messenger, setSidebarState}) => 
                     } catch (error) {
                         console.log(error)
                     }
-
-                    return () => controller.abort()
                 }
             }
         ],
@@ -169,12 +159,10 @@ const MessengerHeader: FC<IChatHeader> = memo(({messenger, setSidebarState}) => 
                 liText: 'Leave Channel',
                 liFoo: async () => {
                     if (!messengerId) return
-
-                    const controller = new AbortController()
-                    const signal = controller.signal
+                    const signal = getSignal()
 
                     try {
-                        const res = await MessengerService.deleteMember(userId, messengerId, signal)
+                        const res = await MessengerSettingsService.deleteMember(userId, messengerId, signal)
 
                         if (res.status === 200) {
                             dispatch(deleteMessenger(messengerId))
@@ -183,8 +171,6 @@ const MessengerHeader: FC<IChatHeader> = memo(({messenger, setSidebarState}) => 
                     } catch (error) {
                         console.log(error)
                     }
-
-                    return () => controller.abort()
                 }
             }
         ]

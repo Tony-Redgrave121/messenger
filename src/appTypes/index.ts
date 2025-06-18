@@ -23,6 +23,7 @@ export type {default as IMessenger} from './messenger/IMessenger'
 export type {default as IMessengerResponse} from './messenger/IMessengerResponse'
 export type {default as IMessengersListResponse} from './messenger/IMessengersListResponse'
 export type {default as IUnifiedMessenger} from './messenger/IUnifiedMessenger'
+export type {default as IUpdateMessenger} from './messenger/IUpdateMessenger'
 
 // Types of Message
 export type {default as ICommentState} from './message/ICommentState'
@@ -33,8 +34,10 @@ export type {default as IMessagesResponse} from './message/IMessagesResponse'
 
 // Types of User
 export type {default as IEditProfileForm} from './user/IEditProfileForm'
-export type {default as IProfileSettings} from './user/IProfileSettings'
 export type {default as IEditPasswordForm} from './user/IEditPasswordForm'
+
+// Types of Error
+export type {default as IApiErrorResponse} from './IApiErrorResponse'
 
 // Types guard
 export {default as isChatArray} from './typeGuard/isChatArray'

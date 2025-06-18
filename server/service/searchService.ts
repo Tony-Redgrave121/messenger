@@ -4,7 +4,7 @@ import {Op, Sequelize} from "sequelize";
 import findAllMessagesQuery from "../shared/sequelizeQueries/findAllMessagesQuery";
 
 class SearchService {
-    public async getMessengers(query: string, type: string) {
+    public getMessengers = async (query: string, type: string) => {
         if (type !== "chat") {
             const chat = await models.messenger.findAll({
                 include: [
@@ -51,7 +51,13 @@ class SearchService {
             return messengers
         }
     }
-    public async getMessages(query: string, type: string, user_id: string, messenger_id: string, post_id?: string) {
+    public getMessages = async (
+        query: string,
+        type: string,
+        user_id: string,
+        messenger_id: string,
+        post_id?: string
+    ) => {
         const whereBase = type !== "chat" ?
             {
                 messenger_id: messenger_id,

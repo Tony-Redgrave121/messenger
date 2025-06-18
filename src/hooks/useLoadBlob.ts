@@ -1,19 +1,23 @@
 import {useEffect, useState} from "react";
+import {useAbortController} from "@hooks/useAbortController";
+
+const SERVER_URL = process.env.REACT_APP_SERVER_URL
 
 const useLoadBlob = (imagePath?: string | boolean) => {
     const [load, setLoad] = useState(false)
     const [image, setImage] = useState('')
+    const {getSignal} = useAbortController()
 
     useEffect(() => {
         if (!imagePath) {
             setLoad(true)
             return
         }
-        
-        const controller = new AbortController(), signal = controller.signal
-        let objectUrl = ''
 
-        fetch(`http://localhost:5000/static/${imagePath}`, {signal})
+        let objectUrl = ''
+        const signal = getSignal()
+
+        fetch(`${SERVER_URL}/static/${imagePath}`, {signal})
             .then(data => data.blob())
             .then(blob => {
                 objectUrl = URL.createObjectURL(blob)
@@ -25,7 +29,6 @@ const useLoadBlob = (imagePath?: string | boolean) => {
             .finally(() => setLoad(true))
 
         return () => {
-            controller.abort()
             if (objectUrl) URL.revokeObjectURL(objectUrl)
         }
     }, [imagePath])

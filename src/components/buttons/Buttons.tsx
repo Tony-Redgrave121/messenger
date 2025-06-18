@@ -120,7 +120,7 @@ namespace Buttons {
         )
     }
     export const VolumeButton: FC<IVolumeButton> = ({handleVolume}) => {
-        const volume = useAppSelector(state => state.slider.volume)
+        const volume = useAppSelector(state => state.video.volume)
 
         return (
             <button onClick={handleVolume} className={style.PlayButtonMini}>

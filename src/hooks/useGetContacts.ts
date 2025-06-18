@@ -1,19 +1,20 @@
 import {useEffect} from "react"
-import messengerService from "../service/MessengerService"
 import {useAppDispatch, useAppSelector} from "@hooks/useRedux"
 import {setContacts} from "@store/reducers/liveUpdatesReducer";
+import UserService from "@service/UserService";
+import {useAbortController} from "@hooks/useAbortController";
 
 const useGetContacts = () => {
     const userId = useAppSelector(state => state.user.userId)
     const dispatch = useAppDispatch()
+    const {getSignal} = useAbortController()
 
     useEffect(() => {
-        const controller = new AbortController()
-        const signal = controller.signal
+        const signal = getSignal()
 
         const getContacts = async () => {
             try {
-                const contacts = await messengerService.getContacts(userId, signal)
+                const contacts = await UserService.getContacts(userId, signal)
 
                 if (contacts.status === 200) {
                     dispatch(setContacts(contacts.data))
@@ -23,8 +24,6 @@ const useGetContacts = () => {
             }
         }
         getContacts()
-
-        return () => controller.abort()
     }, [])
 }
 

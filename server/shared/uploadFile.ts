@@ -4,11 +4,11 @@ import * as fs from "fs"
 import sharp from "sharp"
 import ApiError from "../error/ApiError"
 import {UploadedFile} from 'express-fileupload'
+import FileKeys from "../types/keys/FileKeys";
 
 const IMAGE_TYPES = ['jpg', 'jpeg', 'png', 'webp'] as const
-type FileType = 'media' | 'document'
 
-const uploadFile = async (folder: string, file: UploadedFile, type: FileType) => {
+const uploadFile = async (folder: string, file: UploadedFile, type: FileKeys) => {
     try {
         const extension = path.extname(file.name).toLowerCase().replace('.', '')
         const isImage = IMAGE_TYPES.includes(extension as typeof IMAGE_TYPES[number])

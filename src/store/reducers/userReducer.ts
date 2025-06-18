@@ -1,13 +1,13 @@
-import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
-import AuthService from "../../service/AuthService";
+import {createSlice, PayloadAction} from "@reduxjs/toolkit";
+import {IAuthResponse} from "@appTypes";
+import {deleteAccount, login, logout, registration, userCheckAuth} from "@store/thunks/userThunks";
 
 interface IUsersState {
     userId: string,
     userName: string,
     userEmail: string,
-    userState: boolean,
     userBio: string,
-    userImg: string | null,
+    userImg: string | File | null,
     isAuth: boolean,
     isLoading: boolean,
 }
@@ -16,102 +16,30 @@ const initialState: IUsersState = {
     userId: '',
     userName: '',
     userEmail: '',
-    userState: false,
     userBio: '',
     userImg: null,
     isAuth: false,
     isLoading: true,
 }
 
-interface IRegistrationArgs {
-    formData: FormData
-}
+const updateAuthState = (state: IUsersState, action: PayloadAction<IAuthResponse>) => {
+    const user = action.payload
 
-interface IDeleteAccountArgs {
-    user_id: string
-}
-
-export const registration = createAsyncThunk("registration", async ({formData}: IRegistrationArgs, thunkAPI) => {
-    try {
-        const response = await AuthService.registration(formData)
-        localStorage.setItem('token', response.data.accessToken)
-
-        return response.data
-    } catch (e: any) {
-        return thunkAPI.rejectWithValue(e.response?.data?.message || "Could not fetch user data")
-    }
-})
-
-export const login = createAsyncThunk("login", async ({formData}: IRegistrationArgs, thunkAPI) => {
-    try {
-        const response = await AuthService.login(formData)
-
-        if (response.data.accessToken) localStorage.setItem('token', response.data.accessToken)
-
-        return response.data
-    } catch (e: any) {
-        return thunkAPI.rejectWithValue(e.response?.data?.message || "Could not fetch user data")
-    }
-})
-
-export const logout = createAsyncThunk("logout", async (_, thunkAPI) => {
-    try {
-        await AuthService.logout()
-        localStorage.removeItem('token')
-
-        return true
-    } catch (e: any) {
-        return thunkAPI.rejectWithValue(e.response?.data?.message || "Could not fetch user data")
-    }
-})
-
-export const deleteAccount = createAsyncThunk("deleteAccount", async ({user_id}: IDeleteAccountArgs, thunkAPI) => {
-    try {
-        await AuthService.deleteAccount(user_id)
-        localStorage.removeItem('token')
-
-        return true
-    } catch (e: any) {
-        return thunkAPI.rejectWithValue(e.response?.data?.message || "Could not fetch user data")
-    }
-})
-
-
-export const userCheckAuth = createAsyncThunk("userCheckAuth", async (_, thunkAPI) => {
-    thunkAPI.dispatch(updateIsLoading(true))
-    try {
-        const response = await AuthService.userCheckAuth()
-
-        if (response.data) {
-            localStorage.setItem('token', response.data.accessToken)
-            return response.data
-        }
-        return thunkAPI.rejectWithValue("Could not fetch user data")
-    } catch (e: any) {
-        return thunkAPI.rejectWithValue(e.response?.data?.message || "Could not fetch user data")
-    } finally {
-        thunkAPI.dispatch(updateIsLoading(false))
-    }
-})
-
-const updateState = (state: any, action: any) => {
-    if (action.payload.user_id) {
-        state.userId = action.payload.user_id
-        state.userName = action.payload.user_name
-        state.userEmail = action.payload.user_email
-        state.userState = action.payload.user_state
-        state.userBio = action.payload.user_bio
-        state.userImg = action.payload.user_img
+    if (user.user_id) {
+        state.userId = user.user_id
+        state.userName = user.user_name
+        state.userEmail = user.user_email
+        state.userBio = user.user_bio
+        state.userImg = user.user_img
         state.isAuth = true
     }
 }
 
-const dropState = (state: any) => {
+const dropState = (state: IUsersState) => {
     state.isAuth = false
     state.userId = ""
     state.userName = ""
     state.userEmail = ""
-    state.userState = false
     state.userBio = ""
     state.userImg = ""
 }
@@ -120,23 +48,23 @@ const userSlice = createSlice({
     name: "user",
     initialState,
     reducers: {
-        updateIsLoading(state, action) {
+        updateIsLoading(state, action: PayloadAction<boolean>) {
             state.isLoading = action.payload
         },
-        setUserName(state, action) {
+        setUserName(state, action: PayloadAction<string>) {
             state.userName = action.payload
         },
-        setUserBio(state, action) {
+        setUserBio(state, action: PayloadAction<string>) {
             state.userBio = action.payload
         },
-        setUserImg(state, action) {
+        setUserImg(state, action: PayloadAction<string | File | null>) {
             state.userImg = action.payload
         }
     },
     extraReducers: (builder) => {
-        builder.addCase(userCheckAuth.fulfilled, (state, action) => updateState(state, action))
-        builder.addCase(registration.fulfilled, (state, action) => updateState(state, action))
-        builder.addCase(login.fulfilled, (state, action) => updateState(state, action))
+        builder.addCase(userCheckAuth.fulfilled, (state, action: PayloadAction<IAuthResponse>) => updateAuthState(state, action))
+        builder.addCase(registration.fulfilled, (state, action) => updateAuthState(state, action))
+        builder.addCase(login.fulfilled, (state, action) => updateAuthState(state, action))
         builder.addCase(logout.fulfilled, (state) => dropState(state))
         builder.addCase(deleteAccount.fulfilled, (state) => dropState(state))
     }

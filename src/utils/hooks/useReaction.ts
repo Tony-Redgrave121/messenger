@@ -1,12 +1,14 @@
-import MessengerService from "@service/MessengerService";
 import {IMessagesResponse, IReaction} from "@appTypes";
 import {RefObject} from "react";
 import {useAppSelector} from "@hooks/useRedux";
 import {useParams} from "react-router-dom";
+import MessageService from "@service/MessageService";
+import {useAbortController} from "@hooks/useAbortController";
 
 const useReaction = () => {
     const user_id = useAppSelector(state => state.user.userId)
     const {messengerId, postId} = useParams()
+    const {getSignal} = useAbortController()
 
     const reactionOnClick = async (
         message: IMessagesResponse,
@@ -14,9 +16,14 @@ const useReaction = () => {
         socketRef: RefObject<WebSocket | null>
     ) => {
         const messageReaction = message.reactions?.find(react => react.reaction.reaction_id === reaction.reaction_id)
+        const signal = getSignal()
 
         if (messageReaction?.users_ids.includes(user_id)) {
-            await MessengerService.deleteMessageReaction(message.message_id, user_id, reaction.reaction_id)
+            await MessageService.deleteMessageReaction(
+                message.message_id, user_id,
+                reaction.reaction_id,
+                signal
+            )
 
             if (socketRef.current?.readyState === WebSocket.OPEN) {
                 socketRef.current.send(JSON.stringify({
@@ -32,7 +39,12 @@ const useReaction = () => {
                 }))
             }
         } else {
-            const reactionResponse = await MessengerService.postMessageReaction(message.message_id, user_id, reaction.reaction_id)
+            const reactionResponse = await MessageService.postMessageReaction(
+                message.message_id,
+                user_id,
+                reaction.reaction_id,
+                signal
+            )
 
             if (reactionResponse.status === 200) {
                 if (socketRef.current?.readyState === WebSocket.OPEN) {

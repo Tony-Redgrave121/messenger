@@ -1,5 +1,5 @@
 import {WebSocketServer, WebSocket} from "ws";
-import IFullMessenger from "../types/IFullMessenger";
+import IFullMessenger from "../types/messengerTypes/IFullMessenger";
 
 type WebSocketMethod =
     | "CONNECTION"

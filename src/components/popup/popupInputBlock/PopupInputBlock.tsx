@@ -50,7 +50,7 @@ const PopupInputBlock: FC<IPopupInputBlock> = ({setState, files, type, inputText
                 <MediaBlock.InputBlock media={files}/>
             }
             <div className={style.SubmitBlock}>
-                <TextareaBlock ref={refTextarea} inputText={inputText} setInputText={setInputText}/>
+                <TextareaBlock textareaRef={refTextarea} inputText={inputText} setInputText={setInputText}/>
                 <button onClick={() => {
                     handleSubmit()
                     handleCancel()

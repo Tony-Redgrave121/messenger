@@ -15,6 +15,7 @@ import SearchService from "@service/SearchService";
 import {useParams} from "react-router-dom";
 import {useAppSelector} from "@hooks/useRedux";
 import scrollInto from "@utils/logic/scrollInto";
+import {useAbortController} from "@hooks/useAbortController";
 
 interface IChatHeader {
     messenger: IAdaptMessenger,
@@ -28,7 +29,10 @@ const SearchMessage: FC<IChatHeader> = memo(({messenger, state, setState}) => {
 
     const searchRef = useRef<HTMLDivElement>(null)
     const animationRef = useRef<HTMLDivElement>(null)
+
     const {type, messengerId, postId} = useParams()
+    const {getSignal} = useAbortController()
+
     const userId = useAppSelector(state => state.user.userId)
 
     const searchDebounce = useMemo(() =>
@@ -36,8 +40,7 @@ const SearchMessage: FC<IChatHeader> = memo(({messenger, state, setState}) => {
             try {
                 if (!query || !messengerId || !type) return setSearchRes([])
 
-                const controller = new AbortController()
-                const signal = controller.signal
+                const signal = getSignal()
 
                 const params = {
                     query: query,

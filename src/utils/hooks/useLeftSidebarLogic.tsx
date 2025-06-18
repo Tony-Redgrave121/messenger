@@ -1,21 +1,19 @@
 import React, {useEffect, useMemo, useRef, useState} from "react";
 import {useAppDispatch, useAppSelector} from "@hooks/useRedux";
-import {useLiveUpdatesWS} from "@utils/hooks/useLiveUpdatesWS";
+import {useLiveUpdatesWS} from "@hooks/useLiveUpdatesWS";
 import debounce from "debounce";
-import {setSidebarLeft} from "@store/reducers/appReducer";
 import {
-    HiOutlineBugAnt,
-    HiOutlineCog8Tooth,
     HiOutlineMegaphone,
-    HiOutlineQuestionMarkCircle,
     HiOutlineUser,
     HiOutlineUsers
 } from "react-icons/hi2";
-import {LoadFile} from "@components/loadFile";
 import {useNavigate} from "react-router";
 import SearchService from "@service/SearchService";
 import {isChatArray, isMessengerArray, IUnifiedMessenger, ListKeys} from "@appTypes";
 import useGetContacts from "@hooks/useGetContacts";
+import {useAbortController} from "@hooks/useAbortController";
+import {setSidebarLeft} from "@store/reducers/appReducer";
+import useCloseLeftSidebar from "@hooks/useCloseLeftSidebar";
 
 const useLeftSidebarLogic = () => {
     const [settings, setSettings] = useState(false)
@@ -36,23 +34,14 @@ const useLeftSidebarLogic = () => {
     const sidebarLeft = useAppSelector(state => state.app.sidebarLeft)
     const {userImg, userName, userId} = useAppSelector(state => state.user)
     const contacts = useAppSelector(state => state.live.contacts)
-    const dispatch = useAppDispatch()
-    const socketRef = useLiveUpdatesWS()
 
+    const socketRef = useLiveUpdatesWS()
     const navigate = useNavigate()
+    const {getSignal} = useAbortController()
+    const {closeSidebar} = useCloseLeftSidebar()
+
     const [searchRes, setSearchRes] = useState<IUnifiedMessenger[]>([])
     const [active, setActive] = useState<ListKeys>('chat')
-
-    const handleResize = debounce(() => {
-        if (window.innerWidth >= 940) dispatch(setSidebarLeft(true))
-        else dispatch(setSidebarLeft(false))
-    }, 100)
-
-    useEffect(() => {
-        window.addEventListener('resize', handleResize)
-
-        return () => window.removeEventListener('resize', handleResize)
-    }, [dispatch, handleResize])
 
     useGetContacts()
 
@@ -83,72 +72,33 @@ const useLeftSidebarLogic = () => {
         }
     ]
 
-    const dropDownList = [
-        {
-            liChildren: <LoadFile imagePath={userImg ? `users/${userId}/${userImg}` : ''} imageTitle={userName}/>,
-            liText: userName,
-            liFoo: () => setProfile({
-                state: true,
-                mounted: true
-            })
-        },
-        {
-            liChildren: <HiOutlineUsers/>,
-            liText: 'Contacts',
-            liFoo: () => setMessengerCreation(prev => ({
-                state: !prev.state,
-                type: 'chat'
-            }))
-        },
-        {
-            liChildren: <HiOutlineCog8Tooth/>,
-            liText: 'Settings',
-            liFoo: () =>  setProfile({
-                state: true,
-                mounted: true
-            })
-        },
-        {
-            liChildren: <HiOutlineQuestionMarkCircle/>,
-            liText: 'CrowCaw Features',
-            liFoo: () => {
-            }
-        },
-        {
-            liChildren: <HiOutlineBugAnt/>,
-            liText: 'Report Bug',
-            liFoo: () => {
-            }
-        }
-    ]
-
     const navigateChat = (user_id: string) => {
+        closeSidebar()
         return navigate(`/chat/${user_id}`)
     }
 
     const searchDebounce = useMemo(() =>
         debounce(async (query: string, type: string) => {
+            if (!query) return
+
             try {
-                if (!query) return
+                const signal = getSignal()
+                const searched = await SearchService.getMessengers(query, type, signal)
 
-                const controller = new AbortController()
-                const signal = controller.signal
+                if (searched.status === 200) {
+                    const searchedData = searched.data
 
-                const res = await SearchService.getMessengers(query, type, signal)
-
-                if (res.status === 200) {
-                    const messengersData = res.data
                     let unifiedMessengers: IUnifiedMessenger[] = []
 
-                    if (isChatArray(messengersData)) {
-                        unifiedMessengers = messengersData.map(item => ({
+                    if (isChatArray(searchedData)) {
+                        unifiedMessengers = searchedData.map(item => ({
                             id: item.user_id,
                             name: item.user_name,
                             img: item.user_img,
                             desc: item.user_last_seen
                         }))
-                    } else if (isMessengerArray(messengersData)) {
-                        unifiedMessengers = messengersData.map(item => ({
+                    } else if (isMessengerArray(searchedData)) {
+                        unifiedMessengers = searchedData.map(item => ({
                             id: item.messenger_id,
                             name: item.messenger_name,
                             img: item.messenger_image,
@@ -181,12 +131,25 @@ const useLeftSidebarLogic = () => {
         else setSearch(false)
     }, [filter])
 
+    const dispatch = useAppDispatch()
+    const handleResize = debounce(() => {
+        if (window.innerWidth >= 940) dispatch(setSidebarLeft(true))
+    }, 100)
+
+    useEffect(() => {
+        window.addEventListener('resize', handleResize)
+
+        return () => window.removeEventListener('resize', handleResize)
+    }, [dispatch, handleResize])
+
     return {
         sidebarLeft,
         refSidebar,
         setSettings,
         settings,
-        dropDownList,
+        userImg,
+        userName,
+        userId,
         refSearch,
         setMessenger,
         messenger,

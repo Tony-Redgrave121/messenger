@@ -4,11 +4,12 @@ import {InputForm} from "@components/inputForm"
 import {Buttons} from "@components/buttons"
 import {IStepProps, IAuthForm} from '@appTypes'
 import { SubmitHandler} from "react-hook-form";
-import {registration} from "@store/reducers/userReducer";
+import {registration} from "@store/thunks/userThunks";
 import {useNavigate} from "react-router-dom";
 import {useAppDispatch} from "@hooks/useRedux";
 import { Control, UseFormHandleSubmit } from "react-hook-form";
 import InputFile from "@components/inputForm/inputFile/InputFile";
+import {useAbortController} from "@hooks/useAbortController";
 
 interface IStep4Props extends IStepProps {
     handleSubmit: UseFormHandleSubmit<IAuthForm>,
@@ -20,6 +21,7 @@ const Step4: React.FC<IStep4Props> = ({errors, register, handlePrev, handleSubmi
     const [picture, setPicture] = useState<File | null>(null)
     const navigate = useNavigate()
     const dispatch = useAppDispatch()
+    const {getSignal} = useAbortController()
 
     const handleImageChange = (file: FileList | null, onChange: (value: File) => void) => {
         if (file) {
@@ -29,18 +31,22 @@ const Step4: React.FC<IStep4Props> = ({errors, register, handlePrev, handleSubmi
     }
 
     const handleRegistration: SubmitHandler<IAuthForm> = async (data) => {
-        const formData = new FormData()
+        try {
+            const formData = new FormData()
 
-        formData.append('user_image', data.user_image as File)
-        formData.append('user_name', data.user_name)
-        formData.append('user_email', data.user_email)
-        formData.append('user_password', data.user_password)
-        formData.append('user_bio', data.user_bio)
+            formData.append('user_img', data.user_image as File)
+            formData.append('user_name', data.user_name)
+            formData.append('user_email', data.user_email)
+            formData.append('user_password', data.user_password)
+            formData.append('user_bio', data.user_bio)
 
-        const res = await dispatch(registration({formData: formData})) as any
+            const signal = getSignal()
+            await dispatch(registration({formData: formData, signal}))
 
-        if (res.payload.message) setErrorForm(res.payload.message)
-        else return navigate('/')
+            return navigate('/')
+        } catch (e) {
+            console.log(e)
+        }
     }
 
     return (

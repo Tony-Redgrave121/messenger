@@ -1,23 +1,23 @@
-import {memo, useEffect} from 'react'
-import {ChatBlock} from "./"
-import UserService from '../../service/UserService'
+import {lazy, memo, useEffect} from 'react'
 import {useAppDispatch, useAppSelector} from "@hooks/useRedux"
 import style from './style.module.css'
 import {setMessengers} from "@store/reducers/liveUpdatesReducer";
+import MessengerManagementService from "@service/MessengerManagementService";
+import {useAbortController} from "@hooks/useAbortController";
+const ChatBlock = lazy(() => import("./chatBlock/ChatBlock"))
 
 const ChatList = memo(() => {
     const user_id = useAppSelector(state => state.user.userId)
     const messengers = useAppSelector(state => state.live.messengers)
     const dispatch = useAppDispatch()
+    const {getSignal} = useAbortController()
 
     useEffect(() => {
-        const constructor = new AbortController()
-        const signal = constructor.signal
+        const signal = getSignal()
 
         const handleMessengerList = async () => {
             try {
-                const messengers = await UserService.fetchMessengersList(user_id, signal)
-
+                const messengers = await MessengerManagementService.fetchMessengersList(user_id, signal)
                 dispatch(setMessengers(messengers.data))
             } catch (e) {
                 console.error(e)

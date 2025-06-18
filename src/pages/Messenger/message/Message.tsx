@@ -21,7 +21,6 @@ import {IMessagesResponse, IMessageFile, IAdaptMessenger, IReaction} from "@appT
 import {useAppDispatch, useAppSelector} from "@hooks/useRedux";
 import {DropDown} from "@components/dropDown";
 import {DocumentBlock} from "./index";
-import UserService from "@service/UserService";
 import {Link, useNavigate, useParams} from "react-router-dom";
 import handleContextMenu from "@utils/logic/handleContextMenu";
 import {CSSTransition} from 'react-transition-group'
@@ -34,6 +33,8 @@ import ReactionsBlock from "./reactionsBlock/ReactionsBlock";
 import useReaction from "@utils/hooks/useReaction";
 import scrollInto from "@utils/logic/scrollInto";
 import {setWrapperState} from "@store/reducers/appReducer";
+import MessageService from "@service/MessageService";
+import useCopy from "@hooks/useCopy";
 
 interface IMessageProps {
     message: IMessagesResponse,
@@ -77,6 +78,7 @@ const Message: FC<IMessageProps> = (
     const navigate = useNavigate()
 
     const {messengerId, postId} = useParams()
+    const {handleCopy}= useCopy()
 
     const [slider, setSlider] = useState({
         state: false,
@@ -85,7 +87,7 @@ const Message: FC<IMessageProps> = (
 
     const handleDelete = useCallback(async () => {
         if (!messengerId) return
-        const messageDelete = await UserService.deleteMessage(message.message_id)
+        const messageDelete = await MessageService.deleteMessage(message.message_id)
 
         if (messageDelete && socketRef.current?.readyState === WebSocket.OPEN) {
             socketRef.current.send(JSON.stringify({
@@ -110,7 +112,7 @@ const Message: FC<IMessageProps> = (
             liChildren: <HiOutlineDocumentDuplicate/>,
             liText: 'Copy',
             liFoo: () => {
-                message.message_text && window.navigator.clipboard.writeText(message.message_text)
+                handleCopy(message?.message_text || '', 'Text copied to clipboard')
                 setContextMenu(false)
             }
         },
@@ -323,7 +325,7 @@ const Message: FC<IMessageProps> = (
                         </div>
                         {messenger.type === 'channel' && !postId &&
                             <div className={style.CommentsContainer} onClick={commentsOnClick}>
-                                <p>{message.comments_count} Comments</p>
+                                <p>{message?.comments_count || 0} Comments</p>
                                 <HiOutlineChevronRight/>
                             </div>
                         }

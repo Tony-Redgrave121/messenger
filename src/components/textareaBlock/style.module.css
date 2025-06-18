@@ -1,4 +1,4 @@
-textarea {
+.Textarea {
   align-self: center;
   caret-color: #656565;
   width: 100%;
@@ -7,7 +7,7 @@ textarea {
   padding: 0 8px;
   overflow-wrap: break-word;
 }
-textarea::placeholder {
+.Textarea::placeholder {
   color: #989898;
 }
 

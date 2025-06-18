@@ -8,7 +8,7 @@ import useSearch from "@hooks/useSearch";
 import {ContactList} from "@components/contacts";
 import NoResult from "@components/noResult/NoResult";
 import {useAppSelector} from "@hooks/useRedux";
-import MessengerService from "@service/MessengerService";
+import MessengerSettingsService from "@service/MessengerSettingsService";
 import {useParams} from "react-router-dom";
 
 interface IPopupEditModeratorsProps {
@@ -48,7 +48,7 @@ const PopupEditMembers: FC<IPopupEditModeratorsProps> = (
         if (!messengerId) return
 
         try {
-            const newModerators = await MessengerService.putMessengerModerator('moderator', userId, messengerId)
+            const newModerators = await MessengerSettingsService.putMessengerModerator('moderator', userId, messengerId)
 
             if (newModerators.data.message) return
 

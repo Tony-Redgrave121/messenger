@@ -1,17 +1,9 @@
-import React, {useEffect} from 'react'
 import AppRouter from "./router/AppRouter"
 import {BrowserRouter} from 'react-router-dom'
-import {useAppDispatch, useAppSelector} from "@hooks/useRedux";
-import {userCheckAuth, updateIsLoading} from "@store/reducers/userReducer";
+import useApp from "@utils/hooks/useApp"
 
 function App() {
-    const isLoading = useAppSelector(state => state.user.isLoading)
-    const dispatch = useAppDispatch()
-
-    useEffect(() => {
-        if (localStorage.getItem('token')) dispatch(userCheckAuth())
-        else dispatch(updateIsLoading(false))
-    }, [dispatch])
+    const {isLoading} = useApp()
 
     if (isLoading) return <></>
 

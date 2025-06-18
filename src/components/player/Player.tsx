@@ -1,7 +1,7 @@
 import React, {FC, useEffect, useMemo, useRef, useState} from 'react'
 import style from './style.module.css'
 import {useAppDispatch, useAppSelector} from "@hooks/useRedux";
-import {setCurrVideo} from "@store/reducers/sliderReducer"
+import {setCurrVideo} from "@store/reducers/videoReducer"
 import Buttons from "../buttons/Buttons";
 import Inputs from "../inputs/Inputs";
 import {HiArrowsPointingIn, HiArrowsPointingOut, HiMiniPause, HiPlay} from "react-icons/hi2";
@@ -20,7 +20,8 @@ const Player: FC<IPlayerProps> = ({src, id, foo}) => {
     const [duration, setDuration] = useState(0)
     const videoRef = useRef<HTMLVideoElement | null>(null)
     const playerRef = useRef<HTMLElement | null>(null)
-    const {currVideo, zoom} = useAppSelector(state => state.slider)
+    const currVideo = useAppSelector(state => state.video.currVideo)
+    const zoom = useAppSelector(state => state.slider.zoom)
     const dispatch = useAppDispatch()
 
     useEffect(() => {

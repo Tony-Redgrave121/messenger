@@ -1,4 +1,4 @@
-import React from 'react'
+import {FC} from 'react'
 import {HiOutlineChatBubbleLeftRight} from "react-icons/hi2"
 import style from "../style.module.css"
 import {InputForm} from "@components/inputForm"
@@ -6,20 +6,24 @@ import {Buttons} from "@components/buttons"
 import {IStepProps, IAuthForm} from '@appTypes'
 import AuthService from '../../../service/AuthService'
 import {UseFormTrigger, UseFormWatch} from "react-hook-form";
+import {useAbortController} from "@hooks/useAbortController";
 
 interface IStep3Props extends IStepProps {
     watch: UseFormWatch<IAuthForm>,
     trigger: UseFormTrigger<IAuthForm>
 }
 
-const Step1: React.FC<IStep3Props> = ({errors, register, handleNext, watch, trigger}) => {
+const Step1: FC<IStep3Props> = ({errors, register, handleNext, watch, trigger}) => {
+    const {getSignal} = useAbortController()
+
     const handleCode = async () => {
         try {
             const isValid = await trigger('user_email')
 
             if (isValid) {
                 const email = watch('user_email')
-                await AuthService.sendCode(email)
+                const signal = getSignal()
+                await AuthService.sendCode(email, signal)
             }
         } catch (e) {
             console.log(e)

@@ -28,6 +28,11 @@ class AuthController {
 
             const result = await this.authService.login(user_email, user_password)
 
+            if (typeof result === "boolean") {
+                res.sendStatus(200)
+                return
+            }
+
             if (!(result instanceof ApiError)) this.setRefreshToken(res, result.refreshToken)
             res.json(result)
         } catch (e) {

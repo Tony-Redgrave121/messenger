@@ -6,11 +6,9 @@ import validateQueryParams from "../shared/validation/validateQueryParams";
 class SearchController {
     constructor(private readonly searchService: SearchService) {}
 
-    async getMessengers(req: Request, res: Response, next: NextFunction) {
+    public getMessengers = async (req: Request, res: Response, next: NextFunction)=> {
         try {
             const validatedData = validateQueryParams(req.query, ['query', 'type'])
-            if (validatedData instanceof ApiError) return next(validatedData)
-
             const {query, type} = validatedData
 
             const messengers = await this.searchService.getMessengers(query, type)
@@ -19,11 +17,9 @@ class SearchController {
             return next(e)
         }
     }
-    async getMessages(req: Request, res: Response, next: NextFunction) {
+    public getMessages = async (req: Request, res: Response, next: NextFunction)=> {
         try {
             const validatedData = validateQueryParams(req.query, ['query', 'type', 'user_id', 'messenger_id'])
-            if (validatedData instanceof ApiError) return next(validatedData)
-
             const {query, type, user_id, messenger_id} = validatedData
             const {post_id} = req.query
 

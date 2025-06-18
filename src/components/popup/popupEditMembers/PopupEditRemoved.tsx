@@ -9,8 +9,9 @@ import {ContactList} from "@components/contacts";
 import NoResult from "@components/noResult/NoResult";
 import {useAppSelector} from "@hooks/useRedux";
 import {useParams} from "react-router-dom";
-import MessengerService from "@service/MessengerService";
-import {useLiveUpdatesWS} from "@utils/hooks/useLiveUpdatesWS";
+import MessengerSettingsService from "@service/MessengerSettingsService";
+import {useLiveUpdatesWS} from "@hooks/useLiveUpdatesWS";
+import {useAbortController} from "@hooks/useAbortController";
 
 interface IPopupEditModeratorsProps {
     handleCancel: () => void,
@@ -31,6 +32,7 @@ const PopupEditRemoved: FC<IPopupEditModeratorsProps> = (
 
     const socketRef = useLiveUpdatesWS()
     const {messengerId} = useParams()
+    const {getSignal} = useAbortController()
 
     useEffect(() => {
         setUserToRemove(members.filter(member => member.user_id !== owner_id))
@@ -46,7 +48,9 @@ const PopupEditRemoved: FC<IPopupEditModeratorsProps> = (
         if (!messengerId) return
 
         try {
-            const newRemovedMember = await MessengerService.postRemoved(userId, messengerId)
+            const signal = getSignal()
+
+            const newRemovedMember = await MessengerSettingsService.postRemoved(userId, messengerId, signal)
             if (newRemovedMember.data.message) return
 
             setSettings(prev => ({

@@ -5,14 +5,16 @@ import {IMessagesResponse} from "@appTypes";
 import {Message} from "../message";
 import {InputBlock} from "@components/inputBlock";
 import CommentsHeader from "../messengerHeader/CommentsHeader";
-import userService from "@service/UserService";
 import {useParams} from "react-router-dom";
 import useFetchInitialData from "@hooks/useFetchInitialData";
+import MessageService from "@service/MessageService";
+import {useAbortController} from "@hooks/useAbortController";
 
 const CommentsBlock = () => {
     const [reply, setReply] = useState<IMessagesResponse | null>(null)
     const [channelPost, setChannelPost] = useState<IMessagesResponse | null>(null)
     const {type, messengerId, postId} = useParams()
+    const {getSignal} = useAbortController()
 
     const {
         messenger,
@@ -24,23 +26,18 @@ const CommentsBlock = () => {
 
     useEffect(() => {
         if (!type || !messengerId || !postId) return
-
-        const controller = new AbortController()
-        const signal = controller.signal
+        const signal = getSignal()
 
         const handlePostFetching = async () => {
-            const data = await userService.fetchMessage(messengerId, postId, signal)
+            const data = await MessageService.fetchMessage(messengerId, postId, signal)
 
             if (data.status === 200) {
                 setChannelPost(data.data)
                 setMessagesList(prev => [data.data, ...prev])
             }
         }
-        handlePostFetching()
 
-        return () => {
-            controller.abort()
-        }
+        handlePostFetching()
     }, [postId])
 
     return (

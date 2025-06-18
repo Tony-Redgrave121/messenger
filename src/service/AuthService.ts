@@ -12,8 +12,8 @@ import {AxiosResponse} from 'axios'
 import {IAuthResponse} from "@appTypes"
 
 export default class AuthService {
-    static async sendCode(email: string): Promise<AxiosResponse> {
-        return $api.post(SEND_CODE_ROUTE, {email})
+    static async sendCode(email: string, signal: AbortSignal): Promise<void> {
+        return $api.post(SEND_CODE_ROUTE, {email}, {signal})
     }
     static async confirmEmail(user_code: number, user_email: string): Promise<AxiosResponse> {
         return $api.post(CONFIRM_EMAIL_ROUTE, {user_code, user_email})
@@ -21,10 +21,10 @@ export default class AuthService {
     static async login(formData: FormData): Promise<AxiosResponse<IAuthResponse>> {
         return $api.post<IAuthResponse>(LOGIN_ROUTE, formData)
     }
-    static async registration(formData: FormData): Promise<AxiosResponse<IAuthResponse>> {
-        return $api.post<IAuthResponse>(REGISTRATION_ROUTE, formData)
+    static async registration(formData: FormData, signal: AbortSignal): Promise<AxiosResponse<IAuthResponse>> {
+        return $api.post<IAuthResponse>(REGISTRATION_ROUTE, formData, {signal})
     }
-    static async logout(): Promise<void> {
+    static async logout() {
         return $api.post(LOGOUT_ROUTE)
     }
     static async deleteAccount(user_id: string): Promise<AxiosResponse<{user_id: string}>> {
