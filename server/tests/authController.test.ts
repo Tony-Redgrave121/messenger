@@ -1,6 +1,6 @@
-import ApiError from "../error/ApiError"
+import ApiError from "../src/errors/apiError"
 import {NextFunction, Request, Response} from "express"
-import AuthController from "../controller/authController"
+import AuthController from "../src/controllers/auth.controller"
 
 describe('AuthController', () => {
     let controller: AuthController
@@ -62,7 +62,7 @@ describe('AuthController', () => {
     })
 
     describe('login', () => {
-        it('should call login service and return result', async () => {
+        it('should call login services and return result', async () => {
             const fakeResult = {refreshToken: 'token456', user: {id: 2}}
 
             mockAuthService.login.mockResolvedValue(fakeResult)

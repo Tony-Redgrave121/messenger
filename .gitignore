@@ -1,32 +1,40 @@
-# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+# IDE
+.idea/
 
-# dependencies
-/node_modules
-/.pnp
+# Dependencies
+node_modules/
+client/node_modules/
+server/node_modules/
+.pnp
 .pnp.js
 
-# testing
-/coverage
+# Builds
+dist/
+client/build/
+server/dist/
+server/static/
 
-# production
-/build
-
-# server
-.env
-/server/.env
-/server/node_modules
-/server/src/static/
-/server/**/*.js
-
-# misc
-.DS_Store
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
-
+# Logs
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+pnpm-debug.log*
 
-.idea
+# Testing
+coverage/
+jest.config.js
+
+# Env
+.env
+.env.*
+!.env.example
+
+# Misc
+.DS_Store
+*.local
+
+# Docker
+docker-compose.override.yml
+docker-compose*.log
+*.pid
+*.seed.ts

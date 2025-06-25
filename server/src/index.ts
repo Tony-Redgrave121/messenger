@@ -1,8 +1,8 @@
 import express from 'express'
 import dotenv from 'dotenv'
-import sequelize from '../db'
-import router from "../routes/router"
-import errorHandler from '../middleware/errorHandler'
+import sequelize from './database/db'
+import index from "./routes"
+import errorHandler from './middlewares/errorHandler'
 import fileUpload from 'express-fileupload'
 import * as path from "path"
 import cors from 'cors'
@@ -10,8 +10,8 @@ import cookieParser from "cookie-parser"
 import helmet from 'helmet'
 import compression from 'compression'
 import expressWs from "express-ws"
-import messengerHandlerWS from "../middleware/messengerHandlerWS";
-import liveUpdatesHandlerWS from "../middleware/liveUpdatesHandlerWS";
+import messengerHandlerWS from "./middlewares/messengerHandlerWS";
+import liveUpdatesHandlerWS from "./middlewares/liveUpdatesHandlerWS";
 
 dotenv.config({path: "./.env"})
 const PORT = Number(process.env.SERVER_PORT)
@@ -34,7 +34,7 @@ app.use(cors({
     credentials: true,
     origin: process.env.CLIENT_URL
 }))
-app.use('/static', express.static(path.resolve(__dirname, 'static'), {
+app.use('/static', express.static(path.join(__dirname, '../static'), {
     maxAge: '0',
     setHeaders: (res) => {
         res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate')
@@ -42,7 +42,7 @@ app.use('/static', express.static(path.resolve(__dirname, 'static'), {
 }))
 app.use(fileUpload({}))
 app.use(cookieParser())
-app.use(router)
+app.use(index)
 app.use(errorHandler)
 
 app.ws("/messenger", messengerHandlerWS(aWss))

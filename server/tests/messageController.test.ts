@@ -1,5 +1,5 @@
 import {NextFunction, Request, Response} from "express"
-import MessageController from "../controller/messageController"
+import MessageController from "../src/controllers/message.controller"
 
 describe('MessageController', () => {
     let controller: MessageController
