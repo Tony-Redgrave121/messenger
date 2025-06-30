@@ -1,4 +1,13 @@
-import React, {ChangeEvent, Dispatch, FC, RefObject, SetStateAction, useEffect, useRef, useState} from 'react'
+import React, {
+    ChangeEvent,
+    Dispatch,
+    FC,
+    RefObject,
+    SetStateAction,
+    useEffect,
+    useRef,
+    useState
+} from 'react'
 import {
     HiOutlineFaceSmile,
     HiMiniPaperClip,
@@ -7,19 +16,18 @@ import {
     HiOutlineFolderOpen,
     HiOutlineArrowUturnLeft, HiOutlineXMark
 } from "react-icons/hi2"
-import {Buttons} from '@components/buttons'
+import {DefaultButton, InterButton} from '../../rebuild/shared/ui/Button'
 import style from './style.module.css'
-import {DropDown} from "../dropDown"
+import {DropDown} from "../../rebuild/shared/ui/DropDown"
 import useEmojis from "./useEmojis"
-import {PopupContainer} from "@components/popup";
 import {IFilesState, IMessagesResponse} from "@appTypes"
-import {TextareaBlock} from "@components/textareaBlock";
+import {Textarea} from "../../rebuild/shared/ui/Textarea";
 import {PopupInputBlock} from "@components/popup";
 import {useParams} from "react-router-dom";
-import {useAppSelector} from "@hooks/useRedux";
-import getFileObject from "../../utils/logic/getFileObject";
-import {useLiveUpdatesWS} from "@hooks/useLiveUpdatesWS";
-import MessageService from "@service/MessageService";
+import {useAppSelector, getFileObject} from "../../rebuild/shared/lib";
+import {useLiveUpdatesWS} from "@utils/hooks/useLiveUpdatesWS";
+import MessageService from "../../services/MessageService";
+import {Popup} from "../../rebuild/shared/ui/Popup";
 
 interface IInputBlock {
     reply: IMessagesResponse | null,
@@ -154,23 +162,23 @@ const InputBlock: FC<IInputBlock> = ({reply, setReply, socketRef, members}) => {
                             <h4>Reply to {reply.user.user_name}</h4>
                             <p>{!reply.message_text && reply.message_files ? 'Media' : reply.message_text}</p>
                         </button>
-                        <Buttons.DefaultButton foo={() => setReply(null)}>
+                        <DefaultButton foo={() => setReply(null)}>
                             <HiOutlineXMark/>
-                        </Buttons.DefaultButton>
+                        </DefaultButton>
                     </div>
                 }
                 <div className={style.InputBlock}>
-                    <Buttons.DefaultButton foo={() => setEmoji(!emoji)}>
+                    <DefaultButton foo={() => setEmoji(!emoji)}>
                         <HiOutlineFaceSmile/>
                         <DropDown list={emojis} state={emoji} setState={setEmoji} styles={['EmojiContainer']}/>
-                    </Buttons.DefaultButton>
-                    <TextareaBlock textareaRef={refTextarea} inputText={inputText} setInputText={setInputText}/>
-                    <Buttons.DefaultButton foo={() => setUpload(!upload)}>
+                    </DefaultButton>
+                    <Textarea textareaRef={refTextarea} inputText={inputText} setInputText={setInputText}/>
+                    <DefaultButton foo={() => setUpload(!upload)}>
                         <HiMiniPaperClip/>
                         <DropDown list={dropDownUpload} state={upload} setState={setUpload}/>
-                    </Buttons.DefaultButton>
+                    </DefaultButton>
                     {filesState.files &&
-                        <PopupContainer
+                        <Popup
                             state={filesState.popup}
                             handleCancel={handleCancel}>
                             <PopupInputBlock
@@ -183,13 +191,13 @@ const InputBlock: FC<IInputBlock> = ({reply, setReply, socketRef, members}) => {
                                 filesRef={filesRef}
                                 handleCancel={handleCancel}
                             />
-                        </PopupContainer>
+                        </Popup>
                     }
                 </div>
             </div>
-            <Buttons.InterButton foo={handleSubmit}>
+            <InterButton foo={handleSubmit}>
                 <HiOutlinePaperAirplane/>
-            </Buttons.InterButton>
+            </InterButton>
             <label htmlFor="media">
                 <input
                     ref={mediaRef}

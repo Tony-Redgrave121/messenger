@@ -1,6 +1,6 @@
 import {FC} from 'react'
 import style from './style.module.css'
-import '../animation.css'
+import "../../../rebuild/shared/ui/Popup/popup-animation.css";
 
 interface IPopupConfirmationProps {
     onConfirm: () => void,
@@ -21,7 +21,7 @@ const PopupConfirmation: FC<IPopupConfirmationProps> = ({onCancel, onConfirm, ti
                    <button onClick={onCancel}>Cancel</button>
                    <button onClick={onConfirm}>{confirmButtonText}</button>
                 </span>
-            </div>
+            </div>z
         </>
     )
 }

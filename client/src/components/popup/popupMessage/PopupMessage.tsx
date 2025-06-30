@@ -1,9 +1,9 @@
 import {useEffect, useRef} from 'react'
 import style from './style.module.css'
-import '../animation.css'
+import '../../../rebuild/shared/ui/Popup/popup-animation.css'
 import {CSSTransition} from "react-transition-group"
-import {useAppDispatch, useAppSelector} from "@hooks/useRedux";
-import {setPopupMessageState} from "@store/reducers/appReducer";
+import {useAppDispatch, useAppSelector} from "../../../rebuild/shared/lib";
+import {setPopupMessageState} from "../../../store/reducers/appReducer";
 
 const PopupMessage= () => {
     const refDiv = useRef<HTMLDivElement>(null)

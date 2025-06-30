@@ -1,4 +1,4 @@
-@use '../../../styles/base/_variables.css' as v;
+@use '../../../rebuild/1-app/styles/variables.css' as v;
 
 .ToolsBlock {
   &, span, svg {
@@ -13,7 +13,7 @@
   }
 }
 
-.SearchBlock {
+.SearchBar {
   display: flex;
   flex-direction: column;
   gap: 16px;

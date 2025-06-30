@@ -1,45 +1,41 @@
-import {Dispatch, RefObject, SetStateAction, useCallback, useEffect} from "react";
-import {IUseSliderProps, ISlide} from "@appTypes";
+import {RefObject, useCallback, useEffect} from "react";
+import {IMessagesResponse} from "@appTypes";
+import {useAppDispatch, useAppSelector} from "../../../rebuild/shared/lib";
+import {setCurrentSlide, setSlideNumber} from "@store/reducers/sliderReducer";
 
-const useSwipe = (media: IUseSliderProps, refZoom: RefObject<HTMLImageElement | null>, slide: ISlide, setSlide: Dispatch<SetStateAction<ISlide>>) => {
+const useSwipe = (
+    message: IMessagesResponse,
+    refSwipe: RefObject<HTMLDivElement | null>,
+    refZoom: RefObject<HTMLImageElement | null>,
+) => {
+    const {state, currentSlide} = useAppSelector(state => state.slider)
+    const dispatch = useAppDispatch()
+
     const handlePosition = useCallback((pos: number, lng: number, id: string) => {
-        if (!media.refSwipe.current) return
-        const curr = media.refSwipe.current
+        if (!refSwipe.current) return
+        const curr = refSwipe.current
 
         setTimeout(() => {
             const element = curr.querySelector(`[id="${id}"]`) as HTMLImageElement
             if (element) refZoom.current = element
         }, 100)
 
-        media.refSwipe.current.style.left = `-${pos * (100 / lng)}%`
-    }, [media.refSwipe])
+        refSwipe.current.style.left = `-${pos * (100 / lng)}%`
+    }, [refSwipe])
 
     useEffect(() => {
-        if (media.mediaArr && media.mediaArr.length > 0) {
-            const newSlide = Math.max(slide.slideNumber - 1, 0)
-            handlePosition(newSlide, media.mediaArr.length, media.mediaArr[newSlide].message_file_id)
+        if (!state) return
 
-            setSlide({
-                slideNumber: newSlide,
-                currentSlide: media.mediaArr[newSlide]
-            })
-        }
-    }, [media.mediaArr])
+        const files = message?.message_files
+        if (!files || files.length === 0) return
 
-    useEffect(() => {
-        if (media.animationState) {
-            setSlide(() => {
-                const index = media.mediaArr.findIndex(item => item.message_file_id === media.currentSlide.message_file_id)
+        const index = files.findIndex(item => item.message_file_id === currentSlide.message_file_id)
+        handlePosition(index, files.length, currentSlide.message_file_id)
 
-                handlePosition(index, media.mediaArr.length, media.currentSlide.message_file_id)
 
-                return {
-                    slideNumber: index,
-                    currentSlide: media.currentSlide
-                }
-            })
-        }
-    }, [media.animationState])
+        dispatch(setSlideNumber(index))
+        dispatch(setCurrentSlide(currentSlide))
+    }, [state, message.message_files])
 
     return {
         handlePosition

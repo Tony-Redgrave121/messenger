@@ -1,6 +1,6 @@
 import React, {Dispatch, RefObject, SetStateAction} from 'react'
 import {IFilesState} from "@appTypes";
-import getFileObject from "@utils/logic/getFileObject";
+import {getFileObject} from "../../../rebuild/shared/lib";
 
 interface IUpload {
     setState: React.Dispatch<React.SetStateAction<IFilesState>>,

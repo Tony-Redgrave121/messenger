@@ -1,27 +1,28 @@
 import React, {Dispatch, FC, SetStateAction} from 'react'
-import {Buttons} from "@components/buttons";
 import {Contact} from "../";
-import {IContact} from "@appTypes";
+
 import style from "./style.module.css";
 import {LoadFile} from "@components/loadFile";
-import useSearch from "@hooks/useSearch";
-import NoResult from "@components/noResult/NoResult";
-import {useAppSelector} from "@hooks/useRedux";
+import {useSearch}from "../../../rebuild/shared/lib";
+import {NoResult} from "../../../rebuild/shared/ui/NoResult";
+import {useAppSelector} from "../../../rebuild/shared/lib";
+import {Checkbox} from "../../../rebuild/shared/ui/Input";
+import {ContactSchema} from "../../../rebuild/5-entities/Contact";
 
 interface ICheckboxContactProps {
-    members: IContact[],
-    setMembers: Dispatch<SetStateAction<IContact[]>>
+    members: ContactSchema[],
+    setMembers: Dispatch<SetStateAction<ContactSchema[]>>
 }
 
 const AddContacts: FC<ICheckboxContactProps> = ({members, setMembers}) => {
-    const contacts = useAppSelector(state => state.live.contacts)
-    const {filteredArr, handleInput, filter} = useSearch<IContact, 'user_name'>(contacts, 'user_name')
+    const contacts = useAppSelector(state => state.contact.contacts)
+    const {filteredArr, handleInput, filter} = useSearch<ContactSchema, 'user_name'>(contacts, 'user_name')
 
-    const handleCheck = (contact: IContact, members: IContact[]) => {
+    const handleCheck = (contact: ContactSchema, members: ContactSchema[]) => {
         return members.some(el => el.user_id === contact.user_id)
     }
 
-    const handleAddMember = (contact: IContact) => {
+    const handleAddMember = (contact: ContactSchema) => {
         setMembers((prev) => {
             if (handleCheck(contact, prev)) return [...prev.filter(el => el.user_id !== contact.user_id)]
             else return [...prev, contact]
@@ -41,9 +42,9 @@ const AddContacts: FC<ICheckboxContactProps> = ({members, setMembers}) => {
             </div>
             {filteredArr.length > 0 ?
                 filteredArr.map((contact) =>
-                    <Buttons.Checkbox key={contact.user_id} foo={() => handleAddMember(contact)} state={handleCheck(contact, members)}>
+                    <Checkbox key={contact.user_id} foo={() => handleAddMember(contact)} state={handleCheck(contact, members)}>
                         <Contact contact={contact}/>
-                    </Buttons.Checkbox>
+                    </Checkbox>
                 ) : <NoResult filter={filter}/>
             }
         </div>

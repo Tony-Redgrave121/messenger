@@ -1,22 +1,21 @@
 import {Dispatch, SetStateAction, useRef, useState} from "react";
-import useSettingsAnimation from "@hooks/useSettingsAnimation";
-import useSearch from "@hooks/useSearch";
-import {IAnimationState, IContact, IToggleState, SettingsKeys} from "@appTypes";
+import {useSearch}from "../../../rebuild/shared/lib";
+import {SettingsKeys} from "@appTypes";
+import {ToggleState} from "../../../rebuild/shared/types";
+import {ContactSchema} from "../../../rebuild/5-entities/Contact";
 
 const useEditSubscribers = (
-    state: IAnimationState,
-    setState: Dispatch<SetStateAction<IToggleState<SettingsKeys>>>,
-    members: IContact[],
+    state: boolean,
+    setState: Dispatch<SetStateAction<ToggleState<SettingsKeys>>>,
+    members: ContactSchema[],
 ) => {
-    const [animation, setAnimation] = useState(false)
-    useSettingsAnimation(state.state, setAnimation, setState, 'subscribers')
 
     const refForm = useRef<HTMLDivElement>(null)
     const searchRef = useRef<HTMLDivElement>(null)
-    const {filteredArr, handleInput, filter} = useSearch<IContact, 'user_name'>(members, 'user_name')
+    const {filteredArr, handleInput, filter} = useSearch<ContactSchema, 'user_name'>(members, 'user_name')
 
     return {
-        animation,
+        state,
         refForm,
         searchRef,
         filteredArr,

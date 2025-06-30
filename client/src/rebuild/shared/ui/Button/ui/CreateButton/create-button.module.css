@@ -1,0 +1,19 @@
+
+.CreateButton {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  display: flex;
+}
+.CreateButton > button > svg {
+  width: 24px;
+  height: 24px;
+}
+.CreateButton ul {
+  top: unset;
+  bottom: calc(100% + 8px);
+  right: 0;
+  transform-origin: bottom right;
+}
+
+/*# sourceMappingURL=create-button.module.css.map */

@@ -1,21 +1,22 @@
 import React, {Dispatch, FC, SetStateAction, useEffect, useRef, useState} from 'react'
 import style from './style.module.css'
-import {Buttons} from "@components/buttons";
 import {HiOutlineXMark} from "react-icons/hi2";
-import {IContact, IMessengerSettings} from "@appTypes";
-import {SearchBlock} from "@components/searchBlock";
-import useSearch from "@hooks/useSearch";
+import {IMessengerSettings} from "@appTypes";
+import {SearchBar} from "../../../rebuild/shared/ui/SearchBar";
+import {useSearch}from "../../../rebuild/shared/lib";
 import {ContactList} from "@components/contacts";
-import NoResult from "@components/noResult/NoResult";
-import {useAppSelector} from "@hooks/useRedux";
-import MessengerSettingsService from "@service/MessengerSettingsService";
+import {NoResult} from "../../../rebuild/shared/ui/NoResult";
+import {useAppSelector} from "../../../rebuild/shared/lib";
+import MessengerSettingsService from "../../../services/MessengerSettingsService";
 import {useParams} from "react-router-dom";
+import {DefaultButton} from "../../../rebuild/shared/ui/Button";
+import {ContactSchema} from "../../../rebuild/5-entities/Contact";
 
 interface IPopupEditModeratorsProps {
     handleCancel: () => void,
-    moderators: IContact[],
-    members: IContact[],
-    setMembers: Dispatch<SetStateAction<IContact[]>>,
+    moderators: ContactSchema[],
+    members: ContactSchema[],
+    setMembers: Dispatch<SetStateAction<ContactSchema[]>>,
     setSettings: Dispatch<SetStateAction<IMessengerSettings>>
 }
 
@@ -28,7 +29,7 @@ const PopupEditMembers: FC<IPopupEditModeratorsProps> = (
         setSettings
     }
 ) => {
-    const [unrated, setUnrated] = useState<IContact[]>([])
+    const [unrated, setUnrated] = useState<ContactSchema[]>([])
     const searchRef = useRef<HTMLDivElement>(null)
     const user_id = useAppSelector(state => state.user.userId)
 
@@ -40,7 +41,7 @@ const PopupEditMembers: FC<IPopupEditModeratorsProps> = (
         filteredArr,
         handleInput,
         filter
-    } = useSearch<IContact, 'user_name'>(unrated, 'user_name')
+    } = useSearch<ContactSchema, 'user_name'>(unrated, 'user_name')
 
     const {messengerId} = useParams()
 
@@ -67,14 +68,14 @@ const PopupEditMembers: FC<IPopupEditModeratorsProps> = (
         <>
             <div className={style.ToolsBlock}>
                 <span>
-                    <Buttons.DefaultButton foo={handleCancel}>
+                    <DefaultButton foo={handleCancel}>
                         <HiOutlineXMark/>
-                    </Buttons.DefaultButton>
+                    </DefaultButton>
                     <p>Moderators</p>
                 </span>
             </div>
-            <div className={style.SearchBlock}>
-                <SearchBlock ref={searchRef} foo={handleInput}/>
+            <div className={style.SearchBar}>
+                <SearchBar searchRef={searchRef} foo={handleInput}/>
                 {filteredArr.length > 0 ?
                     <ContactList contacts={filteredArr} onClick={handleAddModerator}/> : <NoResult filter={filter}/>
                 }

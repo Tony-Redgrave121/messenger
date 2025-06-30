@@ -1,11 +1,11 @@
 import React, {FC, memo} from 'react'
 import style from './style.module.css'
 import {Contact} from "../"
-import {Buttons} from "@components/buttons"
-import {IContact} from "@appTypes"
+import {ContactButton} from "../../../rebuild/shared/ui/Button";
+import {ContactSchema} from "../../../rebuild/5-entities/Contact";
 
 interface ContactListProps {
-    contacts: IContact[],
+    contacts: ContactSchema[],
     text?: string,
     onClick: (user_id: string) => void
 }
@@ -15,9 +15,9 @@ const ContactList: FC<ContactListProps> = memo(({contacts, text, onClick}) => {
         <section className={style.ContactListContainer}>
             {text && <p>{text}</p>}
             {contacts.length && contacts.map(contact =>
-                <Buttons.ContactButton key={contact.user_id} foo={() => onClick(contact.user_id)}>
+                <ContactButton key={contact.user_id} foo={() => onClick(contact.user_id)}>
                     <Contact contact={contact}/>
-                </Buttons.ContactButton>
+                </ContactButton>
             )}
         </section>
     )

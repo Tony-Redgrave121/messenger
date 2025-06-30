@@ -1,7 +1,7 @@
-import React, {memo, Dispatch, SetStateAction, FC} from 'react'
+import {memo, FC} from 'react'
 import style from "./style.module.css"
 import {MediaTag} from "@components/media";
-import {IAnimationState, IFileObject, IMessageFile} from "@appTypes";
+import {IFileObject, IMessageFile} from "@appTypes";
 
 interface IMedia {
     media: IFileObject[]
@@ -9,17 +9,18 @@ interface IMedia {
 
 interface IMessageMediaProps {
     media: IMessageFile[],
-    setSlider: Dispatch<SetStateAction<IAnimationState>>,
-    setCurrMedia: Dispatch<SetStateAction<IMessageFile>>,
+    messageId: string
 }
 
 namespace MediaBlock {
-    export const MessageMedia: FC<IMessageMediaProps> = memo(({media, setSlider, setCurrMedia}) => {
+    export const MessageMedia: FC<IMessageMediaProps> = memo(({media, messageId}) => {
         return (
             <div className={style.MediaBlock}>
-                <MediaTag.MessageMedia media={media[0]} setSlider={setSlider} setCurrMedia={setCurrMedia} key={media[0].message_file_id}/>
+                <MediaTag.MessageMedia media={media[0]} key={media[0].message_file_id} messageId={messageId}/>
                 <span>
-                    {media.slice(1).map(media => <MediaTag.MessageMedia media={media} setSlider={setSlider} setCurrMedia={setCurrMedia} key={media.message_file_id}/>)}
+                    {media.slice(1).map(media =>
+                        <MediaTag.MessageMedia media={media} key={media.message_file_id} messageId={messageId}/>
+                    )}
                 </span>
             </div>
         )

@@ -1,8 +1,8 @@
 import {createAsyncThunk} from "@reduxjs/toolkit";
-import AuthService from "@service/AuthService";
+import AuthService from "../../services/AuthService";
 import {AxiosError} from "axios";
-import {IApiErrorResponse} from "@appTypes";
-import {updateIsLoading} from "@store/reducers/userReducer";
+import {updateIsLoading} from "../reducers/userReducer";
+import {ApiError} from "../../rebuild/shared/types";
 
 interface IRegistrationArgs {
     formData: FormData,
@@ -16,7 +16,7 @@ export const registration = createAsyncThunk(
             localStorage.setItem('token', response.data.accessToken)
             return response.data
         } catch (e) {
-            const error = e as AxiosError<IApiErrorResponse>
+            const error = e as AxiosError<ApiError>
             return thunkAPI.rejectWithValue(error.response?.data?.message || "Could not fetch user data")
         }
     }
@@ -30,7 +30,7 @@ export const login = createAsyncThunk(
             if (response.data.accessToken) localStorage.setItem('token', response.data.accessToken)
             return response.data
         } catch (e) {
-            const error = e as AxiosError<IApiErrorResponse>
+            const error = e as AxiosError<ApiError>
             return thunkAPI.rejectWithValue(error.response?.data?.message || "Could not fetch user data")
         }
     }
@@ -44,7 +44,7 @@ export const logout = createAsyncThunk(
             localStorage.removeItem('token')
             return true
         } catch (e: any) {
-            const error = e as AxiosError<IApiErrorResponse>
+            const error = e as AxiosError<ApiError>
             return thunkAPI.rejectWithValue(error.response?.data?.message || "Could not fetch user data")
         }
     }
@@ -59,7 +59,7 @@ export const deleteAccount = createAsyncThunk(
 
             return true
         } catch (e: any) {
-            const error = e as AxiosError<IApiErrorResponse>
+            const error = e as AxiosError<ApiError>
             return thunkAPI.rejectWithValue(error.response?.data?.message || "Could not fetch user data")
         }
     }
@@ -79,7 +79,7 @@ export const userCheckAuth = createAsyncThunk(
             }
             return thunkAPI.rejectWithValue("Could not fetch user data")
         } catch (e: any) {
-            const error = e as AxiosError<IApiErrorResponse>
+            const error = e as AxiosError<ApiError>
             return thunkAPI.rejectWithValue(error.response?.data?.message || "Could not fetch user data")
         } finally {
             thunkAPI.dispatch(updateIsLoading(false))

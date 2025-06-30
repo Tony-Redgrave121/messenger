@@ -25,7 +25,7 @@ export const GET_REACTIONS_ROUTE = '/reactions'
 export const MESSAGE_REACTIONS_ROUTE = '/messages/:message_id/reactions'
 export const MESSENGER_REACTIONS_ROUTE = '/settings/:messenger_setting_id/reactions'
 
-// Contact Routes
+// IContact Routes
 export const GET_CONTACTS_ROUTE = '/users/:user_id/contacts'
 export const ADD_CONTACTS_TO_MESSENGER_ROUTE = '/messengers/:messenger_id/contacts'
 

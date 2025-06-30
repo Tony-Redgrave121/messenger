@@ -1,0 +1,15 @@
+@use '../../../1-app/styles/variables.css' as v;
+
+
+.CaptionBlock {
+  width: 100%;
+  background-color: #181818;
+  padding: 6px 24px;
+  font-size: 14px;
+  line-height: 18px;
+  color: #aaaaaa;
+
+  p {
+    padding-bottom: 6px;
+  }
+}

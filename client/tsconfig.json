@@ -33,7 +33,7 @@
     }
   },
   "include": [
-    "globals.d.ts",
+    "src/rebuild/1-app/types/globals.d.ts",
     "src"
   ]
 }

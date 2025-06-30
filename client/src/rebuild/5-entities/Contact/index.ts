@@ -1,0 +1,1 @@
+export type {default as ContactSchema} from './model/types/ContactSchema'

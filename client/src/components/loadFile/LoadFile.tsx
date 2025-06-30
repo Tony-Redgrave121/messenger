@@ -1,7 +1,7 @@
 import {FC, useRef} from 'react'
 import style from './style.module.css'
-import useLoadBlob from "@hooks/useLoadBlob"
-import getTitle from "@utils/logic/getTitle";
+import useLoadBlob from "@utils/hooks/useLoadBlob"
+import {getTitle} from "../../rebuild/shared/lib";
 
 interface ILoadImage {
     imagePath?: string,

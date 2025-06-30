@@ -1,33 +1,20 @@
-import {Dispatch, SetStateAction, useEffect, useRef, useState} from "react";
-import {
-    IAnimationState,
-    IContact,
-    IToggleState,
-    SettingsKeys
-} from "@appTypes";
-import useSettingsAnimation from "@hooks/useSettingsAnimation";
-import useSearch from "@hooks/useSearch";
+import {useEffect, useRef, useState} from "react";
+import {useSearch}from "../../../rebuild/shared/lib";
+import {ContactSchema} from "../../../rebuild/5-entities/Contact";
 
-const useEditModerators = (
-    moderators: IContact[],
-    state: IAnimationState,
-    setState: Dispatch<SetStateAction<IToggleState<SettingsKeys>>>
-) => {
-    const [animation, setAnimation] = useState(false)
-    const [newMembers, setNewMembers] = useState<IContact[]>([])
-    useSettingsAnimation(state.state, setAnimation, setState, 'moderators')
+const useEditModerators = (moderators: ContactSchema[]) => {
+    const [newMembers, setNewMembers] = useState<ContactSchema[]>([])
 
     const refForm = useRef<HTMLDivElement>(null)
     const searchRef = useRef<HTMLDivElement>(null)
 
-    const {filteredArr, handleInput, filter} = useSearch<IContact, 'user_name'>(moderators, 'user_name')
+    const {filteredArr, handleInput, filter} = useSearch<ContactSchema, 'user_name'>(moderators, 'user_name')
 
     useEffect(() => {
         setNewMembers(moderators)
     }, [moderators])
 
     return {
-        animation,
         newMembers,
         setNewMembers,
         refForm,

@@ -1,21 +1,20 @@
-import React, {Dispatch, FC, SetStateAction} from 'react'
-import useLoadBlob from "@hooks/useLoadBlob";
+import React, {FC} from 'react'
+import useLoadBlob from "@utils/hooks/useLoadBlob";
 import style from './style.module.css'
-import {IAnimationState, IFileObject, IMessageFile} from "@appTypes";
+import {IFileObject, IMessageFile} from "@appTypes";
 import {Player} from "@components/player";
-import getExt from "@utils/logic/getExt";
-import useShortMedia from "@hooks/useShortMedia";
-import Buttons from "@components/buttons/Buttons";
+import useShortMedia from "@utils/hooks/useShortMedia";
 import {HiPlay} from "react-icons/hi2";
+import {PlayButton} from "../../../rebuild/shared/ui/Button";
+import {useAppDispatch, getExt} from "../../../rebuild/shared/lib";
+import {setCurrentSlide, setMessageId, setState} from "@store/reducers/sliderReducer";
 
 interface ISliderProps {
     media: IMessageFile
 }
 
 interface IMessageMediaProps extends ISliderProps {
-    media: IMessageFile
-    setSlider: Dispatch<SetStateAction<IAnimationState>>,
-    setCurrMedia: Dispatch<SetStateAction<IMessageFile>>
+    messageId: string;
 }
 
 interface IInputBlockProps {
@@ -36,10 +35,23 @@ namespace MediaTag {
         const geTag = () => {
             const ext = getExt(media.message_file_name)
 
-            if (isVideo.includes(ext))
-                return <Player key={media.message_file_id} id={media.message_file_id} src={image} foo={handlePropagation}/>
-            else
-                return <img src={image} alt="media" key={media.message_file_id} id={media.message_file_id} draggable={'false'} onClick={handlePropagation}/>
+            if (isVideo.includes(ext)) {
+                return <Player
+                    key={media.message_file_id}
+                    id={media.message_file_id}
+                    src={image}
+                    foo={handlePropagation}
+                />
+            } else {
+                return <img
+                    src={image}
+                    alt="media"
+                    key={media.message_file_id}
+                    id={media.message_file_id}
+                    draggable={'false'}
+                    onClick={handlePropagation}
+                />
+            }
         }
 
         return (
@@ -49,9 +61,11 @@ namespace MediaTag {
         )
     }
 
-    export const MessageMedia: FC<IMessageMediaProps> = ({media, setSlider, setCurrMedia}) => {
+    export const MessageMedia: FC<IMessageMediaProps> = ({media, messageId}) => {
         const {load, image} = useLoadBlob(`messengers/${media.message_file_path}/${media.message_file_name}`)
         const ext = getExt(media.message_file_name)
+
+        const dispatch = useAppDispatch()
 
         const fileObj = {
             url: image,
@@ -63,11 +77,10 @@ namespace MediaTag {
 
         const handleClick = (event: React.MouseEvent<HTMLElement | HTMLImageElement>) => {
             event.stopPropagation()
-            setCurrMedia(media)
-            setSlider({
-                state: true,
-                mounted: true
-            })
+
+            dispatch(setCurrentSlide(media))
+            dispatch(setMessageId(messageId))
+            dispatch(setState(true))
         }
 
         return (
@@ -76,9 +89,9 @@ namespace MediaTag {
                     <div className={style.MediaBlock} onClick={handleClick}>
                         <img src={preview} alt="media"/>
                         {isVideo.includes(ext) &&
-                            <Buttons.PlayerButton className='PlayButton'>
+                            <PlayButton>
                                 <HiPlay/>
-                            </Buttons.PlayerButton>
+                            </PlayButton>
                         }
                     </div>
                     :

@@ -1,0 +1,79 @@
+@use '../../../1-app/styles/variables.css' as v;
+
+.SearchBar {
+  position: absolute;
+  z-index: 9;
+  display: flex;
+  gap: 8px;
+  flex-direction: column;
+  width: calc(100% - 80px);
+  left: 62px;
+
+  .SearchTopBar {
+    display: flex;
+    background-color: #212121FF;
+  }
+
+  .SearchList {
+    background-color: #212121FF;
+    border: 1px solid #2f2f2f;
+    border-radius: 16px;
+    padding: 8px;
+    transition: .3s all ease-in-out;
+
+    .SearchedMessage {
+      justify-content: space-between;
+      padding: 8px 12px;
+      width: calc(100% - 24px);
+
+      &, .MessageInfo {
+        display: flex;
+      }
+
+      .MessageInfo {
+        align-items: center;
+        width: inherit;
+        gap: 16px;
+        color: white;
+        overflow: hidden;
+
+        & >:first-child {
+          width: 42px;
+          height: 42px;
+        }
+
+        .MessageDetail {
+          line-height: 1.4;
+          width: calc(100% - 58px);
+
+          & >:first-child {
+            font-weight: 600;
+          }
+
+          & >:last-child {
+            color: #aaaaaa;
+            font-size: 14px;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            overflow: hidden;
+          }
+
+          b {
+            color: white;
+          }
+        }
+      }
+
+      > p {
+        color: #aaaaaa;
+        font-size: 12px;
+        white-space: nowrap;
+      }
+
+      &:hover {
+        background-color: #2f2f2f;
+        border-radius: 10px;
+      }
+    }
+  }
+}

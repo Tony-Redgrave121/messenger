@@ -1,14 +1,15 @@
 import React, {Dispatch, FC, SetStateAction, useState} from 'react'
 import style from './style.module.css'
-import {Buttons} from "@components/buttons";
 import {HiOutlineArrowRight, HiOutlineXMark} from "react-icons/hi2";
-import {IContact, IMessengerSettings} from "@appTypes";
+import {IMessengerSettings} from "@appTypes";
 import {AddContacts} from "@components/contacts";
-import MessengerSettingsService from "@service/MessengerSettingsService";
+import MessengerSettingsService from "../../../services/MessengerSettingsService";
 import {useParams} from "react-router-dom";
-import {useLiveUpdatesWS} from "@hooks/useLiveUpdatesWS";
-import {useAppSelector} from "@hooks/useRedux";
-import {useAbortController} from "@hooks/useAbortController";
+import {useLiveUpdatesWS} from "@utils/hooks/useLiveUpdatesWS";
+import {useAppSelector} from "../../../rebuild/shared/lib";
+import {useAbortController} from "../../../rebuild/shared/lib";
+import {CreateButton, DefaultButton} from "../../../rebuild/shared/ui/Button";
+import {ContactSchema} from "../../../rebuild/5-entities/Contact";
 
 interface IPopupEditSubscribersProps {
     handleCancel: () => void,
@@ -16,12 +17,12 @@ interface IPopupEditSubscribersProps {
 }
 
 const PopupEditSubscribers: FC<IPopupEditSubscribersProps> = ({handleCancel, setSettings}) => {
-    const [members, setMembers] = useState<IContact[]>([])
+    const [members, setMembers] = useState<ContactSchema[]>([])
     const {messengerId} = useParams()
     const {getSignal} = useAbortController()
 
     const socketRef = useLiveUpdatesWS()
-    const messengers = useAppSelector(state => state.live.messengers)
+    const messengers = useAppSelector(state => state.messenger.messengers)
     const userId = useAppSelector(state => state.user.userId)
 
     const handleAddMembers = async () => {
@@ -61,21 +62,21 @@ const PopupEditSubscribers: FC<IPopupEditSubscribersProps> = ({handleCancel, set
         <>
             <div className={style.ToolsBlock}>
                 <span>
-                    <Buttons.DefaultButton foo={handleCancel}>
+                    <DefaultButton foo={handleCancel}>
                         <HiOutlineXMark/>
-                    </Buttons.DefaultButton>
+                    </DefaultButton>
                     <p>Add Subscribers</p>
                 </span>
             </div>
-            <div className={style.SearchBlock}>
+            <div className={style.SearchBar}>
                 <AddContacts
                     members={members}
                     setMembers={setMembers}
                 />
             </div>
-            <Buttons.CreateButton state={members.length > 0} foo={handleAddMembers}>
+            <CreateButton state={members.length > 0} foo={handleAddMembers}>
                 <HiOutlineArrowRight/>
-            </Buttons.CreateButton>
+            </CreateButton>
         </>
     )
 }

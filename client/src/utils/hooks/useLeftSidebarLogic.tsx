@@ -1,6 +1,6 @@
 import React, {useEffect, useMemo, useRef, useState} from "react";
-import {useAppDispatch, useAppSelector} from "@hooks/useRedux";
-import {useLiveUpdatesWS} from "@hooks/useLiveUpdatesWS";
+import {useAppDispatch, useAppSelector} from "../../rebuild/shared/lib";
+import {useLiveUpdatesWS} from "@utils/hooks/useLiveUpdatesWS";
 import debounce from "debounce";
 import {
     HiOutlineMegaphone,
@@ -8,22 +8,20 @@ import {
     HiOutlineUsers
 } from "react-icons/hi2";
 import {useNavigate} from "react-router";
-import SearchService from "@service/SearchService";
-import {isChatArray, isMessengerArray, IUnifiedMessenger, ListKeys} from "@appTypes";
-import useGetContacts from "@hooks/useGetContacts";
-import {useAbortController} from "@hooks/useAbortController";
-import {setSidebarLeft} from "@store/reducers/appReducer";
-import useCloseLeftSidebar from "@hooks/useCloseLeftSidebar";
+import SearchService from "../../services/SearchService";
+import {isChatArray, isMessengerArray, IUnifiedMessenger} from "@appTypes";
+import useGetContacts from "@utils/hooks/useGetContacts";
+import {useAbortController} from "../../rebuild/shared/lib";
+import {setSidebarLeft} from "../../store/reducers/appReducer";
+import useCloseLeftSidebar from "@utils/hooks/useCloseLeftSidebar";
+import {ListKeys} from "../../rebuild/shared/types";
 
 const useLeftSidebarLogic = () => {
     const [settings, setSettings] = useState(false)
     const [messenger, setMessenger] = useState(false)
     const [search, setSearch] = useState(false)
     const [filter, setFilter] = useState('')
-    const [profile, setProfile] = useState({
-        state: false,
-        mounted: false
-    })
+    const [profile, setProfile] = useState(false)
     const [messengerCreation, setMessengerCreation] = useState({
         state: false,
         type: ''
@@ -33,7 +31,7 @@ const useLeftSidebarLogic = () => {
     const refProfile = useRef<HTMLDivElement>(null)
     const sidebarLeft = useAppSelector(state => state.app.sidebarLeft)
     const {userImg, userName, userId} = useAppSelector(state => state.user)
-    const contacts = useAppSelector(state => state.live.contacts)
+    const contacts = useAppSelector(state => state.contact.contacts)
 
     const socketRef = useLiveUpdatesWS()
     const navigate = useNavigate()

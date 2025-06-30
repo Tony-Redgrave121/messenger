@@ -1,11 +1,10 @@
 import React, {FC, useEffect, useMemo, useRef, useState} from 'react'
 import style from './style.module.css'
-import {useAppDispatch, useAppSelector} from "@hooks/useRedux";
-import {setCurrVideo} from "@store/reducers/videoReducer"
-import Buttons from "../buttons/Buttons";
-import Inputs from "../inputs/Inputs";
+import {useAppDispatch, useAppSelector, getVideoTime} from "../../rebuild/shared/lib";
+import {setCurrVideo} from "../../store/reducers/videoReducer"
 import {HiArrowsPointingIn, HiArrowsPointingOut, HiMiniPause, HiPlay} from "react-icons/hi2";
-import {getVideoTime} from "@utils/logic/getDate";
+import {TimeInput, VolumeInput} from "../../rebuild/shared/ui/Input";
+import {PlayButton} from "../../rebuild/shared/ui/Button";
 
 interface IPlayerProps {
     src: string,
@@ -99,17 +98,17 @@ const Player: FC<IPlayerProps> = ({src, id, foo}) => {
             <video src={src} id={id} ref={videoRef}/>
             {!zoom &&
                 <>
-                    <Buttons.PlayerButton foo={handlePlay} className='PlayButton'>
+                    <PlayButton foo={handlePlay}>
                         {pause && <HiPlay/>}
-                    </Buttons.PlayerButton>
+                    </PlayButton>
                     <div className={style.BottomBar}>
-                        <Inputs.TimeInput mediaRef={videoRef} time={time} setTime={setTime} duration={duration}/>
+                        <TimeInput mediaRef={videoRef} time={time} setTime={setTime} duration={duration}/>
                         <div className={style.ControlBar}>
                             <div>
-                                <Buttons.PlayerButton foo={handlePlay} className='PlayButtonMini'>
+                                <PlayButton foo={handlePlay} isMini>
                                     {pause ? <HiPlay/> : <HiMiniPause/>}
-                                </Buttons.PlayerButton>
-                                <Inputs.VolumeInput mediaRef={videoRef}/>
+                                </PlayButton>
+                                <VolumeInput mediaRef={videoRef}/>
                                 <span className={style.TimeBlock}>
                                     <time>{(time && duration) ? formattedTime : '0:00'}</time>
                                     <p>/</p>
@@ -117,9 +116,9 @@ const Player: FC<IPlayerProps> = ({src, id, foo}) => {
                                 </span>
                             </div>
                             <div>
-                                <Buttons.PlayerButton className='PlayButtonMini' foo={handleFullscreen}>
+                                <PlayButton foo={handleFullscreen}>
                                     {fullScreen ? <HiArrowsPointingOut/> : <HiArrowsPointingIn/>}
-                                </Buttons.PlayerButton>
+                                </PlayButton>
                             </div>
                         </div>
                     </div>

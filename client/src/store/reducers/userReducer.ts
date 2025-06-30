@@ -1,6 +1,6 @@
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {IAuthResponse} from "@appTypes";
-import {deleteAccount, login, logout, registration, userCheckAuth} from "@store/thunks/userThunks";
+import {deleteAccount, login, logout, registration, userCheckAuth} from "../thunks/userThunks";
 
 interface IUsersState {
     userId: string,

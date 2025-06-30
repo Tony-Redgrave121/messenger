@@ -1,10 +1,10 @@
 import {Dispatch, SetStateAction, useState} from "react";
 import {useParams} from "react-router-dom";
-import MessengerSettingsService from "@service/MessengerSettingsService";
+import MessengerSettingsService from "../../../services/MessengerSettingsService";
 import {IMessengerSettings} from "@appTypes";
-import {useLiveUpdatesWS} from "@hooks/useLiveUpdatesWS";
-import {useAppSelector} from "@hooks/useRedux";
-import {useAbortController} from "@hooks/useAbortController";
+import {useLiveUpdatesWS} from "@utils/hooks/useLiveUpdatesWS";
+import {useAppSelector} from "../../../rebuild/shared/lib";
+import {useAbortController} from "../../../rebuild/shared/lib";
 
 const useEditSettings = (
     setSettings: Dispatch<SetStateAction<IMessengerSettings>>
@@ -15,7 +15,7 @@ const useEditSettings = (
     const [popup, setPopup] = useState(false)
     const socketRef = useLiveUpdatesWS()
 
-    const messengers = useAppSelector(state => state.live.messengers)
+    const messengers = useAppSelector(state => state.messenger.messengers)
 
     const handleCancel = () => {
         setPopup(false)

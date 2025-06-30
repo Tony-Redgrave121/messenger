@@ -1,0 +1,13 @@
+
+.FileInput svg, .FileInput img {
+  color: white;
+  height: 160px;
+  width: 160px;
+  cursor: pointer;
+}
+.FileInput img {
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+/*# sourceMappingURL=style.module.css.map */

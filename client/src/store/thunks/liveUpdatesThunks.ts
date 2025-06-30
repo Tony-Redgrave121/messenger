@@ -3,9 +3,9 @@ import {
     setNotificationCount,
     setNotificationsFromStorage,
     removeMessenger
-} from '../reducers/liveUpdatesReducer'
+} from '../../rebuild/5-entities/Messenger/model/slice/messengerSlice'
 import {IUpdateMessenger} from "@appTypes";
-import {AppThunk} from "@store/store";
+import {AppThunk} from "../../rebuild/1-app/providers/StoreProvider/config/store";
 
 const NOTIFICATIONS_KEY = 'messengersNotifications'
 

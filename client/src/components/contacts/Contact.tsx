@@ -1,11 +1,11 @@
 import {FC, ReactNode} from 'react';
 import style from './style.module.css';
-import {IContact} from "@appTypes";
-import {getDate} from "@utils/logic/getDate";
+import {getDate} from "../../rebuild/shared/lib";
 import {LoadFile} from "../loadFile";
+import {ContactSchema} from "../../rebuild/5-entities/Contact";
 
 interface IContactsProps {
-    contact: IContact,
+    contact: ContactSchema,
     children?: ReactNode,
 }
 

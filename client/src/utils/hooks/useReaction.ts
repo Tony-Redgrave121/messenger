@@ -1,9 +1,9 @@
 import {IMessagesResponse, IReaction} from "@appTypes";
 import {RefObject} from "react";
-import {useAppSelector} from "@hooks/useRedux";
+import {useAppSelector} from "../../rebuild/shared/lib";
 import {useParams} from "react-router-dom";
-import MessageService from "@service/MessageService";
-import {useAbortController} from "@hooks/useAbortController";
+import MessageService from "../../services/MessageService";
+import {useAbortController} from "../../rebuild/shared/lib";
 
 const useReaction = () => {
     const user_id = useAppSelector(state => state.user.userId)

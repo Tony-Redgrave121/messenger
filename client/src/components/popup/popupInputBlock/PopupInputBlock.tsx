@@ -1,11 +1,11 @@
 import React, {Dispatch, FC, RefObject, SetStateAction, useRef} from 'react'
 import style from './style.module.css'
 import {IFilesState, IFileObject} from "@appTypes";
-import {Buttons} from "@components/buttons";
 import {HiOutlineDocumentPlus, HiOutlineDocumentText, HiOutlineXMark} from "react-icons/hi2";
-import {TextareaBlock} from "@components/textareaBlock";
+import {Textarea} from "../../../rebuild/shared/ui/Textarea";
 import Upload from "./Upload";
 import {MediaBlock} from "@components/media";
+import {DefaultButton} from "../../../rebuild/shared/ui/Button";
 
 interface IPopupInputBlock {
     setState: Dispatch<SetStateAction<IFilesState>>,
@@ -25,15 +25,17 @@ const PopupInputBlock: FC<IPopupInputBlock> = ({setState, files, type, inputText
         <>
             <div className={style.ToolsBlock}>
                 <span>
-                    <Buttons.DefaultButton foo={handleCancel}>
+                    <DefaultButton foo={handleCancel}>
                         <HiOutlineXMark/>
-                    </Buttons.DefaultButton>
+                    </DefaultButton>
                     <h1>Send {files.length} files</h1>
                 </span>
-                <Buttons.DefaultButton>
-                    <label htmlFor="addNewFile"><HiOutlineDocumentPlus/></label>
+                <DefaultButton foo={() => {}}>
+                    <label htmlFor="addNewFile">
+                        <HiOutlineDocumentPlus/>
+                    </label>
                     {type === 'document' ? <Upload.Document setState={setState} filesRef={filesRef}/> : <Upload.Image setState={setState} filesRef={filesRef}/>}
-                </Buttons.DefaultButton>
+                </DefaultButton>
             </div>
             {type === 'document' ?
                 <div className={style.FilesBlock}>
@@ -50,7 +52,7 @@ const PopupInputBlock: FC<IPopupInputBlock> = ({setState, files, type, inputText
                 <MediaBlock.InputBlock media={files}/>
             }
             <div className={style.SubmitBlock}>
-                <TextareaBlock textareaRef={refTextarea} inputText={inputText} setInputText={setInputText}/>
+                <Textarea textareaRef={refTextarea} inputText={inputText} setInputText={setInputText}/>
                 <button onClick={() => {
                     handleSubmit()
                     handleCancel()
