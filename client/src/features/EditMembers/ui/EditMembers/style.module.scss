@@ -1,0 +1,30 @@
+@use '../../../../app/styles/variables.css' as v;
+
+.FormContainer {
+  > div {
+    padding: 8px 8px 0;
+  }
+
+  & > :first-child {
+    padding: 64px 8px 8px;
+
+    > p {
+      padding: 12px 16px;
+      font-weight: 600;
+      color: white;
+    }
+  }
+
+  .CreateButton {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+
+    > button {
+      > svg {
+        width: 26px;
+        height: 26px;
+      }
+    }
+  }
+}

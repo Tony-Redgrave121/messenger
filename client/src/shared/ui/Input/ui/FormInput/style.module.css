@@ -1,0 +1,41 @@
+.FormInput {
+  position: relative;
+  display: flex;
+  width: 100%;
+}
+.FormInput input, .FormInput textarea {
+  padding: 15px;
+  border-radius: 10px;
+  color: #9d9d9d;
+  box-shadow: 0 0 0 1px #2f2f2f;
+  width: 100%;
+  height: auto;
+  transition: 0.2s all ease-in-out;
+}
+.FormInput input:hover, .FormInput textarea:hover {
+  color: white;
+  box-shadow: 0 0 0 1px white;
+}
+.FormInput input:focus, .FormInput textarea:focus {
+  color: white;
+  box-shadow: 0 0 0 2px white;
+}
+.FormInput input::placeholder, .FormInput textarea::placeholder {
+  text-transform: capitalize;
+}
+.FormInput textarea {
+  word-wrap: break-word;
+  word-break: break-all;
+}
+.FormInput small {
+  position: absolute;
+  bottom: -25px;
+  color: #ca0000;
+  font-size: 14px;
+  line-height: 1.5;
+}
+.FormInput small::first-letter {
+  text-transform: capitalize;
+}
+
+/*# sourceMappingURL=slider.module.css.map */

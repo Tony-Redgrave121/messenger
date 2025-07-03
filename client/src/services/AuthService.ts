@@ -6,8 +6,8 @@ import {
     DELETE_ACCOUNT_ROUTE,
     SEND_CODE_ROUTE,
     CONFIRM_EMAIL_ROUTE
-} from "../rebuild/shared/config/router/router"
-import $api from '../rebuild/shared/api/axiosApi'
+} from "@shared/config/router/router"
+import $api from '@shared/api/axiosApi'
 import {AxiosResponse} from 'axios'
 import {IAuthResponse} from "@appTypes"
 

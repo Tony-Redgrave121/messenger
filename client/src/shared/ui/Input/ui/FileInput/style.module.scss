@@ -1,0 +1,15 @@
+@use '../../../../../app/styles/variables.css' as v;
+
+.FileInput {
+  svg, img {
+    color: white;
+    height: 160px;
+    width: 160px;
+    cursor: pointer;
+  }
+
+  img {
+    border-radius: 50%;
+    object-fit: cover;
+  }
+}

@@ -1,0 +1,17 @@
+@use '../../../../app/styles/variables.css' as v;
+
+.FormContainer {
+  .FormBlock {
+    padding: 8px;
+  }
+
+  & > :first-child {
+    padding: 64px 8px 8px;
+
+    > p {
+      padding: 12px 16px;
+      font-weight: 600;
+      color: white;
+    }
+  }
+}

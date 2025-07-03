@@ -1,0 +1,16 @@
+@use '../../../../../app/styles/variables.css' as v;
+
+.PlayButton {
+  display: flex;
+  position: absolute;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+
+  svg {
+    width: initial;
+    height: 20%;
+    max-height: 80px;
+  }
+}

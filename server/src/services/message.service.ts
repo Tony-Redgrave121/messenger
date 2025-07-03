@@ -6,7 +6,7 @@ import uploadFile from "../utils/uploadFile"
 import path from "path"
 import fs from "fs"
 import {Op, Sequelize} from "sequelize";
-import IMessagesResponse from "../types/messageTypes/IMessagesResponse";
+import MessageSchema from "../types/messageTypes/MessageSchema";
 import findAllMessagesQuery from "../utils/sequelizeQueries/findAllMessagesQuery";
 import normalizeMessage from "../utils/normalizeMessage";
 import convertToPlain from "../utils/convertToPlain";
@@ -31,7 +31,7 @@ class MessageService {
             order: [['message_date', 'ASC']],
         })
 
-        const messagesPlain = convertToPlain<IMessagesResponse>(messages)
+        const messagesPlain = convertToPlain<MessageSchema>(messages)
         return await Promise.all(
             messagesPlain.map(async m => normalizeMessage(m))
         )
@@ -51,7 +51,7 @@ class MessageService {
         })
 
         if (!message) throw ApiError.internalServerError("Message not found")
-        const messagePlain = convertToPlain<IMessagesResponse>(message)
+        const messagePlain = convertToPlain<MessageSchema>(message)
 
         return normalizeMessage(messagePlain)
     }

@@ -1,4 +1,4 @@
-import {ContactSchema} from "../rebuild/5-entities/Contact";
+import {ContactSchema} from "@entities/Contact";
 
 export default interface IMember {
     member_date: Date,

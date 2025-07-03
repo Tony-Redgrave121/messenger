@@ -1,0 +1,20 @@
+@use '../../../../app/styles/variables.css' as v;
+
+.ToolsBlock {
+  &, span, svg {
+    display: flex;
+    align-items: center;
+  }
+
+  p {
+    font-weight: 600;
+    margin-left: 24px;
+    font-size: 20px;
+  }
+}
+
+.SearchBar {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}

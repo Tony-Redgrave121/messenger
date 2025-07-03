@@ -1,0 +1,129 @@
+@use '../../../../app/styles/variables.css' as v;
+
+.MessageContainer {
+  transform-origin: bottom left;
+
+  .MessageInnerBlock {
+    display: flex;
+    align-items: end;
+    gap: 5px;
+
+    .UserAvatarLink > * {
+      width: 40px;
+      height: 40px;
+    }
+
+    .MessageWrapper {
+      line-height: 1.3;
+      max-width: 65%;
+      min-width: 180px;
+
+      .MessageContent {
+        position: relative;
+        background-color: #181818;
+        padding: 8px 8px 15px 8px;
+        border-radius: 15px 15px 15px 0;
+        margin-bottom: 1px;
+
+        > a {
+          color: white;
+          line-height: 1;
+          font-size: 14px;
+          font-weight: 600;
+          transition: .2s color ease-in-out;
+        }
+
+        .ReplyBlock {
+          border-left: 3px solid white;
+          background-color: #2f2f2f;
+          padding: 5px;
+          border-radius: 5px;
+          font-size: 14px;
+          line-height: 1.4;
+          transition: .2s background-color ease-in-out;
+
+          &:hover {
+            background-color: #353535;
+          }
+
+          & >:first-child {
+            font-weight: 600;
+          }
+        }
+
+        &, .MessageBlock {
+          display: flex;
+          flex-direction: column;
+          gap: 4px;
+        }
+
+        .MessageBlock {
+          overflow: hidden;
+
+          small {
+            position: absolute;
+            right: 8px;
+            bottom: 4px;
+            line-height: 1;
+            color: #a9a9a9;
+            font-size: 12px;
+          }
+
+          p {
+            word-break: break-all;
+          }
+
+          ul {
+            transform-origin: center center;
+          }
+        }
+
+        .DocumentBlock {
+          display: flex;
+          flex-direction: column;
+          gap: 5px;
+        }
+      }
+
+      .OwnerMessageContent {
+        background-color: #212121;
+        border-radius: 15px 15px 0 15px;
+      }
+
+      .ChannelMessageContent {
+        border-radius: 15px 15px 0 0
+      }
+    }
+
+    .CommentsContainer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background-color: #181818;
+      padding: 8px;
+      border-radius: 0 0 15px 0;
+      cursor: pointer;
+      transition: .2s background-color ease-in-out;
+      font-weight: 600;
+      font-size: 15px;
+
+      &:hover {
+        background-color: #212121;
+      }
+
+      > svg {
+        width: 24px;
+        height: 24px;
+      }
+    }
+  }
+
+  .OwnerMessageInnerBlock {
+    justify-content: end;
+  }
+}
+
+.OwnerMessageContainer {
+  align-self: end;
+  transform-origin: bottom right;
+}

@@ -9,9 +9,9 @@ import {
     ADD_MEMBER_ROUTE,
     DELETE_MEMBER_ROUTE,
     DELETE_REMOVED_USER_ROUTE,
-} from "../rebuild/shared/config/router/router"
+} from "@shared/config/router/router"
 
-import $api from '../rebuild/shared/api/axiosApi'
+import $api from '@shared/api/axiosApi'
 import {AxiosResponse} from 'axios'
 import {IMessengerResponse} from "@appTypes"
 import IMessengerSettings from "../appTypes/messenger/IMessengerSettings"

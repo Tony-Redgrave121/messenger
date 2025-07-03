@@ -1,23 +1,12 @@
 import {
     GET_CONTACTS_ROUTE,
-    GET_PROFILE_ROUTE,
-    UPDATE_PASSWORD_ROUTE
-} from "../rebuild/shared/config/router/router"
-import $api from '../rebuild/shared/api/axiosApi'
+} from "@shared/config"
+import $api from '@shared/api/axiosApi'
 import {AxiosResponse} from 'axios'
-import IEditProfileForm from "../appTypes/user/IEditProfileForm";
-import {ContactSchema} from "../rebuild/5-entities/Contact";
+import {ContactSchema} from "@entities/Contact";
 
 export default class UserService {
-    static async getProfile(user_id: string, signal: AbortSignal): Promise<AxiosResponse<IEditProfileForm>> {
-        return $api.get<IEditProfileForm>(GET_PROFILE_ROUTE.replace(":user_id", user_id), {signal})
-    }
-    static async putProfile(user_id: string, formData: FormData): Promise<AxiosResponse<IEditProfileForm>> {
-        return $api.put<IEditProfileForm>(GET_PROFILE_ROUTE.replace(":user_id", user_id), formData)
-    }
-    static async putPassword(user_id: string, formData: FormData): Promise<AxiosResponse> {
-        return $api.put(UPDATE_PASSWORD_ROUTE.replace(":user_id", user_id), formData)
-    }
+
     static async getContacts(user_id: string, signal: AbortSignal): Promise<AxiosResponse<ContactSchema[]>> {
         return $api.get<ContactSchema[]>(GET_CONTACTS_ROUTE.replace(":user_id", user_id), {signal})
     }

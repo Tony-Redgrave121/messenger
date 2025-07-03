@@ -1,0 +1,15 @@
+@use '../../../../app/styles/variables.css' as v;
+
+.FormContainer {
+  &, .Form, .TopForm {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+  }
+
+  .TopForm {
+    padding: 80px 24px 28px;
+    gap: 28px;
+  }
+}

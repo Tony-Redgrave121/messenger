@@ -1,6 +1,6 @@
 import IMember from "../IMember";
-import {IReaction} from "@appTypes";
-import IRemovedUser from "../sidebar/IRemovedUser";
+import {IReaction} from "../index";
+import {ContactSchema} from "@entities/Contact";
 
 export default interface IMessengerSettings {
     messenger_setting_type: 'private' | 'public',
@@ -8,7 +8,10 @@ export default interface IMessengerSettings {
     messenger_type: string,
     reactions: IReaction[],
     reactions_count: number,
-    removed_users: IRemovedUser[],
+    removed_users: {
+        removed_user_id: string,
+        user: ContactSchema
+    }[],
     members: IMember[],
     moderators: IMember[],
     messenger_name: string,

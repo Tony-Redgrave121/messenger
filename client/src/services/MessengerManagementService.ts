@@ -2,12 +2,12 @@ import {
     MESSENGER_ROUTE,
     GET_REACTIONS_ROUTE,
     PRIVATE_CHAT_ROUTE,
-} from "../rebuild/shared/config/router/router"
+} from "@shared/config"
 
-import $api from '../rebuild/shared/api/axiosApi'
+import $api from '@shared/api/axiosApi'
 import {AxiosResponse} from 'axios'
 import {IMessengerResponse, IReaction} from "@appTypes"
-import {ContactSchema} from "../rebuild/5-entities/Contact";
+import {ContactSchema} from "@entities/Contact";
 
 export default class MessengerManagementService {
     static async fetchMessenger(user_id: string, type: string, messenger_id: string, signal: AbortSignal): Promise<AxiosResponse<IMessengerResponse | ContactSchema>> {
@@ -15,10 +15,6 @@ export default class MessengerManagementService {
             `${MESSENGER_ROUTE}?type=${type}&user_id=${user_id}&messenger_id=${messenger_id}`,
             {signal}
         )
-    }
-
-    static async postMessenger(messenger: FormData, signal: AbortSignal): Promise<AxiosResponse<IMessengerResponse>> {
-        return $api.post<IMessengerResponse>(MESSENGER_ROUTE, messenger, {signal})
     }
 
     static async deleteMessenger(messengerId: string, signal: AbortSignal): Promise<AxiosResponse> {

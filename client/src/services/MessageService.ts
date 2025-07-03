@@ -4,11 +4,12 @@ import {
     CREATE_MESSAGE_ROUTE,
     DELETE_MESSAGE_ROUTE,
     GET_MESSAGES_ROUTE,
-} from "../rebuild/shared/config/router/router"
+} from "@shared/config"
 
-import $api from '../rebuild/shared/api/axiosApi'
+import $api from '@shared/api/axiosApi'
 import {AxiosResponse} from 'axios'
-import {IMessagesResponse, IReaction} from "@appTypes"
+import {IReaction} from "@appTypes"
+import {MessageSchema} from "@entities/Message";
 
 export default class MessageService {
     static async fetchMessages(
@@ -17,21 +18,10 @@ export default class MessageService {
         messenger_id: string,
         post_id: string | undefined,
         signal: AbortSignal
-    ): Promise<AxiosResponse<IMessagesResponse[]>> {
+    ): Promise<AxiosResponse<MessageSchema[]>> {
         const query = `?type=${type}&user_id=${user_id}&messenger_id=${messenger_id}${post_id ? `&post_id=${post_id}` : ""}`
 
-        return $api.get<IMessagesResponse[]>(`${GET_MESSAGES_ROUTE.replace(":messenger_id", messenger_id)}${query}`, {signal})
-    }
-    static async fetchMessage(
-        messenger_id: string,
-        message_id: string | undefined,
-        signal: AbortSignal
-    ): Promise<AxiosResponse<IMessagesResponse>> {
-        const query = `?messenger_id=${messenger_id}&message_id=${message_id}`
-        return $api.get<IMessagesResponse>(`${CREATE_MESSAGE_ROUTE}${query}`, {signal})
-    }
-    static async postMessage(message: FormData) {
-        return $api.post(CREATE_MESSAGE_ROUTE, message)
+        return $api.get<MessageSchema[]>(`${GET_MESSAGES_ROUTE.replace(":messenger_id", messenger_id)}${query}`, {signal})
     }
     static async deleteMessage(message_id: string): Promise<AxiosResponse> {
         return $api.delete(`${DELETE_MESSAGE_ROUTE.replace(":message_id", message_id)}`)

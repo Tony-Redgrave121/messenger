@@ -1,6 +1,6 @@
 import IReaction from "../reactionTypes/IReaction";
 
-export default interface IMessagesResponse {
+export default interface MessageSchema {
     message_id: string,
     message_text?: string,
     message_date: Date,

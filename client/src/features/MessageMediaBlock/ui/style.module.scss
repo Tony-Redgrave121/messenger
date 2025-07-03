@@ -1,0 +1,32 @@
+@use '../../../app/styles/variables.css' as v;
+
+.MediaBlock {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+
+  >:first-child img {
+    border-radius: 7.5px 7.5px 0 0;
+  }
+
+  img, section {
+    border: 2px solid #212121;
+    height: auto;
+    object-fit: cover;
+    max-height: 300px;
+    width: 100%;
+  }
+
+  > span {
+    display: flex;
+    width: 100%;
+    max-height: 137.5px;
+
+    img {
+      flex-shrink: 1;
+      max-width: 100%;
+      min-width: 0;
+      min-height: 100px;
+    }
+  }
+}

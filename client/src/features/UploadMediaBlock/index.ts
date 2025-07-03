@@ -1,0 +1,1 @@
+export {default as UploadMediaBlock} from './ui/UploadMediaBlock'

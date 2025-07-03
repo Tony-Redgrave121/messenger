@@ -1,0 +1,12 @@
+@use '../../app/styles/normalize.css';
+
+.LayoutContainer {
+  display: flex;
+  justify-content: center;
+
+  .Layout {
+    display: flex;
+    max-width: 1680px;
+    width: 100%;
+  }
+}

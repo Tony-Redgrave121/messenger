@@ -38,7 +38,7 @@ export const ADD_REMOVED_USER_ROUTE = '/messengers/:messenger_id/removed'
 export const DELETE_REMOVED_USER_ROUTE = '/messengers/:messenger_id/removed/:user_id'
 
 // Profile Routes
-export const GET_PROFILE_ROUTE = '/users/:user_id/profile'
+export const GET_PROFILE_ROUTE = '/users/:user_id/Profile'
 export const UPDATE_PASSWORD_ROUTE = '/users/:user_id/password'
 
 // Search Routes

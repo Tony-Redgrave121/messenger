@@ -1,8 +1,6 @@
 // General types
 export type {default as IAuthForm} from './IAuthForm'
 export type {default as IAuthResponse} from './IAuthResponse'
-export type {default as IFileObject} from './IFileObject'
-export type {default as IFilesState} from './IFilesState'
 export type {default as IPostMessage} from './IPostMessage'
 export type {default as IStepProps} from './IStepProps'
 export type {default as IMember} from './IMember'
@@ -22,11 +20,6 @@ export type {default as IUpdateMessenger} from './messenger/IUpdateMessenger'
 // Types of Message
 export type {default as ICommentState} from './message/ICommentState'
 export type {default as IMessageFile} from './message/IMessageFile'
-export type {default as IMessagesResponse} from './message/IMessagesResponse'
-
-// Types of User
-export type {default as IEditProfileForm} from './user/IEditProfileForm'
-export type {default as IEditPasswordForm} from './user/IEditPasswordForm'
 
 // Types guard
 export {default as isChatArray} from './typeGuard/isChatArray'
@@ -34,4 +27,3 @@ export {default as isMessengerArray} from './typeGuard/isMessengerArray'
 
 // Keys
 export type {default as SettingsKeys} from './keys/MessengerSettingsKeys'
-export type {default as ProfileSettingsKeys} from './keys/ProfileSettingsKeys'

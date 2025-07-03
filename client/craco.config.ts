@@ -3,12 +3,12 @@ import * as path from 'path'
 module.exports = {
     webpack: {
         alias: {
-            "@components": path.resolve(__dirname, "src/components"),
-            "@features": path.resolve(__dirname, "src/4-features"),
-            "@hooks": path.resolve(__dirname, "src/hooks"),
-            "@utils": path.resolve(__dirname, "src/utils"),
-            "@assets": path.resolve(__dirname, "src/assets"),
-            "@store": path.resolve(__dirname, "src/store"),
+            "@app": path.resolve(__dirname, "src/app"),
+            "@pages": path.resolve(__dirname, "src/pages"),
+            "@widgets": path.resolve(__dirname, "src/widgets"),
+            "@features": path.resolve(__dirname, "src/features"),
+            "@entities": path.resolve(__dirname, "src/entities"),
+            "@shared": path.resolve(__dirname, "src/shared"),
             "@appTypes": path.resolve(__dirname, "src/appTypes"),
             "@services": path.resolve(__dirname, "src/services"),
         }

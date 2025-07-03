@@ -1,6 +1,6 @@
-import {IMessagesResponse} from "@appTypes";
+import {MessageSchema} from "@entities/Message";
 
 export default interface ICommentState {
-    comment: IMessagesResponse | null,
+    comment: MessageSchema | null,
     commentState: boolean
 }

@@ -1,0 +1,77 @@
+@use '../../../../app/styles/variables.css' as v;
+
+.ToolsBlock {
+  justify-content: space-between;
+
+  &, span, svg {
+    display: flex;
+    align-items: center;
+  }
+
+  h1 {
+    margin-left: 24px;
+    font-size: 20px;
+  }
+
+  label svg {
+    width: 25px;
+    height: 25px;
+    padding: 8px;
+    cursor: pointer;
+  }
+}
+
+.FilesBlock {
+  flex-direction: column;
+  gap: 8px;
+  padding: 8px 0;
+
+  &, > div {
+    display: flex;
+  }
+
+  > div {
+    align-items: center;
+    gap: 8px;
+    line-height: 1.4;
+    width: calc(100% - 66px);
+
+    > div {
+      width: 100%;
+
+      h4 {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        font-size: 15px;
+      }
+
+      p {
+        font-size: 13px;
+      }
+    }
+
+    svg, label {
+      min-width: 50px;
+      min-height: 50px;
+      stroke-width: 1px;
+    }
+  }
+}
+
+.SubmitBlock {
+  display: flex;
+  align-items: end;
+  margin-top: 8px;
+
+  > button {
+    padding: 14px 16px;
+    background-color: #1c1c1c;
+    border-radius: 10px;
+    transition: .2s background-color ease-in-out;
+
+    &:hover {
+      background-color: #191919;
+    }
+  }
+}

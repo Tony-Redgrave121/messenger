@@ -1,0 +1,35 @@
+@use '../../../../../app/styles/variables.css' as v;
+
+.SwitchButton {
+  width: 30px;
+  height: 14px;
+  border-radius: 12px;
+  background-color: #6f7478;
+  z-index: 0;
+  position: relative;
+  transition: .2s all ease-in-out;
+
+  &:after {
+    content: "";
+    position: absolute;
+    z-index: 1;
+    height: 18px;
+    width: 18px;
+    border-radius: 18px;
+    background-color: #212121;
+    top: 50%;
+    transform: translateY(-50%);
+    left: -6px;
+    border: 2px solid #6f7478;
+    transition: .2s all ease-in-out;
+  }
+}
+
+.SwitchButtonOn {
+  background-color: white;
+
+  &:after {
+    left: 15px;
+    border: 2px solid white;
+  }
+}
