@@ -1,7 +1,6 @@
 import React, {lazy, useEffect, useRef, useState} from 'react'
 import style from './style.module.css'
 import {InputBlock} from "@features/InputBlock"
-import {Message} from "@entities/Message/ui/message"
 import {useAppDispatch, useAppSelector} from "@shared/lib"
 import {useParams} from "react-router-dom"
 import MessengerHeader from "@widgets/Header/ui/MessengerHeader"
@@ -12,7 +11,7 @@ import useFetchInitialData from "@entities/Messenger/lib/hooks/useFetchInitialDa
 import {addMessenger} from "@entities/Messenger/model/slice/messengerSlice";
 import {clearNotification} from "@entities/Messenger/lib/thunk/messengerThunk";
 import {useAbortController} from "@shared/lib";
-import {MessageSchema} from "@entities/Message";
+import {Message, MessageSchema} from "@entities/Message";
 
 const RightSidebar = lazy(() => import("@widgets/RightSidebar/ui/RightSidebar"))
 

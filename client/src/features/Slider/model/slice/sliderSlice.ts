@@ -1,12 +1,12 @@
 import {createSlice, PayloadAction} from "@reduxjs/toolkit"
-import {IMessageFile} from "@appTypes";
+import MessageFileSchema from "@entities/Media/model/types/MessageFileSchema";
 
 interface ISliderState {
     zoom: boolean,
     state: boolean,
     messageId: string,
     slideNumber: number,
-    currentSlide: IMessageFile,
+    currentSlide: MessageFileSchema,
 }
 
 const initialState: ISliderState = {
@@ -38,7 +38,7 @@ const appSlice = createSlice({
         setSlideNumber(state, action: PayloadAction<number>) {
             state.slideNumber = action.payload
         },
-        setCurrentSlide(state, action: PayloadAction<IMessageFile>) {
+        setCurrentSlide(state, action: PayloadAction<MessageFileSchema>) {
             state.currentSlide = action.payload
         }
     }

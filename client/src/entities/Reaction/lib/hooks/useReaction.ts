@@ -1,10 +1,10 @@
-import {IReaction} from "@appTypes";
 import {RefObject} from "react";
 import {useAppSelector} from "@shared/lib";
 import {useParams} from "react-router-dom";
 import MessageService from "../../../../services/MessageService";
 import {useAbortController} from "@shared/lib";
 import {MessageSchema} from "../../../Message";
+import {ReactionSchema} from "@entities/Reaction";
 
 const useReaction = () => {
     const user_id = useAppSelector(state => state.user.userId)
@@ -13,7 +13,7 @@ const useReaction = () => {
 
     const reactionOnClick = async (
         message: MessageSchema,
-        reaction: IReaction,
+        reaction: ReactionSchema,
         socketRef: RefObject<WebSocket | null>
     ) => {
         const messageReaction = message.reactions?.find(react => react.reaction.reaction_id === reaction.reaction_id)

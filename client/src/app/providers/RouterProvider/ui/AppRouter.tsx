@@ -4,7 +4,7 @@ import Layout from "@pages/Layout/Layout"
 import {routerConfig} from "../index"
 import {useAppSelector} from "@shared/lib";
 
-const AuthForm = lazy(() => import('@pages/Auth/AuthForm'))
+const AuthForm = lazy(() => import('@pages/Auth/ui/AuthForm/AuthForm'))
 
 const AppRouter = () => {
     const isAuth = useAppSelector(state => state.user.isAuth)

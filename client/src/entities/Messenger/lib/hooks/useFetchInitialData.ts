@@ -1,16 +1,19 @@
 import {useEffect, useState} from "react"
-import {IAdaptMessenger, IReaction} from "@appTypes";
 import {useNavigate, useParams} from "react-router-dom";
 import {isServerError, useAppDispatch, useAppSelector} from "@shared/lib";
-import MessageService from "../../../../services/MessageService";
-import MessengerManagementService from "../../../../services/MessengerManagementService";
 import {useAbortController} from "@shared/lib";
 import {useMessageWS} from "../../../Message";
 import {setPopupChildren, setPopupState} from "@features/PopupMessage/model/slice/popupSlice";
+import {ReactionSchema} from "@entities/Reaction";
+import mapMessengerDTO from "@entities/Messenger/api/mappers/mapMessengerDTO";
+import AdaptMessengerSchema from "@entities/Messenger/model/types/AdaptMessengerSchema";
+import fetchMessengerApi from "@entities/Messenger/api/fetchMessengerApi";
+import fetchMessagesApi from "@entities/Messenger/api/fetchMessagesApi";
+import getReactionsApi from "@entities/Messenger/api/getReactionsApi";
 
 const types = ['chat', 'channel', 'group']
 
-const InitialMessenger: IAdaptMessenger = {
+const InitialMessenger: AdaptMessengerSchema = {
     id: '',
     name: '',
     image: '',
@@ -22,8 +25,8 @@ const InitialMessenger: IAdaptMessenger = {
 }
 
 const useFetchInitialData = () => {
-    const [reactions, setReactions] = useState<IReaction[]>([])
-    const [messenger, setMessenger] = useState<IAdaptMessenger>(InitialMessenger)
+    const [reactions, setReactions] = useState<ReactionSchema[]>([])
+    const [messenger, setMessenger] = useState<AdaptMessengerSchema>(InitialMessenger)
 
     const {messengerId, type, postId} = useParams()
     const user = useAppSelector(state => state.user)
@@ -52,34 +55,12 @@ const useFetchInitialData = () => {
 
             try {
                 const [messenger, messages, reactions] = await Promise.all([
-                    MessengerManagementService.fetchMessenger(user.userId, type, messengerId, signal),
-                    MessageService.fetchMessages(user.userId, type, messengerId, postId, signal),
-                    MessengerManagementService.getReactions((type === 'channel' && messengerId) ? messengerId : undefined, signal)
+                    fetchMessengerApi(user.userId, type, messengerId, signal),
+                    fetchMessagesApi(user.userId, type, messengerId, postId, signal),
+                    getReactionsApi((type === 'channel' && messengerId) ? messengerId : undefined, signal)
                 ])
 
-                const messengerData = messenger.data
-                let adaptMessenger = InitialMessenger
-
-                if ("user_id" in messengerData) {
-                    adaptMessenger = {
-                        id: messengerData.user_id,
-                        name: messengerData.user_name,
-                        image: messengerData.user_img,
-                        desc: messengerData.user_bio,
-                        type: 'chat',
-                        last_seen: messengerData.user_last_seen,
-                    }
-                } else if ("messenger_id" in messengerData) {
-                    adaptMessenger = {
-                        id: messengerData.messenger_id,
-                        name: messengerData.messenger_name,
-                        image: messengerData.messenger_image,
-                        desc: messengerData.messenger_desc,
-                        type: messengerData.messenger_type,
-                        members: messengerData.user_member,
-                        members_count: messengerData.members_count,
-                    }
-                }
+                const adaptMessenger = mapMessengerDTO(messenger.data)
 
                 if (!!adaptMessenger.id) {
                     setMessenger(adaptMessenger)

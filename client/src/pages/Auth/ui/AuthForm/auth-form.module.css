@@ -1,0 +1,46 @@
+
+.AuthContainer {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
+.AuthContainer .AuthForm {
+  width: 100%;
+}
+.AuthContainer .AuthForm, .AuthContainer .AuthForm > div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.AuthContainer .AuthForm > div {
+  position: relative;
+  flex-direction: column;
+  gap: 30px;
+  width: 100%;
+  max-width: 360px;
+  color: white;
+  line-height: 1.5;
+}
+.AuthContainer .AuthForm > div svg {
+  height: 160px;
+  width: 160px;
+}
+.AuthContainer .AuthForm > div .TitleBlock {
+  text-align: center;
+}
+.AuthContainer .AuthForm > div .TitleBlock h1 {
+  font-size: 32px;
+}
+.AuthContainer .AuthForm > div .TitleBlock p {
+  color: #a6a6a6;
+}
+.AuthContainer .AuthForm > div .ButtonBlock {
+  display: flex;
+  width: 100%;
+  gap: 25px;
+}
+
+/*# sourceMappingURL=auth-form.module.css.map */

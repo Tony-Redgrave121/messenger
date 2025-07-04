@@ -11,20 +11,21 @@ import {
 } from "react-icons/hi2"
 import {DropDown} from "@shared/ui/DropDown"
 import {useAppDispatch, useAbortController, useAppSelector, getDate} from "@shared/lib"
-import {IAdaptMessenger} from "@appTypes";
 import {clsx} from "clsx";
 import SearchMessage from "@features/SearchMessage/SearchMessage";
-import MessengerSettingsService from "../../../services/MessengerSettingsService";
 import {useNavigate, useParams} from "react-router-dom";
 import {addContact, deleteContact} from "@entities/Contact/model/slice/contactSlice";
 import {deleteMessenger} from "@entities/Messenger/lib/thunk/messengerThunk";
-import UserService from "../../../services/UserService";
-import MessengerManagementService from "../../../services/MessengerManagementService";
 import {DefaultButton} from "@shared/ui/Button";
 import {setSidebarLeft} from "../../LeftSidebar/model/slice/sidebarSlice";
+import postContactApi from "@widgets/Header/api/postContactApi";
+import deleteContactApi from "@widgets/Header/api/deleteContactApi";
+import deleteChatApi from "@widgets/Header/api/deleteChatApi";
+import deleteMemberApi from "@features/EditMembers/api/deleteMemberApi";
+import AdaptMessengerSchema from "@entities/Messenger/model/types/AdaptMessengerSchema";
 
 interface IChatHeader {
-    messenger: IAdaptMessenger,
+    messenger: AdaptMessengerSchema,
     setSidebarState: Dispatch<SetStateAction<boolean>>
 }
 
@@ -73,7 +74,7 @@ const MessengerHeader: FC<IChatHeader> = memo(({messenger, setSidebarState}) => 
                         const signal = getSignal()
 
                         try {
-                            const res = await UserService.deleteContact(userId, messengerId, signal)
+                            const res = await deleteContactApi(userId, messengerId, signal)
 
                             if (res.status === 200) dispatch(deleteContact(messengerId))
                         } catch (error) {
@@ -89,7 +90,7 @@ const MessengerHeader: FC<IChatHeader> = memo(({messenger, setSidebarState}) => 
                         const signal = getSignal()
 
                         try {
-                            const newContact = await UserService.postContact(userId, messengerId, signal)
+                            const newContact = await postContactApi(userId, messengerId, signal)
 
                             if (newContact.status === 200) dispatch(addContact(newContact.data))
                         } catch (error) {
@@ -105,7 +106,7 @@ const MessengerHeader: FC<IChatHeader> = memo(({messenger, setSidebarState}) => 
                     const signal = getSignal()
 
                     try {
-                        const res = await MessengerManagementService.deleteChat(userId, messengerId, signal)
+                        const res = await deleteChatApi(userId, messengerId, signal)
 
                         if (res.status === 200) {
                             dispatch(deleteMessenger(messengerId))
@@ -132,7 +133,7 @@ const MessengerHeader: FC<IChatHeader> = memo(({messenger, setSidebarState}) => 
                     const signal = getSignal()
 
                     try {
-                        const res = await MessengerSettingsService.deleteMember(userId, messengerId, signal)
+                        const res = await deleteMemberApi(userId, messengerId, signal)
 
                         if (res.status === 200) {
                             dispatch(deleteMessenger(messengerId))
@@ -159,7 +160,7 @@ const MessengerHeader: FC<IChatHeader> = memo(({messenger, setSidebarState}) => 
                     const signal = getSignal()
 
                     try {
-                        const res = await MessengerSettingsService.deleteMember(userId, messengerId, signal)
+                        const res = await deleteMemberApi(userId, messengerId, signal)
 
                         if (res.status === 200) {
                             dispatch(deleteMessenger(messengerId))

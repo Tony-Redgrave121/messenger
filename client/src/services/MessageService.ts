@@ -1,34 +1,13 @@
 import {
     MESSENGER_REACTIONS_ROUTE,
     MESSAGE_REACTIONS_ROUTE,
-    CREATE_MESSAGE_ROUTE,
-    DELETE_MESSAGE_ROUTE,
-    GET_MESSAGES_ROUTE,
 } from "@shared/config"
 
 import $api from '@shared/api/axiosApi'
 import {AxiosResponse} from 'axios'
-import {IReaction} from "@appTypes"
-import {MessageSchema} from "@entities/Message";
+import {ReactionSchema} from "@entities/Reaction";
 
 export default class MessageService {
-    static async fetchMessages(
-        user_id: string,
-        type: string,
-        messenger_id: string,
-        post_id: string | undefined,
-        signal: AbortSignal
-    ): Promise<AxiosResponse<MessageSchema[]>> {
-        const query = `?type=${type}&user_id=${user_id}&messenger_id=${messenger_id}${post_id ? `&post_id=${post_id}` : ""}`
-
-        return $api.get<MessageSchema[]>(`${GET_MESSAGES_ROUTE.replace(":messenger_id", messenger_id)}${query}`, {signal})
-    }
-    static async deleteMessage(message_id: string): Promise<AxiosResponse> {
-        return $api.delete(`${DELETE_MESSAGE_ROUTE.replace(":message_id", message_id)}`)
-    }
-    static async postMessengerReactions(messenger_setting_id: string, reactions: string[]): Promise<AxiosResponse> {
-        return $api.post(MESSENGER_REACTIONS_ROUTE.replace(":messenger_setting_id", messenger_setting_id), {reactions})
-    }
     static async deleteMessageReaction(
         message_id: string,
         user_id: string,
@@ -42,7 +21,7 @@ export default class MessageService {
         user_id: string,
         reaction_id: string,
         signal: AbortSignal
-    ): Promise<AxiosResponse<IReaction>> {
+    ): Promise<AxiosResponse<ReactionSchema>> {
         return $api.post(MESSAGE_REACTIONS_ROUTE.replace(":message_id", message_id), {
             user_id,
             reaction_id,

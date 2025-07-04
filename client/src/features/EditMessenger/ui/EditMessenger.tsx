@@ -1,7 +1,6 @@
 import React, {Dispatch, FC, RefObject, SetStateAction, useEffect, useRef, useState} from 'react'
 import {CSSTransition} from "react-transition-group";
 import {
-    IAdaptMessenger,
     IEditMessengerForm,
     IMessengerSettings,
     SettingsKeys
@@ -28,17 +27,18 @@ import EditModerators from "../../EditMembers/ui/EditMembers/EditModerators";
 import EditSubscribers from "../../EditMembers/ui/EditMembers/EditSubscribers";
 import EditRemoved from "../../EditMembers/ui/EditMembers/EditRemoved";
 import {deleteMessenger} from "@entities/Messenger/lib/thunk/messengerThunk";
-import MessengerManagementService from "../../../services/MessengerManagementService";
 import {useAbortController, openForm, useAppDispatch} from "@shared/lib";
 import {CreateButton, DefaultButton, SettingButton} from "@shared/ui/Button";
 import {TopBar} from "@shared/ui/TopBar";
 import {Sidebar} from "@shared/ui/Sidebar";
 import {ToggleState} from "@shared/types";
+import AdaptMessengerSchema from "@entities/Messenger/model/types/AdaptMessengerSchema";
+import deleteMessengerApi from "@features/EditMessenger/api/deleteMessengerApi";
 
 interface IEditMessengerProps {
     state: boolean,
     setState: Dispatch<SetStateAction<boolean>>,
-    setEntity: Dispatch<SetStateAction<IAdaptMessenger>>,
+    setEntity: Dispatch<SetStateAction<AdaptMessengerSchema>>,
     refSidebar: RefObject<HTMLDivElement | null>,
 }
 
@@ -177,7 +177,7 @@ const EditMessenger: FC<IEditMessengerProps> = ({state, setState, setEntity, ref
 
         try {
             const signal = getSignal()
-            const res = await MessengerManagementService.deleteMessenger(messengerId, signal)
+            const res = await deleteMessengerApi(messengerId, signal)
 
             if (res.status === 200) {
                 navigate('/')

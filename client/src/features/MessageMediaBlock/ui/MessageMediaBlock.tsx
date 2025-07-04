@@ -1,10 +1,10 @@
 import React, {FC, memo} from "react";
 import style from "./style.module.css";
-import {IMessageFile} from "@appTypes";
 import {MessageMedia} from "@entities/Media";
+import MessageFileSchema from "@entities/Media/model/types/MessageFileSchema";
 
 interface IMessageMediaProps {
-    media: IMessageFile[],
+    media: MessageFileSchema[],
     messageId: string
 }
 

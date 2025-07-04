@@ -5,6 +5,7 @@ import {IMessengerSettings} from "@appTypes";
 import {useLiveUpdatesWS} from "@entities/Reaction/lib/hooks/useLiveUpdatesWS";
 import {useAppSelector} from "@shared/lib";
 import {useAbortController} from "@shared/lib";
+import deleteMemberApi from "@features/EditMembers/api/deleteMemberApi";
 
 const useEditSettings = (
     setSettings: Dispatch<SetStateAction<IMessengerSettings>>
@@ -101,7 +102,7 @@ const useEditSettings = (
         const signal = getSignal()
 
         try {
-            const deletedMember = await MessengerSettingsService.deleteMember(userId, messengerId, signal)
+            const deletedMember = await deleteMemberApi(userId, messengerId, signal)
 
             if (deletedMember.status === 200) {
                 setSettings(prev => ({

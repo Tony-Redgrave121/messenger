@@ -1,4 +1,5 @@
-import {IReaction, IMessageFile} from "@appTypes";
+import {ReactionSchema} from "@entities/Reaction";
+import MessageFileSchema from "@entities/Media/model/types/MessageFileSchema";
 
 export default interface MessageSchema {
     message_id: string,
@@ -8,12 +9,12 @@ export default interface MessageSchema {
     reply_id?: string,
     user_id: string,
     messenger_id: string,
-    message_files?: IMessageFile[],
+    message_files?: MessageFileSchema[],
     comments_count?: number,
     reactions?: {
         users_ids: string[],
         reaction_count: string,
-        reaction: IReaction
+        reaction: ReactionSchema
     }[],
     user: {
         user_id: string,

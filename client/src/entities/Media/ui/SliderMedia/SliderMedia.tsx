@@ -3,11 +3,11 @@ import useLoadBlob from "@shared/lib/hooks/useLoadBlob/useLoadBlob";
 import {getExt} from "@shared/lib";
 import {Player} from "@features/Player";
 import style from "../MessageMedia/style.module.css";
-import {IMessageFile} from "@appTypes";
 import {VIDEO_TYPES} from "../../consts/videoTypes";
+import MessageFileSchema from "@entities/Media/model/types/MessageFileSchema";
 
 interface ISliderProps {
-    media: IMessageFile
+    media: MessageFileSchema
 }
 
 const SliderMedia: FC<ISliderProps> = ({media}) => {

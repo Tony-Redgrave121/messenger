@@ -10,7 +10,6 @@ import {
 import style from './style.module.css'
 import './animation.css'
 import {CSSTransition} from 'react-transition-group'
-import {IAdaptMessenger} from "@appTypes";
 import useLoadBlob from "@shared/lib/hooks/useLoadBlob/useLoadBlob";
 import {ImageBlock} from "@features/ImageBlock";
 import EditMessenger from "@features/EditMessenger/ui/EditMessenger";
@@ -23,10 +22,11 @@ import {useAppSelector, getDate} from "@shared/lib";
 import {DefaultButton, SettingButton, SwitchSettingButton} from "@shared/ui/Button";
 import {TopBar} from "@shared/ui/TopBar";
 import {Sidebar} from "@shared/ui/Sidebar";
+import AdaptMessengerSchema from "@entities/Messenger/model/types/AdaptMessengerSchema";
 
 interface IRightSidebar {
-    entity: IAdaptMessenger,
-    setEntity: Dispatch<SetStateAction<IAdaptMessenger>>,
+    entity: AdaptMessengerSchema,
+    setEntity: Dispatch<SetStateAction<AdaptMessengerSchema>>,
     ref: RefObject<HTMLDivElement | null>,
     state: boolean,
     setState: Dispatch<SetStateAction<boolean>>

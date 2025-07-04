@@ -16,16 +16,16 @@ import {
 } from "react-icons/hi2"
 import {SearchBar} from "@shared/ui/SearchBar"
 import {CSSTransition} from 'react-transition-group'
-import {IAdaptMessenger} from "@appTypes"
 import debounce from "debounce";
 import SearchService from "../../services/SearchService";
 import {useParams} from "react-router-dom";
 import {useAbortController, getDate, scrollInto, useAppSelector} from "@shared/lib";
 import {DefaultButton} from "@shared/ui/Button";
 import {MessageSchema} from "@entities/Message";
+import AdaptMessengerSchema from "@entities/Messenger/model/types/AdaptMessengerSchema";
 
 interface IChatHeader {
-    messenger: IAdaptMessenger,
+    messenger: AdaptMessengerSchema,
     state: boolean,
     setState: Dispatch<SetStateAction<boolean>>
 }

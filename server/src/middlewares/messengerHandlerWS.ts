@@ -60,7 +60,7 @@ const messengerHandlerWS = (aWss: WebSocketServer) => {
                         return exhaustiveCheck
                 }
             } catch (e) {
-                console.error("Messenger WebSocket message handling errors: ", e);
+                console.error("Messenger WebSocket Message handling errors: ", e);
             }
         })
     }

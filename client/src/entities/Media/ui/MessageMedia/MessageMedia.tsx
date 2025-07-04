@@ -1,16 +1,16 @@
 import React, {FC} from "react";
 import useShortMedia from "../../lib/hooks/useShortMedia";
 import style from "./style.module.css";
-import {IMessageFile} from "@appTypes";
 import useLoadBlob from "@shared/lib/hooks/useLoadBlob/useLoadBlob";
 import {getExt, useAppDispatch} from "@shared/lib";
 import {setCurrentSlide, setMessageId, setState} from "@features/Slider/model/slice/sliderSlice";
 import {PlayButton} from "@shared/ui/Button";
 import {HiPlay} from "react-icons/hi2";
 import {IS_VIDEO} from "../../consts/isVideo";
+import MessageFileSchema from "@entities/Media/model/types/MessageFileSchema";
 
 interface IMessageMediaProps {
-    media: IMessageFile
+    media: MessageFileSchema
     messageId: string;
 }
 

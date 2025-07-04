@@ -1,8 +1,8 @@
 import {useEffect} from "react"
 import {useAppDispatch, useAppSelector} from "@shared/lib"
 import {setContacts} from "@entities/Contact/model/slice/contactSlice";
-import UserService from "../../../../services/UserService";
 import {useAbortController} from "@shared/lib";
+import getContactsApi from "../../api/getContactsApi";
 
 const useGetContacts = () => {
     const userId = useAppSelector(state => state.user.userId)
@@ -14,7 +14,7 @@ const useGetContacts = () => {
 
         const getContacts = async () => {
             try {
-                const contacts = await UserService.getContacts(userId, signal)
+                const contacts = await getContactsApi(userId, signal)
 
                 if (contacts.status === 200) {
                     dispatch(setContacts(contacts.data))

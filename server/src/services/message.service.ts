@@ -171,7 +171,7 @@ class MessageService {
         })
 
         if (reactionExists) {
-            throw ApiError.badRequest('Reaction already exists for this message and user')
+            throw ApiError.badRequest('Reaction already exists for this Message and user')
         }
 
         await index.message_reactions.create({

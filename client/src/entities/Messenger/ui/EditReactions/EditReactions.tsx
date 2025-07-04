@@ -1,23 +1,24 @@
 import React, {Dispatch, FC, RefObject, SetStateAction, useCallback, useEffect, useRef, useState} from 'react'
 import {CSSTransition} from "react-transition-group";
-import {IMessengerSettings, IReaction, SettingsKeys} from "@appTypes";
+import {IMessengerSettings, SettingsKeys} from "@appTypes";
 import style from "./style.module.css";
 import {Caption} from "@shared/ui/Caption";
 import {HiOutlineArrowLeft} from "react-icons/hi2";
 import debounce from "debounce";
-import MessageService from "../../../../services/MessageService";
-import MessengerManagementService from "../../../../services/MessengerManagementService";
 import {useAbortController, closeForm} from "@shared/lib";
 import {DefaultButton, SwitchSettingButton} from "@shared/ui/Button";
 import {TopBar} from "@shared/ui/TopBar";
 import {Sidebar} from "@shared/ui/Sidebar";
 import {ToggleState} from "@shared/types";
+import {ReactionSchema} from "@entities/Reaction";
+import getReactionsApi from "@entities/Messenger/api/getReactionsApi";
+import postMessengerReactionsApi from "@entities/Messenger/api/postMessengerReactionsApi";
 
 interface IEditReactionsProps {
     state: boolean,
     setState: Dispatch<SetStateAction<ToggleState<SettingsKeys>>>,
     refSidebar: RefObject<HTMLDivElement | null>,
-    channelReactions: IReaction[],
+    channelReactions: ReactionSchema[],
     messengerSettingsId: string,
     setSettings: Dispatch<SetStateAction<IMessengerSettings>>
 }
@@ -33,7 +34,7 @@ const EditReactions: FC<IEditReactionsProps> = (
     }
 ) => {
     const [newReactions, setNewReactions] = useState<string[]>([])
-    const [reactions, setReactions] = useState<IReaction[]>([])
+    const [reactions, setReactions] = useState<ReactionSchema[]>([])
     const {getSignal} = useAbortController()
 
     const refForm = useRef<HTMLDivElement>(null)
@@ -46,7 +47,7 @@ const EditReactions: FC<IEditReactionsProps> = (
         const signal = getSignal()
 
         const fetchReactions = async () => {
-            MessengerManagementService.getReactions(undefined, signal)
+            getReactionsApi(undefined, signal)
                 .then(res => res.data)
                 .then(data => setReactions(data))
                 .catch(e => console.log(e))
@@ -59,7 +60,7 @@ const EditReactions: FC<IEditReactionsProps> = (
         if (!messengerSettingsId) return
 
         try {
-            const updatedReactions = await MessageService.postMessengerReactions(messengerSettingsId, reactions)
+            const updatedReactions = await postMessengerReactionsApi(messengerSettingsId, reactions)
 
             setSettings(prev => ({
                 ...prev,

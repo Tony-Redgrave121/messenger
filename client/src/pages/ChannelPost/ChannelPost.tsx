@@ -1,13 +1,12 @@
 import {useEffect, useState} from 'react'
 import style from '../Messenger/style.module.css'
 import '../Messenger/animationWrapper.css'
-import {Message} from "@entities/Message/ui/message";
 import {InputBlock} from "@features/InputBlock";
 import ChannelPostHeader from "@widgets/Header/ui/ChannelPostHeader";
 import {useParams} from "react-router-dom";
 import useFetchInitialData from "@entities/Messenger/lib/hooks/useFetchInitialData";
 import {useAbortController} from "@shared/lib";
-import {MessageSchema} from "@entities/Message";
+import {Message, MessageSchema} from "@entities/Message";
 import fetchMessageApi from "@entities/Message/api/fetchMessageApi";
 
 const ChannelPost = () => {

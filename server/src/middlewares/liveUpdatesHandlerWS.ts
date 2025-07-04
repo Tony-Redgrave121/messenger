@@ -86,7 +86,7 @@ const liveUpdatesHandlerWS = (aWss: WebSocketServer) => {
                         return exhaustiveCheck
                 }
             } catch (e) {
-                console.error("Live Updates WebSocket message handling errors: ", e);
+                console.error("Live Updates WebSocket Message handling errors: ", e);
             }
         })
     }

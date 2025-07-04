@@ -6,15 +6,15 @@ import {
     HiOutlineArrowLeft
 } from "react-icons/hi2"
 import {DefaultButton} from "@shared/ui/Button"
-import {IAdaptMessenger} from "@appTypes";
 import SearchMessage from "@features/SearchMessage/SearchMessage";
 import {useNavigate} from "react-router-dom";
 import {setWrapperState} from "../../Main/model/slice/wrapperSlice";
 import {useAppDispatch} from "@shared/lib";
+import AdaptMessengerSchema from "@entities/Messenger/model/types/AdaptMessengerSchema";
 
 interface ICommentsHeader {
     commentsCount?: number,
-    messenger: IAdaptMessenger
+    messenger: AdaptMessengerSchema
 }
 
 const ChannelPostHeader: FC<ICommentsHeader> = memo(({commentsCount, messenger}) => {

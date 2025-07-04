@@ -1,7 +1,7 @@
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
-import {IAuthResponse} from "@appTypes";
 import {deleteAccount, login, logout, registration, userCheckAuth} from "../../lib/thunk/userThunk";
 import UserStateShema from "../types/UserStateShema";
+import AuthSchema from "../types/AuthSchema";
 
 const initialState: UserStateShema = {
     userId: '',
@@ -13,7 +13,7 @@ const initialState: UserStateShema = {
     isLoading: true,
 }
 
-const updateAuthState = (state: UserStateShema, action: PayloadAction<IAuthResponse>) => {
+const updateAuthState = (state: UserStateShema, action: PayloadAction<AuthSchema>) => {
     const user = action.payload
 
     if (user.user_id) {
@@ -53,7 +53,7 @@ const userSlice = createSlice({
         }
     },
     extraReducers: (builder) => {
-        builder.addCase(userCheckAuth.fulfilled, (state, action: PayloadAction<IAuthResponse>) => updateAuthState(state, action))
+        builder.addCase(userCheckAuth.fulfilled, (state, action: PayloadAction<AuthSchema>) => updateAuthState(state, action))
         builder.addCase(registration.fulfilled, (state, action) => updateAuthState(state, action))
         builder.addCase(login.fulfilled, (state, action) => updateAuthState(state, action))
         builder.addCase(logout.fulfilled, (state) => dropState(state))

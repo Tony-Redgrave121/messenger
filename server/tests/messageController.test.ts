@@ -25,7 +25,7 @@ describe('MessageController', () => {
     })
 
     describe('fetchMessage', () => {
-        it('should fetch message and return it', async () => {
+        it('should fetch Message and return it', async () => {
             const fakeMessage = {id: '123', content: 'Hello'}
             mockMessageService.fetchMessage.mockResolvedValue(fakeMessage)
 
@@ -44,7 +44,7 @@ describe('MessageController', () => {
     })
 
     describe('postMessage', () => {
-        it('should post message and return data', async () => {
+        it('should post Message and return data', async () => {
             const fakeData = {id: '999', message_text: 'Hi there'}
             mockMessageService.postMessage.mockResolvedValue(fakeData)
 
@@ -79,7 +79,7 @@ describe('MessageController', () => {
     })
 
     describe('deleteMessage', () => {
-        it('should delete message and return message_id', async () => {
+        it('should delete Message and return message_id', async () => {
             mockReq = {
                 params: {message_id: 'abc123'}
             }

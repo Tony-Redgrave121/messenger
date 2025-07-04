@@ -1,6 +1,6 @@
-import {IMember} from "@appTypes"
+import {MemberSchema} from "@entities/Member"
 
-const isMember = (members: IMember[], user_id: string) => {
+const isMember = (members: MemberSchema[], user_id: string) => {
     return members?.find(({user}) => user.user_id === user_id)
 }
 

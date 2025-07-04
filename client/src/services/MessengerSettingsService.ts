@@ -13,8 +13,8 @@ import {
 
 import $api from '@shared/api/axiosApi'
 import {AxiosResponse} from 'axios'
-import {IMessengerResponse} from "@appTypes"
-import IMessengerSettings from "../appTypes/messenger/IMessengerSettings"
+import IMessengerSettings from "../appTypes/IMessengerSettings"
+import MessengerSchema from "@entities/Messenger/model/types/MessengerSchema";
 
 export default class MessengerSettingsService {
     static async getMessengerSettings(messenger_id: string, signal: AbortSignal): Promise<AxiosResponse<IMessengerSettings>> {
@@ -40,12 +40,6 @@ export default class MessengerSettingsService {
     static async postMember(user_id: string, messenger_id: string, signal: AbortSignal): Promise<AxiosResponse> {
         return $api.post(ADD_MEMBER_ROUTE.replace(":messenger_id", messenger_id), {user_id}, {signal})
     }
-    static async deleteMember(user_id: string, messenger_id: string, signal: AbortSignal): Promise<AxiosResponse> {
-        return $api.delete(DELETE_MEMBER_ROUTE
-            .replace(":messenger_id", messenger_id)
-            .replace(":user_id", user_id), {signal}
-        )
-    }
     static async postRemoved(user_id: string, messenger_id: string, signal: AbortSignal): Promise<AxiosResponse> {
         return $api.post(ADD_REMOVED_USER_ROUTE.replace(":messenger_id", messenger_id), {user_id}, {signal})
     }
@@ -54,7 +48,7 @@ export default class MessengerSettingsService {
             .replace(":messenger_id", messenger_id)
             .replace(":user_id", user_id)}`, {signal})
     }
-    static async putMessenger(messenger: FormData, signal: AbortSignal): Promise<AxiosResponse<IMessengerResponse>> {
-        return $api.put<IMessengerResponse>(MESSENGER_ROUTE, messenger, {signal})
+    static async putMessenger(messenger: FormData, signal: AbortSignal): Promise<AxiosResponse<MessengerSchema>> {
+        return $api.put<MessengerSchema>(MESSENGER_ROUTE, messenger, {signal})
     }
 }
