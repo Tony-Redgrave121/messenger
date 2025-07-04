@@ -12,7 +12,7 @@ import {
 import {DropDown} from "@shared/ui/DropDown"
 import {useAppDispatch, useAbortController, useAppSelector, getDate} from "@shared/lib"
 import {clsx} from "clsx";
-import SearchMessage from "@features/SearchMessage/SearchMessage";
+import SearchMessage from "@features/SearchMessage/ui/SearchMessage";
 import {useNavigate, useParams} from "react-router-dom";
 import {addContact, deleteContact} from "@entities/Contact/model/slice/contactSlice";
 import {deleteMessenger} from "@entities/Messenger/lib/thunk/messengerThunk";

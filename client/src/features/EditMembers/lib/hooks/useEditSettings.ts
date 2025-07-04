@@ -1,11 +1,13 @@
 import {Dispatch, SetStateAction, useState} from "react";
 import {useParams} from "react-router-dom";
-import MessengerSettingsService from "../../../../services/MessengerSettingsService";
-import {IMessengerSettings} from "@appTypes";
 import {useLiveUpdatesWS} from "@entities/Reaction/lib/hooks/useLiveUpdatesWS";
 import {useAppSelector} from "@shared/lib";
 import {useAbortController} from "@shared/lib";
 import deleteMemberApi from "@features/EditMembers/api/deleteMemberApi";
+import IMessengerSettings from "@features/EditMessenger/model/types/IMessengerSettings";
+import putMessengerModeratorApi from "@features/EditMembers/api/putMessengerModeratorApi";
+import postMemberApi from "@features/EditMembers/api/postMemberApi";
+import deleteRemovedApi from "@features/EditMembers/api/deleteRemovedApi";
 
 const useEditSettings = (
     setSettings: Dispatch<SetStateAction<IMessengerSettings>>
@@ -27,7 +29,7 @@ const useEditSettings = (
         if (!messengerId) return
 
         try {
-            const newModerators = await MessengerSettingsService.putMessengerModerator('member', userId, messengerId)
+            const newModerators = await putMessengerModeratorApi('member', userId, messengerId)
 
             if (newModerators.data.message) return
 
@@ -50,7 +52,7 @@ const useEditSettings = (
         try {
             const signal = getSignal()
 
-            const newMembers = await MessengerSettingsService.postMember(userId, messengerId, signal)
+            const newMembers = await postMemberApi(userId, messengerId, signal)
             if (newMembers.data.message) return
 
             setSettings(prev => ({
@@ -84,7 +86,7 @@ const useEditSettings = (
         try {
             const signal = getSignal()
 
-            const deletedRemoved = await MessengerSettingsService.deleteRemoved(userId, messengerId, signal)
+            const deletedRemoved = await deleteRemovedApi(userId, messengerId, signal)
 
             if (deletedRemoved.status === 200) {
                 setSettings(prev => ({

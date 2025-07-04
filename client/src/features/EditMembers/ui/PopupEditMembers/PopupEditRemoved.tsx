@@ -1,18 +1,18 @@
 import React, {Dispatch, FC, SetStateAction, useEffect, useRef, useState} from 'react'
 import style from './style.module.css'
 import {HiOutlineXMark} from "react-icons/hi2";
-import {IMessengerSettings} from "@appTypes";
 import {SearchBar} from "@shared/ui/SearchBar";
 import {useSearch}from "@shared/lib";
 import {NoResult} from "@shared/ui/NoResult";
 import {useAppSelector} from "@shared/lib";
 import {useParams} from "react-router-dom";
-import MessengerSettingsService from "../../../../services/MessengerSettingsService";
 import {useLiveUpdatesWS} from "@entities/Reaction/lib/hooks/useLiveUpdatesWS";
 import {useAbortController} from "@shared/lib";
 import {DefaultButton} from "@shared/ui/Button";
 import {ContactSchema} from "@entities/Contact";
 import {ContactList} from "../../../ContactList";
+import IMessengerSettings from "@features/EditMessenger/model/types/IMessengerSettings";
+import postRemovedApi from "@features/EditMembers/api/postRemovedApi";
 
 interface IPopupEditModeratorsProps {
     handleCancel: () => void,
@@ -51,7 +51,7 @@ const PopupEditRemoved: FC<IPopupEditModeratorsProps> = (
         try {
             const signal = getSignal()
 
-            const newRemovedMember = await MessengerSettingsService.postRemoved(userId, messengerId, signal)
+            const newRemovedMember = await postRemovedApi(userId, messengerId, signal)
             if (newRemovedMember.data.message) return
 
             setSettings(prev => ({

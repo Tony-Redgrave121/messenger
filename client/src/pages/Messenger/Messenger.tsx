@@ -5,13 +5,13 @@ import {useAppDispatch, useAppSelector} from "@shared/lib"
 import {useParams} from "react-router-dom"
 import MessengerHeader from "@widgets/Header/ui/MessengerHeader"
 import checkRights from "@entities/User/lib/CheckRights/checkRights";
-import MessengerSettingsService from "../../services/MessengerSettingsService";
 import isMember from "@entities/User/lib/IsMember/isMember";
 import useFetchInitialData from "@entities/Messenger/lib/hooks/useFetchInitialData";
 import {addMessenger} from "@entities/Messenger/model/slice/messengerSlice";
 import {clearNotification} from "@entities/Messenger/lib/thunk/messengerThunk";
 import {useAbortController} from "@shared/lib";
 import {Message, MessageSchema} from "@entities/Message";
+import postContactsMembersApi from "@features/EditMembers/api/postContactsMembersApi";
 
 const RightSidebar = lazy(() => import("@widgets/RightSidebar/ui/RightSidebar"))
 
@@ -66,7 +66,7 @@ const Messenger = () => {
         try {
             if (messenger.type === 'chat') adaptMessenger()
             else {
-                const newMembers = await MessengerSettingsService.postContactsMembers([userId], messengerId, signal)
+                const newMembers = await postContactsMembersApi([userId], messengerId, signal)
 
                 if (newMembers.status === 200) adaptMessenger()
             }

@@ -3,12 +3,14 @@ import {useAppDispatch, useAppSelector} from "@shared/lib";
 import {useLiveUpdatesWS} from "@entities/Reaction/lib/hooks/useLiveUpdatesWS";
 import debounce from "debounce";
 import {useNavigate} from "react-router";
-import SearchService from "../../../../services/SearchService";
-import {isChatArray, isMessengerArray, IUnifiedMessenger} from "@appTypes";
+import {IUnifiedMessenger} from "@appTypes";
 import {useAbortController} from "@shared/lib";
 import useCloseLeftSidebar from "./useCloseLeftSidebar";
 import {ListKeys} from "@shared/types";
 import {setSidebarLeft} from "../../model/slice/sidebarSlice";
+import getFilteredMessengersApi from "@widgets/LeftSidebar/api/getFilteredMessengersApi";
+import isChatArray from "../isChatArray";
+import isMessengerArray from "../isMessengerArray";
 
 const useLeftSidebar = () => {
     const [settings, setSettings] = useState(false)
@@ -46,7 +48,7 @@ const useLeftSidebar = () => {
 
             try {
                 const signal = getSignal()
-                const searched = await SearchService.getMessengers(query, type, signal)
+                const searched = await getFilteredMessengersApi(query, type, signal)
 
                 if (searched.status === 200) {
                     const searchedData = searched.data

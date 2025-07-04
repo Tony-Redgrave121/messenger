@@ -5,7 +5,6 @@ import style from "./style.module.css"
 import {HiOutlineArrowLeft, HiOutlineTrash} from "react-icons/hi2"
 import {Caption} from "@shared/ui/Caption";
 import {closeForm} from "@shared/lib";
-import MessengerSettingsService from "../../../../services/MessengerSettingsService";
 import {useNavigate, useParams} from "react-router-dom"
 import useCopy from "../../../Message/lib/hooks/useCopy";
 import {DefaultButton, SettingButton} from "@shared/ui/Button";
@@ -13,6 +12,8 @@ import {Radio} from "@shared/ui/Input";
 import {TopBar} from "@shared/ui/TopBar";
 import {Sidebar} from "@shared/ui/Sidebar";
 import {ToggleState} from "@shared/types";
+import putMessengerTypeApi from "@entities/Messenger/api/putMessengerTypeApi";
+import putMessengerLinkApi from "@entities/Messenger/api/putMessengerLinkApi";
 
 interface IEditTypeProps {
     state: boolean,
@@ -51,7 +52,7 @@ const EditType: FC<IEditTypeProps> = (
         if (!newMessengerLink) return
 
         try {
-            await MessengerSettingsService.putMessengerType(type, newMessengerLink)
+            await putMessengerTypeApi(type, newMessengerLink)
 
             setNewMessengerType(type)
         } catch (error) {
@@ -63,7 +64,7 @@ const EditType: FC<IEditTypeProps> = (
         if (!newMessengerLink) return
 
         try {
-            const data = await MessengerSettingsService.putMessengerLink(newMessengerLink)
+            const data = await putMessengerLinkApi(newMessengerLink)
 
             setNewMessengerLink(data.data.messenger_id)
             navigate(`/${messengerUrlType}/${data.data.messenger_id}`)

@@ -1,6 +1,6 @@
 import React, {Dispatch, FC, RefObject, SetStateAction, useCallback, useEffect, useRef, useState} from 'react'
 import {CSSTransition} from "react-transition-group";
-import {IMessengerSettings, SettingsKeys} from "@appTypes";
+import {SettingsKeys} from "@appTypes";
 import style from "./style.module.css";
 import {Caption} from "@shared/ui/Caption";
 import {HiOutlineArrowLeft} from "react-icons/hi2";
@@ -13,6 +13,7 @@ import {ToggleState} from "@shared/types";
 import {ReactionSchema} from "@entities/Reaction";
 import getReactionsApi from "@entities/Messenger/api/getReactionsApi";
 import postMessengerReactionsApi from "@entities/Messenger/api/postMessengerReactionsApi";
+import IMessengerSettings from "@features/EditMessenger/model/types/IMessengerSettings";
 
 interface IEditReactionsProps {
     state: boolean,

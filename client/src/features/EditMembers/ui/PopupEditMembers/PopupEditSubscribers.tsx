@@ -1,8 +1,6 @@
 import React, {Dispatch, FC, SetStateAction, useState} from 'react'
 import style from './style.module.css'
 import {HiOutlineArrowRight, HiOutlineXMark} from "react-icons/hi2";
-import {IMessengerSettings} from "@appTypes";
-import MessengerSettingsService from "../../../../services/MessengerSettingsService";
 import {useParams} from "react-router-dom";
 import {useLiveUpdatesWS} from "@entities/Reaction/lib/hooks/useLiveUpdatesWS";
 import {useAppSelector} from "@shared/lib";
@@ -10,6 +8,8 @@ import {useAbortController} from "@shared/lib";
 import {CreateButton, DefaultButton} from "@shared/ui/Button";
 import {ContactSchema} from "@entities/Contact";
 import {AddContact} from "../../../AddContact";
+import IMessengerSettings from "@features/EditMessenger/model/types/IMessengerSettings";
+import postContactsMembersApi from "@features/EditMembers/api/postContactsMembersApi";
 
 interface IPopupEditSubscribersProps {
     handleCancel: () => void,
@@ -31,7 +31,7 @@ const PopupEditSubscribers: FC<IPopupEditSubscribersProps> = ({handleCancel, set
 
         try {
             const membersId = members.map(member => member.user_id)
-            const newMembers = await MessengerSettingsService.postContactsMembers(membersId, messengerId, signal)
+            const newMembers = await postContactsMembersApi(membersId, messengerId, signal)
 
             if (newMembers.data.message) return
 

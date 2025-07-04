@@ -1,4 +1,4 @@
-export default interface IChatInfo {
+export default interface ChatInfoSchema {
     user_id: string,
     user_name: string,
     user_img?: string,

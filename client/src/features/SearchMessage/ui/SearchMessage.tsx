@@ -17,12 +17,12 @@ import {
 import {SearchBar} from "@shared/ui/SearchBar"
 import {CSSTransition} from 'react-transition-group'
 import debounce from "debounce";
-import SearchService from "../../services/SearchService";
 import {useParams} from "react-router-dom";
 import {useAbortController, getDate, scrollInto, useAppSelector} from "@shared/lib";
 import {DefaultButton} from "@shared/ui/Button";
 import {MessageSchema} from "@entities/Message";
 import AdaptMessengerSchema from "@entities/Messenger/model/types/AdaptMessengerSchema";
+import getFilteredMessagesApi from "@features/SearchMessage/api/getFilteredMessagesApi";
 
 interface IChatHeader {
     messenger: AdaptMessengerSchema,
@@ -57,7 +57,7 @@ const SearchMessage: FC<IChatHeader> = memo(({messenger, state, setState}) => {
                     post_id: postId,
                 }
 
-                const res = await SearchService.getMessages(params, signal)
+                const res = await getFilteredMessagesApi(params, signal)
 
                 if (res.status === 200) {
                     const messagesData = res.data

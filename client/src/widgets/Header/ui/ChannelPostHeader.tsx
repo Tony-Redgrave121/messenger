@@ -6,7 +6,7 @@ import {
     HiOutlineArrowLeft
 } from "react-icons/hi2"
 import {DefaultButton} from "@shared/ui/Button"
-import SearchMessage from "@features/SearchMessage/SearchMessage";
+import SearchMessage from "@features/SearchMessage/ui/SearchMessage";
 import {useNavigate} from "react-router-dom";
 import {setWrapperState} from "../../Main/model/slice/wrapperSlice";
 import {useAppDispatch} from "@shared/lib";

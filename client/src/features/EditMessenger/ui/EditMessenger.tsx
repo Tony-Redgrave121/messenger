@@ -1,10 +1,6 @@
 import React, {Dispatch, FC, RefObject, SetStateAction, useEffect, useRef, useState} from 'react'
 import {CSSTransition} from "react-transition-group";
-import {
-    IEditMessengerForm,
-    IMessengerSettings,
-    SettingsKeys
-} from "@appTypes";
+import {IEditMessengerForm, SettingsKeys} from "@appTypes";
 import {
     HiOutlineArrowLeft,
     HiOutlineCheck,
@@ -19,7 +15,6 @@ import {SubmitHandler, useForm} from "react-hook-form";
 import style from "./style.module.css";
 import {FileInput, FormInput} from "@shared/ui/Input";
 import {Caption} from "@shared/ui/Caption";
-import messengerService from "../../../services/MessengerSettingsService";
 import {useNavigate, useParams} from "react-router-dom";
 import EditReactions from "@entities/Messenger/ui/EditReactions/EditReactions";
 import EditType from "@entities/Messenger/ui/EditType/EditType";
@@ -34,6 +29,9 @@ import {Sidebar} from "@shared/ui/Sidebar";
 import {ToggleState} from "@shared/types";
 import AdaptMessengerSchema from "@entities/Messenger/model/types/AdaptMessengerSchema";
 import deleteMessengerApi from "@features/EditMessenger/api/deleteMessengerApi";
+import IMessengerSettings from "@features/EditMessenger/model/types/IMessengerSettings";
+import getMessengerSettingsApi from "@features/EditMessenger/api/getMessengerSettingsApi";
+import putMessengerApi from "@features/EditMessenger/api/putMessengerApi";
 
 interface IEditMessengerProps {
     state: boolean,
@@ -110,7 +108,7 @@ const EditMessenger: FC<IEditMessengerProps> = ({state, setState, setEntity, ref
         const signal = getSignal()
 
         const getSettings = async () => {
-            messengerService.getMessengerSettings(messengerId, signal)
+            getMessengerSettingsApi(messengerId, signal)
                 .then(res => res.data)
                 .then(data => {
                     if (!data.messenger_name) throw data
@@ -121,7 +119,10 @@ const EditMessenger: FC<IEditMessengerProps> = ({state, setState, setEntity, ref
                     setValue('messenger_desc', data.messenger_desc)
 
                     if (data.messenger_image) {
-                        pictureRef.current = new Blob([Uint8Array.from(atob(data.messenger_image), c => c.charCodeAt(0))], {type: 'image/png'}) as File
+                        pictureRef.current = new Blob(
+                            [Uint8Array.from(atob(data.messenger_image), c => c.charCodeAt(0))],
+                            {type: 'image/png'}
+                        ) as File
                     }
                 })
                 .catch(e => console.log(e))
@@ -143,7 +144,7 @@ const EditMessenger: FC<IEditMessengerProps> = ({state, setState, setEntity, ref
             formData.append('messenger_desc', data.messenger_desc)
 
             const signal = getSignal()
-            const newData = await messengerService.putMessenger(formData, signal)
+            const newData = await putMessengerApi(formData, signal)
 
             if (newData.status === 200) {
                 setSettings(prev => ({

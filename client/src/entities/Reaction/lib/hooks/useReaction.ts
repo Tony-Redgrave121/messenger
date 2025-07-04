@@ -1,10 +1,11 @@
 import {RefObject} from "react";
 import {useAppSelector} from "@shared/lib";
 import {useParams} from "react-router-dom";
-import MessageService from "../../../../services/MessageService";
 import {useAbortController} from "@shared/lib";
 import {MessageSchema} from "../../../Message";
 import {ReactionSchema} from "@entities/Reaction";
+import deleteMessageReactionApi from "@entities/Reaction/api/deleteMessageReactionApi";
+import postMessageReactionApi from "@entities/Reaction/api/postMessageReactionApi";
 
 const useReaction = () => {
     const user_id = useAppSelector(state => state.user.userId)
@@ -20,7 +21,7 @@ const useReaction = () => {
         const signal = getSignal()
 
         if (messageReaction?.users_ids.includes(user_id)) {
-            await MessageService.deleteMessageReaction(
+            await deleteMessageReactionApi(
                 message.message_id, user_id,
                 reaction.reaction_id,
                 signal
@@ -40,7 +41,7 @@ const useReaction = () => {
                 }))
             }
         } else {
-            const reactionResponse = await MessageService.postMessageReaction(
+            const reactionResponse = await postMessageReactionApi(
                 message.message_id,
                 user_id,
                 reaction.reaction_id,

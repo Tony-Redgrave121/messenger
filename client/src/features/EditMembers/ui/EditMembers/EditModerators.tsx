@@ -1,6 +1,6 @@
 import React, {Dispatch, FC, RefObject, SetStateAction} from 'react'
 import {CSSTransition} from "react-transition-group"
-import {IMessengerSettings, SettingsKeys} from "@appTypes"
+import { SettingsKeys} from "@appTypes"
 import style from "./style.module.css"
 import {
     HiOutlineArrowLeft,
@@ -22,6 +22,7 @@ import {TopBar} from "@shared/ui/TopBar";
 import {Sidebar} from "@shared/ui/Sidebar";
 import {ToggleState} from "@shared/types";
 import {ContactSchema} from "@entities/Contact";
+import IMessengerSettings from "@features/EditMessenger/model/types/IMessengerSettings";
 
 interface IEditMemberProps {
     state: boolean,
