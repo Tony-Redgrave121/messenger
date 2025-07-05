@@ -4,13 +4,13 @@ import {useLiveUpdatesWS} from "@entities/Reaction/lib/hooks/useLiveUpdatesWS";
 import {useAppSelector} from "@shared/lib";
 import {useAbortController} from "@shared/lib";
 import deleteMemberApi from "@features/EditMembers/api/deleteMemberApi";
-import IMessengerSettings from "@features/EditMessenger/model/types/IMessengerSettings";
+import MessengerSettingsSchema from "@features/EditMessenger/model/types/MessengerSettingsSchema";
 import putMessengerModeratorApi from "@features/EditMembers/api/putMessengerModeratorApi";
 import postMemberApi from "@features/EditMembers/api/postMemberApi";
 import deleteRemovedApi from "@features/EditMembers/api/deleteRemovedApi";
 
 const useEditSettings = (
-    setSettings: Dispatch<SetStateAction<IMessengerSettings>>
+    setSettings: Dispatch<SetStateAction<MessengerSettingsSchema>>
 ) => {
     const {messengerId} = useParams()
     const {getSignal} = useAbortController()

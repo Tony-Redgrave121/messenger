@@ -1,6 +1,5 @@
 import React, {Dispatch, FC, RefObject, SetStateAction, useEffect, useRef, useState} from 'react'
 import {CSSTransition} from "react-transition-group";
-import {IEditMessengerForm, SettingsKeys} from "@appTypes";
 import {
     HiOutlineArrowLeft,
     HiOutlineCheck,
@@ -29,9 +28,11 @@ import {Sidebar} from "@shared/ui/Sidebar";
 import {ToggleState} from "@shared/types";
 import AdaptMessengerSchema from "@entities/Messenger/model/types/AdaptMessengerSchema";
 import deleteMessengerApi from "@features/EditMessenger/api/deleteMessengerApi";
-import IMessengerSettings from "@features/EditMessenger/model/types/IMessengerSettings";
+import MessengerSettingsSchema from "@features/EditMessenger/model/types/MessengerSettingsSchema";
 import getMessengerSettingsApi from "@features/EditMessenger/api/getMessengerSettingsApi";
 import putMessengerApi from "@features/EditMessenger/api/putMessengerApi";
+import MessengerSettingsKeys from "@entities/Messenger/model/types/MessengerSettingsKeys";
+import EditMessengerSchema from "@features/EditMessenger/model/types/EditMessengerSchema";
 
 interface IEditMessengerProps {
     state: boolean,
@@ -40,14 +41,14 @@ interface IEditMessengerProps {
     refSidebar: RefObject<HTMLDivElement | null>,
 }
 
-const InitialValues: IEditMessengerForm = {
+const InitialValues: EditMessengerSchema = {
     messenger_id: '',
     messenger_name: '',
     messenger_image: null,
     messenger_desc: '',
 }
 
-const InitialSettings: IMessengerSettings = {
+const InitialSettings: MessengerSettingsSchema = {
     messenger_setting_type: 'private',
     messenger_setting_id: '',
     messenger_type: '',
@@ -66,9 +67,9 @@ const EditMessenger: FC<IEditMessengerProps> = ({state, setState, setEntity, ref
     const refForm = useRef<HTMLDivElement>(null)
     const pictureRef = useRef<File>(null)
 
-    const [settings, setSettings] = useState<IMessengerSettings>(InitialSettings)
+    const [settings, setSettings] = useState<MessengerSettingsSchema>(InitialSettings)
 
-    const initialToggleState: ToggleState<SettingsKeys> = {
+    const initialToggleState: ToggleState<MessengerSettingsKeys> = {
         reactions: false,
         channelType: false,
         moderators: false,
@@ -132,7 +133,7 @@ const EditMessenger: FC<IEditMessengerProps> = ({state, setState, setEntity, ref
         getSettings().catch(e => console.log(e))
     }, [messengerId, setValue, state])
 
-    const handleChange: SubmitHandler<IEditMessengerForm> = async (data) => {
+    const handleChange: SubmitHandler<EditMessengerSchema> = async (data) => {
         if (!messengerId) return
 
         try {

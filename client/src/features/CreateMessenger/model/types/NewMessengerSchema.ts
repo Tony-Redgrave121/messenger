@@ -1,4 +1,4 @@
-export default interface IMessenger {
+export default interface NewMessengerSchema {
     messenger_name: string,
     messenger_image: File | null,
     messenger_desc: string,

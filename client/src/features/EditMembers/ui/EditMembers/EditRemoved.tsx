@@ -1,6 +1,5 @@
 import {Dispatch, FC, RefObject, SetStateAction} from 'react'
 import {CSSTransition} from "react-transition-group"
-import {SettingsKeys} from "@appTypes"
 import style from "./style.module.css"
 import {
     HiOutlineArrowLeft,
@@ -21,15 +20,16 @@ import {TopBar} from "@shared/ui/TopBar";
 import {Sidebar} from "@shared/ui/Sidebar";
 import {ToggleState} from "@shared/types";
 import {ContactSchema} from "@entities/Contact";
-import IMessengerSettings from "@features/EditMessenger/model/types/IMessengerSettings";
+import MessengerSettingsSchema from "@features/EditMessenger/model/types/MessengerSettingsSchema";
+import MessengerSettingsKeys from "@entities/Messenger/model/types/MessengerSettingsKeys";
 
 interface IEditMemberProps {
     state: boolean,
-    setState: Dispatch<SetStateAction<ToggleState<SettingsKeys>>>,
+    setState: Dispatch<SetStateAction<ToggleState<MessengerSettingsKeys>>>,
     refSidebar: RefObject<HTMLDivElement | null>,
     members: ContactSchema[],
     removed: ContactSchema[],
-    setSettings: Dispatch<SetStateAction<IMessengerSettings>>
+    setSettings: Dispatch<SetStateAction<MessengerSettingsSchema>>
 }
 
 const EditMembers: FC<IEditMemberProps> = (

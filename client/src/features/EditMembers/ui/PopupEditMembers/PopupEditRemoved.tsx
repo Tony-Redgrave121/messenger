@@ -11,13 +11,13 @@ import {useAbortController} from "@shared/lib";
 import {DefaultButton} from "@shared/ui/Button";
 import {ContactSchema} from "@entities/Contact";
 import {ContactList} from "../../../ContactList";
-import IMessengerSettings from "@features/EditMessenger/model/types/IMessengerSettings";
+import MessengerSettingsSchema from "@features/EditMessenger/model/types/MessengerSettingsSchema";
 import postRemovedApi from "@features/EditMembers/api/postRemovedApi";
 
 interface IPopupEditModeratorsProps {
     handleCancel: () => void,
     members: ContactSchema[],
-    setSettings: Dispatch<SetStateAction<IMessengerSettings>>
+    setSettings: Dispatch<SetStateAction<MessengerSettingsSchema>>
 }
 
 const PopupEditRemoved: FC<IPopupEditModeratorsProps> = (

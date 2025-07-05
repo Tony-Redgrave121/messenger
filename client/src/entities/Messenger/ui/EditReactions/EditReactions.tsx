@@ -1,6 +1,5 @@
 import React, {Dispatch, FC, RefObject, SetStateAction, useCallback, useEffect, useRef, useState} from 'react'
 import {CSSTransition} from "react-transition-group";
-import {SettingsKeys} from "@appTypes";
 import style from "./style.module.css";
 import {Caption} from "@shared/ui/Caption";
 import {HiOutlineArrowLeft} from "react-icons/hi2";
@@ -13,15 +12,16 @@ import {ToggleState} from "@shared/types";
 import {ReactionSchema} from "@entities/Reaction";
 import getReactionsApi from "@entities/Messenger/api/getReactionsApi";
 import postMessengerReactionsApi from "@entities/Messenger/api/postMessengerReactionsApi";
-import IMessengerSettings from "@features/EditMessenger/model/types/IMessengerSettings";
+import MessengerSettingsSchema from "@features/EditMessenger/model/types/MessengerSettingsSchema";
+import MessengerSettingsKeys from "@entities/Messenger/model/types/MessengerSettingsKeys";
 
 interface IEditReactionsProps {
     state: boolean,
-    setState: Dispatch<SetStateAction<ToggleState<SettingsKeys>>>,
+    setState: Dispatch<SetStateAction<ToggleState<MessengerSettingsKeys>>>,
     refSidebar: RefObject<HTMLDivElement | null>,
     channelReactions: ReactionSchema[],
     messengerSettingsId: string,
-    setSettings: Dispatch<SetStateAction<IMessengerSettings>>
+    setSettings: Dispatch<SetStateAction<MessengerSettingsSchema>>
 }
 
 const EditReactions: FC<IEditReactionsProps> = (

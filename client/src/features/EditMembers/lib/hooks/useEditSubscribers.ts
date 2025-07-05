@@ -1,12 +1,12 @@
 import {Dispatch, SetStateAction, useRef, useState} from "react";
 import {useSearch}from "@shared/lib";
-import {SettingsKeys} from "@appTypes";
 import {ToggleState} from "@shared/types";
 import {ContactSchema} from "@entities/Contact";
+import MessengerSettingsKeys from "@entities/Messenger/model/types/MessengerSettingsKeys";
 
 const useEditSubscribers = (
     state: boolean,
-    setState: Dispatch<SetStateAction<ToggleState<SettingsKeys>>>,
+    setState: Dispatch<SetStateAction<ToggleState<MessengerSettingsKeys>>>,
     members: ContactSchema[],
 ) => {
 

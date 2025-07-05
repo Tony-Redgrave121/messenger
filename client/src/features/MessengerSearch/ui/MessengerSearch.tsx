@@ -5,17 +5,17 @@ import style from "./style.module.css";
 import contactStyles from "@entities/Contact/ui/style.module.css";
 import {clsx} from "clsx";
 import {useNavigate} from "react-router";
-import {IUnifiedMessenger} from "@appTypes";
 import {LoadFile} from "@shared/ui/LoadFile";
 import {useAppSelector, getDate} from "@shared/lib";
 import {ContactButton} from "@shared/ui/Button";
 import {ListKeys} from "@shared/types";
+import UnifiedMessengerSchema from "@features/MessengerSearch/model/types/UnifiedMessengerSchema";
 
 interface IMessengerSearchProps {
     animationState: boolean,
     active: 'chat' | 'group' | 'channel',
     setActive: Dispatch<SetStateAction<ListKeys>>,
-    searchRes: IUnifiedMessenger[],
+    searchRes: UnifiedMessengerSchema[],
     foo: () => void
 }
 

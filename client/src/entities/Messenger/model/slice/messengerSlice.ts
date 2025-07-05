@@ -1,6 +1,6 @@
 import {createSlice, PayloadAction} from "@reduxjs/toolkit"
-import {IUpdateMessenger} from "@appTypes"
 import ChatBlockSchema from "../types/ChatBlockSchema";
+import UpdateMessengerSchema from "@entities/Messenger/model/types/UpdateMessengerSchema";
 
 interface ILiveUpdatesState {
     messengers: ChatBlockSchema[],
@@ -23,7 +23,7 @@ const messengerSlice = createSlice({
             const exists = state.messengers.some(m => m.messenger_id === action.payload.messenger_id)
             if (!exists) state.messengers.push(action.payload)
         },
-        updateMessengerMessage(state, action: PayloadAction<IUpdateMessenger>) {
+        updateMessengerMessage(state, action: PayloadAction<UpdateMessengerSchema>) {
             const {messenger_id, message_text, message_date} = action.payload
             const index = state.messengers.findIndex(m => m.messenger_id === messenger_id)
             if (index !== -1) {

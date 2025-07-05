@@ -4,7 +4,7 @@ import {addMessenger} from "../../../Messenger/model/slice/messengerSlice";
 import {deleteMessenger, updateMessenger} from "../../../Messenger/lib/thunk/messengerThunk";
 
 let socketInstance: WebSocket | null = null
-const SERVER_DOMAIN_NAME = process.env.REACT_APP_SERVER_DOMAIN_NAME
+const SERVER_DOMAIN_NAME = process.env.VITE_SERVER_DOMAIN_NAME
 
 export const useLiveUpdatesWS = () => {
     const userId = useAppSelector(state => state.user.userId)

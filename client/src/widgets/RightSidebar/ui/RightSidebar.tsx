@@ -32,7 +32,7 @@ interface IRightSidebar {
     setState: Dispatch<SetStateAction<boolean>>
 }
 
-const CLIENT_URL = process.env.REACT_APP_CLIENT_URL
+const CLIENT_URL = process.env.VITE_CLIENT_URL
 
 const RightSidebar: FC<IRightSidebar> = (
     {

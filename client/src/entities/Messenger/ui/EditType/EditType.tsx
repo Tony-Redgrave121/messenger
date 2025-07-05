@@ -1,6 +1,5 @@
 import React, {Dispatch, FC, RefObject, SetStateAction, useEffect, useRef, useState} from 'react'
 import {CSSTransition} from "react-transition-group"
-import {SettingsKeys} from "@appTypes"
 import style from "./style.module.css"
 import {HiOutlineArrowLeft, HiOutlineTrash} from "react-icons/hi2"
 import {Caption} from "@shared/ui/Caption";
@@ -14,10 +13,11 @@ import {Sidebar} from "@shared/ui/Sidebar";
 import {ToggleState} from "@shared/types";
 import putMessengerTypeApi from "@entities/Messenger/api/putMessengerTypeApi";
 import putMessengerLinkApi from "@entities/Messenger/api/putMessengerLinkApi";
+import MessengerSettingsKeys from "@entities/Messenger/model/types/MessengerSettingsKeys";
 
 interface IEditTypeProps {
     state: boolean,
-    setState: Dispatch<SetStateAction<ToggleState<SettingsKeys>>>,
+    setState: Dispatch<SetStateAction<ToggleState<MessengerSettingsKeys>>>,
     refSidebar: RefObject<HTMLDivElement | null>,
     messengerType: 'private' | 'public',
     messengerUrlType: string,

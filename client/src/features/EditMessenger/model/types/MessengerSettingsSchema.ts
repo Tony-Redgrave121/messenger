@@ -2,7 +2,7 @@ import {MemberSchema} from "@entities/Member";
 import {ContactSchema} from "@entities/Contact";
 import {ReactionSchema} from "@entities/Reaction";
 
-export default interface IMessengerSettings {
+export default interface MessengerSettingsSchema {
     messenger_setting_type: 'private' | 'public',
     messenger_setting_id: string,
     messenger_type: string,

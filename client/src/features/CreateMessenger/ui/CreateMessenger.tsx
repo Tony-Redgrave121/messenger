@@ -9,7 +9,6 @@ import {
 } from "react-icons/hi2";
 import {Controller, SubmitHandler, useForm} from "react-hook-form";
 import {useNavigate} from "react-router-dom";
-import {IMessenger} from "@appTypes";
 import {useAppDispatch, useAppSelector} from "@shared/lib";
 import {addMessenger} from "@entities/Messenger/model/slice/messengerSlice";
 import {SearchBar} from "@shared/ui/SearchBar"
@@ -23,6 +22,7 @@ import {ContactSchema} from "@entities/Contact";
 import {AddContact} from "../../AddContact";
 import {ContactList} from "../../ContactList";
 import postMessengerApi from "../api/postMessengerApi";
+import NewMessengerSchema from "@features/CreateMessenger/model/types/NewMessengerSchema";
 
 interface IMessengerProps {
     messengerCreation: {
@@ -36,7 +36,7 @@ interface IMessengerProps {
     socketRef: WebSocket | null
 }
 
-const InitialValues: IMessenger = {
+const InitialValues: NewMessengerSchema = {
     messenger_name: '',
     messenger_image: null,
     messenger_desc: '',
@@ -107,7 +107,7 @@ const CreateMessenger: FC<IMessengerProps> = ({messengerCreation, setMessengerCr
         }
     }
 
-    const handleCreation: SubmitHandler<IMessenger> = async (data) => {
+    const handleCreation: SubmitHandler<NewMessengerSchema> = async (data) => {
         try {
             const formData = new FormData()
             formData.append('user_id', userId)

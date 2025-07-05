@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const SERVER_URL = process.env.REACT_APP_SERVER_URL
+const SERVER_URL = process.env.VITE_SERVER_URL
 
 const $api = axios.create({
     withCredentials: true,

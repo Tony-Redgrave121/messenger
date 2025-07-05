@@ -4,11 +4,11 @@ import {
     setNotificationsFromStorage,
     removeMessenger
 } from '../../model/slice/messengerSlice'
-import {IUpdateMessenger} from "@appTypes";
 import {AppThunk} from "@app/providers/StoreProvider/config/store";
 import {NOTIFICATIONS_KEY} from "../../consts/MessengerKeys";
+import UpdateMessengerSchema from "@entities/Messenger/model/types/UpdateMessengerSchema";
 
-export const updateMessenger = (data: IUpdateMessenger): AppThunk => dispatch => {
+export const updateMessenger = (data: UpdateMessengerSchema): AppThunk => dispatch => {
     dispatch(updateMessengerMessage(data))
 
     const {isCurrentMessenger, messenger_id} = data

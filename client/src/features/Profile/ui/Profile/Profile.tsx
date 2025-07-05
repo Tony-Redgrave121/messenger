@@ -34,7 +34,7 @@ interface IProfileProps {
     refSidebar: RefObject<HTMLDivElement | null>,
 }
 
-const CLIENT_URL = process.env.REACT_APP_CLIENT_URL
+const CLIENT_URL = process.env.VITE_CLIENT_URL
 
 const Profile: FC<IProfileProps> = ({state, setState, refSidebar}) => {
     const initialToggleState: ToggleState<ProfileKeys> = {

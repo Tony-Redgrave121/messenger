@@ -3,7 +3,6 @@ import {useAppDispatch, useAppSelector} from "@shared/lib";
 import {useLiveUpdatesWS} from "@entities/Reaction/lib/hooks/useLiveUpdatesWS";
 import debounce from "debounce";
 import {useNavigate} from "react-router";
-import {IUnifiedMessenger} from "@appTypes";
 import {useAbortController} from "@shared/lib";
 import useCloseLeftSidebar from "./useCloseLeftSidebar";
 import {ListKeys} from "@shared/types";
@@ -11,6 +10,7 @@ import {setSidebarLeft} from "../../model/slice/sidebarSlice";
 import getFilteredMessengersApi from "@widgets/LeftSidebar/api/getFilteredMessengersApi";
 import isChatArray from "../isChatArray";
 import isMessengerArray from "../isMessengerArray";
+import UnifiedMessengerSchema from "@features/MessengerSearch/model/types/UnifiedMessengerSchema";
 
 const useLeftSidebar = () => {
     const [settings, setSettings] = useState(false)
@@ -34,7 +34,7 @@ const useLeftSidebar = () => {
     const {getSignal} = useAbortController()
     const {closeSidebar} = useCloseLeftSidebar()
 
-    const [searchRes, setSearchRes] = useState<IUnifiedMessenger[]>([])
+    const [searchRes, setSearchRes] = useState<UnifiedMessengerSchema[]>([])
     const [active, setActive] = useState<ListKeys>('chat')
 
     const navigateChat = (user_id: string) => {
@@ -53,7 +53,7 @@ const useLeftSidebar = () => {
                 if (searched.status === 200) {
                     const searchedData = searched.data
 
-                    let unifiedMessengers: IUnifiedMessenger[] = []
+                    let unifiedMessengers: UnifiedMessengerSchema[] = []
 
                     if (isChatArray(searchedData)) {
                         unifiedMessengers = searchedData.map(item => ({

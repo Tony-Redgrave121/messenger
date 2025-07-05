@@ -9,7 +9,7 @@ import {useParams} from "react-router-dom";
 import {DefaultButton} from "@shared/ui/Button";
 import {ContactSchema} from "@entities/Contact";
 import {ContactList} from "../../../ContactList";
-import IMessengerSettings from "@features/EditMessenger/model/types/IMessengerSettings";
+import MessengerSettingsSchema from "@features/EditMessenger/model/types/MessengerSettingsSchema";
 import putMessengerModeratorApi from "@features/EditMembers/api/putMessengerModeratorApi";
 
 interface IPopupEditModeratorsProps {
@@ -17,7 +17,7 @@ interface IPopupEditModeratorsProps {
     moderators: ContactSchema[],
     members: ContactSchema[],
     setMembers: Dispatch<SetStateAction<ContactSchema[]>>,
-    setSettings: Dispatch<SetStateAction<IMessengerSettings>>
+    setSettings: Dispatch<SetStateAction<MessengerSettingsSchema>>
 }
 
 const PopupEditMembers: FC<IPopupEditModeratorsProps> = (

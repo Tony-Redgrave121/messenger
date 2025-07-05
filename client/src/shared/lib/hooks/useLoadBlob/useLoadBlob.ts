@@ -1,7 +1,7 @@
 import {useEffect, useState} from "react";
 import {useAbortController} from "../../index";
 
-const SERVER_URL = process.env.REACT_APP_SERVER_URL
+const SERVER_URL = process.env.VITE_SERVER_URL
 
 const useLoadBlob = (imagePath?: string | boolean) => {
     const [load, setLoad] = useState(false)

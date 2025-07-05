@@ -3,7 +3,7 @@ import {useAppSelector} from "@shared/lib";
 import {useParams} from "react-router-dom";
 import {MessageSchema} from "../../index";
 
-const SERVER_DOMAIN_NAME = process.env.REACT_APP_SERVER_DOMAIN_NAME
+const SERVER_DOMAIN_NAME = process.env.VITE_SERVER_DOMAIN_NAME
 
 const useMessageWS = () => {
     const [messagesList, setMessagesList] = useState<MessageSchema[]>([])
