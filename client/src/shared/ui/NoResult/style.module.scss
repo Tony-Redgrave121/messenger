@@ -1,4 +1,4 @@
-@use '../../../app/styles/variables.css' as v;
+@use "../../../app/styles/variables.css" as v;
 
 .NoResultContainer {
   display: flex;
@@ -11,7 +11,8 @@
   line-height: 1.3;
   padding: 8px;
 
-  svg, h1 {
+  svg,
+  h1 {
     color: white;
   }
 

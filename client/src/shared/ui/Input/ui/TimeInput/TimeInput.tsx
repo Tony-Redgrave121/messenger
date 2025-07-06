@@ -1,17 +1,17 @@
-import {Dispatch, FC, RefObject, SetStateAction} from 'react'
-import inputStyle from "../../styles/inputs.module.scss"
-import useTime from "./useTime";
-import {clsx} from "clsx";
+import { Dispatch, FC, RefObject, SetStateAction } from 'react';
+import inputStyle from '../../styles/inputs.module.scss';
+import useTime from './useTime';
+import { clsx } from 'clsx';
 
 interface ITimeInputProps {
-    mediaRef: RefObject<HTMLVideoElement | null>
-    time: number,
-    setTime: Dispatch<SetStateAction<number>>,
-    duration: number
+    mediaRef: RefObject<HTMLVideoElement | null>;
+    time: number;
+    setTime: Dispatch<SetStateAction<number>>;
+    duration: number;
 }
 
-const TimeInput: FC<ITimeInputProps> = ({mediaRef, time, setTime, duration}) => {
-    const {changeMediaTime, inputRef} = useTime(mediaRef, time, setTime, duration)
+const TimeInput: FC<ITimeInputProps> = ({ mediaRef, time, setTime, duration }) => {
+    const { changeMediaTime, inputRef } = useTime(mediaRef, time, setTime, duration);
 
     return (
         <input
@@ -24,7 +24,7 @@ const TimeInput: FC<ITimeInputProps> = ({mediaRef, time, setTime, duration}) => 
             className={clsx(inputStyle.WideInput, inputStyle.Input)}
             ref={inputRef}
         />
-    )
-}
+    );
+};
 
-export default TimeInput
+export default TimeInput;

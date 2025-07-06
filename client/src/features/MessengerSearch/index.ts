@@ -1,1 +1,1 @@
-export {default as MessengerSearch} from './ui/MessengerSearch'
+export { default as MessengerSearch } from './ui/MessengerSearch';

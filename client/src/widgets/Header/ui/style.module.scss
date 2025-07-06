@@ -1,4 +1,4 @@
-@use '../../../app/styles/variables.css' as v;
+@use "../../../app/styles/variables.css" as v;
 
 .ChatHeader {
   position: absolute;
@@ -9,7 +9,7 @@
   justify-content: space-between;
   width: 100%;
   padding: 6.5px 18px;
-  background: #212121FF;
+  background: #212121ff;
   border-right: 1px solid rgb(15, 15, 15);
   border-left: 1px solid rgb(15, 15, 15);
   -webkit-user-select: none;
@@ -17,7 +17,8 @@
   -ms-user-select: none;
   user-select: none;
 
-  .DeskBlock, > span {
+  .DeskBlock,
+  > span {
     display: flex;
     align-items: center;
   }

@@ -1,7 +1,8 @@
-@use '../../../../../app/styles/variables.css' as v;
+@use "../../../../../app/styles/variables.css" as v;
 
 .FileInput {
-  svg, img {
+  svg,
+  img {
     color: white;
     height: 160px;
     width: 160px;

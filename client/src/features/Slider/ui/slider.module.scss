@@ -1,4 +1,4 @@
-@use '../../../app/styles/variables.css' as v;
+@use "../../../app/styles/variables.css" as v;
 
 .SliderContainer {
   position: fixed;
@@ -23,8 +23,8 @@
     > a {
       display: flex;
       gap: 16px;
-      opacity: .5;
-      transition: .2s opacity ease-in-out;
+      opacity: 0.5;
+      transition: 0.2s opacity ease-in-out;
 
       .OwnerInfo {
         color: white;
@@ -65,7 +65,8 @@
     }
   }
 
-  .LeftArrow, .RightArrow {
+  .LeftArrow,
+  .RightArrow {
     position: absolute;
     display: flex;
     top: 50%;
@@ -107,7 +108,7 @@
       position: relative;
       display: flex;
       width: 100%;
-      transition: .3s left ease-in-out;
+      transition: 0.3s left ease-in-out;
 
       .ImageBlock {
         display: flex;

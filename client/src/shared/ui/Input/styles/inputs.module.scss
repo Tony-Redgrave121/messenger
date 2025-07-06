@@ -1,4 +1,4 @@
-@use '../../../../app/styles/variables.css' as v;
+@use "../../../../app/styles/variables.css" as v;
 
 .Input {
   cursor: pointer;
@@ -90,7 +90,9 @@
     border: none;
   }
 
-  &::-webkit-slider-runnable-track, &::-moz-range-track, &::-ms-track {
+  &::-webkit-slider-runnable-track,
+  &::-moz-range-track,
+  &::-ms-track {
     height: 3px;
     background-color: #a8a8a8;
     border-radius: 5px;

@@ -1,11 +1,9 @@
-import {ContactSchema} from "@entities/Contact";
-import AdaptMessengerSchema from "@entities/Messenger/model/types/AdaptMessengerSchema";
-import MessengerSchema from "@entities/Messenger/model/types/MessengerSchema";
+import { ContactSchema } from '@entities/Contact';
+import AdaptMessengerSchema from '@entities/Messenger/model/types/AdaptMessengerSchema';
+import MessengerSchema from '@entities/Messenger/model/types/MessengerSchema';
 
-const mapMessengerDTO = (
-    messengerData: MessengerSchema | ContactSchema
-): AdaptMessengerSchema => {
-    if ("user_id" in messengerData) {
+const mapMessengerDTO = (messengerData: MessengerSchema | ContactSchema): AdaptMessengerSchema => {
+    if ('user_id' in messengerData) {
         return {
             id: messengerData.user_id,
             name: messengerData.user_name,
@@ -13,7 +11,7 @@ const mapMessengerDTO = (
             desc: messengerData.user_bio,
             type: 'chat',
             last_seen: messengerData.user_last_seen,
-        }
+        };
     } else {
         return {
             id: messengerData.messenger_id,
@@ -23,8 +21,8 @@ const mapMessengerDTO = (
             type: messengerData.messenger_type,
             members: messengerData.user_member,
             members_count: messengerData.members_count,
-        }
+        };
     }
-}
+};
 
 export default mapMessengerDTO;

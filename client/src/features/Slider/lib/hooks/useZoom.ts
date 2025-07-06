@@ -1,67 +1,77 @@
-import {useEffect, useRef, useState} from "react";
+import { useEffect, useRef, useState } from 'react';
 
 const useZoom = () => {
-    const [zoomSize, setZoomSize] = useState(100)
-    const refZoom = useRef<HTMLImageElement | null>(null)
+    const [zoomSize, setZoomSize] = useState(100);
+    const refZoom = useRef<HTMLImageElement | null>(null);
 
     useEffect(() => {
-        const img = refZoom.current
-        if (!img) return
+        const img = refZoom.current;
+        if (!img) return;
 
-        const {width, height} = img.getBoundingClientRect()
-        const clientWidth = window.innerWidth, clientHeight = window.innerHeight
+        const { width, height } = img.getBoundingClientRect();
+        const clientWidth = window.innerWidth,
+            clientHeight = window.innerHeight;
 
         if (width > clientWidth || height > clientHeight)
-            img.addEventListener('mousedown', draggableImage)
+            img.addEventListener('mousedown', draggableImage);
         else {
-            img.style.left = '0'
-            img.style.top = '0'
-            img.removeEventListener('mousedown', draggableImage)
+            img.style.left = '0';
+            img.style.top = '0';
+            img.removeEventListener('mousedown', draggableImage);
         }
 
-        return () => img.removeEventListener('mousedown', draggableImage)
-    }, [zoomSize])
+        return () => img.removeEventListener('mousedown', draggableImage);
+    }, [zoomSize]);
 
     const draggableImage = (event: MouseEvent) => {
-        if (!refZoom.current) return
-        const img = refZoom.current
-        const imgRect = img.getBoundingClientRect()
-        const screenWidth = window.innerWidth, screenHeight = window.innerHeight
-        const restWidth = imgRect.width - screenWidth, restHeight = imgRect.height - screenHeight
+        if (!refZoom.current) return;
+        const img = refZoom.current;
+        const imgRect = img.getBoundingClientRect();
+        const screenWidth = window.innerWidth,
+            screenHeight = window.innerHeight;
+        const restWidth = imgRect.width - screenWidth,
+            restHeight = imgRect.height - screenHeight;
 
-        let startX = event.clientX
-        let startY = event.clientY
-        let offsetX = imgRect.left
-        let offsetY = imgRect.top
+        let startX = event.clientX;
+        let startY = event.clientY;
+        let offsetX = imgRect.left;
+        let offsetY = imgRect.top;
 
         const handlerDrag = (event: MouseEvent) => {
-            const dx = event.clientX - startX, dy = event.clientY - startY
-            const left = offsetX + dx, top = offsetY + dy
-            const halfWidth = restWidth / 2, halfHeight = restHeight / 2
+            const dx = event.clientX - startX,
+                dy = event.clientY - startY;
+            const left = offsetX + dx,
+                top = offsetY + dy;
+            const halfWidth = restWidth / 2,
+                halfHeight = restHeight / 2;
 
-            if (restWidth >= 0 && left >= -halfWidth && left <= halfWidth) img.style.left = left + "px"
-            if (restHeight >= 0 && top >= -halfHeight && top <= halfHeight) img.style.top = top + "px"
-        }
+            if (restWidth >= 0 && left >= -halfWidth && left <= halfWidth)
+                img.style.left = left + 'px';
+            if (restHeight >= 0 && top >= -halfHeight && top <= halfHeight)
+                img.style.top = top + 'px';
+        };
 
         const stopDrag = () => {
-            img.removeEventListener('mousemove', handlerDrag)
-            img.removeEventListener('mouseup', stopDrag)
-        }
+            img.removeEventListener('mousemove', handlerDrag);
+            img.removeEventListener('mouseup', stopDrag);
+        };
 
-        img.addEventListener('mousemove', handlerDrag)
-        img.addEventListener('mouseup', stopDrag)
+        img.addEventListener('mousemove', handlerDrag);
+        img.addEventListener('mouseup', stopDrag);
 
         return () => {
-            refZoom.current!.addEventListener('mousemove', handlerDrag)
-            refZoom.current!.addEventListener('mouseup', () => refZoom.current!.removeEventListener('mousemove', (event) => handlerDrag(event)))
-        }
-    }
+            refZoom.current!.addEventListener('mousemove', handlerDrag);
+            refZoom.current!.addEventListener('mouseup', () =>
+                refZoom.current!.removeEventListener('mousemove', event => handlerDrag(event)),
+            );
+        };
+    };
 
     return {
         setZoomSize,
         zoomSize,
-        refZoom
-    }
-}
+        refZoom,
+    };
+};
 
-export default useZoom
+export default useZoom;

@@ -1,24 +1,22 @@
-import {createSlice, PayloadAction} from "@reduxjs/toolkit"
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 interface IWrapperState {
-    wrapperState: boolean,
+    wrapperState: boolean;
 }
 
 const initialState: IWrapperState = {
     wrapperState: true,
-}
+};
 
 const wrapperSlice = createSlice({
-    name: "wrapper",
+    name: 'wrapper',
     initialState,
     reducers: {
         setWrapperState(state, action: PayloadAction<boolean>) {
-            state.wrapperState = action.payload
-        }
-    }
-})
+            state.wrapperState = action.payload;
+        },
+    },
+});
 
-export default wrapperSlice.reducer
-export const {
-    setWrapperState
-} = wrapperSlice.actions
+export default wrapperSlice.reducer;
+export const { setWrapperState } = wrapperSlice.actions;

@@ -1,11 +1,11 @@
-export {default as ContactButton} from "./ui/ContactButton/ContactButton"
-export {default as CreateButton} from "./ui/CreateButton/CreateButton"
-export {default as DefaultButton} from "./ui/DefaultButton/DefaultButton"
-export {default as FormButton} from "./ui/FormButton/FormButton"
-export {default as InterButton} from "./ui/InterButton/InterButton"
-export {default as PlayButton} from "./ui/PlayButton/PlayButton"
-export {default as SettingButton} from "./ui/SettingButton/SettingButton"
-export {default as SwitchButton} from "./ui/SwitchButton/SwitchButton"
-export {default as SwitchSettingButton} from "./ui/SwitchSettingButton/SwitchSettingButton"
-export {default as VolumeButton} from "./ui/VolumeButton/VolumeButton"
-export {default as WhiteButton} from "./ui/WhiteButton/WhiteButton"
+export { default as ContactButton } from './ui/ContactButton/ContactButton';
+export { default as CreateButton } from './ui/CreateButton/CreateButton';
+export { default as DefaultButton } from './ui/DefaultButton/DefaultButton';
+export { default as FormButton } from './ui/FormButton/FormButton';
+export { default as InterButton } from './ui/InterButton/InterButton';
+export { default as PlayButton } from './ui/PlayButton/PlayButton';
+export { default as SettingButton } from './ui/SettingButton/SettingButton';
+export { default as SwitchButton } from './ui/SwitchButton/SwitchButton';
+export { default as SwitchSettingButton } from './ui/SwitchSettingButton/SwitchSettingButton';
+export { default as VolumeButton } from './ui/VolumeButton/VolumeButton';
+export { default as WhiteButton } from './ui/WhiteButton/WhiteButton';

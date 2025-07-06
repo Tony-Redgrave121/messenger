@@ -1,7 +1,7 @@
-import FileObjectSchema from "./FileObjectSchema"
+import FileObjectSchema from './FileObjectSchema';
 
 export default interface FileStateSchema {
-    files: FileObjectSchema[] | null,
-    popup: boolean,
-    type: string
+    files: FileObjectSchema[] | null;
+    popup: boolean;
+    type: string;
 }

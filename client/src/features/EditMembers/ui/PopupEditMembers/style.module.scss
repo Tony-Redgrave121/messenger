@@ -1,7 +1,9 @@
-@use '../../../../app/styles/variables.css' as v;
+@use "../../../../app/styles/variables.css" as v;
 
 .ToolsBlock {
-  &, span, svg {
+  &,
+  span,
+  svg {
     display: flex;
     align-items: center;
   }

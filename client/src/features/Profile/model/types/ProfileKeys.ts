@@ -1,3 +1,3 @@
-type ProfileKeys = 'profile' | 'password'
+type ProfileKeys = 'profile' | 'password';
 
-export default ProfileKeys
+export default ProfileKeys;

@@ -1,0 +1,19 @@
+# IDE
+.idea
+
+# Node
+node_modules
+
+# Backend
+server
+
+# Static
+**/*.css
+**/*.scss
+**/*.map
+**/*.min.js
+**/*.min.css
+
+# Buid
+dist
+build

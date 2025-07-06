@@ -1,4 +1,4 @@
-@use '../../../app/styles/variables.css' as v;
+@use "../../../app/styles/variables.css" as v;
 
 .SearchBar {
   position: absolute;
@@ -11,22 +11,23 @@
 
   .SearchTopBar {
     display: flex;
-    background-color: #212121FF;
+    background-color: #212121ff;
   }
 
   .SearchList {
-    background-color: #212121FF;
+    background-color: #212121ff;
     border: 1px solid #2f2f2f;
     border-radius: 16px;
     padding: 8px;
-    transition: .3s all ease-in-out;
+    transition: 0.3s all ease-in-out;
 
     .SearchedMessage {
       justify-content: space-between;
       padding: 8px 12px;
       width: calc(100% - 24px);
 
-      &, .MessageInfo {
+      &,
+      .MessageInfo {
         display: flex;
       }
 
@@ -37,7 +38,7 @@
         color: white;
         overflow: hidden;
 
-        & >:first-child {
+        & > :first-child {
           width: 42px;
           height: 42px;
         }
@@ -46,11 +47,11 @@
           line-height: 1.4;
           width: calc(100% - 58px);
 
-          & >:first-child {
+          & > :first-child {
             font-weight: 600;
           }
 
-          & >:last-child {
+          & > :last-child {
             color: #aaaaaa;
             font-size: 14px;
             white-space: nowrap;

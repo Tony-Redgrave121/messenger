@@ -1,4 +1,4 @@
-@use '../../../../../app/styles/variables.css' as v;
+@use "../../../../../app/styles/variables.css" as v;
 
 .FormButton {
   width: 100%;
@@ -6,7 +6,7 @@
   padding: 15px 0;
   text-align: center;
   border-radius: 10px;
-  transition: .2s background-color ease-in-out;
+  transition: 0.2s background-color ease-in-out;
   font-weight: 600;
   margin-top: 10px;
 

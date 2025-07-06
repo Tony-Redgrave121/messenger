@@ -1,15 +1,15 @@
 .wrapper-node-enter {
-    opacity: 0;
+  opacity: 0;
 }
 .wrapper-node-enter-active {
-    opacity: 1;
-    transition: opacity .2s ease-in-out;
+  opacity: 1;
+  transition: opacity 0.2s ease-in-out;
 }
 
 .wrapper-node-exit {
-    opacity: 1;
+  opacity: 1;
 }
 .wrapper-node-exit-active {
-    opacity: 0;
-    transition: opacity .2s ease-in-out;
+  opacity: 0;
+  transition: opacity 0.2s ease-in-out;
 }

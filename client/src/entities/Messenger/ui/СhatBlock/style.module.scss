@@ -1,11 +1,11 @@
-@use '../../../../app/styles/variables.css' as v;
+@use "../../../../app/styles/variables.css" as v;
 
 .ChatContainer {
   display: flex;
   color: white;
   padding: 8px;
   border-radius: 12px;
-  transition: .2s background-color ease-in-out;
+  transition: 0.2s background-color ease-in-out;
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
@@ -23,7 +23,8 @@
       color: #a9a9a9;
     }
 
-    .MessengerInfo, .MessageInfo {
+    .MessengerInfo,
+    .MessageInfo {
       display: flex;
       justify-content: space-between;
     }

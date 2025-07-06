@@ -1,14 +1,14 @@
-import {Dispatch, SetStateAction} from "react";
-import {ToggleState} from "../../types";
+import { Dispatch, SetStateAction } from 'react';
+import { ToggleState } from '../../types';
 
 const closeForm = <T extends string>(
     key: string,
-    setFormsState: Dispatch<SetStateAction<ToggleState<T>>>
+    setFormsState: Dispatch<SetStateAction<ToggleState<T>>>,
 ) => {
-    setFormsState((prev) => ({
+    setFormsState(prev => ({
         ...prev,
-        [key]: false
-    }))
-}
+        [key]: false,
+    }));
+};
 
-export default closeForm
+export default closeForm;

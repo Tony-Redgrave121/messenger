@@ -1,62 +1,57 @@
-import React, {Dispatch, FC, SetStateAction, useState} from 'react'
-import style from "../AuthForm/auth-form.module.css"
-import AuthFormSchema from "../../model/types/AuthFormSchema";
-import AuthStepSchema from "../../model/types/AuthStepSchema";
-import {SubmitHandler} from "react-hook-form";
-import {registration} from "@entities/User/lib/thunk/userThunk";
-import {useNavigate} from "react-router-dom";
-import {useAppDispatch} from "@shared/lib";
-import {Control, UseFormHandleSubmit} from "react-hook-form";
-import {FormButton} from "@shared/ui/Button";
-import {FileInput, FormInput} from "@shared/ui/Input";
+import React, { Dispatch, FC, SetStateAction, useState } from 'react';
+import style from '../AuthForm/auth-form.module.css';
+import AuthFormSchema from '../../model/types/AuthFormSchema';
+import AuthStepSchema from '../../model/types/AuthStepSchema';
+import { SubmitHandler } from 'react-hook-form';
+import { registration } from '@entities/User/lib/thunk/userThunk';
+import { useNavigate } from 'react-router-dom';
+import { useAppDispatch } from '@shared/lib';
+import { Control, UseFormHandleSubmit } from 'react-hook-form';
+import { FormButton } from '@shared/ui/Button';
+import { FileInput, FormInput } from '@shared/ui/Input';
 
 interface IStep4Props extends AuthStepSchema {
-    handleSubmit: UseFormHandleSubmit<AuthFormSchema>,
-    control: Control<AuthFormSchema>,
-    setErrorForm: Dispatch<SetStateAction<string | null>>,
+    handleSubmit: UseFormHandleSubmit<AuthFormSchema>;
+    control: Control<AuthFormSchema>;
+    setErrorForm: Dispatch<SetStateAction<string | null>>;
 }
 
-const Step4: FC<IStep4Props> = (
-    {
-        errors,
-        register,
-        handlePrev,
-        handleSubmit,
-        control,
-        setErrorForm
-    }
-) => {
-    const [picture, setPicture] = useState<File | null>(null)
-    const navigate = useNavigate()
-    const dispatch = useAppDispatch()
+const Step4: FC<IStep4Props> = ({
+    errors,
+    register,
+    handlePrev,
+    handleSubmit,
+    control,
+    setErrorForm,
+}) => {
+    const [picture, setPicture] = useState<File | null>(null);
+    const navigate = useNavigate();
+    const dispatch = useAppDispatch();
 
-    const handleImageChange = (
-        file: FileList | null,
-        onChange: (value: File) => void
-    ) => {
+    const handleImageChange = (file: FileList | null, onChange: (value: File) => void) => {
         if (file) {
-            setPicture(file[0])
-            onChange(file[0])
+            setPicture(file[0]);
+            onChange(file[0]);
         }
-    }
+    };
 
-    const handleRegistration: SubmitHandler<AuthFormSchema> = async (data) => {
+    const handleRegistration: SubmitHandler<AuthFormSchema> = async data => {
         try {
-            const formData = new FormData()
+            const formData = new FormData();
 
-            formData.append('user_img', data.user_image as File)
-            formData.append('user_name', data.user_name)
-            formData.append('user_email', data.user_email)
-            formData.append('user_password', data.user_password)
-            formData.append('user_bio', data.user_bio)
+            formData.append('user_img', data.user_image as File);
+            formData.append('user_name', data.user_name);
+            formData.append('user_email', data.user_email);
+            formData.append('user_password', data.user_password);
+            formData.append('user_bio', data.user_bio);
 
-            await dispatch(registration({formData: formData}))
+            await dispatch(registration({ formData: formData }));
 
-            return navigate('/')
+            return navigate('/');
         } catch (e) {
-            console.log(e)
+            console.log(e);
         }
-    }
+    };
 
     return (
         <>
@@ -76,7 +71,7 @@ const Step4: FC<IStep4Props> = (
                     id="user_name"
                     placeholder="Name"
                     {...register('user_name', {
-                        required: 'User name is required'
+                        required: 'User name is required',
                     })}
                 />
             </FormInput>
@@ -84,15 +79,17 @@ const Step4: FC<IStep4Props> = (
                 <textarea rows={4} placeholder="Bio" {...register('user_bio')}></textarea>
             </FormInput>
             <div className={style.ButtonBlock}>
-                <FormButton foo={(event) => {
-                    handlePrev!(event!, 2)
-                }}>
+                <FormButton
+                    foo={event => {
+                        handlePrev!(event!, 2);
+                    }}
+                >
                     PREV
                 </FormButton>
                 <FormButton foo={handleSubmit(handleRegistration)}>REGISTER</FormButton>
             </div>
         </>
-    )
-}
+    );
+};
 
-export default Step4
+export default Step4;

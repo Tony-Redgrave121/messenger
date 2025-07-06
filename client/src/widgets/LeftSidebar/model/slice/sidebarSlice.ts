@@ -1,24 +1,22 @@
-import {createSlice, PayloadAction} from "@reduxjs/toolkit"
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 interface ISidebarState {
-    sidebarLeft: boolean,
+    sidebarLeft: boolean;
 }
 
 const initialState: ISidebarState = {
     sidebarLeft: true,
-}
+};
 
 const appSlice = createSlice({
-    name: "sidebar",
+    name: 'sidebar',
     initialState,
     reducers: {
         setSidebarLeft(state, action: PayloadAction<boolean>) {
-            state.sidebarLeft = action.payload
-        }
-    }
-})
+            state.sidebarLeft = action.payload;
+        },
+    },
+});
 
-export default appSlice.reducer
-export const {
-    setSidebarLeft
-} = appSlice.actions
+export default appSlice.reducer;
+export const { setSidebarLeft } = appSlice.actions;

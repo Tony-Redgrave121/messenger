@@ -1,16 +1,16 @@
-import {useAppDispatch} from "@shared/lib";
-import {setSidebarLeft} from "../../model/slice/sidebarSlice";
+import { useAppDispatch } from '@shared/lib';
+import { setSidebarLeft } from '../../model/slice/sidebarSlice';
 
 const useCloseLeftSidebar = () => {
-    const dispatch = useAppDispatch()
+    const dispatch = useAppDispatch();
 
-    const closeSidebar = ()=> {
-        if (window.innerWidth <= 940) dispatch(setSidebarLeft(false))
-    }
+    const closeSidebar = () => {
+        if (window.innerWidth <= 940) dispatch(setSidebarLeft(false));
+    };
 
     return {
-        closeSidebar
-    }
-}
+        closeSidebar,
+    };
+};
 
-export default useCloseLeftSidebar
+export default useCloseLeftSidebar;

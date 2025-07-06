@@ -1,7 +1,8 @@
-@use '../../../app/styles/variables.css' as v;
+@use "../../../app/styles/variables.css" as v;
 
 .ContactsContainer {
-  &, .NoResultContainer {
+  &,
+  .NoResultContainer {
     display: flex;
     flex-direction: column;
   }
@@ -17,7 +18,7 @@
     display: flex;
     flex-wrap: wrap;
     gap: 8px;
-    
+
     .RemoveMemberButton {
       display: flex;
       align-items: center;
@@ -35,7 +36,8 @@
         font-weight: 500;
       }
 
-      img, div {
+      img,
+      div {
         width: 32px;
         height: 32px;
 

@@ -1,3 +1,3 @@
-type ToggleState<T extends string> = Record<T, boolean>
+type ToggleState<T extends string> = Record<T, boolean>;
 
-export default ToggleState
+export default ToggleState;

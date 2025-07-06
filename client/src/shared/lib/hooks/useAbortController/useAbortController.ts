@@ -1,21 +1,21 @@
-import {useEffect, useRef} from 'react'
+import { useEffect, useRef } from 'react';
 
 const useAbortController = () => {
-    const controllerRef = useRef<AbortController | null>(null)
+    const controllerRef = useRef<AbortController | null>(null);
 
     const getSignal = () => {
-        controllerRef.current?.abort()
-        controllerRef.current = new AbortController()
-        return controllerRef.current.signal
-    }
+        controllerRef.current?.abort();
+        controllerRef.current = new AbortController();
+        return controllerRef.current.signal;
+    };
 
     useEffect(() => {
-        return () => controllerRef.current?.abort()
-    }, [])
+        return () => controllerRef.current?.abort();
+    }, []);
 
     return {
-        getSignal
-    }
-}
+        getSignal,
+    };
+};
 
-export default useAbortController
+export default useAbortController;

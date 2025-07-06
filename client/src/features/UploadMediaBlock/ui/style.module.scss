@@ -1,15 +1,16 @@
-@use '../../../app/styles/variables.css' as v;
+@use "../../../app/styles/variables.css" as v;
 
 .MediaBlock {
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
 
-  >:first-child img {
+  > :first-child img {
     border-radius: 7.5px 7.5px 0 0;
   }
 
-  img, section {
+  img,
+  section {
     border: 2px solid #212121;
     height: auto;
     object-fit: cover;

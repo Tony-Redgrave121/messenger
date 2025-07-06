@@ -1,1 +1,1 @@
-export {default as InputBlock} from "./ui/InputBlock/InputBlock"
+export { default as InputBlock } from './ui/InputBlock/InputBlock';

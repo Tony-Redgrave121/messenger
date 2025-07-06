@@ -1,4 +1,4 @@
-@use '../../../../../app/styles/variables.css' as v;
+@use "../../../../../app/styles/variables.css" as v;
 
 .InterButton {
   position: relative;
@@ -6,7 +6,7 @@
   border-radius: 100%;
   background-color: #303030;
   height: fit-content;
-  transition: .2s background-color ease-in-out;
+  transition: 0.2s background-color ease-in-out;
 
   &:hover {
     background-color: #212121;

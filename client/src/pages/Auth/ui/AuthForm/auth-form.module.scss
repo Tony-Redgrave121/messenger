@@ -1,4 +1,4 @@
-@use '../../../../app/styles/variables.css' as v;
+@use "../../../../app/styles/variables.css" as v;
 
 .AuthContainer {
   position: relative;
@@ -11,7 +11,8 @@
   .AuthForm {
     width: 100%;
 
-    &, > div {
+    &,
+    > div {
       display: flex;
       justify-content: center;
       align-items: center;

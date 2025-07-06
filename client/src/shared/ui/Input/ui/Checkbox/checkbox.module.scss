@@ -23,14 +23,14 @@
     }
 
     &:before {
-      content: '';
+      content: "";
       display: inline-block;
       transform: rotate(45deg);
       height: 8px;
       width: 4px;
       margin: 0 0 1.2px 5px;
-      border-bottom: 2.5px solid #212121FF;
-      border-right: 2.5px solid #212121FF;
+      border-bottom: 2.5px solid #212121ff;
+      border-right: 2.5px solid #212121ff;
     }
   }
 }

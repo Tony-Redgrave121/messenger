@@ -1,4 +1,4 @@
-@use '../../../app/styles/variables.css' as v;
+@use "../../../app/styles/variables.css" as v;
 
 .SearchListContainer {
   position: absolute;
@@ -22,14 +22,14 @@
         padding: 14px;
         border-radius: 8px 8px 0 0;
         text-transform: capitalize;
-        transition: .2s color ease-in-out;
+        transition: 0.2s color ease-in-out;
 
         &:hover {
           background-color: #2d2d2d;
         }
 
         &:after {
-          content: '';
+          content: "";
           position: absolute;
           bottom: 0;
           left: 14px;
@@ -38,7 +38,7 @@
           height: 3px;
           border-radius: 8px 8px 0 0;
           background-color: rgba(255, 255, 255, 0);
-          transition: .2s background-color ease-in-out;
+          transition: 0.2s background-color ease-in-out;
         }
       }
 

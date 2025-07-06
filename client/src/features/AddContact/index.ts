@@ -1,1 +1,1 @@
-export {default as AddContact} from './ui/AddContact'
+export { default as AddContact } from './ui/AddContact';

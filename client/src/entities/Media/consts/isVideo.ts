@@ -1,5 +1,3 @@
-const IS_VIDEO = ['mp4', 'webm']
+const IS_VIDEO = ['mp4', 'webm'];
 
-export {
-    IS_VIDEO,
-}
+export { IS_VIDEO };

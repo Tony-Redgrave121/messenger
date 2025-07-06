@@ -1,29 +1,29 @@
-import {lazy, Suspense} from 'react'
-import {Outlet} from "react-router-dom";
-import style from './style.module.css'
-import {Slider} from "@features/Slider";
-import {LeftSidebar} from "@widgets/LeftSidebar";
+import { lazy, Suspense } from 'react';
+import { Outlet } from 'react-router-dom';
+import style from './style.module.css';
+import { Slider } from '@features/Slider';
+import { LeftSidebar } from '@widgets/LeftSidebar';
 
-const MainContainer = lazy(() => import("@widgets/Main/ui/Main"))
-const PopupMessage = lazy(() => import("@features/PopupMessage/ui/PopupMessage"))
+const MainContainer = lazy(() => import('@widgets/Main/ui/Main'));
+const PopupMessage = lazy(() => import('@features/PopupMessage/ui/PopupMessage'));
 
 const Layout = () => {
     return (
         <div className={style.LayoutContainer}>
             <div className={style.Layout}>
-                <LeftSidebar/>
+                <LeftSidebar />
                 <Suspense>
                     <MainContainer>
-                        <Outlet/>
+                        <Outlet />
                     </MainContainer>
                 </Suspense>
             </div>
             <Suspense>
-                <PopupMessage/>
-                <Slider/>
+                <PopupMessage />
+                <Slider />
             </Suspense>
         </div>
-    )
-}
+    );
+};
 
-export default Layout
+export default Layout;

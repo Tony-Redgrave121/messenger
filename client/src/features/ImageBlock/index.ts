@@ -1,1 +1,1 @@
-export {default as ImageBlock} from "./ui/ImageBlock"
+export { default as ImageBlock } from './ui/ImageBlock';

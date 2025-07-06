@@ -1,1 +1,1 @@
-export {default as LoadFile} from "./ui/LoadFile"
+export { default as LoadFile } from './ui/LoadFile';

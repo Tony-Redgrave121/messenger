@@ -5,7 +5,7 @@
   cursor: pointer;
   padding: 8px 16px;
   border-radius: 10px;
-  transition: .2s background-color ease-in-out;
+  transition: 0.2s background-color ease-in-out;
   line-height: 1.5;
   color: white;
 
@@ -18,7 +18,7 @@
     min-width: 18px;
     border: 2px solid #8c959b;
     border-radius: 50%;
-    transition: background-color .2s ease-in-out;
+    transition: background-color 0.2s ease-in-out;
     box-shadow: 0 0 0 3px rgb(33, 33, 33) inset;
 
     &:checked {

@@ -1,24 +1,18 @@
-import {FC, RefObject} from 'react'
-import inputStyle from "@shared/ui/Input/styles/inputs.module.css"
-import volumeInputStyle from "./volume-input.module.css"
-import {CSSTransition} from "react-transition-group";
-import './volume-input.animation.css'
-import useVolume from "./useVolume";
-import {VolumeButton} from "@shared/ui/Button";
+import { FC, RefObject } from 'react';
+import inputStyle from '@shared/ui/Input/styles/inputs.module.css';
+import volumeInputStyle from './volume-input.module.css';
+import { CSSTransition } from 'react-transition-group';
+import './volume-input.animation.css';
+import useVolume from './useVolume';
+import { VolumeButton } from '@shared/ui/Button';
 
 interface IVolumeInputProps {
-    mediaRef: RefObject<HTMLVideoElement | null>
+    mediaRef: RefObject<HTMLVideoElement | null>;
 }
 
-const VolumeInput: FC<IVolumeInputProps> = ({mediaRef}) => {
-    const {
-        isEnter,
-        setIsEnter,
-        handleVolume,
-        handleOnChange,
-        inputRef,
-        volume
-    } = useVolume(mediaRef)
+const VolumeInput: FC<IVolumeInputProps> = ({ mediaRef }) => {
+    const { isEnter, setIsEnter, handleVolume, handleOnChange, inputRef, volume } =
+        useVolume(mediaRef);
 
     return (
         <span
@@ -26,10 +20,10 @@ const VolumeInput: FC<IVolumeInputProps> = ({mediaRef}) => {
             onMouseEnter={() => setIsEnter(true)}
             onMouseLeave={() => setIsEnter(false)}
         >
-            <VolumeButton handleVolume={handleVolume}/>
+            <VolumeButton handleVolume={handleVolume} />
             <CSSTransition
                 timeout={300}
-                classNames='volume-input-node'
+                classNames="volume-input-node"
                 nodeRef={inputRef}
                 in={isEnter}
                 unmountOnExit
@@ -45,7 +39,7 @@ const VolumeInput: FC<IVolumeInputProps> = ({mediaRef}) => {
                 />
             </CSSTransition>
         </span>
-    )
-}
+    );
+};
 
-export default VolumeInput
+export default VolumeInput;

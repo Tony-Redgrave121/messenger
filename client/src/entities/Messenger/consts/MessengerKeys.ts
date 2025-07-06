@@ -1,5 +1,3 @@
-const NOTIFICATIONS_KEY = 'messengersNotifications'
+const NOTIFICATIONS_KEY = 'messengersNotifications';
 
-export {
-    NOTIFICATIONS_KEY
-}
+export { NOTIFICATIONS_KEY };

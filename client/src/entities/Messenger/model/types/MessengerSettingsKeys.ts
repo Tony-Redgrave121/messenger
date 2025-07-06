@@ -1,3 +1,8 @@
-type MessengerSettingsKeys = 'reactions' | 'channelType' | 'moderators' | 'subscribers' | 'removedUsers'
+type MessengerSettingsKeys =
+    | 'reactions'
+    | 'channelType'
+    | 'moderators'
+    | 'subscribers'
+    | 'removedUsers';
 
-export default MessengerSettingsKeys
+export default MessengerSettingsKeys;

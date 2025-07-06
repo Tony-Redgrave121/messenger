@@ -1,59 +1,51 @@
-import {FC, memo, useState} from 'react'
-import style from './style.module.css'
-import {
-    HiOutlineMagnifyingGlass,
-    HiOutlineXMark,
-    HiOutlineArrowLeft
-} from "react-icons/hi2"
-import {DefaultButton} from "@shared/ui/Button"
-import SearchMessage from "@features/SearchMessage/ui/SearchMessage";
-import {useNavigate} from "react-router-dom";
-import {setWrapperState} from "../../Main/model/slice/wrapperSlice";
-import {useAppDispatch} from "@shared/lib";
-import AdaptMessengerSchema from "@entities/Messenger/model/types/AdaptMessengerSchema";
+import { FC, memo, useState } from 'react';
+import style from './style.module.css';
+import { HiOutlineMagnifyingGlass, HiOutlineXMark, HiOutlineArrowLeft } from 'react-icons/hi2';
+import { DefaultButton } from '@shared/ui/Button';
+import SearchMessage from '@features/SearchMessage/ui/SearchMessage';
+import { useNavigate } from 'react-router-dom';
+import { setWrapperState } from '../../Main/model/slice/wrapperSlice';
+import { useAppDispatch } from '@shared/lib';
+import AdaptMessengerSchema from '@entities/Messenger/model/types/AdaptMessengerSchema';
 
 interface ICommentsHeader {
-    commentsCount?: number,
-    messenger: AdaptMessengerSchema
+    commentsCount?: number;
+    messenger: AdaptMessengerSchema;
 }
 
-const ChannelPostHeader: FC<ICommentsHeader> = memo(({commentsCount, messenger}) => {
-    const [inputState, setInputState] = useState(false)
-    const navigate = useNavigate()
-    const dispatch = useAppDispatch()
+const ChannelPostHeader: FC<ICommentsHeader> = memo(({ commentsCount, messenger }) => {
+    const [inputState, setInputState] = useState(false);
+    const navigate = useNavigate();
+    const dispatch = useAppDispatch();
 
     const handleClose = () => {
-        let timer: NodeJS.Timeout | null
-        dispatch(setWrapperState(false))
+        let timer: NodeJS.Timeout | null;
+        dispatch(setWrapperState(false));
 
         timer = setTimeout(() => {
-            navigate(`/channel/${messenger.id}`)
-            dispatch(setWrapperState(true))
-        }, 300)
+            navigate(`/channel/${messenger.id}`);
+            dispatch(setWrapperState(true));
+        }, 300);
 
         return () => {
-            timer && clearTimeout(timer)
-        }
-    }
+            timer && clearTimeout(timer);
+        };
+    };
 
     return (
         <header className={style.ChatHeader}>
             <DefaultButton foo={handleClose}>
-                <HiOutlineArrowLeft/>
+                <HiOutlineArrowLeft />
             </DefaultButton>
             <p>{commentsCount} Comments</p>
-            <SearchMessage
-                messenger={messenger}
-                state={inputState}
-                setState={setInputState}
-            />
+            <SearchMessage messenger={messenger} state={inputState} setState={setInputState} />
             <span>
                 <DefaultButton foo={() => setInputState(!inputState)}>
-                    {inputState ? <HiOutlineXMark/> : <HiOutlineMagnifyingGlass/>}
+                    {inputState ? <HiOutlineXMark /> : <HiOutlineMagnifyingGlass />}
                 </DefaultButton>
             </span>
         </header>
-    )
-})
+    );
+});
 
-export default ChannelPostHeader
+export default ChannelPostHeader;

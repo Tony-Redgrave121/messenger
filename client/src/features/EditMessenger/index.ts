@@ -1,1 +1,1 @@
-export {default as EditMessenger} from './ui/EditMessenger'
+export { default as EditMessenger } from './ui/EditMessenger';

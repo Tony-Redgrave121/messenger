@@ -1,23 +1,17 @@
-import React, {FC, memo} from 'react';
-import {LoadFile} from "@shared/ui/LoadFile";
-import style from './style.module.css'
-import {Link} from "react-router-dom";
-import {getDate, useAppSelector} from "@shared/lib";
-import ChatBlockSchema from "../../model/types/ChatBlockSchema";
+import React, { FC, memo } from 'react';
+import { LoadFile } from '@shared/ui/LoadFile';
+import style from './style.module.css';
+import { Link } from 'react-router-dom';
+import { getDate, useAppSelector } from '@shared/lib';
+import ChatBlockSchema from '../../model/types/ChatBlockSchema';
 
 interface IChatBlockProps {
-    messenger: ChatBlockSchema,
-    onClick?: () => void
+    messenger: ChatBlockSchema;
+    onClick?: () => void;
 }
 
-const ChatBlock: FC<IChatBlockProps> = memo(({messenger, onClick}) => {
-    const {
-        messenger_id,
-        messenger_name,
-        messenger_image,
-        messenger_type,
-        messages
-    } = messenger;
+const ChatBlock: FC<IChatBlockProps> = memo(({ messenger, onClick }) => {
+    const { messenger_id, messenger_name, messenger_image, messenger_type, messages } = messenger;
 
     const notifications = useAppSelector(state => state.messenger.notifications);
     const notificationCount = notifications?.[messenger_id] ?? 0;
@@ -27,7 +21,7 @@ const ChatBlock: FC<IChatBlockProps> = memo(({messenger, onClick}) => {
     const lastMessageText = lastMessage?.message_text || 'Media';
 
     const imagePath = messenger_image
-        ? `${messenger_type !== "chat" ? "messengers" : "users"}/${messenger_id}/${messenger_image}`
+        ? `${messenger_type !== 'chat' ? 'messengers' : 'users'}/${messenger_id}/${messenger_image}`
         : '';
 
     return (
@@ -36,7 +30,7 @@ const ChatBlock: FC<IChatBlockProps> = memo(({messenger, onClick}) => {
             onClick={onClick}
             className={style.ChatContainer}
         >
-            <LoadFile imagePath={imagePath} imageTitle={messenger_name}/>
+            <LoadFile imagePath={imagePath} imageTitle={messenger_name} />
             <div className={style.DescContainer}>
                 <span className={style.MessengerInfo}>
                     <p>{messenger_name}</p>
@@ -49,6 +43,6 @@ const ChatBlock: FC<IChatBlockProps> = memo(({messenger, onClick}) => {
             </div>
         </Link>
     );
-})
+});
 
-export default ChatBlock
+export default ChatBlock;

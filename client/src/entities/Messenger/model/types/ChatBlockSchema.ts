@@ -1,10 +1,10 @@
 export default interface ChatBlockSchema {
-    messenger_id: string,
-    messenger_name: string,
-    messenger_image?: string,
-    messenger_type: string,
+    messenger_id: string;
+    messenger_name: string;
+    messenger_image?: string;
+    messenger_type: string;
     messages: {
-        message_date: Date,
-        message_text?: string
-    }[]
+        message_date: Date;
+        message_text?: string;
+    }[];
 }

@@ -1,26 +1,29 @@
 .message-scale-node-enter {
-    opacity: 0;
-    transform: scale(0);
+  opacity: 0;
+  transform: scale(0);
 }
 
 .message-scale-node-enter-active {
-    opacity: 1;
-    transform: scale(1);
-    transition: opacity .3s ease-in-out, transform .2s ease-in-out;
+  opacity: 1;
+  transform: scale(1);
+  transition:
+    opacity 0.3s ease-in-out,
+    transform 0.2s ease-in-out;
 }
 
 .message-scale-node-exit {
-    opacity: 1;
+  opacity: 1;
 }
 
 .message-scale-node-exit-active {
-    opacity: 0;
-    transform: scale(0);
-    transition: opacity .3s ease-in-out, transform .2s ease-in-out;
+  opacity: 0;
+  transform: scale(0);
+  transition:
+    opacity 0.3s ease-in-out,
+    transform 0.2s ease-in-out;
 }
 
 .message-scale-node-exit-done {
-    opacity: 0;
-    transform: scale(0);
+  opacity: 0;
+  transform: scale(0);
 }
-

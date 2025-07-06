@@ -1,1 +1,1 @@
-export {default as Player} from "./ui/Player"
+export { default as Player } from './ui/Player';

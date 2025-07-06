@@ -38,3 +38,9 @@ docker-compose.override.yml
 docker-compose*.log
 *.pid
 *.seed.ts
+
+# Styles
+**/*.module.css
+**/*.css
+**/*.css.map
+!**/animation.css

@@ -1,20 +1,20 @@
-import {MemberSchema} from "@entities/Member";
-import {ContactSchema} from "@entities/Contact";
-import {ReactionSchema} from "@entities/Reaction";
+import { MemberSchema } from '@entities/Member';
+import { ContactSchema } from '@entities/Contact';
+import { ReactionSchema } from '@entities/Reaction';
 
 export default interface MessengerSettingsSchema {
-    messenger_setting_type: 'private' | 'public',
-    messenger_setting_id: string,
-    messenger_type: string,
-    reactions: ReactionSchema[],
-    reactions_count: number,
+    messenger_setting_type: 'private' | 'public';
+    messenger_setting_id: string;
+    messenger_type: string;
+    reactions: ReactionSchema[];
+    reactions_count: number;
     removed_users: {
-        removed_user_id: string,
-        user: ContactSchema
-    }[],
-    members: MemberSchema[],
-    moderators: MemberSchema[],
-    messenger_name: string,
-    messenger_desc: string,
-    messenger_image: string | null,
+        removed_user_id: string;
+        user: ContactSchema;
+    }[];
+    members: MemberSchema[];
+    moderators: MemberSchema[];
+    messenger_name: string;
+    messenger_desc: string;
+    messenger_image: string | null;
 }

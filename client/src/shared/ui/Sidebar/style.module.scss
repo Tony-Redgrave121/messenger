@@ -1,4 +1,4 @@
-@use '../../../app/styles/variables.css' as v;
+@use "../../../app/styles/variables.css" as v;
 
 .SidebarContainer {
   position: relative;
@@ -8,7 +8,7 @@
   max-width: 420px;
   width: 100%;
   height: 100vh;
-  background-color: #212121FF;
+  background-color: #212121ff;
   overflow: hidden;
   -webkit-user-select: none;
   -moz-user-select: none;
@@ -36,7 +36,8 @@
   min-width: 420px;
 }
 
-.LeftSidebarContainerSettings, .RightSidebarContainerEdit {
+.LeftSidebarContainerSettings,
+.RightSidebarContainerEdit {
   position: absolute;
   top: 0;
   left: 0;
@@ -74,7 +75,8 @@
 }
 
 @media screen and (max-width: 600px) {
-  .LeftSidebarContainer, .RightSidebarContainer {
+  .LeftSidebarContainer,
+  .RightSidebarContainer {
     min-width: 100%;
     max-width: 100%;
 
@@ -83,4 +85,3 @@
     }
   }
 }
-

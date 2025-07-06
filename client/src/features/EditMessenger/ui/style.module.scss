@@ -1,12 +1,13 @@
-@use '../../../app/styles/variables.css' as v;
+@use "../../../app/styles/variables.css" as v;
 
 .FormContainer {
-  &, .Form, .TopForm {
+  &,
+  .Form,
+  .TopForm {
     display: flex;
     flex-direction: column;
     align-items: center;
     width: 100%;
-
   }
 
   .TopForm {
@@ -19,7 +20,8 @@
   }
 
   label {
-    img, svg {
+    img,
+    svg {
       height: 120px;
       width: 120px;
     }

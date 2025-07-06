@@ -1,4 +1,4 @@
-@use '../../../app/styles/variables.css' as v;
+@use "../../../app/styles/variables.css" as v;
 
 .VideoPlayer {
   display: flex;
@@ -29,7 +29,9 @@
     .ControlBar {
       justify-content: space-between;
 
-      &, > div, .TimeBlock {
+      &,
+      > div,
+      .TimeBlock {
         display: flex;
       }
 

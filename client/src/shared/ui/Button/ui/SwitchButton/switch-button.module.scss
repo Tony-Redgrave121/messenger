@@ -1,4 +1,4 @@
-@use '../../../../../app/styles/variables.css' as v;
+@use "../../../../../app/styles/variables.css" as v;
 
 .SwitchButton {
   width: 30px;
@@ -7,7 +7,7 @@
   background-color: #6f7478;
   z-index: 0;
   position: relative;
-  transition: .2s all ease-in-out;
+  transition: 0.2s all ease-in-out;
 
   &:after {
     content: "";
@@ -21,7 +21,7 @@
     transform: translateY(-50%);
     left: -6px;
     border: 2px solid #6f7478;
-    transition: .2s all ease-in-out;
+    transition: 0.2s all ease-in-out;
   }
 }
 

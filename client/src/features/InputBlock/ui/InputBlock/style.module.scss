@@ -1,4 +1,3 @@
-
 .InputContainer {
   position: absolute;
   bottom: 15px;
@@ -34,13 +33,14 @@
         border-radius: 5px;
         font-size: 14px;
         line-height: 1.4;
-        transition: .2s background-color ease-in-out;
+        transition: 0.2s background-color ease-in-out;
 
         &:hover {
           background-color: #353535;
         }
 
-        h4, p {
+        h4,
+        p {
           font-size: 14px;
         }
 
@@ -64,7 +64,8 @@
       width: 100%;
       min-height: 42px;
 
-      &:first-child, &:last-child {
+      &:first-child,
+      &:last-child {
         ul {
           top: unset;
           bottom: calc(100% + 10px);
@@ -78,7 +79,7 @@
         }
       }
 
-      >:first-child {
+      > :first-child {
         ul {
           left: 0;
           transform-origin: bottom left;

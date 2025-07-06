@@ -1,3 +1,3 @@
-type ListKeys = 'chat' | 'group' | 'channel'
+type ListKeys = 'chat' | 'group' | 'channel';
 
-export default ListKeys
+export default ListKeys;

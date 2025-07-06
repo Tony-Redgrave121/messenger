@@ -1,5 +1,5 @@
-import React, {Dispatch, FC, RefObject, SetStateAction, useEffect, useRef, useState} from 'react'
-import {CSSTransition} from "react-transition-group";
+import React, { Dispatch, FC, RefObject, SetStateAction, useEffect, useRef, useState } from 'react';
+import { CSSTransition } from 'react-transition-group';
 import {
     HiOutlineArrowLeft,
     HiOutlineCheck,
@@ -8,37 +8,37 @@ import {
     HiOutlineShieldCheck,
     HiOutlineTrash,
     HiOutlineUserMinus,
-    HiOutlineUsers
-} from "react-icons/hi2";
-import {SubmitHandler, useForm} from "react-hook-form";
-import style from "./style.module.css";
-import {FileInput, FormInput} from "@shared/ui/Input";
-import {Caption} from "@shared/ui/Caption";
-import {useNavigate, useParams} from "react-router-dom";
-import EditReactions from "@entities/Messenger/ui/EditReactions/EditReactions";
-import EditType from "@entities/Messenger/ui/EditType/EditType";
-import EditModerators from "../../EditMembers/ui/EditMembers/EditModerators";
-import EditSubscribers from "../../EditMembers/ui/EditMembers/EditSubscribers";
-import EditRemoved from "../../EditMembers/ui/EditMembers/EditRemoved";
-import {deleteMessenger} from "@entities/Messenger/lib/thunk/messengerThunk";
-import {useAbortController, openForm, useAppDispatch} from "@shared/lib";
-import {CreateButton, DefaultButton, SettingButton} from "@shared/ui/Button";
-import {TopBar} from "@shared/ui/TopBar";
-import {Sidebar} from "@shared/ui/Sidebar";
-import {ToggleState} from "@shared/types";
-import AdaptMessengerSchema from "@entities/Messenger/model/types/AdaptMessengerSchema";
-import deleteMessengerApi from "@features/EditMessenger/api/deleteMessengerApi";
-import MessengerSettingsSchema from "@features/EditMessenger/model/types/MessengerSettingsSchema";
-import getMessengerSettingsApi from "@features/EditMessenger/api/getMessengerSettingsApi";
-import putMessengerApi from "@features/EditMessenger/api/putMessengerApi";
-import MessengerSettingsKeys from "@entities/Messenger/model/types/MessengerSettingsKeys";
-import EditMessengerSchema from "@features/EditMessenger/model/types/EditMessengerSchema";
+    HiOutlineUsers,
+} from 'react-icons/hi2';
+import { SubmitHandler, useForm } from 'react-hook-form';
+import style from './style.module.css';
+import { FileInput, FormInput } from '@shared/ui/Input';
+import { Caption } from '@shared/ui/Caption';
+import { useNavigate, useParams } from 'react-router-dom';
+import EditReactions from '@entities/Messenger/ui/EditReactions/EditReactions';
+import EditType from '@entities/Messenger/ui/EditType/EditType';
+import EditModerators from '../../EditMembers/ui/EditMembers/EditModerators';
+import EditSubscribers from '../../EditMembers/ui/EditMembers/EditSubscribers';
+import EditRemoved from '../../EditMembers/ui/EditMembers/EditRemoved';
+import { deleteMessenger } from '@entities/Messenger/lib/thunk/messengerThunk';
+import { useAbortController, openForm, useAppDispatch } from '@shared/lib';
+import { CreateButton, DefaultButton, SettingButton } from '@shared/ui/Button';
+import { TopBar } from '@shared/ui/TopBar';
+import { Sidebar } from '@shared/ui/Sidebar';
+import { ToggleState } from '@shared/types';
+import AdaptMessengerSchema from '@entities/Messenger/model/types/AdaptMessengerSchema';
+import deleteMessengerApi from '@features/EditMessenger/api/deleteMessengerApi';
+import MessengerSettingsSchema from '@features/EditMessenger/model/types/MessengerSettingsSchema';
+import getMessengerSettingsApi from '@features/EditMessenger/api/getMessengerSettingsApi';
+import putMessengerApi from '@features/EditMessenger/api/putMessengerApi';
+import MessengerSettingsKeys from '@entities/Messenger/model/types/MessengerSettingsKeys';
+import EditMessengerSchema from '@features/EditMessenger/model/types/EditMessengerSchema';
 
 interface IEditMessengerProps {
-    state: boolean,
-    setState: Dispatch<SetStateAction<boolean>>,
-    setEntity: Dispatch<SetStateAction<AdaptMessengerSchema>>,
-    refSidebar: RefObject<HTMLDivElement | null>,
+    state: boolean;
+    setState: Dispatch<SetStateAction<boolean>>;
+    setEntity: Dispatch<SetStateAction<AdaptMessengerSchema>>;
+    refSidebar: RefObject<HTMLDivElement | null>;
 }
 
 const InitialValues: EditMessengerSchema = {
@@ -46,7 +46,7 @@ const InitialValues: EditMessengerSchema = {
     messenger_name: '',
     messenger_image: null,
     messenger_desc: '',
-}
+};
 
 const InitialSettings: MessengerSettingsSchema = {
     messenger_setting_type: 'private',
@@ -59,153 +59,158 @@ const InitialSettings: MessengerSettingsSchema = {
     moderators: [],
     messenger_name: '',
     messenger_desc: '',
-    messenger_image: null
-}
+    messenger_image: null,
+};
 
-const EditMessenger: FC<IEditMessengerProps> = ({state, setState, setEntity, refSidebar}) => {
-    const [isLoaded, setIsLoaded] = useState(false)
-    const refForm = useRef<HTMLDivElement>(null)
-    const pictureRef = useRef<File>(null)
+const EditMessenger: FC<IEditMessengerProps> = ({ state, setState, setEntity, refSidebar }) => {
+    const [isLoaded, setIsLoaded] = useState(false);
+    const refForm = useRef<HTMLDivElement>(null);
+    const pictureRef = useRef<File>(null);
 
-    const [settings, setSettings] = useState<MessengerSettingsSchema>(InitialSettings)
+    const [settings, setSettings] = useState<MessengerSettingsSchema>(InitialSettings);
 
     const initialToggleState: ToggleState<MessengerSettingsKeys> = {
         reactions: false,
         channelType: false,
         moderators: false,
         subscribers: false,
-        removedUsers: false
-    }
+        removedUsers: false,
+    };
 
-    const [formsState, setFormsState] = useState(initialToggleState)
+    const [formsState, setFormsState] = useState(initialToggleState);
 
-    const refEditReactions = useRef<HTMLDivElement>(null)
-    const refEditChannelType = useRef<HTMLDivElement>(null)
-    const refEditModerators = useRef<HTMLDivElement>(null)
-    const refEditSubscribers = useRef<HTMLDivElement>(null)
-    const refEditRemoved = useRef<HTMLDivElement>(null)
+    const refEditReactions = useRef<HTMLDivElement>(null);
+    const refEditChannelType = useRef<HTMLDivElement>(null);
+    const refEditModerators = useRef<HTMLDivElement>(null);
+    const refEditSubscribers = useRef<HTMLDivElement>(null);
+    const refEditRemoved = useRef<HTMLDivElement>(null);
 
-    const {messengerId} = useParams()
-    const {getSignal} = useAbortController()
+    const { messengerId } = useParams();
+    const { getSignal } = useAbortController();
 
     const handleImageChange = (file: FileList | null, onChange: (value: File) => void) => {
         if (file) {
-            pictureRef.current = file[0]
-            onChange(file[0])
+            pictureRef.current = file[0];
+            onChange(file[0]);
         }
-    }
+    };
 
     const {
         register,
-        formState: {errors},
+        formState: { errors },
         control,
         setValue,
         handleSubmit,
-        watch
-    } = useForm({defaultValues: InitialValues})
+        watch,
+    } = useForm({ defaultValues: InitialValues });
 
     useEffect(() => {
-        if (!messengerId || !state) return setIsLoaded(false)
-        const signal = getSignal()
+        if (!messengerId || !state) return setIsLoaded(false);
+        const signal = getSignal();
 
         const getSettings = async () => {
             getMessengerSettingsApi(messengerId, signal)
                 .then(res => res.data)
                 .then(data => {
-                    if (!data.messenger_name) throw data
+                    if (!data.messenger_name) throw data;
 
-                    setSettings(data)
+                    setSettings(data);
 
-                    setValue('messenger_name', data.messenger_name)
-                    setValue('messenger_desc', data.messenger_desc)
+                    setValue('messenger_name', data.messenger_name);
+                    setValue('messenger_desc', data.messenger_desc);
 
                     if (data.messenger_image) {
                         pictureRef.current = new Blob(
                             [Uint8Array.from(atob(data.messenger_image), c => c.charCodeAt(0))],
-                            {type: 'image/png'}
-                        ) as File
+                            { type: 'image/png' },
+                        ) as File;
                     }
                 })
                 .catch(e => console.log(e))
-                .finally(() => setIsLoaded(true))
-        }
+                .finally(() => setIsLoaded(true));
+        };
 
-        getSettings().catch(e => console.log(e))
-    }, [messengerId, setValue, state])
+        getSettings().catch(e => console.log(e));
+    }, [messengerId, setValue, state]);
 
-    const handleChange: SubmitHandler<EditMessengerSchema> = async (data) => {
-        if (!messengerId) return
+    const handleChange: SubmitHandler<EditMessengerSchema> = async data => {
+        if (!messengerId) return;
 
         try {
-            const formData = new FormData()
+            const formData = new FormData();
 
-            formData.append('messenger_id', messengerId)
-            formData.append('messenger_name', data.messenger_name)
-            formData.append('messenger_image', data.messenger_image as File)
-            formData.append('messenger_desc', data.messenger_desc)
+            formData.append('messenger_id', messengerId);
+            formData.append('messenger_name', data.messenger_name);
+            formData.append('messenger_image', data.messenger_image as File);
+            formData.append('messenger_desc', data.messenger_desc);
 
-            const signal = getSignal()
-            const newData = await putMessengerApi(formData, signal)
+            const signal = getSignal();
+            const newData = await putMessengerApi(formData, signal);
 
             if (newData.status === 200) {
                 setSettings(prev => ({
                     ...prev,
                     messenger_name: data.messenger_name,
-                    messenger_desc: data.messenger_desc
-                }))
+                    messenger_desc: data.messenger_desc,
+                }));
 
-                setState(false)
+                setState(false);
 
                 setEntity(prev => ({
                     ...prev,
                     name: newData.data.messenger_name,
                     desc: newData.data.messenger_desc,
                     image: newData.data.messenger_image,
-                }))
+                }));
 
-                setValue('messenger_image', null)
-                setIsLoaded(false)
+                setValue('messenger_image', null);
+                setIsLoaded(false);
             }
         } catch (error) {
-            console.log(error)
+            console.log(error);
         }
-    }
+    };
 
-    const navigate = useNavigate()
-    const dispatch = useAppDispatch()
+    const navigate = useNavigate();
+    const dispatch = useAppDispatch();
 
     const handleDelete = async () => {
-        if (!messengerId) return
+        if (!messengerId) return;
 
         try {
-            const signal = getSignal()
-            const res = await deleteMessengerApi(messengerId, signal)
+            const signal = getSignal();
+            const res = await deleteMessengerApi(messengerId, signal);
 
             if (res.status === 200) {
-                navigate('/')
-                dispatch(deleteMessenger(messengerId))
+                navigate('/');
+                dispatch(deleteMessenger(messengerId));
             }
         } catch (error) {
-            console.log(error)
+            console.log(error);
         }
-    }
+    };
 
     return (
         <CSSTransition
             in={isLoaded && state}
             nodeRef={refSidebar}
             timeout={300}
-            classNames='left-sidebar-node'
+            classNames="left-sidebar-node"
             unmountOnExit
         >
-            <Sidebar styles={['RightSidebarContainer', 'RightSidebarContainerEdit']} ref={refSidebar}>
+            <Sidebar
+                styles={['RightSidebarContainer', 'RightSidebarContainerEdit']}
+                ref={refSidebar}
+            >
                 <TopBar>
                     <span>
-                        <DefaultButton foo={() => {
-                            setState(false)
-                            setIsLoaded(false)
-                        }}>
-                            <HiOutlineArrowLeft/>
+                        <DefaultButton
+                            foo={() => {
+                                setState(false);
+                                setIsLoaded(false);
+                            }}
+                        >
+                            <HiOutlineArrowLeft />
                         </DefaultButton>
                         <p>Edit</p>
                     </span>
@@ -216,14 +221,15 @@ const EditMessenger: FC<IEditMessengerProps> = ({state, setState, setEntity, ref
                             name="messenger_image"
                             control={control}
                             handleImageChange={handleImageChange}
-                            picture={pictureRef.current}/>
+                            picture={pictureRef.current}
+                        />
                         <FormInput errors={errors} field="messenger_name">
                             <input
                                 type="text"
                                 id="messenger_name"
                                 placeholder="Channel name"
                                 {...register('messenger_name', {
-                                    required: 'MessengerSearch name is required'
+                                    required: 'MessengerSearch name is required',
                                 })}
                             />
                         </FormInput>
@@ -237,58 +243,75 @@ const EditMessenger: FC<IEditMessengerProps> = ({state, setState, setEntity, ref
                         </FormInput>
                     </div>
                     <Caption>
-                        You can provide an optional description for
-                        your {settings.messenger_type === "group" ? 'group' : 'channel'}.
+                        You can provide an optional description for your{' '}
+                        {settings.messenger_type === 'group' ? 'group' : 'channel'}.
                     </Caption>
                     <div className={style.Form}>
                         <SettingButton
                             foo={() => openForm('channelType', setFormsState)}
                             text={'Channel Type'}
-                            desc={settings.messenger_setting_type}>
-                            <HiOutlineLockClosed/>
+                            desc={settings.messenger_setting_type}
+                        >
+                            <HiOutlineLockClosed />
                         </SettingButton>
-                        {settings.messenger_type === "channel" &&
+                        {settings.messenger_type === 'channel' && (
                             <SettingButton
                                 foo={() => openForm('reactions', setFormsState)}
                                 text={'Reactions'}
-                                desc={settings.reactions.length ? `${settings.reactions.length}/${settings.reactions_count}` : 'Disabled'}>
-                                <HiOutlineHeart/>
+                                desc={
+                                    settings.reactions.length
+                                        ? `${settings.reactions.length}/${settings.reactions_count}`
+                                        : 'Disabled'
+                                }
+                            >
+                                <HiOutlineHeart />
                             </SettingButton>
-                        }
+                        )}
                     </div>
                     <Caption>
-                        {settings.messenger_type !== "group" ? 'Add a channel chat for comments.' : ''}
+                        {settings.messenger_type !== 'group'
+                            ? 'Add a channel chat for comments.'
+                            : ''}
                     </Caption>
                     <div className={style.Form}>
                         <SettingButton
                             foo={() => openForm('moderators', setFormsState)}
                             text={'Moderators'}
-                            desc={settings.moderators.length}>
-                            <HiOutlineShieldCheck/>
+                            desc={settings.moderators.length}
+                        >
+                            <HiOutlineShieldCheck />
                         </SettingButton>
                         <SettingButton
                             foo={() => openForm('subscribers', setFormsState)}
                             text={'Subscribers'}
-                            desc={settings.members.length}>
-                            <HiOutlineUsers/>
+                            desc={settings.members.length}
+                        >
+                            <HiOutlineUsers />
                         </SettingButton>
                         <SettingButton
                             foo={() => openForm('removedUsers', setFormsState)}
                             text={'Removed users'}
-                            desc={settings.removed_users.length ? settings.removed_users.length : 'No removed users'}>
-                            <HiOutlineUserMinus/>
+                            desc={
+                                settings.removed_users.length
+                                    ? settings.removed_users.length
+                                    : 'No removed users'
+                            }
+                        >
+                            <HiOutlineUserMinus />
                         </SettingButton>
                     </div>
                     <Caption>
-                        {settings.messenger_type !== "group" ? 'You can control access to the channel.' : ''}
+                        {settings.messenger_type !== 'group'
+                            ? 'You can control access to the channel.'
+                            : ''}
                     </Caption>
                     <div className={style.Form}>
                         <SettingButton
                             foo={handleDelete}
-                            text={`Delete ${settings.messenger_type === "group" ? "and Leave Group" : "Channel"}`}
+                            text={`Delete ${settings.messenger_type === 'group' ? 'and Leave Group' : 'Channel'}`}
                             isRed
                         >
-                            <HiOutlineTrash/>
+                            <HiOutlineTrash />
                         </SettingButton>
                     </div>
                     <CreateButton
@@ -299,9 +322,9 @@ const EditMessenger: FC<IEditMessengerProps> = ({state, setState, setEntity, ref
                         }
                         foo={handleSubmit(handleChange)}
                     >
-                        <HiOutlineCheck/>
+                        <HiOutlineCheck />
                     </CreateButton>
-                    <Caption/>
+                    <Caption />
                 </div>
                 <EditReactions
                     state={formsState.reactions}
@@ -343,7 +366,7 @@ const EditMessenger: FC<IEditMessengerProps> = ({state, setState, setEntity, ref
                 />
             </Sidebar>
         </CSSTransition>
-    )
-}
+    );
+};
 
-export default EditMessenger
+export default EditMessenger;

@@ -1,15 +1,17 @@
-import React, {FC, ReactNode} from 'react'
-import interButtonStyle from './inter-button.module.css'
+import React, { FC, ReactNode } from 'react';
+import interButtonStyle from './inter-button.module.css';
 
 interface IDefaultButtonProps {
-    children?: ReactNode,
-    foo: (event?: React.MouseEvent<HTMLButtonElement>) => void
+    children?: ReactNode;
+    foo: (event?: React.MouseEvent<HTMLButtonElement>) => void;
 }
 
-const InterButton: FC<IDefaultButtonProps> = ({children, foo}) => {
+const InterButton: FC<IDefaultButtonProps> = ({ children, foo }) => {
     return (
-        <button className={interButtonStyle.InterButton} onClick={foo}>{children}</button>
-    )
-}
+        <button className={interButtonStyle.InterButton} onClick={foo}>
+            {children}
+        </button>
+    );
+};
 
-export default InterButton
+export default InterButton;

@@ -1,34 +1,30 @@
-import {createSlice, PayloadAction} from "@reduxjs/toolkit"
-import ContactSchema from "../types/ContactSchema"
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import ContactSchema from '../types/ContactSchema';
 
 interface ILiveUpdatesState {
-    contacts: ContactSchema[]
+    contacts: ContactSchema[];
 }
 
 const initialState: ILiveUpdatesState = {
-    contacts: []
-}
+    contacts: [],
+};
 
 const contactSlice = createSlice({
-    name: "contactSlice",
+    name: 'contactSlice',
     initialState,
     reducers: {
         setContacts(state, action: PayloadAction<ContactSchema[]>) {
-            state.contacts = action.payload
+            state.contacts = action.payload;
         },
         addContact(state, action: PayloadAction<ContactSchema>) {
-            const exists = state.contacts.some(c => c.user_id === action.payload.user_id)
-            if (!exists) state.contacts.push(action.payload)
+            const exists = state.contacts.some(c => c.user_id === action.payload.user_id);
+            if (!exists) state.contacts.push(action.payload);
         },
         deleteContact(state, action: PayloadAction<string>) {
-            state.contacts = state.contacts.filter(c => c.user_id !== action.payload)
+            state.contacts = state.contacts.filter(c => c.user_id !== action.payload);
         },
-    }
-})
+    },
+});
 
-export default contactSlice.reducer
-export const {
-    setContacts,
-    addContact,
-    deleteContact,
-} = contactSlice.actions
+export default contactSlice.reducer;
+export const { setContacts, addContact, deleteContact } = contactSlice.actions;

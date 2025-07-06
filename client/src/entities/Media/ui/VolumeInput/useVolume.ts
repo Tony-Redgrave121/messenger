@@ -1,36 +1,36 @@
-import {ChangeEvent, RefObject, useEffect, useRef, useState} from "react";
-import {rangeProgress} from "@shared/lib";
-import {useAppDispatch, useAppSelector} from "@shared/lib";
-import {setVolume} from "../../model/slice/videoSlice";
+import { ChangeEvent, RefObject, useEffect, useRef, useState } from 'react';
+import { rangeProgress } from '@shared/lib';
+import { useAppDispatch, useAppSelector } from '@shared/lib';
+import { setVolume } from '../../model/slice/videoSlice';
 
 const useVolume = (mediaRef: RefObject<HTMLVideoElement | null>) => {
-    const volume = useAppSelector(state => state.video.volume)
-    const dispatch = useAppDispatch()
-    const inputRef = useRef<HTMLInputElement>(null)
-    const [isEnter, setIsEnter] = useState(false)
+    const volume = useAppSelector(state => state.video.volume);
+    const dispatch = useAppDispatch();
+    const inputRef = useRef<HTMLInputElement>(null);
+    const [isEnter, setIsEnter] = useState(false);
 
     const handleOnChange = (event: ChangeEvent<HTMLInputElement>) => {
-        const value = Number.parseFloat(event.target.value)
-        dispatch(setVolume(value))
-    }
+        const value = Number.parseFloat(event.target.value);
+        dispatch(setVolume(value));
+    };
 
     const handleVolume = () => {
-        const value = !volume ? 100 : 0
-        dispatch(setVolume(value))
-    }
+        const value = !volume ? 100 : 0;
+        dispatch(setVolume(value));
+    };
 
     useEffect(() => {
         const changeMediaVolume = (value: number) => {
-            if (!mediaRef || ! mediaRef.current) return
-            mediaRef.current.volume = value / 100
-        }
+            if (!mediaRef || !mediaRef.current) return;
+            mediaRef.current.volume = value / 100;
+        };
 
-        changeMediaVolume(volume)
-    }, [mediaRef, volume])
+        changeMediaVolume(volume);
+    }, [mediaRef, volume]);
 
     useEffect(() => {
-        rangeProgress(volume, inputRef)
-    }, [volume, isEnter])
+        rangeProgress(volume, inputRef);
+    }, [volume, isEnter]);
 
     return {
         isEnter,
@@ -38,8 +38,8 @@ const useVolume = (mediaRef: RefObject<HTMLVideoElement | null>) => {
         handleVolume,
         handleOnChange,
         inputRef,
-        volume
-    }
-}
+        volume,
+    };
+};
 
-export default useVolume
+export default useVolume;
