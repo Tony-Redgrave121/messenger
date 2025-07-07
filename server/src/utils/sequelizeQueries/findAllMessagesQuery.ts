@@ -24,7 +24,7 @@ const findAllMessagesQuery = {
         }
     ],
     group: [
-        'Message.message_id',
+        'message.message_id',
         'message_files.message_file_id',
         'user.user_id',
         'reply.message_id',

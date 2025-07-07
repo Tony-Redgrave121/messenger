@@ -20,11 +20,6 @@ const deleteAllMessages = async (messages: IMessageId[]) => {
         try {
             const filePath = path.join(__dirname, "../../static/messengers", message_file_path, message_file_name)
 
-            console.log(filePath)
-            console.log(filePath)
-            console.log(filePath)
-            console.log('---------------')
-
             await fs.promises.unlink(filePath)
         } catch (e) {
             const eNode = e as NodeJS.ErrnoException

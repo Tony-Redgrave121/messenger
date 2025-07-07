@@ -1,29 +1,20 @@
-import React, { Dispatch, FC, SetStateAction, useState } from 'react';
-import style from '../AuthForm/auth-form.module.css';
-import AuthFormSchema from '../../model/types/AuthFormSchema';
-import AuthStepSchema from '../../model/types/AuthStepSchema';
-import { SubmitHandler } from 'react-hook-form';
-import { registration } from '@entities/User/lib/thunk/userThunk';
+import React, { FC, useState } from 'react';
+import { Control, UseFormHandleSubmit, SubmitHandler } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
+import { registration } from '@entities/User/lib/thunk/userThunk';
 import { useAppDispatch } from '@shared/lib';
-import { Control, UseFormHandleSubmit } from 'react-hook-form';
 import { FormButton } from '@shared/ui/Button';
 import { FileInput, FormInput } from '@shared/ui/Input';
+import AuthFormSchema from '../../model/types/AuthFormSchema';
+import AuthStepSchema from '../../model/types/AuthStepSchema';
+import stepStyle from './step.module.css';
 
 interface IStep4Props extends AuthStepSchema {
     handleSubmit: UseFormHandleSubmit<AuthFormSchema>;
     control: Control<AuthFormSchema>;
-    setErrorForm: Dispatch<SetStateAction<string | null>>;
 }
 
-const Step4: FC<IStep4Props> = ({
-    errors,
-    register,
-    handlePrev,
-    handleSubmit,
-    control,
-    setErrorForm,
-}) => {
+const Step4: FC<IStep4Props> = ({ errors, register, handleStep, handleSubmit, control }) => {
     const [picture, setPicture] = useState<File | null>(null);
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
@@ -61,7 +52,7 @@ const Step4: FC<IStep4Props> = ({
                 handleImageChange={handleImageChange}
                 picture={picture}
             />
-            <div className={style.TitleBlock}>
+            <div className={stepStyle.TitleBlock}>
                 <h1>Create Your Profile</h1>
                 <p>Please enter the data to create your profile.</p>
             </div>
@@ -78,10 +69,10 @@ const Step4: FC<IStep4Props> = ({
             <FormInput errors={errors} field="user_bio">
                 <textarea rows={4} placeholder="Bio" {...register('user_bio')}></textarea>
             </FormInput>
-            <div className={style.ButtonBlock}>
+            <div className={stepStyle.ButtonBlock}>
                 <FormButton
                     foo={event => {
-                        handlePrev!(event!, 2);
+                        handleStep(event, 1);
                     }}
                 >
                     PREV

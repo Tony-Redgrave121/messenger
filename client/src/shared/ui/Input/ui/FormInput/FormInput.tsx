@@ -1,6 +1,6 @@
 import { FC, memo, ReactNode } from 'react';
-import style from './style.module.css';
 import { FieldErrors } from 'react-hook-form';
+import style from './style.module.css';
 
 interface IFormInputProps {
     children: ReactNode;
@@ -17,5 +17,7 @@ const FormInput: FC<IFormInputProps> = memo(({ children, errors, field }) => {
         </div>
     );
 });
+
+FormInput.displayName = 'FormInput';
 
 export default FormInput;

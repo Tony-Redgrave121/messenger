@@ -12,13 +12,13 @@
     width: 100%;
 
     &,
-    > div {
+    > fieldset {
       display: flex;
       justify-content: center;
       align-items: center;
     }
 
-    > div {
+    > fieldset {
       position: relative;
       flex-direction: column;
       gap: 30px;
@@ -30,24 +30,6 @@
       svg {
         height: 160px;
         width: 160px;
-      }
-
-      .TitleBlock {
-        text-align: center;
-
-        h1 {
-          font-size: 32px;
-        }
-
-        p {
-          color: #a6a6a6;
-        }
-      }
-
-      .ButtonBlock {
-        display: flex;
-        width: 100%;
-        gap: 25px;
       }
     }
   }

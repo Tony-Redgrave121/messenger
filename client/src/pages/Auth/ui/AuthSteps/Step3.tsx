@@ -1,15 +1,51 @@
 import React, { FC } from 'react';
+import { UseFormWatch } from 'react-hook-form';
 import { HiOutlineFingerPrint } from 'react-icons/hi2';
-import style from '../AuthForm/auth-form.module.css';
+import AuthFormSchema from '@pages/Auth/model/types/AuthFormSchema';
+import { setPopupChildren, setPopupState } from '@features/PopupMessage/model/slice/popupSlice';
+import { login } from '@entities/User/lib/thunk/userThunk';
+import { useAppDispatch } from '@shared/lib';
 import { FormButton } from '@shared/ui/Button';
 import { FormInput } from '@shared/ui/Input';
 import AuthStepSchema from '../../model/types/AuthStepSchema';
+import stepStyle from './step.module.css';
 
-const Step3: FC<AuthStepSchema> = ({ errors, register, handlePrev, handleNext }) => {
+interface IStep3Props extends AuthStepSchema {
+    watch: UseFormWatch<AuthFormSchema>;
+}
+
+const Step3: FC<IStep3Props> = ({ errors, register, handleStep, watch }) => {
+    const dispatch = useAppDispatch();
+
+    const handlePassword = async (event?: React.MouseEvent<HTMLButtonElement>) => {
+        if (!event) return;
+
+        try {
+            const formData = new FormData();
+            formData.append('user_email', watch('user_email'));
+            formData.append('user_password', watch('user_password'));
+
+            const res = await dispatch(login({ formData: formData }));
+
+            if (login.rejected.match(res)) {
+                dispatch(setPopupState(true));
+                dispatch(setPopupChildren(res.payload || 'Server error'));
+                return;
+            }
+
+            handleStep(event, 3);
+        } catch (e) {
+            const error = e as Error;
+
+            dispatch(setPopupState(true));
+            dispatch(setPopupChildren(error.message));
+        }
+    };
+
     return (
         <>
             <HiOutlineFingerPrint />
-            <div className={style.TitleBlock}>
+            <div className={stepStyle.TitleBlock}>
                 <h1>Enter Your Password</h1>
                 <p>Your account is protected with an additional password.</p>
             </div>
@@ -27,21 +63,15 @@ const Step3: FC<AuthStepSchema> = ({ errors, register, handlePrev, handleNext })
                     })}
                 />
             </FormInput>
-            <div className={style.ButtonBlock}>
+            <div className={stepStyle.ButtonBlock}>
                 <FormButton
                     foo={event => {
-                        handlePrev!(event!, 1);
+                        handleStep(event, 0);
                     }}
                 >
                     PREV
                 </FormButton>
-                <FormButton
-                    foo={event => {
-                        handleNext!(event!, 'user_password', 1);
-                    }}
-                >
-                    NEXT
-                </FormButton>
+                <FormButton foo={handlePassword}>NEXT</FormButton>
             </div>
         </>
     );

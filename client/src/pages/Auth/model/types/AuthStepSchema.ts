@@ -1,19 +1,9 @@
-import { UseFormRegister } from 'react-hook-form';
 import React from 'react';
+import { FieldErrors, UseFormRegister } from 'react-hook-form';
+import AuthFormSchema from '@pages/Auth/model/types/AuthFormSchema';
 
 export default interface AuthStepSchema {
-    errors: Record<string, any>;
-    register: UseFormRegister<any>;
-    handlePrev?: (event: React.MouseEvent<HTMLButtonElement>, num: number) => void;
-    handleNext?: (
-        event: React.MouseEvent<HTMLButtonElement>,
-        name:
-            | 'user_code'
-            | 'user_image'
-            | 'user_name'
-            | 'user_bio'
-            | 'user_email'
-            | 'user_password',
-        num: number,
-    ) => void;
+    errors: FieldErrors<AuthFormSchema>;
+    register: UseFormRegister<AuthFormSchema>;
+    handleStep: (event: React.MouseEvent<HTMLButtonElement> | undefined, num: number) => void;
 }

@@ -7,7 +7,7 @@ interface IFormButton {
     type?: 'button' | 'submit' | 'reset';
 }
 
-const FormButton: FC<IFormButton> = ({ foo, children, type }) => {
+const FormButton: FC<IFormButton> = ({ foo, children, type = 'button' }) => {
     return (
         <button className={formButtonStyle.FormButton} onClick={foo} type={type}>
             {children}

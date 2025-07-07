@@ -18,8 +18,12 @@ class MessageController {
             }
 
             const messages = await this.messageService.fetchMessages(type, user_id, messenger_id, post_id)
+
             res.json(messages)
         } catch (e) {
+            console.log(e)
+            console.log(e)
+            console.log(e)
             next(e)
         }
     };

@@ -1,10 +1,10 @@
 import index from "../models";
 import {Sequelize} from "sequelize";
-import MessageSchema from "../types/messageTypes/MessageSchema";
 import convertToPlain from "./convertToPlain";
 import IUserReaction from "../types/reactionTypes/IUserReaction";
+import IMessagesResponse from "../types/messageTypes/IMessagesResponse";
 
-const normalizeMessage = async (message: MessageSchema) => {
+const normalizeMessage = async (message: IMessagesResponse) => {
     const reactionsRaw = await index.message_reactions.findAll({
         attributes: [
             [Sequelize.fn('COUNT', Sequelize.col('message_reactions.reaction_id')), 'reaction_count'],

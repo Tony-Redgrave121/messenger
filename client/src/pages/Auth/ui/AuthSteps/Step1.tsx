@@ -1,27 +1,28 @@
-import { FC } from 'react';
-import { HiOutlineChatBubbleLeftRight } from 'react-icons/hi2';
-import style from '../AuthForm/auth-form.module.css';
-import AuthFormSchema from '../../model/types/AuthFormSchema';
-import AuthStepSchema from '../../model/types/AuthStepSchema';
-import sendCodeApi from '../../api/sendCodeApi';
+import React, { FC } from 'react';
 import { UseFormTrigger, UseFormWatch } from 'react-hook-form';
+import { HiOutlineChatBubbleLeftRight } from 'react-icons/hi2';
 import { FormButton } from '@shared/ui/Button';
 import { FormInput } from '@shared/ui/Input';
+import sendCodeApi from '../../api/sendCodeApi';
+import AuthFormSchema from '../../model/types/AuthFormSchema';
+import AuthStepSchema from '../../model/types/AuthStepSchema';
+import stepStyle from './step.module.css';
 
-interface IStep3Props extends AuthStepSchema {
+interface IStep1Props extends AuthStepSchema {
     watch: UseFormWatch<AuthFormSchema>;
     trigger: UseFormTrigger<AuthFormSchema>;
 }
 
-const Step1: FC<IStep3Props> = ({ errors, register, handleNext, watch, trigger }) => {
-    const handleCode = async () => {
+const Step1: FC<IStep1Props> = ({ errors, register, handleStep, watch, trigger }) => {
+    const handleCode = async (event?: React.MouseEvent<HTMLButtonElement>) => {
         try {
             const isValid = await trigger('user_email');
 
-            if (isValid) {
-                const email = watch('user_email');
-                await sendCodeApi(email);
-            }
+            if (!isValid) return;
+            handleStep(event, 1);
+
+            const email = watch('user_email');
+            await sendCodeApi(email);
         } catch (e) {
             console.log(e);
         }
@@ -30,7 +31,7 @@ const Step1: FC<IStep3Props> = ({ errors, register, handleNext, watch, trigger }
     return (
         <>
             <HiOutlineChatBubbleLeftRight />
-            <div className={style.TitleBlock}>
+            <div className={stepStyle.TitleBlock}>
                 <h1>Auth in to Messenger</h1>
                 <p>Please enter your email address.</p>
             </div>
@@ -48,14 +49,7 @@ const Step1: FC<IStep3Props> = ({ errors, register, handleNext, watch, trigger }
                     })}
                 ></input>
             </FormInput>
-            <FormButton
-                foo={event => {
-                    handleCode();
-                    handleNext!(event!, 'user_email', 1);
-                }}
-            >
-                NEXT
-            </FormButton>
+            <FormButton foo={handleCode}>NEXT</FormButton>
         </>
     );
 };

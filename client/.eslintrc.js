@@ -22,6 +22,8 @@ module.exports = {
     },
     rules: {
         'prettier/prettier': 'warn',
+        'react/prop-types': 'off',
+        'react/react-in-jsx-scope': 'off',
     },
     ignorePatterns: ['dist/', 'build/', 'node_modules/'],
 };

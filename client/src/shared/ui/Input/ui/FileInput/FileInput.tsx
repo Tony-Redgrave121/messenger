@@ -1,13 +1,15 @@
 import { FC, memo } from 'react';
-import style from './style.module.css';
 import { Control, Controller } from 'react-hook-form';
 import { HiOutlineUserCircle } from 'react-icons/hi2';
+import AuthFormSchema from '@pages/Auth/model/types/AuthFormSchema';
+import { inputNames } from '@pages/Auth/model/types/InputNames';
+import style from './style.module.css';
 
 interface IFileInputProps {
-    control: Control<any>;
+    control: Control<AuthFormSchema>;
     handleImageChange: (file: FileList | null, onChange: (value: File) => void) => void;
     picture: File | null;
-    name: string;
+    name: inputNames;
 }
 
 const FileInput: FC<IFileInputProps> = memo(({ control, handleImageChange, picture, name }) => {
@@ -35,5 +37,7 @@ const FileInput: FC<IFileInputProps> = memo(({ control, handleImageChange, pictu
         </div>
     );
 });
+
+FileInput.displayName = 'FileInput';
 
 export default FileInput;
