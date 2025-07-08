@@ -1,3 +1,4 @@
+import debounce from 'debounce';
 import React, {
     Dispatch,
     FC,
@@ -8,19 +9,18 @@ import React, {
     useRef,
     useState,
 } from 'react';
-import style from './style.module.css';
-import '@pages/Messenger/animation.css';
-import { LoadFile } from '@shared/ui/LoadFile';
+import '@features/SearchMessage/ui/search-message.animation.css';
 import { HiOutlineXMark } from 'react-icons/hi2';
-import { SearchBar } from '@shared/ui/SearchBar';
-import { CSSTransition } from 'react-transition-group';
-import debounce from 'debounce';
 import { useParams } from 'react-router-dom';
-import { useAbortController, getDate, scrollInto, useAppSelector } from '@shared/lib';
-import { DefaultButton } from '@shared/ui/Button';
+import { CSSTransition } from 'react-transition-group';
+import getFilteredMessagesApi from '@features/SearchMessage/api/getFilteredMessagesApi';
 import { MessageSchema } from '@entities/Message';
 import AdaptMessengerSchema from '@entities/Messenger/model/types/AdaptMessengerSchema';
-import getFilteredMessagesApi from '@features/SearchMessage/api/getFilteredMessagesApi';
+import { useAbortController, getDate, scrollInto, useAppSelector } from '@shared/lib';
+import { DefaultButton } from '@shared/ui/Button';
+import { LoadFile } from '@shared/ui/LoadFile';
+import { SearchBar } from '@shared/ui/SearchBar';
+import style from './style.module.css';
 
 interface IChatHeader {
     messenger: AdaptMessengerSchema;
@@ -169,5 +169,7 @@ const SearchMessage: FC<IChatHeader> = memo(({ messenger, state, setState }) => 
         </CSSTransition>
     );
 });
+
+SearchMessage.displayName = 'SearchMessage';
 
 export default SearchMessage;

@@ -1,0 +1,27 @@
+@use "../../../../app/styles/variables.css" as v;
+
+.AuthForm {
+  width: 100%;
+
+  &,
+  > fieldset {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  > fieldset {
+    position: relative;
+    flex-direction: column;
+    gap: 30px;
+    width: 100%;
+    max-width: 360px;
+    color: white;
+    line-height: 1.5;
+
+    svg {
+      height: 160px;
+      width: 160px;
+    }
+  }
+}

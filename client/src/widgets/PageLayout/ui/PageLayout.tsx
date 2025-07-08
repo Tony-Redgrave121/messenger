@@ -1,13 +1,13 @@
 import { lazy, Suspense } from 'react';
 import { Outlet } from 'react-router-dom';
-import style from './style.module.css';
-import { Slider } from '@features/Slider';
 import { LeftSidebar } from '@widgets/LeftSidebar';
+import { Slider } from '@features/Slider';
+import style from './style.module.css';
 
 const MainContainer = lazy(() => import('@widgets/Main/ui/Main'));
 const PopupMessage = lazy(() => import('@features/PopupMessage/ui/PopupMessage'));
 
-const Layout = () => {
+const PageLayout = () => {
     return (
         <div className={style.LayoutContainer}>
             <div className={style.Layout}>
@@ -26,4 +26,4 @@ const Layout = () => {
     );
 };
 
-export default Layout;
+export default PageLayout;

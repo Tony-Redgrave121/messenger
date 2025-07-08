@@ -43,4 +43,4 @@ docker-compose*.log
 **/*.module.css
 **/*.css
 **/*.css.map
-!**/animation.css
+!**/*.animation.css

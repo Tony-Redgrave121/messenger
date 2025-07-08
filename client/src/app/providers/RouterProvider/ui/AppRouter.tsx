@@ -1,10 +1,10 @@
 import { lazy } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
-import Layout from '@pages/Layout/Layout';
-import { routerConfig } from '../index';
+import { PageLayout } from '@widgets/PageLayout';
 import { useAppSelector } from '@shared/lib';
+import { routerConfig } from '../index';
 
-const AuthForm = lazy(() => import('@pages/Auth/ui/AuthForm/AuthForm'));
+const AuthPage = lazy(() => import('@pages/AuthPage/ui/AuthPage'));
 
 const AppRouter = () => {
     const isAuth = useAppSelector(state => state.user.isAuth);
@@ -12,14 +12,14 @@ const AppRouter = () => {
     if (!isAuth) {
         return (
             <Routes>
-                <Route path="*" element={<AuthForm />} />
+                <Route path="*" element={<AuthPage />} />
             </Routes>
         );
     }
 
     return (
         <Routes>
-            <Route path="/" element={<Layout />}>
+            <Route path="/" element={<PageLayout />}>
                 {routerConfig.map(({ path, Component }) => (
                     <Route key={path} path={path} element={<Component />} />
                 ))}

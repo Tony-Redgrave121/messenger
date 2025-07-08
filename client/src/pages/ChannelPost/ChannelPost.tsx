@@ -1,13 +1,12 @@
 import { useEffect, useState } from 'react';
-import style from '../Messenger/style.module.css';
-import '../Messenger/animationWrapper.css';
-import { InputBlock } from '@features/InputBlock';
-import ChannelPostHeader from '@widgets/Header/ui/ChannelPostHeader';
 import { useParams } from 'react-router-dom';
-import useFetchInitialData from '@entities/Messenger/lib/hooks/useFetchInitialData';
-import { useAbortController } from '@shared/lib';
+import ChannelPostHeader from '@widgets/Header/ui/ChannelPostHeader';
+import { InputBlock } from '@features/InputBlock';
 import { Message, MessageSchema } from '@entities/Message';
 import fetchMessageApi from '@entities/Message/api/fetchMessageApi';
+import useFetchInitialData from '@entities/Messenger/lib/hooks/useFetchInitialData';
+import { useAbortController } from '@shared/lib';
+import style from '../Messenger/style.module.css';
 
 const ChannelPost = () => {
     const [reply, setReply] = useState<MessageSchema | null>(null);
@@ -35,34 +34,30 @@ const ChannelPost = () => {
     }, [postId]);
 
     return (
-        <>
-            {messenger && (
-                <div className={style.MessengerContainer}>
-                    <ChannelPostHeader
-                        commentsCount={channelPost ? channelPost.comments_count : 0}
-                        messenger={messenger}
-                    />
-                    <section className={style.MessageBlock}>
-                        {channelPost &&
-                            messagesList.length &&
-                            messagesList.map((message, index) => (
-                                <Message
-                                    message={message}
-                                    messenger={{
-                                        ...messenger,
-                                        type: index ? 'group' : 'channel',
-                                    }}
-                                    key={message.message_id}
-                                    setReply={setReply}
-                                    socketRef={socketRef}
-                                    reactions={reactions}
-                                />
-                            ))}
-                    </section>
-                    <InputBlock setReply={setReply} reply={reply} socketRef={socketRef} />
-                </div>
-            )}
-        </>
+        <div className={style.MessengerContainer}>
+            <ChannelPostHeader
+                commentsCount={channelPost ? channelPost.comments_count : 0}
+                messenger={messenger}
+            />
+            <section className={style.MessageBlock}>
+                {channelPost &&
+                    messagesList.length &&
+                    messagesList.map((message, index) => (
+                        <Message
+                            message={message}
+                            messenger={{
+                                ...messenger,
+                                type: index ? 'group' : 'channel',
+                            }}
+                            key={message.message_id}
+                            setReply={setReply}
+                            socketRef={socketRef}
+                            reactions={reactions}
+                        />
+                    ))}
+            </section>
+            <InputBlock setReply={setReply} reply={reply} socketRef={socketRef} />
+        </div>
     );
 };
 

@@ -1,17 +1,17 @@
 import React, { lazy, useEffect, useRef, useState } from 'react';
-import style from './style.module.css';
-import { InputBlock } from '@features/InputBlock';
-import { useAppDispatch, useAppSelector } from '@shared/lib';
 import { useParams } from 'react-router-dom';
 import MessengerHeader from '@widgets/Header/ui/MessengerHeader';
+import postContactsMembersApi from '@features/EditMembers/api/postContactsMembersApi';
+import { InputBlock } from '@features/InputBlock';
+import { Message, MessageSchema } from '@entities/Message';
+import useFetchInitialData from '@entities/Messenger/lib/hooks/useFetchInitialData';
+import { clearNotification } from '@entities/Messenger/lib/thunk/messengerThunk';
+import { addMessenger } from '@entities/Messenger/model/slice/messengerSlice';
 import checkRights from '@entities/User/lib/CheckRights/checkRights';
 import isMember from '@entities/User/lib/IsMember/isMember';
-import useFetchInitialData from '@entities/Messenger/lib/hooks/useFetchInitialData';
-import { addMessenger } from '@entities/Messenger/model/slice/messengerSlice';
-import { clearNotification } from '@entities/Messenger/lib/thunk/messengerThunk';
+import { useAppDispatch, useAppSelector } from '@shared/lib';
 import { useAbortController } from '@shared/lib';
-import { Message, MessageSchema } from '@entities/Message';
-import postContactsMembersApi from '@features/EditMembers/api/postContactsMembersApi';
+import style from './style.module.css';
 
 const RightSidebar = lazy(() => import('@widgets/RightSidebar/ui/RightSidebar'));
 

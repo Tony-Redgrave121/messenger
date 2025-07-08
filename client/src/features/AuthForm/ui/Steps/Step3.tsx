@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import { UseFormWatch } from 'react-hook-form';
 import { HiOutlineFingerPrint } from 'react-icons/hi2';
-import AuthFormSchema from '@pages/Auth/model/types/AuthFormSchema';
+import AuthFormSchema from '@features/AuthForm/model/types/AuthFormSchema';
 import { setPopupChildren, setPopupState } from '@features/PopupMessage/model/slice/popupSlice';
 import { login } from '@entities/User/lib/thunk/userThunk';
 import { useAppDispatch } from '@shared/lib';

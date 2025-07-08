@@ -47,7 +47,7 @@ const Step1: FC<IStep1Props> = ({ errors, register, handleStep, watch, trigger }
                             message: 'Invalid email address',
                         },
                     })}
-                ></input>
+                />
             </FormInput>
             <FormButton foo={handleCode}>NEXT</FormButton>
         </>

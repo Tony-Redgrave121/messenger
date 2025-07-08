@@ -1,6 +1,5 @@
+import { clsx } from 'clsx';
 import { Dispatch, FC, memo, SetStateAction, useState } from 'react';
-import style from './style.module.css';
-import { LoadFile } from '@shared/ui/LoadFile';
 import {
     HiOutlineMagnifyingGlass,
     HiEllipsisVertical,
@@ -10,20 +9,21 @@ import {
     HiOutlineArrowLeft,
     HiOutlineUserMinus,
 } from 'react-icons/hi2';
-import { DropDown } from '@shared/ui/DropDown';
-import { useAppDispatch, useAbortController, useAppSelector, getDate } from '@shared/lib';
-import { clsx } from 'clsx';
-import SearchMessage from '@features/SearchMessage/ui/SearchMessage';
 import { useNavigate, useParams } from 'react-router-dom';
+import deleteChatApi from '@widgets/Header/api/deleteChatApi';
+import deleteContactApi from '@widgets/Header/api/deleteContactApi';
+import postContactApi from '@widgets/Header/api/postContactApi';
+import deleteMemberApi from '@features/EditMembers/api/deleteMemberApi';
+import SearchMessage from '@features/SearchMessage/ui/SearchMessage';
 import { addContact, deleteContact } from '@entities/Contact/model/slice/contactSlice';
 import { deleteMessenger } from '@entities/Messenger/lib/thunk/messengerThunk';
-import { DefaultButton } from '@shared/ui/Button';
-import { setSidebarLeft } from '../../LeftSidebar/model/slice/sidebarSlice';
-import postContactApi from '@widgets/Header/api/postContactApi';
-import deleteContactApi from '@widgets/Header/api/deleteContactApi';
-import deleteChatApi from '@widgets/Header/api/deleteChatApi';
-import deleteMemberApi from '@features/EditMembers/api/deleteMemberApi';
 import AdaptMessengerSchema from '@entities/Messenger/model/types/AdaptMessengerSchema';
+import { useAppDispatch, useAbortController, useAppSelector, getDate } from '@shared/lib';
+import { DefaultButton } from '@shared/ui/Button';
+import { DropDown } from '@shared/ui/DropDown';
+import { LoadFile } from '@shared/ui/LoadFile';
+import { setSidebarLeft } from '../../LeftSidebar/model/slice/sidebarSlice';
+import style from './style.module.css';
 
 interface IChatHeader {
     messenger: AdaptMessengerSchema;
