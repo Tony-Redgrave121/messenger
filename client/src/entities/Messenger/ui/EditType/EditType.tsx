@@ -1,39 +1,33 @@
 import React, { Dispatch, FC, RefObject, SetStateAction, useEffect, useRef, useState } from 'react';
-import { CSSTransition } from 'react-transition-group';
-import style from './style.module.css';
 import { HiOutlineArrowLeft, HiOutlineTrash } from 'react-icons/hi2';
-import { Caption } from '@shared/ui/Caption';
-import { closeForm } from '@shared/lib';
 import { useNavigate, useParams } from 'react-router-dom';
-import useCopy from '../../../Message/lib/hooks/useCopy';
-import { DefaultButton, SettingButton } from '@shared/ui/Button';
-import { Radio } from '@shared/ui/Input';
-import { TopBar } from '@shared/ui/TopBar';
-import { Sidebar } from '@shared/ui/Sidebar';
-import { ToggleState } from '@shared/types';
-import putMessengerTypeApi from '@entities/Messenger/api/putMessengerTypeApi';
+import { CSSTransition } from 'react-transition-group';
 import putMessengerLinkApi from '@entities/Messenger/api/putMessengerLinkApi';
+import putMessengerTypeApi from '@entities/Messenger/api/putMessengerTypeApi';
 import MessengerSettingsKeys from '@entities/Messenger/model/types/MessengerSettingsKeys';
+import { closeForm } from '@shared/lib';
+import { ToggleState } from '@shared/types';
+import { DefaultButton, SettingButton } from '@shared/ui/Button';
+import { Caption } from '@shared/ui/Caption';
+import { Radio } from '@shared/ui/Input';
+import { Sidebar } from '@shared/ui/Sidebar';
+import { TopBar } from '@shared/ui/TopBar';
+import useCopy from '../../../Message/lib/hooks/useCopy';
+import style from './style.module.css';
 
 interface IEditTypeProps {
     state: boolean;
     setState: Dispatch<SetStateAction<ToggleState<MessengerSettingsKeys>>>;
-    refSidebar: RefObject<HTMLDivElement | null>;
     messengerType: 'private' | 'public';
     messengerUrlType: string;
 }
 
-const EditType: FC<IEditTypeProps> = ({
-    setState,
-    refSidebar,
-    state,
-    messengerType,
-    messengerUrlType,
-}) => {
+const EditType: FC<IEditTypeProps> = ({ setState, state, messengerType, messengerUrlType }) => {
     const [newMessengerType, setNewMessengerType] = useState('private');
     const [newMessengerLink, setNewMessengerLink] = useState('');
 
     const refForm = useRef<HTMLDivElement>(null);
+    const refEditChannelType = useRef<HTMLDivElement>(null);
 
     const { messengerId } = useParams();
     const navigate = useNavigate();
@@ -74,14 +68,14 @@ const EditType: FC<IEditTypeProps> = ({
     return (
         <CSSTransition
             in={state}
-            nodeRef={refSidebar}
+            nodeRef={refEditChannelType}
             timeout={300}
             classNames="left-sidebar-node"
             unmountOnExit
         >
             <Sidebar
                 styles={['RightSidebarContainer', 'RightSidebarContainerEdit']}
-                ref={refSidebar}
+                ref={refEditChannelType}
             >
                 <TopBar>
                     <span>

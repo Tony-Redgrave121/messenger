@@ -1,7 +1,7 @@
 import ChatInfoSchema from '@widgets/LeftSidebar/model/types/ChatInfoSchema';
 
-const isChatArray = (data: any[]): data is ChatInfoSchema[] => {
-    return data.length > 0 && 'user_id' in data[0];
+const isChatArray = (data: unknown[]): data is ChatInfoSchema[] => {
+    return data.every(item => typeof item === 'object' && item !== null && 'user_id' in item);
 };
 
 export default isChatArray;

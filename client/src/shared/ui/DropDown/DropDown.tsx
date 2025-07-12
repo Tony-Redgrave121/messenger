@@ -1,11 +1,11 @@
+import { clsx } from 'clsx';
 import { Dispatch, FC, SetStateAction } from 'react';
-import dropDownStyle from './drop-down.module.css';
 import './drop-down.animation.css';
 import { CSSTransition } from 'react-transition-group';
 import { getStyles } from '../../lib';
-import { clsx } from 'clsx';
-import useDropDown from './useDropDown';
 import { DropDownList } from '../../types';
+import dropDownStyle from './drop-down.module.css';
+import useDropDown from './useDropDown';
 
 interface IDropDownProps {
     list: DropDownList[];

@@ -1,16 +1,16 @@
 import { lazy } from 'react';
 
-const Messenger = lazy(() => import('@pages/Messenger/Messenger'));
-const CommentsBlock = lazy(() => import('@pages/ChannelPost/ChannelPost'));
+const MessengerPage = lazy(() => import('@pages/MessengerPage/ui/MessengerPage'));
+const PostPage = lazy(() => import('@pages/PostPage/ui/PostPage'));
 
 const routerConfig = [
     {
         path: ':type/:messengerId',
-        Component: Messenger,
+        Component: MessengerPage,
     },
     {
         path: ':type/:messengerId/post/:postId',
-        Component: CommentsBlock,
+        Component: PostPage,
     },
 ];
 

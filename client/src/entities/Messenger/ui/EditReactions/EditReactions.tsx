@@ -1,33 +1,31 @@
+import debounce from 'debounce';
 import React, {
     Dispatch,
     FC,
-    RefObject,
     SetStateAction,
     useCallback,
     useEffect,
     useRef,
     useState,
 } from 'react';
-import { CSSTransition } from 'react-transition-group';
-import style from './style.module.css';
-import { Caption } from '@shared/ui/Caption';
 import { HiOutlineArrowLeft } from 'react-icons/hi2';
-import debounce from 'debounce';
-import { useAbortController, closeForm } from '@shared/lib';
-import { DefaultButton, SwitchSettingButton } from '@shared/ui/Button';
-import { TopBar } from '@shared/ui/TopBar';
-import { Sidebar } from '@shared/ui/Sidebar';
-import { ToggleState } from '@shared/types';
-import { ReactionSchema } from '@entities/Reaction';
+import { CSSTransition } from 'react-transition-group';
+import MessengerSettingsSchema from '@features/EditMessenger/model/types/MessengerSettingsSchema';
 import getReactionsApi from '@entities/Messenger/api/getReactionsApi';
 import postMessengerReactionsApi from '@entities/Messenger/api/postMessengerReactionsApi';
-import MessengerSettingsSchema from '@features/EditMessenger/model/types/MessengerSettingsSchema';
 import MessengerSettingsKeys from '@entities/Messenger/model/types/MessengerSettingsKeys';
+import { ReactionSchema } from '@entities/Reaction';
+import { useAbortController, closeForm } from '@shared/lib';
+import { ToggleState } from '@shared/types';
+import { DefaultButton, SwitchSettingButton } from '@shared/ui/Button';
+import { Caption } from '@shared/ui/Caption';
+import { Sidebar } from '@shared/ui/Sidebar';
+import { TopBar } from '@shared/ui/TopBar';
+import style from './style.module.css';
 
 interface IEditReactionsProps {
     state: boolean;
     setState: Dispatch<SetStateAction<ToggleState<MessengerSettingsKeys>>>;
-    refSidebar: RefObject<HTMLDivElement | null>;
     channelReactions: ReactionSchema[];
     messengerSettingsId: string;
     setSettings: Dispatch<SetStateAction<MessengerSettingsSchema>>;
@@ -35,7 +33,6 @@ interface IEditReactionsProps {
 
 const EditReactions: FC<IEditReactionsProps> = ({
     setState,
-    refSidebar,
     state,
     channelReactions,
     messengerSettingsId,
@@ -45,6 +42,7 @@ const EditReactions: FC<IEditReactionsProps> = ({
     const [reactions, setReactions] = useState<ReactionSchema[]>([]);
     const { getSignal } = useAbortController();
 
+    const refEditReactions = useRef<HTMLDivElement>(null);
     const refForm = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
@@ -86,20 +84,20 @@ const EditReactions: FC<IEditReactionsProps> = ({
     );
 
     useEffect(() => {
-        state && debounceHandleReactions(newReactions);
+        if (state) debounceHandleReactions(newReactions);
     }, [debounceHandleReactions, newReactions]);
 
     return (
         <CSSTransition
             in={state}
-            nodeRef={refSidebar}
+            nodeRef={refEditReactions}
             timeout={300}
             classNames="left-sidebar-node"
             unmountOnExit
         >
             <Sidebar
                 styles={['RightSidebarContainer', 'RightSidebarContainerEdit']}
-                ref={refSidebar}
+                ref={refEditReactions}
             >
                 <TopBar>
                     <span>
@@ -114,11 +112,13 @@ const EditReactions: FC<IEditReactionsProps> = ({
                         <SwitchSettingButton
                             text={'Enable Reactions'}
                             foo={() => {
-                                newReactions.length
-                                    ? setNewReactions([])
-                                    : setNewReactions(
-                                          reactions.map(reaction => reaction.reaction_id),
-                                      );
+                                if (newReactions.length > 0) {
+                                    setNewReactions([]);
+                                } else {
+                                    setNewReactions(
+                                        reactions.map(reaction => reaction.reaction_id),
+                                    );
+                                }
                             }}
                             state={newReactions.length}
                         />

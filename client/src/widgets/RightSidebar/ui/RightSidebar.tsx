@@ -1,43 +1,33 @@
-import { Dispatch, FC, RefObject, SetStateAction, useRef, useState } from 'react';
-import {
-    HiOutlinePencil,
-    HiOutlineXMark,
-    HiOutlineExclamationCircle,
-    HiOutlinePaperClip,
-    HiOutlineBell,
-    HiOutlineChatBubbleLeft,
-} from 'react-icons/hi2';
-import style from './style.module.css';
-import './animation.css';
-import { CSSTransition } from 'react-transition-group';
-import useLoadBlob from '@shared/lib/hooks/useLoadBlob/useLoadBlob';
-import { ImageBlock } from '@features/ImageBlock';
-import EditMessenger from '@features/EditMessenger/ui/EditMessenger';
-import useCopy from '@entities/Message/lib/hooks/useCopy';
-import { Caption } from '@shared/ui/Caption';
-import MembersList from '@entities/Member/ui/MembersList/MembersList';
+import { Dispatch, FC, SetStateAction, useRef, useState } from 'react';
+import { HiOutlinePencil, HiOutlineXMark, HiOutlineChatBubbleLeft } from 'react-icons/hi2';
 import { useNavigate } from 'react-router-dom';
+import { CSSTransition } from 'react-transition-group';
+import InfoList from '@widgets/RightSidebar/ui/InfoList';
+import EditMessenger from '@features/EditMessenger/ui/EditMessenger';
+import { ImageBlock } from '@features/ImageBlock';
+import MembersList from '@entities/Member/ui/MembersList/MembersList';
+import AdaptMessengerSchema from '@entities/Messenger/model/types/AdaptMessengerSchema';
 import checkRights from '@entities/User/lib/CheckRights/checkRights';
 import { useAppSelector, getDate } from '@shared/lib';
-import { DefaultButton, SettingButton, SwitchSettingButton } from '@shared/ui/Button';
-import { TopBar } from '@shared/ui/TopBar';
+import useLoadBlob from '@shared/lib/hooks/useLoadBlob/useLoadBlob';
+import { DefaultButton } from '@shared/ui/Button';
+import { Caption } from '@shared/ui/Caption';
 import { Sidebar } from '@shared/ui/Sidebar';
-import AdaptMessengerSchema from '@entities/Messenger/model/types/AdaptMessengerSchema';
+import { TopBar } from '@shared/ui/TopBar';
+import './right-sidebar.animation.css';
 
-interface IRightSidebar {
+interface IRightSidebarProps {
     entity: AdaptMessengerSchema;
     setEntity: Dispatch<SetStateAction<AdaptMessengerSchema>>;
-    ref: RefObject<HTMLDivElement | null>;
     state: boolean;
     setState: Dispatch<SetStateAction<boolean>>;
 }
 
-const CLIENT_URL = process.env.VITE_CLIENT_URL;
+const RightSidebar: FC<IRightSidebarProps> = ({ entity, setEntity, state, setState }) => {
+    const [editMessenger, setEditMessenger] = useState(false);
+    const refRightSidebar = useRef<HTMLDivElement>(null);
 
-const RightSidebar: FC<IRightSidebar> = ({ entity, setEntity, ref, state, setState }) => {
-    const refEditMessenger = useRef<HTMLDivElement>(null);
-    const [notification, setNotification] = useState(true);
-    const { handleCopy } = useCopy();
+    const navigate = useNavigate();
 
     const user_id = useAppSelector(state => state.user.userId);
     const { image } = useLoadBlob(
@@ -45,10 +35,6 @@ const RightSidebar: FC<IRightSidebar> = ({ entity, setEntity, ref, state, setSta
             ? `${entity.type !== 'chat' ? 'messengers' : 'users'}/${entity.id}/${entity.image}`
             : '',
     );
-
-    const [editMessenger, setEditMessenger] = useState(false);
-
-    const navigate = useNavigate();
 
     const MembersDropDown = (user_id: string) => [
         {
@@ -64,12 +50,12 @@ const RightSidebar: FC<IRightSidebar> = ({ entity, setEntity, ref, state, setSta
     return (
         <CSSTransition
             in={state}
-            nodeRef={ref}
+            nodeRef={refRightSidebar}
             timeout={300}
             classNames="right-sidebar-node"
             unmountOnExit
         >
-            <Sidebar styles={['RightSidebarContainer']} ref={ref}>
+            <Sidebar styles={['RightSidebarContainer']} ref={refRightSidebar}>
                 <TopBar>
                     <DefaultButton foo={() => setState(false)}>
                         <HiOutlineXMark />
@@ -91,57 +77,21 @@ const RightSidebar: FC<IRightSidebar> = ({ entity, setEntity, ref, state, setSta
                                 : getDate(entity.last_seen!),
                     }}
                 />
-                <ul className={style.InfoList}>
-                    {entity.desc && (
-                        <li>
-                            <SettingButton
-                                foo={() => handleCopy(entity.desc!, 'Info copied to clipboard')}
-                                text={entity.desc}
-                                desc={'Info'}
-                            >
-                                <HiOutlineExclamationCircle />
-                            </SettingButton>
-                        </li>
-                    )}
-                    <li>
-                        <SettingButton
-                            foo={() =>
-                                handleCopy(
-                                    `${CLIENT_URL}/${entity.type}/${entity.id}`,
-                                    'Link copied to clipboard',
-                                )
-                            }
-                            text={entity.id}
-                            desc={'Link'}
-                        >
-                            <HiOutlinePaperClip />
-                        </SettingButton>
-                    </li>
-                    <li>
-                        <SwitchSettingButton
-                            text={'Notifications'}
-                            foo={() => setNotification(!notification)}
-                            state={notification}
-                        >
-                            <HiOutlineBell />
-                        </SwitchSettingButton>
-                    </li>
-                </ul>
+                <InfoList entity={entity} />
                 <Caption />
-                <div>
-                    {entity?.members && entity.type === 'group' && (
+                {entity?.members && entity.type === 'group' && (
+                    <div>
                         <MembersList
                             text="Members"
                             members={entity.members.flatMap(member => member.user)}
                             dropList={MembersDropDown}
                         />
-                    )}
-                </div>
+                    </div>
+                )}
                 <Caption />
                 <EditMessenger
                     state={editMessenger}
                     setState={setEditMessenger}
-                    refSidebar={refEditMessenger}
                     setEntity={setEntity}
                 />
             </Sidebar>

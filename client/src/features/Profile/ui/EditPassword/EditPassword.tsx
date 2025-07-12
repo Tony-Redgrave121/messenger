@@ -1,20 +1,17 @@
 import React, { Dispatch, FC, RefObject, SetStateAction, useRef } from 'react';
-import { CSSTransition } from 'react-transition-group';
-import '@widgets/LeftSidebar/ui/LeftSidebar/left-sidebar.animation.css';
-import style from './style.module.css';
 import { HiOutlineArrowLeft, HiOutlineCheck } from 'react-icons/hi2';
-import { Caption } from '@shared/ui/Caption';
-import { SubmitHandler, useForm } from 'react-hook-form';
-import { useAppDispatch, useAppSelector, closeForm } from '@shared/lib';
-import { CreateButton, DefaultButton } from '@shared/ui/Button';
-import { FormInput } from '@shared/ui/Input';
-import { TopBar } from '@shared/ui/TopBar';
-import { Sidebar } from '@shared/ui/Sidebar';
+import { CSSTransition } from 'react-transition-group';
+import useEditPassword from '@features/Profile/lib/hooks/useEditPassword';
+import { closeForm } from '@shared/lib';
 import { ToggleState } from '@shared/types';
-import EditPasswordSchema from '../../model/types/EditPasswordSchema';
-import putPasswordApi from '../../api/putPasswordApi';
+import { CreateButton, DefaultButton } from '@shared/ui/Button';
+import { Caption } from '@shared/ui/Caption';
+import { FormInput } from '@shared/ui/Input';
+import { Sidebar } from '@shared/ui/Sidebar';
+import { TopBar } from '@shared/ui/TopBar';
 import ProfileKeys from '../../model/types/ProfileKeys';
-import { setPopupChildren, setPopupState } from '../../../PopupMessage/model/slice/popupSlice';
+import style from './style.module.css';
+import '@widgets/LeftSidebar/ui/LeftSidebar/left-sidebar.animation.css';
 
 interface IEditPasswordProps {
     state: boolean;
@@ -22,42 +19,10 @@ interface IEditPasswordProps {
     refSidebar: RefObject<HTMLDivElement | null>;
 }
 
-const InitialValues: EditPasswordSchema = {
-    user_id: '',
-    user_password: '',
-    user_password_new: '',
-};
-
 const EditPassword: FC<IEditPasswordProps> = ({ state, setState, refSidebar }) => {
     const refForm = useRef<HTMLDivElement>(null);
-    const { userId } = useAppSelector(state => state.user);
-    const dispatch = useAppDispatch();
 
-    const handleChange: SubmitHandler<EditPasswordSchema> = async data => {
-        try {
-            const formData = new FormData();
-
-            formData.append('user_id', userId);
-            formData.append('user_password', data.user_password);
-            formData.append('user_password_new', data.user_password_new);
-
-            const newData = await putPasswordApi(userId, formData);
-
-            dispatch(setPopupState(true));
-            dispatch(setPopupChildren(newData.data.message));
-
-            if (newData.data.status === 200) closeForm('password', setState);
-        } catch (error) {
-            console.log(error);
-        }
-    };
-
-    const {
-        register,
-        formState: { errors },
-        handleSubmit,
-        watch,
-    } = useForm({ defaultValues: InitialValues });
+    const { handleChange, handleSubmit, register, errors, isValid } = useEditPassword(setState);
 
     return (
         <CSSTransition
@@ -86,13 +51,7 @@ const EditPassword: FC<IEditPasswordProps> = ({ state, setState, refSidebar }) =
                                 type="password"
                                 id="user_password"
                                 placeholder="Current Password"
-                                {...register('user_password', {
-                                    required: 'Current password is required',
-                                    pattern: {
-                                        value: /^.{8,}$/,
-                                        message: 'Password must be at least 8 characters long',
-                                    },
-                                })}
+                                {...register.user_password}
                             />
                         </FormInput>
                         <FormInput errors={errors} field="user_password_new">
@@ -100,16 +59,7 @@ const EditPassword: FC<IEditPasswordProps> = ({ state, setState, refSidebar }) =
                                 type="password"
                                 id="user_password_new"
                                 placeholder="New Password"
-                                {...register('user_password_new', {
-                                    required: 'New password is required',
-                                    pattern: {
-                                        value: /^.{8,}$/,
-                                        message: 'Password must be at least 8 characters long',
-                                    },
-                                    validate: value =>
-                                        value !== watch('user_password') ||
-                                        'New password must be different',
-                                })}
+                                {...register.user_password_new}
                             />
                         </FormInput>
                     </div>
@@ -117,10 +67,7 @@ const EditPassword: FC<IEditPasswordProps> = ({ state, setState, refSidebar }) =
                         Use at least 8 characters with a mix of letters, numbers, and symbols to
                         increase password strength
                     </Caption>
-                    <CreateButton
-                        state={watch('user_password') !== '' && watch('user_password_new') !== ''}
-                        foo={handleSubmit(handleChange)}
-                    >
+                    <CreateButton state={isValid} foo={handleSubmit(handleChange)}>
                         <HiOutlineCheck />
                     </CreateButton>
                 </div>

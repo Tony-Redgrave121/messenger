@@ -1,33 +1,32 @@
-import React, { Dispatch, FC, RefObject, SetStateAction } from 'react';
-import { CSSTransition } from 'react-transition-group';
-import style from './style.module.css';
+import React, { Dispatch, FC, SetStateAction, useRef } from 'react';
 import {
     HiOutlineArrowLeft,
     HiOutlineShieldExclamation,
     HiOutlineTrash,
     HiOutlineUserPlus,
 } from 'react-icons/hi2';
-import { Caption } from '@shared/ui/Caption';
-import { SearchBar } from '@shared/ui/SearchBar';
-import { Popup } from '@shared/ui/Popup';
-import { NoResult } from '@shared/ui/NoResult';
+import { CSSTransition } from 'react-transition-group';
+import MessengerSettingsSchema from '@features/EditMessenger/model/types/MessengerSettingsSchema';
+import { ContactSchema } from '@entities/Contact';
 import MembersList from '@entities/Member/ui/MembersList/MembersList';
+import MessengerSettingsKeys from '@entities/Messenger/model/types/MessengerSettingsKeys';
 import { closeForm } from '@shared/lib';
-import PopupEditModerators from '../PopupEditMembers/PopupEditModerators';
+import { ToggleState } from '@shared/types';
+import { CreateButton, DefaultButton } from '@shared/ui/Button';
+import { Caption } from '@shared/ui/Caption';
+import { NoResult } from '@shared/ui/NoResult';
+import { Popup } from '@shared/ui/Popup';
+import { SearchBar } from '@shared/ui/SearchBar';
+import { Sidebar } from '@shared/ui/Sidebar';
+import { TopBar } from '@shared/ui/TopBar';
 import useEditModerators from '../../lib/hooks/useEditModerators';
 import useEditSettings from '../../lib/hooks/useEditSettings';
-import { CreateButton, DefaultButton } from '@shared/ui/Button';
-import { TopBar } from '@shared/ui/TopBar';
-import { Sidebar } from '@shared/ui/Sidebar';
-import { ToggleState } from '@shared/types';
-import { ContactSchema } from '@entities/Contact';
-import MessengerSettingsSchema from '@features/EditMessenger/model/types/MessengerSettingsSchema';
-import MessengerSettingsKeys from '@entities/Messenger/model/types/MessengerSettingsKeys';
+import PopupEditModerators from '../PopupEditMembers/PopupEditModerators';
+import style from './style.module.css';
 
 interface IEditMemberProps {
     state: boolean;
     setState: Dispatch<SetStateAction<ToggleState<MessengerSettingsKeys>>>;
-    refSidebar: RefObject<HTMLDivElement | null>;
     members: ContactSchema[];
     moderators: ContactSchema[];
     setSettings: Dispatch<SetStateAction<MessengerSettingsSchema>>;
@@ -35,12 +34,13 @@ interface IEditMemberProps {
 
 const EditModerators: FC<IEditMemberProps> = ({
     setState,
-    refSidebar,
     state,
     members,
     moderators,
     setSettings,
 }) => {
+    const refEditModerators = useRef<HTMLDivElement>(null);
+
     const { newMembers, setNewMembers, refForm, searchRef, filteredArr, handleInput, filter } =
         useEditModerators(moderators);
 
@@ -63,14 +63,14 @@ const EditModerators: FC<IEditMemberProps> = ({
     return (
         <CSSTransition
             in={state}
-            nodeRef={refSidebar}
+            nodeRef={refEditModerators}
             timeout={300}
             classNames="left-sidebar-node"
             unmountOnExit
         >
             <Sidebar
                 styles={['RightSidebarContainer', 'RightSidebarContainerEdit']}
-                ref={refSidebar}
+                ref={refEditModerators}
             >
                 <TopBar>
                     <span>

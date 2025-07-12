@@ -1,45 +1,39 @@
-import { Dispatch, FC, RefObject, SetStateAction } from 'react';
-import { CSSTransition } from 'react-transition-group';
-import style from './style.module.css';
+import { Dispatch, FC, SetStateAction, useRef } from 'react';
 import { HiOutlineArrowLeft, HiOutlineMinusCircle, HiOutlineUserPlus } from 'react-icons/hi2';
-import { Caption } from '@shared/ui/Caption';
-import { SearchBar } from '@shared/ui/SearchBar';
-import { NoResult } from '@shared/ui/NoResult';
+import { CSSTransition } from 'react-transition-group';
+import MessengerSettingsSchema from '@features/EditMessenger/model/types/MessengerSettingsSchema';
+import { ContactSchema } from '@entities/Contact';
 import MembersList from '@entities/Member/ui/MembersList/MembersList';
-import PopupEditSubscribers from '../PopupEditMembers/PopupEditSubscribers';
+import MessengerSettingsKeys from '@entities/Messenger/model/types/MessengerSettingsKeys';
 import { closeForm } from '@shared/lib';
+import { ToggleState } from '@shared/types';
+import { CreateButton, DefaultButton } from '@shared/ui/Button';
+import { Caption } from '@shared/ui/Caption';
+import { NoResult } from '@shared/ui/NoResult';
+import { Popup } from '@shared/ui/Popup';
+import { SearchBar } from '@shared/ui/SearchBar';
+import { Sidebar } from '@shared/ui/Sidebar';
+import { TopBar } from '@shared/ui/TopBar';
 import useEditSettings from '../../lib/hooks/useEditSettings';
 import useEditSubscribers from '../../lib/hooks/useEditSubscribers';
-import { CreateButton, DefaultButton } from '@shared/ui/Button';
-import { Popup } from '@shared/ui/Popup';
-import { TopBar } from '@shared/ui/TopBar';
-import { Sidebar } from '@shared/ui/Sidebar';
-import { ToggleState } from '@shared/types';
-import { ContactSchema } from '@entities/Contact';
-import MessengerSettingsSchema from '@features/EditMessenger/model/types/MessengerSettingsSchema';
-import MessengerSettingsKeys from '@entities/Messenger/model/types/MessengerSettingsKeys';
+import PopupEditSubscribers from '../PopupEditMembers/PopupEditSubscribers';
+import style from './style.module.css';
 
 interface IEditSubscribersProps {
     state: boolean;
     setState: Dispatch<SetStateAction<ToggleState<MessengerSettingsKeys>>>;
-    refSidebar: RefObject<HTMLDivElement | null>;
     members: ContactSchema[];
     setSettings: Dispatch<SetStateAction<MessengerSettingsSchema>>;
 }
 
-const EditSubscribers: FC<IEditSubscribersProps> = ({
-    setState,
-    refSidebar,
-    state,
-    members,
-    setSettings,
-}) => {
+const EditSubscribers: FC<IEditSubscribersProps> = ({ setState, state, members, setSettings }) => {
     const { refForm, searchRef, filteredArr, handleInput, filter } = useEditSubscribers(
         state,
         setState,
         members,
     );
 
+    const refEditSubscribers = useRef<HTMLDivElement>(null);
     const { deleteFromGroup, handleCancel, setPopup, popup } = useEditSettings(setSettings);
 
     const SubscribersDropDown = (userId: string) => [
@@ -53,14 +47,14 @@ const EditSubscribers: FC<IEditSubscribersProps> = ({
     return (
         <CSSTransition
             in={state}
-            nodeRef={refSidebar}
+            nodeRef={refEditSubscribers}
             timeout={300}
             classNames="left-sidebar-node"
             unmountOnExit
         >
             <Sidebar
                 styles={['RightSidebarContainer', 'RightSidebarContainerEdit']}
-                ref={refSidebar}
+                ref={refEditSubscribers}
             >
                 <TopBar>
                     <span>

@@ -1,16 +1,16 @@
 import { FC, ReactNode, useEffect, useRef } from 'react';
-import style from './style.module.css';
 import './main.animation.css';
-import img from '@shared/assets/images/pattern.webp';
 import { CSSTransition } from 'react-transition-group';
-import { useAppDispatch, useAppSelector } from '@shared/lib';
 import { syncNotifications } from '@entities/Messenger/lib/thunk/messengerThunk';
+import img from '@shared/assets/images/pattern.webp';
+import { useAppDispatch, useAppSelector } from '@shared/lib';
+import style from './style.module.css';
 
-interface IMainContainer {
+interface IMainContainerProps {
     children?: ReactNode;
 }
 
-const Main: FC<IMainContainer> = ({ children }) => {
+const Main: FC<IMainContainerProps> = ({ children }) => {
     const wrapperRef = useRef<HTMLDivElement>(null);
     const wrapperState = useAppSelector(state => state.wrapper.wrapperState);
     const dispatch = useAppDispatch();

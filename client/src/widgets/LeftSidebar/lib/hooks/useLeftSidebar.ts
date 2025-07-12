@@ -1,46 +1,47 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
-import { useAppDispatch, useAppSelector } from '@shared/lib';
-import { useLiveUpdatesWS } from '@entities/Reaction/lib/hooks/useLiveUpdatesWS';
 import debounce from 'debounce';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate } from 'react-router';
-import { useAbortController } from '@shared/lib';
-import useCloseLeftSidebar from './useCloseLeftSidebar';
-import { ListKeys } from '@shared/types';
-import { setSidebarLeft } from '../../model/slice/sidebarSlice';
 import getFilteredMessengersApi from '@widgets/LeftSidebar/api/getFilteredMessengersApi';
-import isChatArray from '../isChatArray';
-import isMessengerArray from '../isMessengerArray';
+import mapSearchDTO from '@widgets/LeftSidebar/api/mappers/mapSearchDTO';
+import { MessengerCreationSchema } from '@features/CreateMessenger/model/types/MessengerCreationSchema';
 import UnifiedMessengerSchema from '@features/MessengerSearch/model/types/UnifiedMessengerSchema';
+import { useAppDispatch, useAppSelector } from '@shared/lib';
+import { useAbortController } from '@shared/lib';
+import { MessengerTypes } from '@shared/types';
+import { setSidebarLeft } from '../../model/slice/sidebarSlice';
+import useCloseLeftSidebar from './useCloseLeftSidebar';
 
 const useLeftSidebar = () => {
     const [settings, setSettings] = useState(false);
     const [messenger, setMessenger] = useState(false);
     const [search, setSearch] = useState(false);
-    const [filter, setFilter] = useState('');
     const [profile, setProfile] = useState(false);
-    const [messengerCreation, setMessengerCreation] = useState({
+    const [filter, setFilter] = useState('');
+    const [messengerCreation, setMessengerCreation] = useState<MessengerCreationSchema>({
         state: false,
-        type: '',
+        type: undefined,
     });
+
     const refSearch = useRef<HTMLDivElement>(null);
     const refSidebar = useRef<HTMLDivElement>(null);
-    const refProfile = useRef<HTMLDivElement>(null);
+
     const sidebarLeft = useAppSelector(state => state.sidebar.sidebarLeft);
     const { userImg, userName, userId } = useAppSelector(state => state.user);
-    const contacts = useAppSelector(state => state.contact.contacts);
 
-    const socketRef = useLiveUpdatesWS();
     const navigate = useNavigate();
     const { getSignal } = useAbortController();
     const { closeSidebar } = useCloseLeftSidebar();
 
     const [searchRes, setSearchRes] = useState<UnifiedMessengerSchema[]>([]);
-    const [active, setActive] = useState<ListKeys>('chat');
+    const [active, setActive] = useState<MessengerTypes>('chat');
 
-    const navigateChat = (user_id: string) => {
-        closeSidebar();
-        return navigate(`/chat/${user_id}`);
-    };
+    const navigateChat = useCallback(
+        (userId: string) => {
+            closeSidebar();
+            return navigate(`/chat/${userId}`);
+        },
+        [closeSidebar, navigate],
+    );
 
     const searchDebounce = useMemo(
         () =>
@@ -52,26 +53,7 @@ const useLeftSidebar = () => {
                     const searched = await getFilteredMessengersApi(query, type, signal);
 
                     if (searched.status === 200) {
-                        const searchedData = searched.data;
-
-                        let unifiedMessengers: UnifiedMessengerSchema[] = [];
-
-                        if (isChatArray(searchedData)) {
-                            unifiedMessengers = searchedData.map(item => ({
-                                id: item.user_id,
-                                name: item.user_name,
-                                img: item.user_img,
-                                desc: item.user_last_seen,
-                            }));
-                        } else if (isMessengerArray(searchedData)) {
-                            unifiedMessengers = searchedData.map(item => ({
-                                id: item.messenger_id,
-                                name: item.messenger_name,
-                                img: item.messenger_image,
-                                desc: item.count,
-                            }));
-                        }
-
+                        const unifiedMessengers = mapSearchDTO(searched.data);
                         setSearchRes(unifiedMessengers);
                     }
                 } catch (e) {
@@ -85,7 +67,7 @@ const useLeftSidebar = () => {
         const query = event.currentTarget.value.toLowerCase();
         setFilter(query);
 
-        searchDebounce(query, active);
+        if (query.length > 3) searchDebounce(query, active);
     };
 
     useEffect(() => {
@@ -94,7 +76,7 @@ const useLeftSidebar = () => {
     }, [active]);
 
     useEffect(() => {
-        if (filter) setSearch(true);
+        if (filter.length > 3) setSearch(true);
         else setSearch(false);
     }, [filter]);
 
@@ -121,18 +103,15 @@ const useLeftSidebar = () => {
         setMessenger,
         messenger,
         messengerCreation,
-        socketRef,
         setMessengerCreation,
         profile,
         setProfile,
-        refProfile,
         navigateChat,
         searchRes,
         active,
         setActive,
         handleInput,
         search,
-        contacts,
     };
 };
 

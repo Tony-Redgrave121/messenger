@@ -1,13 +1,13 @@
 import React, { ChangeEvent, FC, RefObject } from 'react';
-import style from './search-bar.module.css';
 import { HiOutlineMagnifyingGlass } from 'react-icons/hi2';
+import style from './search-bar.module.css';
 
-interface ISearchBar {
+interface ISearchBarProps {
     searchRef: RefObject<HTMLDivElement | null>;
     foo: (event: ChangeEvent<HTMLInputElement>) => void;
 }
 
-const SearchBar: FC<ISearchBar> = ({ searchRef, foo }) => {
+const SearchBar: FC<ISearchBarProps> = ({ searchRef, foo }) => {
     return (
         <div className={style.SearchBar} ref={searchRef}>
             <HiOutlineMagnifyingGlass />

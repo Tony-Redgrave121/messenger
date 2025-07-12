@@ -1,15 +1,15 @@
-import { FC, ReactNode } from 'react';
-import style from './style.module.css';
+import { FC, memo, ReactNode } from 'react';
 import { getDate } from '@shared/lib';
 import { LoadFile } from '@shared/ui/LoadFile';
 import { ContactSchema } from '../index';
+import style from './style.module.css';
 
 interface IContactProps {
     contact: ContactSchema;
     children?: ReactNode;
 }
 
-const Contact: FC<IContactProps> = ({ contact, children }) => {
+const Contact: FC<IContactProps> = memo(({ contact, children }) => {
     return (
         <div className={style.ContactBlock}>
             {children}
@@ -27,6 +27,8 @@ const Contact: FC<IContactProps> = ({ contact, children }) => {
             </div>
         </div>
     );
-};
+});
+
+Contact.displayName = 'Contact';
 
 export default Contact;

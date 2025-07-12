@@ -14,4 +14,6 @@ const DefaultButton: FC<IDefaultButtonProps> = ({ children, foo }) => {
     );
 };
 
+DefaultButton.displayName = 'DefaultButton';
+
 export default DefaultButton;

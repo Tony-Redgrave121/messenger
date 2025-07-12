@@ -1,35 +1,32 @@
 import { FC, memo, useState } from 'react';
-import style from './style.module.css';
 import { HiOutlineMagnifyingGlass, HiOutlineXMark, HiOutlineArrowLeft } from 'react-icons/hi2';
-import { DefaultButton } from '@shared/ui/Button';
-import SearchMessage from '@features/SearchMessage/ui/SearchMessage';
 import { useNavigate } from 'react-router-dom';
-import { setWrapperState } from '../../Main/model/slice/wrapperSlice';
-import { useAppDispatch } from '@shared/lib';
+import SearchMessage from '@features/SearchMessage/ui/SearchMessage';
 import AdaptMessengerSchema from '@entities/Messenger/model/types/AdaptMessengerSchema';
+import { useAppDispatch } from '@shared/lib';
+import { DefaultButton } from '@shared/ui/Button';
+import { setWrapperState } from '../../Main/model/slice/wrapperSlice';
+import style from './style.module.css';
 
-interface ICommentsHeader {
+interface ICommentsHeaderProps {
     commentsCount?: number;
     messenger: AdaptMessengerSchema;
 }
 
-const ChannelPostHeader: FC<ICommentsHeader> = memo(({ commentsCount, messenger }) => {
+const ChannelPostHeader: FC<ICommentsHeaderProps> = memo(({ commentsCount, messenger }) => {
     const [inputState, setInputState] = useState(false);
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
 
     const handleClose = () => {
-        let timer: NodeJS.Timeout | null;
         dispatch(setWrapperState(false));
 
-        timer = setTimeout(() => {
+        const timer = setTimeout(() => {
             navigate(`/channel/${messenger.id}`);
             dispatch(setWrapperState(true));
         }, 300);
 
-        return () => {
-            timer && clearTimeout(timer);
-        };
+        return () => clearTimeout(timer);
     };
 
     return (
@@ -47,5 +44,7 @@ const ChannelPostHeader: FC<ICommentsHeader> = memo(({ commentsCount, messenger 
         </header>
     );
 });
+
+ChannelPostHeader.displayName = 'ChannelPostHeader';
 
 export default ChannelPostHeader;

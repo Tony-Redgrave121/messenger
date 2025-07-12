@@ -1,6 +1,6 @@
 import React, { FC, ReactNode } from 'react';
-import buttonStyle from '../../styles/button.module.css';
 import { SwitchButton } from '../../index';
+import buttonStyle from '../../styles/button.module.css';
 
 interface ISwitchSettingButtonProps {
     foo: () => void;

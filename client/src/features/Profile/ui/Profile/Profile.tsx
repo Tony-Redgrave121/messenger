@@ -1,86 +1,54 @@
-import React, { Dispatch, FC, RefObject, SetStateAction, useRef, useState } from 'react';
+import React, { Dispatch, FC, lazy, memo, SetStateAction, Suspense, useRef, useState } from 'react';
 import { CSSTransition } from 'react-transition-group';
-import './profile.animation.css';
-import style from '@widgets/RightSidebar/ui/style.module.css';
-import { ImageBlock } from '../../../ImageBlock';
+import ProfileActions from '@features/Profile/ui/Profile/ProfileActions';
+import ProfileInfo from '@features/Profile/ui/Profile/ProfileInfo';
+import ProfileTopBar from '@features/Profile/ui/Profile/ProfileTopBar';
+import { deleteAccount } from '@entities/User/lib/thunk/userThunk';
+import { useAppDispatch, useAppSelector } from '@shared/lib';
 import useLoadBlob from '@shared/lib/hooks/useLoadBlob/useLoadBlob';
-import { useAppDispatch, useAppSelector, openForm } from '@shared/lib';
-import {
-    HiOutlinePencil,
-    HiOutlineArrowRightOnRectangle,
-    HiOutlineExclamationCircle,
-    HiOutlinePaperClip,
-    HiOutlineLockClosed,
-    HiOutlineUser,
-    HiOutlineArrowLeft,
-    HiOutlineTrash,
-} from 'react-icons/hi2';
 import { Caption } from '@shared/ui/Caption';
-import { EditProfile } from '../../index';
-import { EditPassword } from '../../index';
-import useCopy from '@entities/Message/lib/hooks/useCopy';
-import PopupConfirmation from '../PopupConfirmation/PopupConfirmation';
-import { deleteAccount, logout } from '@entities/User/lib/thunk/userThunk';
-import { DefaultButton, SettingButton } from '@shared/ui/Button';
 import { Popup } from '@shared/ui/Popup';
-import { TopBar } from '@shared/ui/TopBar';
 import { Sidebar } from '@shared/ui/Sidebar';
-import { ToggleState } from '@shared/types';
-import ProfileKeys from '../../model/types/ProfileKeys';
+import { ImageBlock } from '../../../ImageBlock';
+import PopupConfirmation from '../PopupConfirmation/PopupConfirmation';
+import './profile.animation.css';
 
 interface IProfileProps {
     state: boolean;
     setState: Dispatch<SetStateAction<boolean>>;
-    refSidebar: RefObject<HTMLDivElement | null>;
 }
 
-const CLIENT_URL = process.env.VITE_CLIENT_URL;
+const EditProfile = lazy(() => import('../EditProfile/EditProfile'));
+const EditPassword = lazy(() => import('../EditPassword/EditPassword'));
 
-const Profile: FC<IProfileProps> = ({ state, setState, refSidebar }) => {
-    const initialToggleState: ToggleState<ProfileKeys> = {
-        profile: false,
-        password: false,
-    };
-
-    const [popup, setPopup] = useState(false);
-    const [formsState, setFormsState] = useState(initialToggleState);
-
-    const { userImg, userName, userId, userBio } = useAppSelector(state => state.user);
-    const { image } = useLoadBlob(userImg ? `users/${userId}/${userImg}` : '');
-
+const Profile: FC<IProfileProps> = memo(({ state, setState }) => {
+    const refProfile = useRef<HTMLDivElement>(null);
     const refEditProfile = useRef<HTMLDivElement>(null);
 
-    const { handleCopy } = useCopy();
+    const [popup, setPopup] = useState(false);
+    const [formsState, setFormsState] = useState({
+        profile: false,
+        password: false,
+    });
+
+    const { userImg, userName, userId } = useAppSelector(state => state.user);
+    const { image } = useLoadBlob(userImg ? `users/${userId}/${userImg}` : '');
+
     const dispatch = useAppDispatch();
 
     return (
         <CSSTransition
             in={state}
-            nodeRef={refSidebar}
+            nodeRef={refProfile}
             timeout={300}
             classNames="profile-node"
             unmountOnExit
         >
             <Sidebar
                 styles={['LeftSidebarContainer', 'LeftSidebarContainerSettings']}
-                ref={refSidebar}
+                ref={refProfile}
             >
-                <TopBar>
-                    <span>
-                        <DefaultButton foo={() => setState(false)}>
-                            <HiOutlineArrowLeft />
-                        </DefaultButton>
-                        <p>Settings</p>
-                    </span>
-                    <span>
-                        <DefaultButton foo={() => openForm('profile', setFormsState)}>
-                            <HiOutlinePencil />
-                        </DefaultButton>
-                        <DefaultButton foo={() => dispatch(logout())}>
-                            <HiOutlineArrowRightOnRectangle />
-                        </DefaultButton>
-                    </span>
-                </TopBar>
+                <ProfileTopBar setState={setState} setFormsState={setFormsState} />
                 <ImageBlock
                     image={image}
                     info={{
@@ -88,69 +56,22 @@ const Profile: FC<IProfileProps> = ({ state, setState, refSidebar }) => {
                         type: 'online',
                     }}
                 />
-                <ul className={style.InfoList}>
-                    <li>
-                        <SettingButton
-                            foo={() => handleCopy(userName, 'Username copied to clipboard')}
-                            text={userName}
-                            desc={'Username'}
-                        >
-                            <HiOutlineUser />
-                        </SettingButton>
-                    </li>
-                    <li>
-                        <SettingButton
-                            foo={() =>
-                                handleCopy(
-                                    `${CLIENT_URL}/chat/${userId}`,
-                                    'Link copied to clipboard',
-                                )
-                            }
-                            text={userId}
-                            desc={'Link'}
-                        >
-                            <HiOutlinePaperClip />
-                        </SettingButton>
-                    </li>
-                    {userBio && (
-                        <li>
-                            <SettingButton
-                                foo={() => handleCopy(userBio, 'Bio copied to clipboard')}
-                                text={userBio}
-                                desc={'Bio'}
-                            >
-                                <HiOutlineExclamationCircle />
-                            </SettingButton>
-                        </li>
-                    )}
-                </ul>
+                <ProfileInfo />
                 <Caption />
-                <ul className={style.InfoList}>
-                    <li>
-                        <SettingButton
-                            foo={() => openForm('password', setFormsState)}
-                            text={'Edit Password'}
-                        >
-                            <HiOutlineLockClosed />
-                        </SettingButton>
-                    </li>
-                    <li>
-                        <SettingButton foo={() => setPopup(true)} text={'Delete Account'} isRed>
-                            <HiOutlineTrash />
-                        </SettingButton>
-                    </li>
-                </ul>
+                <ProfileActions setFormsState={setFormsState} setPopup={setPopup} />
                 <Caption />
-                <EditProfile
-                    state={formsState.profile}
-                    setState={setFormsState}
-                    refSidebar={refEditProfile}
-                />
-                <EditPassword
-                    state={formsState.password}
-                    setState={setFormsState}
-                    refSidebar={refEditProfile}
-                />
+                <Suspense>
+                    <EditProfile
+                        state={formsState.profile}
+                        setState={setFormsState}
+                        refSidebar={refEditProfile}
+                    />
+                    <EditPassword
+                        state={formsState.password}
+                        setState={setFormsState}
+                        refSidebar={refEditProfile}
+                    />
+                </Suspense>
                 <Popup state={popup} handleCancel={() => setPopup(false)}>
                     <PopupConfirmation
                         title="Delete Account"
@@ -163,6 +84,8 @@ const Profile: FC<IProfileProps> = ({ state, setState, refSidebar }) => {
             </Sidebar>
         </CSSTransition>
     );
-};
+});
+
+Profile.displayName = 'Profile';
 
 export default Profile;

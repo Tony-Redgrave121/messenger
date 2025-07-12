@@ -1,6 +1,6 @@
-import React, { FC } from 'react';
-import style from './style.module.css';
+import React, { FC, memo } from 'react';
 import { LoadFile } from '@shared/ui/LoadFile';
+import style from './style.module.css';
 
 interface IImageBlockProps {
     image: string;
@@ -10,7 +10,7 @@ interface IImageBlockProps {
     };
 }
 
-const ImageBlock: FC<IImageBlockProps> = ({ image, info }) => {
+const ImageBlock: FC<IImageBlockProps> = memo(({ image, info }) => {
     return (
         <>
             {image ? (
@@ -34,6 +34,8 @@ const ImageBlock: FC<IImageBlockProps> = ({ image, info }) => {
             )}
         </>
     );
-};
+});
+
+ImageBlock.displayName = 'ImageBlock';
 
 export default ImageBlock;

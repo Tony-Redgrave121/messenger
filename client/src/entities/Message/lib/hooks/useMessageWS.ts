@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
-import { useAppSelector } from '@shared/lib';
 import { useParams } from 'react-router-dom';
+import { useAppSelector } from '@shared/lib';
 import { MessageSchema } from '../../index';
 
 const SERVER_DOMAIN_NAME = process.env.VITE_SERVER_DOMAIN_NAME;
@@ -31,7 +31,7 @@ const useMessageWS = () => {
         };
 
         socket.onmessage = event => {
-            let message = JSON.parse(event.data);
+            const message = JSON.parse(event.data);
 
             switch (message.method) {
                 case 'CONNECTION':

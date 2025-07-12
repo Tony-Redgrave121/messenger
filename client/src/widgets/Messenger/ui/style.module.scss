@@ -1,4 +1,4 @@
-@use "../../app/styles/variables.css" as v;
+@use "../../../app/styles/variables.css" as v;
 
 .MessengerContainer {
   display: flex;
@@ -24,21 +24,6 @@
     scroll-behavior: smooth;
     max-width: 700px;
     padding: 64px 8px 8px;
-  }
-
-  .SubscribeButton {
-    position: absolute;
-    bottom: 15px;
-    padding: 16px 28px;
-    text-transform: uppercase;
-    color: white;
-    background-color: #212121;
-    border-radius: 10px;
-    transition: 0.2s background-color ease-in-out;
-
-    &:hover {
-      background-color: #2b2b2b;
-    }
   }
 
   > :last-child {

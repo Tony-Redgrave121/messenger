@@ -1,15 +1,15 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import { setPopupChildren, setPopupState } from '@features/PopupMessage/model/slice/popupSlice';
+import fetchMessagesApi from '@entities/Messenger/api/fetchMessagesApi';
+import fetchMessengerApi from '@entities/Messenger/api/fetchMessengerApi';
+import getReactionsApi from '@entities/Messenger/api/getReactionsApi';
+import mapMessengerDTO from '@entities/Messenger/api/mappers/mapMessengerDTO';
+import AdaptMessengerSchema from '@entities/Messenger/model/types/AdaptMessengerSchema';
+import { ReactionSchema } from '@entities/Reaction';
 import { isServerError, useAppDispatch, useAppSelector } from '@shared/lib';
 import { useAbortController } from '@shared/lib';
 import { useMessageWS } from '../../../Message';
-import { setPopupChildren, setPopupState } from '@features/PopupMessage/model/slice/popupSlice';
-import { ReactionSchema } from '@entities/Reaction';
-import mapMessengerDTO from '@entities/Messenger/api/mappers/mapMessengerDTO';
-import AdaptMessengerSchema from '@entities/Messenger/model/types/AdaptMessengerSchema';
-import fetchMessengerApi from '@entities/Messenger/api/fetchMessengerApi';
-import fetchMessagesApi from '@entities/Messenger/api/fetchMessagesApi';
-import getReactionsApi from '@entities/Messenger/api/getReactionsApi';
 
 const types = ['chat', 'channel', 'group'];
 
@@ -61,7 +61,7 @@ const useFetchInitialData = () => {
 
                 const adaptMessenger = mapMessengerDTO(messenger.data);
 
-                if (!!adaptMessenger.id) {
+                if (adaptMessenger.id) {
                     setMessenger(adaptMessenger);
                     setMessagesList(prev => [...prev, ...messages.data]);
                     setReactions(reactions.data);
@@ -76,7 +76,7 @@ const useFetchInitialData = () => {
         };
 
         handleMessageList();
-    }, [user.userId, messengerId, postId]);
+    }, [messengerId, postId]);
 
     return {
         messenger,

@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
-import { useAppDispatch } from '@shared/lib';
 import { useNavigate } from 'react-router-dom';
 import { setPopupChildren, setPopupState } from '@features/PopupMessage/model/slice/popupSlice';
+import { useAppDispatch } from '@shared/lib';
 
 const PageError = () => {
     const dispatch = useAppDispatch();

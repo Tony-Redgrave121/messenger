@@ -1,10 +1,10 @@
 import { ChangeEvent, useEffect, useRef, useState } from 'react';
-import { getFileObject, useAppSelector } from '@shared/lib';
 import { useParams } from 'react-router-dom';
+import FileStateSchema from '@entities/Media/model/types/FileStateSchema';
 import { useLiveUpdatesWS } from '@entities/Reaction/lib/hooks/useLiveUpdatesWS';
+import { getFileObject, useAppSelector } from '@shared/lib';
 import postMessageApi from '../../api/postMessageApi';
 import InputBlockSchema from '../../model/types/InputBlockSchema';
-import FileStateSchema from '@entities/Media/model/types/FileStateSchema';
 
 const useInputBlock = ({ reply, setReply, socketRef, members }: InputBlockSchema) => {
     const refTextarea = useRef<HTMLTextAreaElement>(null);
@@ -40,7 +40,7 @@ const useInputBlock = ({ reply, setReply, socketRef, members }: InputBlockSchema
 
     const resetInput = () => {
         setInputText('');
-        refTextarea.current && (refTextarea.current.value = '');
+        if (refTextarea.current) refTextarea.current.value = '';
         setReply(null);
     };
 

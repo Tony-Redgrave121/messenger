@@ -1,22 +1,22 @@
+import { clsx } from 'clsx';
 import React, { Dispatch, FC, SetStateAction, useRef } from 'react';
+import { useNavigate } from 'react-router';
 import { CSSTransition } from 'react-transition-group';
 import '@widgets/LeftSidebar/ui/LeftSidebar/left-sidebar.animation.css';
-import style from './style.module.css';
-import contactStyles from '@entities/Contact/ui/style.module.css';
-import { clsx } from 'clsx';
-import { useNavigate } from 'react-router';
-import { LoadFile } from '@shared/ui/LoadFile';
-import { useAppSelector, getDate } from '@shared/lib';
-import { ContactButton } from '@shared/ui/Button';
-import { ListKeys } from '@shared/types';
 import UnifiedMessengerSchema from '@features/MessengerSearch/model/types/UnifiedMessengerSchema';
+import contactStyles from '@entities/Contact/ui/style.module.css';
+import { useAppSelector, getDate } from '@shared/lib';
+import { MessengerTypes } from '@shared/types';
+import { ContactButton } from '@shared/ui/Button';
+import { LoadFile } from '@shared/ui/LoadFile';
+import style from './style.module.css';
 
 interface IMessengerSearchProps {
     animationState: boolean;
-    active: 'chat' | 'group' | 'channel';
-    setActive: Dispatch<SetStateAction<ListKeys>>;
+    active: MessengerTypes;
+    setActive: Dispatch<SetStateAction<MessengerTypes>>;
     searchRes: UnifiedMessengerSchema[];
-    foo: () => void;
+    foo?: () => void;
 }
 
 const MessengerSearch: FC<IMessengerSearchProps> = ({
@@ -29,16 +29,16 @@ const MessengerSearch: FC<IMessengerSearchProps> = ({
     const searchListRef = useRef<HTMLDivElement>(null);
     const navigate = useNavigate();
 
-    const buttonsList: ListKeys[] = ['chat', 'group', 'channel'];
+    const buttonsList: MessengerTypes[] = ['chat', 'group', 'channel'];
     const userId = useAppSelector(state => state.user.userId);
 
-    const buttonOnClick = (newActive: ListKeys) => {
+    const buttonOnClick = (newActive: MessengerTypes) => {
         setActive(newActive);
     };
 
     const handleClick = (id: string) => {
         if (userId !== id) {
-            foo();
+            foo?.();
             navigate(`/${active}/${id}`);
         }
     };

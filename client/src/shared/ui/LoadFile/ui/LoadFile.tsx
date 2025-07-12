@@ -1,14 +1,14 @@
-import { FC, useRef } from 'react';
-import style from './style.module.css';
-import useLoadBlob from '../../../lib/hooks/useLoadBlob/useLoadBlob';
+import { FC, memo, useRef } from 'react';
 import { getTitle } from '../../../lib';
+import useLoadBlob from '../../../lib/hooks/useLoadBlob/useLoadBlob';
+import style from './style.module.css';
 
 interface ILoadImage {
     imagePath?: string;
     imageTitle: string;
 }
 
-const LoadFile: FC<ILoadImage> = ({ imagePath, imageTitle }) => {
+const LoadFile: FC<ILoadImage> = memo(({ imagePath, imageTitle }) => {
     const refImageContainer = useRef<HTMLDivElement>(null);
     const { load, image } = useLoadBlob(imagePath);
 
@@ -21,6 +21,8 @@ const LoadFile: FC<ILoadImage> = ({ imagePath, imageTitle }) => {
             )}
         </div>
     );
-};
+});
+
+LoadFile.displayName = 'LoadFile';
 
 export default LoadFile;

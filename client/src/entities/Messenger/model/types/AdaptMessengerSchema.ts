@@ -1,11 +1,12 @@
 import { MemberSchema } from '@entities/Member';
+import { MessengerTypes } from '@shared/types';
 
 export default interface AdaptMessengerSchema {
     id: string;
     name: string;
     image?: string;
     desc?: string;
-    type: 'chat' | 'channel' | 'group';
+    type: MessengerTypes;
     members?: MemberSchema[];
     members_count?: number;
     last_seen?: Date;

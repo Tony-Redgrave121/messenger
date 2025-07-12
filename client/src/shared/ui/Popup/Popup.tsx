@@ -1,8 +1,8 @@
+import { clsx } from 'clsx';
 import { FC, ReactNode, useRef } from 'react';
+import { CSSTransition } from 'react-transition-group';
 import style from './style.module.css';
 import './popup-animation.css';
-import { CSSTransition } from 'react-transition-group';
-import { clsx } from 'clsx';
 
 interface IPopupProps {
     state: boolean;

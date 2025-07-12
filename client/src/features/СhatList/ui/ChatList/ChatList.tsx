@@ -1,9 +1,9 @@
 import { lazy, memo, useEffect } from 'react';
-import { useAppDispatch, useAppSelector } from '@shared/lib';
-import style from './style.module.css';
 import { setMessengers } from '@entities/Messenger/model/slice/messengerSlice';
+import { useAppDispatch, useAppSelector } from '@shared/lib';
 import { useAbortController } from '@shared/lib';
 import chatListApi from '../../api/chatListApi';
+import style from './style.module.css';
 
 const ChatBlock = lazy(() => import('@entities/Messenger/ui/СhatBlock/ChatBlock'));
 
@@ -27,7 +27,7 @@ const ChatList = memo(() => {
         };
 
         handleMessengerList();
-    }, [userId]);
+    }, [dispatch, userId]);
 
     return (
         <ul className={style.ChatList}>
@@ -37,5 +37,7 @@ const ChatList = memo(() => {
         </ul>
     );
 });
+
+ChatList.displayName = 'ChatList';
 
 export default ChatList;

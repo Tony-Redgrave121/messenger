@@ -1,11 +1,10 @@
 import React, { FC, ReactNode, useState } from 'react';
-import style from '../../../Contact/ui/style.module.css';
-
-import { LoadFile } from '@shared/ui/LoadFile';
-import { DropDown } from '@shared/ui/DropDown';
 import { useAppSelector, getDate, contextMenu } from '@shared/lib';
 import { DropDownList } from '@shared/types';
+import { DropDown } from '@shared/ui/DropDown';
+import { LoadFile } from '@shared/ui/LoadFile';
 import { ContactSchema } from '../../../Contact';
+import style from '../../../Contact/ui/style.module.css';
 
 interface IContactsProps {
     contact: ContactSchema;

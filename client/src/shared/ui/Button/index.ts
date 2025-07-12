@@ -9,3 +9,4 @@ export { default as SwitchButton } from './ui/SwitchButton/SwitchButton';
 export { default as SwitchSettingButton } from './ui/SwitchSettingButton/SwitchSettingButton';
 export { default as VolumeButton } from './ui/VolumeButton/VolumeButton';
 export { default as WhiteButton } from './ui/WhiteButton/WhiteButton';
+export { default as SubscribeButton } from './ui/SubscribeButton/SubscribeButton';

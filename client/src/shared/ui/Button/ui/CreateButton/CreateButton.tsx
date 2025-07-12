@@ -1,7 +1,8 @@
 import React, { FC, ReactNode, useRef } from 'react';
-import createButtonStyle from './create-button.module.css';
 import { CSSTransition } from 'react-transition-group';
 import { InterButton } from '../../index';
+import createButtonStyle from './create-button.module.css';
+import './create-button.animation.css';
 
 interface ICreateButtonProps {
     foo: () => void;
@@ -16,7 +17,7 @@ const CreateButton: FC<ICreateButtonProps> = ({ foo, children, state }) => {
         <CSSTransition
             in={state}
             nodeRef={refButton}
-            timeout={300}
+            timeout={200}
             classNames="create-button"
             unmountOnExit
         >
