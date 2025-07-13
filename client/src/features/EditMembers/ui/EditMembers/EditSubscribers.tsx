@@ -1,4 +1,4 @@
-import { Dispatch, FC, SetStateAction, useRef } from 'react';
+import { Dispatch, FC, SetStateAction, useCallback, useRef } from 'react';
 import { HiOutlineArrowLeft, HiOutlineMinusCircle, HiOutlineUserPlus } from 'react-icons/hi2';
 import { CSSTransition } from 'react-transition-group';
 import MessengerSettingsSchema from '@features/EditMessenger/model/types/MessengerSettingsSchema';
@@ -27,22 +27,21 @@ interface IEditSubscribersProps {
 }
 
 const EditSubscribers: FC<IEditSubscribersProps> = ({ setState, state, members, setSettings }) => {
-    const { refForm, searchRef, filteredArr, handleInput, filter } = useEditSubscribers(
-        state,
-        setState,
-        members,
-    );
-
+    const { refForm, searchRef, filteredArr, handleInput, filter } = useEditSubscribers(members);
     const refEditSubscribers = useRef<HTMLDivElement>(null);
+
     const { deleteFromGroup, handleCancel, setPopup, popup } = useEditSettings(setSettings);
 
-    const SubscribersDropDown = (userId: string) => [
-        {
-            liChildren: <HiOutlineMinusCircle />,
-            liText: 'Remove from group',
-            liFoo: () => deleteFromGroup(userId),
-        },
-    ];
+    const SubscribersDropDown = useCallback(
+        (userId: string) => [
+            {
+                liChildren: <HiOutlineMinusCircle />,
+                liText: 'Remove from group',
+                liFoo: () => deleteFromGroup(userId),
+            },
+        ],
+        [deleteFromGroup],
+    );
 
     return (
         <CSSTransition

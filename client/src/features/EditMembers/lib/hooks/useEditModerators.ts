@@ -1,17 +1,10 @@
-import { useEffect, useRef, useState } from 'react';
-import { useSearch } from '@shared/lib';
+import { useEffect, useState } from 'react';
+import useEditSubscribers from '@features/EditMembers/lib/hooks/useEditSubscribers';
 import { ContactSchema } from '@entities/Contact';
 
 const useEditModerators = (moderators: ContactSchema[]) => {
     const [newMembers, setNewMembers] = useState<ContactSchema[]>([]);
-
-    const refForm = useRef<HTMLDivElement>(null);
-    const searchRef = useRef<HTMLDivElement>(null);
-
-    const { filteredArr, handleInput, filter } = useSearch<ContactSchema, 'user_name'>(
-        moderators,
-        'user_name',
-    );
+    const { refForm, searchRef, filteredArr, handleInput, filter } = useEditSubscribers(moderators);
 
     useEffect(() => {
         setNewMembers(moderators);

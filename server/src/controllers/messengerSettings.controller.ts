@@ -1,6 +1,4 @@
-import ApiError from "../errors/apiError"
 import {NextFunction, Request, Response} from "express"
-import isMessengerKey from "../types/typeGuards/isMessengerKey";
 import ensureRequiredFields from "../utils/validation/ensureRequiredFields";
 import MessengerSettingsService from "../services/messengerSettings.service";
 
@@ -23,8 +21,7 @@ class MessengerSettingsController {
             const {messenger_id} = req.params
             const {messenger_type} = req.body
 
-            if (!isMessengerKey(messenger_type)) return next(ApiError.badRequest('Invalid messenger type'))
-            ensureRequiredFields([messenger_id])
+            ensureRequiredFields([messenger_type, messenger_id])
 
             const messengerType = await this.messengerSettingsService.updateMessengerType(messenger_id, messenger_type)
             res.json(messengerType)

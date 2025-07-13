@@ -1,4 +1,4 @@
-import React, { Dispatch, FC, SetStateAction, useRef } from 'react';
+import React, { Dispatch, FC, SetStateAction, useCallback, useRef } from 'react';
 import {
     HiOutlineArrowLeft,
     HiOutlineShieldExclamation,
@@ -43,22 +43,24 @@ const EditModerators: FC<IEditMemberProps> = ({
 
     const { newMembers, setNewMembers, refForm, searchRef, filteredArr, handleInput, filter } =
         useEditModerators(moderators);
-
     const { deleteFromGroup, dismissModerator, handleCancel, setPopup, popup } =
         useEditSettings(setSettings);
 
-    const ModeratorDropDown = (user_id: string) => [
-        {
-            liChildren: <HiOutlineTrash />,
-            liText: 'Remove from group',
-            liFoo: () => deleteFromGroup(user_id),
-        },
-        {
-            liChildren: <HiOutlineShieldExclamation />,
-            liText: 'Dismiss Moderator',
-            liFoo: () => dismissModerator(user_id),
-        },
-    ];
+    const ModeratorDropDown = useCallback(
+        (userId: string) => [
+            {
+                liChildren: <HiOutlineTrash />,
+                liText: 'Remove from group',
+                liFoo: () => deleteFromGroup(userId),
+            },
+            {
+                liChildren: <HiOutlineShieldExclamation />,
+                liText: 'Dismiss Moderator',
+                liFoo: () => dismissModerator(userId),
+            },
+        ],
+        [deleteFromGroup, dismissModerator],
+    );
 
     return (
         <CSSTransition

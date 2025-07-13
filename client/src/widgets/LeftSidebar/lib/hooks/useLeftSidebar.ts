@@ -5,10 +5,10 @@ import getFilteredMessengersApi from '@widgets/LeftSidebar/api/getFilteredMessen
 import mapSearchDTO from '@widgets/LeftSidebar/api/mappers/mapSearchDTO';
 import { MessengerCreationSchema } from '@features/CreateMessenger/model/types/MessengerCreationSchema';
 import UnifiedMessengerSchema from '@features/MessengerSearch/model/types/UnifiedMessengerSchema';
+import { setSidebarLeft } from '@entities/Messenger/model/slice/sidebarSlice';
 import { useAppDispatch, useAppSelector } from '@shared/lib';
 import { useAbortController } from '@shared/lib';
 import { MessengerTypes } from '@shared/types';
-import { setSidebarLeft } from '../../model/slice/sidebarSlice';
 import useCloseLeftSidebar from './useCloseLeftSidebar';
 
 const useLeftSidebar = () => {

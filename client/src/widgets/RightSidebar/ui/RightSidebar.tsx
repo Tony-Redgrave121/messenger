@@ -6,9 +6,10 @@ import InfoList from '@widgets/RightSidebar/ui/InfoList';
 import EditMessenger from '@features/EditMessenger/ui/EditMessenger';
 import { ImageBlock } from '@features/ImageBlock';
 import MembersList from '@entities/Member/ui/MembersList/MembersList';
+import { setSidebarRight } from '@entities/Messenger/model/slice/sidebarSlice';
 import AdaptMessengerSchema from '@entities/Messenger/model/types/AdaptMessengerSchema';
 import checkRights from '@entities/User/lib/CheckRights/checkRights';
-import { useAppSelector, getDate } from '@shared/lib';
+import { useAppSelector, getDate, useAppDispatch } from '@shared/lib';
 import useLoadBlob from '@shared/lib/hooks/useLoadBlob/useLoadBlob';
 import { DefaultButton } from '@shared/ui/Button';
 import { Caption } from '@shared/ui/Caption';
@@ -19,17 +20,18 @@ import './right-sidebar.animation.css';
 interface IRightSidebarProps {
     entity: AdaptMessengerSchema;
     setEntity: Dispatch<SetStateAction<AdaptMessengerSchema>>;
-    state: boolean;
-    setState: Dispatch<SetStateAction<boolean>>;
 }
 
-const RightSidebar: FC<IRightSidebarProps> = ({ entity, setEntity, state, setState }) => {
+const RightSidebar: FC<IRightSidebarProps> = ({ entity, setEntity }) => {
     const [editMessenger, setEditMessenger] = useState(false);
     const refRightSidebar = useRef<HTMLDivElement>(null);
 
     const navigate = useNavigate();
+    const dispatch = useAppDispatch();
 
     const user_id = useAppSelector(state => state.user.userId);
+    const sidebarRight = useAppSelector(state => state.sidebar.sidebarRight);
+
     const { image } = useLoadBlob(
         entity.image
             ? `${entity.type !== 'chat' ? 'messengers' : 'users'}/${entity.id}/${entity.image}`
@@ -41,7 +43,7 @@ const RightSidebar: FC<IRightSidebarProps> = ({ entity, setEntity, state, setSta
             liChildren: <HiOutlineChatBubbleLeft />,
             liText: 'Send Message',
             liFoo: () => {
-                setState(false);
+                dispatch(setSidebarRight(false));
                 setTimeout(() => navigate(`/chat/${user_id}`), 300);
             },
         },
@@ -49,7 +51,7 @@ const RightSidebar: FC<IRightSidebarProps> = ({ entity, setEntity, state, setSta
 
     return (
         <CSSTransition
-            in={state}
+            in={sidebarRight}
             nodeRef={refRightSidebar}
             timeout={300}
             classNames="right-sidebar-node"
@@ -57,7 +59,7 @@ const RightSidebar: FC<IRightSidebarProps> = ({ entity, setEntity, state, setSta
         >
             <Sidebar styles={['RightSidebarContainer']} ref={refRightSidebar}>
                 <TopBar>
-                    <DefaultButton foo={() => setState(false)}>
+                    <DefaultButton foo={() => dispatch(setSidebarRight(false))}>
                         <HiOutlineXMark />
                     </DefaultButton>
                     <p>{entity.type} info</p>

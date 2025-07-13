@@ -1,4 +1,4 @@
-import React, { Dispatch, FC, RefObject, SetStateAction, useEffect, useRef, useState } from 'react';
+import React, { Dispatch, FC, SetStateAction, useEffect, useRef, useState } from 'react';
 import { HiOutlineArrowLeft, HiOutlineTrash } from 'react-icons/hi2';
 import { useNavigate, useParams } from 'react-router-dom';
 import { CSSTransition } from 'react-transition-group';
@@ -43,6 +43,9 @@ const EditType: FC<IEditTypeProps> = ({ setState, state, messengerType, messenge
     const handleMessengerType = async (type: string) => {
         if (!newMessengerLink) return;
 
+        console.log(type);
+        console.log(newMessengerLink);
+
         try {
             await putMessengerTypeApi(type, newMessengerLink);
 
@@ -56,10 +59,10 @@ const EditType: FC<IEditTypeProps> = ({ setState, state, messengerType, messenge
         if (!newMessengerLink) return;
 
         try {
-            const data = await putMessengerLinkApi(newMessengerLink);
+            const res = await putMessengerLinkApi(newMessengerLink);
 
-            setNewMessengerLink(data.data.messenger_id);
-            navigate(`/${messengerUrlType}/${data.data.messenger_id}`);
+            setNewMessengerLink(res.data.messenger_id);
+            navigate(`/${messengerUrlType}/${res.data.messenger_id}`);
         } catch (error) {
             console.log(error);
         }

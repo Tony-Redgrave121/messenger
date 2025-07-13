@@ -1,4 +1,4 @@
-import { Dispatch, FC, SetStateAction, useRef } from 'react';
+import { Dispatch, FC, SetStateAction, useCallback, useRef } from 'react';
 import { HiOutlineArrowLeft, HiOutlineTrash, HiOutlineUserPlus } from 'react-icons/hi2';
 import { CSSTransition } from 'react-transition-group';
 import MessengerSettingsSchema from '@features/EditMessenger/model/types/MessengerSettingsSchema';
@@ -34,18 +34,21 @@ const EditMembers: FC<IEditMemberProps> = ({ setState, state, members, removed, 
     const { handleCancel, addToGroup, deleteFromRemoved, setPopup, popup } =
         useEditSettings(setSettings);
 
-    const RemovedDropDown = (user_id: string) => [
-        {
-            liChildren: <HiOutlineUserPlus />,
-            liText: 'Add to Messenger',
-            liFoo: () => addToGroup(user_id),
-        },
-        {
-            liChildren: <HiOutlineTrash />,
-            liText: 'Unblock user',
-            liFoo: () => deleteFromRemoved(user_id),
-        },
-    ];
+    const RemovedDropDown = useCallback(
+        (userId: string) => [
+            {
+                liChildren: <HiOutlineUserPlus />,
+                liText: 'Add to Messenger',
+                liFoo: () => addToGroup(userId),
+            },
+            {
+                liChildren: <HiOutlineTrash />,
+                liText: 'Unblock user',
+                liFoo: () => deleteFromRemoved(userId),
+            },
+        ],
+        [addToGroup, deleteFromRemoved],
+    );
 
     return (
         <CSSTransition

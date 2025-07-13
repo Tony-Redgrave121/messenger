@@ -13,13 +13,12 @@ import style from './style.module.css';
 const RightSidebar = lazy(() => import('@widgets/RightSidebar/ui/RightSidebar'));
 
 const Messenger = memo(() => {
-    const [sidebarState, setSidebarState] = useState(false);
     const [reply, setReply] = useState<MessageSchema | null>(null);
-
     const refEnd = useRef<HTMLDivElement>(null);
 
     const { messenger, setMessenger, reactions, messagesList, socketRef } = useFetchInitialData();
     const { messengerId } = useParams();
+
     const dispatch = useAppDispatch();
 
     useEffect(() => {
@@ -31,7 +30,7 @@ const Messenger = memo(() => {
     return (
         <>
             <div className={style.MessengerContainer}>
-                <MessengerHeader messenger={messenger} setSidebarState={setSidebarState} />
+                <MessengerHeader messenger={messenger} />
                 <section className={style.MessageBlock} key={messengerId}>
                     <MessagesList
                         messagesList={messagesList}
@@ -50,13 +49,7 @@ const Messenger = memo(() => {
                     socketRef={socketRef}
                 />
             </div>
-            <RightSidebar
-                entity={messenger}
-                setEntity={setMessenger}
-                state={sidebarState}
-                setState={setSidebarState}
-                key={messenger.id}
-            />
+            <RightSidebar entity={messenger} setEntity={setMessenger} key={messenger.id} />
         </>
     );
 });

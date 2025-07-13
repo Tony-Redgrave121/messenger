@@ -1,5 +1,5 @@
-import React, { useEffect, useMemo, useState } from 'react';
 import debounce from 'debounce';
+import React, { useEffect, useMemo, useState } from 'react';
 
 const useSearch = <T extends object, K extends keyof T>(arr: T[], field: K) => {
     const [filteredArr, setFilteredArr] = useState<T[]>([]);

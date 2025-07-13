@@ -1,9 +1,9 @@
 import React, { FC } from 'react';
 import style from '@features/ContactList/ui/style.module.css';
+import { Member } from '@entities/Member';
 import { DropDownList } from '@shared/types';
 import { ContactButton } from '@shared/ui/Button';
 import { ContactSchema } from '../../../Contact';
-import Member from '../Member/Member';
 
 interface ContactListProps {
     members: ContactSchema[];

@@ -1,4 +1,4 @@
-import React, { FC, ReactNode, useState } from 'react';
+import React, { FC, memo, ReactNode, useState } from 'react';
 import { useAppSelector, getDate, contextMenu } from '@shared/lib';
 import { DropDownList } from '@shared/types';
 import { DropDown } from '@shared/ui/DropDown';
@@ -12,7 +12,7 @@ interface IContactsProps {
     dropList: DropDownList[];
 }
 
-const Member: FC<IContactsProps> = ({ contact, children, dropList }) => {
+const Member: FC<IContactsProps> = memo(({ contact, children, dropList }) => {
     const [contextMenuState, setContextMenuState] = useState(false);
     const [position, setPosition] = useState({ x: 0, y: 0 });
     const user_id = useAppSelector(state => state.user.userId);
@@ -51,6 +51,8 @@ const Member: FC<IContactsProps> = ({ contact, children, dropList }) => {
             />
         </div>
     );
-};
+});
+
+Member.displayName = 'Member';
 
 export default Member;

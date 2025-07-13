@@ -1,13 +1,12 @@
 import { Dispatch, SetStateAction, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { useLiveUpdatesWS } from '@entities/Reaction/lib/hooks/useLiveUpdatesWS';
-import { useAppSelector } from '@shared/lib';
-import { useAbortController } from '@shared/lib';
 import deleteMemberApi from '@features/EditMembers/api/deleteMemberApi';
-import MessengerSettingsSchema from '@features/EditMessenger/model/types/MessengerSettingsSchema';
-import putMessengerModeratorApi from '@features/EditMembers/api/putMessengerModeratorApi';
-import postMemberApi from '@features/EditMembers/api/postMemberApi';
 import deleteRemovedApi from '@features/EditMembers/api/deleteRemovedApi';
+import postMemberApi from '@features/EditMembers/api/postMemberApi';
+import putMessengerModeratorApi from '@features/EditMembers/api/putMessengerModeratorApi';
+import MessengerSettingsSchema from '@features/EditMessenger/model/types/MessengerSettingsSchema';
+import { useLiveUpdatesWS } from '@entities/Reaction/lib/hooks/useLiveUpdatesWS';
+import { useAppSelector, useAbortController } from '@shared/lib';
 
 const useEditSettings = (setSettings: Dispatch<SetStateAction<MessengerSettingsSchema>>) => {
     const { messengerId } = useParams();

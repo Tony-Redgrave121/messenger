@@ -1,14 +1,8 @@
-import { Dispatch, SetStateAction, useRef, useState } from 'react';
-import { useSearch } from '@shared/lib';
-import { ToggleState } from '@shared/types';
+import { useRef } from 'react';
 import { ContactSchema } from '@entities/Contact';
-import MessengerSettingsKeys from '@entities/Messenger/model/types/MessengerSettingsKeys';
+import { useSearch } from '@shared/lib';
 
-const useEditSubscribers = (
-    state: boolean,
-    setState: Dispatch<SetStateAction<ToggleState<MessengerSettingsKeys>>>,
-    members: ContactSchema[],
-) => {
+const useEditSubscribers = (members: ContactSchema[]) => {
     const refForm = useRef<HTMLDivElement>(null);
     const searchRef = useRef<HTMLDivElement>(null);
     const { filteredArr, handleInput, filter } = useSearch<ContactSchema, 'user_name'>(
@@ -17,7 +11,6 @@ const useEditSubscribers = (
     );
 
     return {
-        state,
         refForm,
         searchRef,
         filteredArr,
