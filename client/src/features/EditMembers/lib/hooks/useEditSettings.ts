@@ -4,7 +4,7 @@ import deleteMemberApi from '@features/EditMembers/api/deleteMemberApi';
 import deleteRemovedApi from '@features/EditMembers/api/deleteRemovedApi';
 import postMemberApi from '@features/EditMembers/api/postMemberApi';
 import putMessengerModeratorApi from '@features/EditMembers/api/putMessengerModeratorApi';
-import MessengerSettingsSchema from '@features/EditMessenger/model/types/MessengerSettingsSchema';
+import MessengerSettingsSchema from '@entities/Messenger/model/types/MessengerSettingsSchema';
 import { useLiveUpdatesWS } from '@entities/Reaction/lib/hooks/useLiveUpdatesWS';
 import { useAppSelector, useAbortController } from '@shared/lib';
 

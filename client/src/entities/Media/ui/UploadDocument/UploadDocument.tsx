@@ -1,6 +1,6 @@
 import React, { Dispatch, FC, RefObject, SetStateAction } from 'react';
+import { FileStateSchema } from '@entities/Media';
 import { uploadFiles } from '@shared/lib';
-import FileStateSchema from '../../model/types/FileStateSchema';
 
 interface IUploadDocumentProps {
     setState: Dispatch<SetStateAction<FileStateSchema>>;
@@ -15,7 +15,7 @@ export const UploadDocument: FC<IUploadDocumentProps> = ({ setState, filesRef })
             type="file"
             style={{ display: 'none' }}
             onChange={event => {
-                event.target.files && uploadFiles(event.target.files, setState, filesRef);
+                if (event.target.files) uploadFiles(event.target.files, setState, filesRef);
             }}
             multiple
         />

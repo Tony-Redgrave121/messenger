@@ -9,6 +9,7 @@ module.exports = {
         'plugin:react-hooks/recommended',
         'plugin:prettier/recommended',
         'prettier',
+        '@feature-sliced',
         '@feature-sliced/eslint-config/rules/import-order',
         '@feature-sliced/eslint-config/rules/public-api',
         '@feature-sliced/eslint-config/rules/layers-slices',
@@ -24,6 +25,9 @@ module.exports = {
         'prettier/prettier': 'warn',
         'react/prop-types': 'off',
         'react/react-in-jsx-scope': 'off',
+        'import/order': 'warn',
+        'import/no-internal-modules': 'warn',
+        'boundaries/element-types': 'warn',
     },
     ignorePatterns: ['dist/', 'build/', 'node_modules/'],
 };

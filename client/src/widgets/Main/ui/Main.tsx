@@ -4,7 +4,7 @@ import { CSSTransition } from 'react-transition-group';
 import { syncNotifications } from '@entities/Messenger/lib/thunk/messengerThunk';
 import img from '@shared/assets/images/pattern.webp';
 import { useAppDispatch, useAppSelector } from '@shared/lib';
-import style from './style.module.css';
+import style from './main.module.css';
 
 interface IMainContainerProps {
     children?: ReactNode;

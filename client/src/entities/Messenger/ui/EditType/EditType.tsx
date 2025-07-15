@@ -2,6 +2,7 @@ import React, { Dispatch, FC, SetStateAction, useEffect, useRef, useState } from
 import { HiOutlineArrowLeft, HiOutlineTrash } from 'react-icons/hi2';
 import { useNavigate, useParams } from 'react-router-dom';
 import { CSSTransition } from 'react-transition-group';
+import useCopy from '@features/Message/lib/hooks/useCopy';
 import putMessengerLinkApi from '@entities/Messenger/api/putMessengerLinkApi';
 import putMessengerTypeApi from '@entities/Messenger/api/putMessengerTypeApi';
 import MessengerSettingsKeys from '@entities/Messenger/model/types/MessengerSettingsKeys';
@@ -12,7 +13,6 @@ import { Caption } from '@shared/ui/Caption';
 import { Radio } from '@shared/ui/Input';
 import { Sidebar } from '@shared/ui/Sidebar';
 import { TopBar } from '@shared/ui/TopBar';
-import useCopy from '../../../Message/lib/hooks/useCopy';
 import style from './style.module.css';
 
 interface IEditTypeProps {

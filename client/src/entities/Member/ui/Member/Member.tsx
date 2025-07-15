@@ -1,10 +1,10 @@
 import React, { FC, memo, ReactNode, useState } from 'react';
+import { ContactSchema } from '@entities/Contact';
 import { useAppSelector, getDate, contextMenu } from '@shared/lib';
 import { DropDownList } from '@shared/types';
 import { DropDown } from '@shared/ui/DropDown';
 import { LoadFile } from '@shared/ui/LoadFile';
-import { ContactSchema } from '../../../Contact';
-import style from '../../../Contact/ui/style.module.css';
+import style from './member.module.css';
 
 interface IContactsProps {
     contact: ContactSchema;
@@ -19,7 +19,7 @@ const Member: FC<IContactsProps> = memo(({ contact, children, dropList }) => {
 
     return (
         <div
-            className={style.ContactBlock}
+            className={style.Member}
             onContextMenu={event =>
                 user_id !== contact.user_id &&
                 contextMenu({
@@ -39,7 +39,7 @@ const Member: FC<IContactsProps> = memo(({ contact, children, dropList }) => {
                     imageTitle={contact.user_name}
                 />
             </span>
-            <div className={style.ContactInfo}>
+            <div className={style.MemberInfo}>
                 <h4>{contact.user_name}</h4>
                 <p>{getDate(contact.user_last_seen)}</p>
             </div>

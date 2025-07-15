@@ -6,7 +6,7 @@ import { FormInput } from '@shared/ui/Input';
 import sendCodeApi from '../../api/sendCodeApi';
 import AuthFormSchema from '../../model/types/AuthFormSchema';
 import AuthStepSchema from '../../model/types/AuthStepSchema';
-import stepStyle from './step.module.css';
+import style from './step.module.css';
 
 interface IStep1Props extends AuthStepSchema {
     watch: UseFormWatch<AuthFormSchema>;
@@ -31,7 +31,7 @@ const Step1: FC<IStep1Props> = ({ errors, register, handleStep, watch, trigger }
     return (
         <>
             <HiOutlineChatBubbleLeftRight />
-            <div className={stepStyle.TitleBlock}>
+            <div className={style.TitleBlock}>
                 <h1>Auth in to Messenger</h1>
                 <p>Please enter your email address.</p>
             </div>

@@ -1,5 +1,5 @@
 import React, { FC, ReactNode } from 'react';
-import formButtonStyle from './form-button.module.css';
+import style from './form-button.module.css';
 
 interface IFormButton {
     children?: ReactNode;
@@ -9,7 +9,7 @@ interface IFormButton {
 
 const FormButton: FC<IFormButton> = ({ foo, children, type = 'button' }) => {
     return (
-        <button className={formButtonStyle.FormButton} onClick={foo} type={type}>
+        <button className={style.FormButton} onClick={foo} type={type}>
             {children}
         </button>
     );

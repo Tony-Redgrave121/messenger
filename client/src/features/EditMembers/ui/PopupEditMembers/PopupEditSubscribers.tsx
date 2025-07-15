@@ -1,15 +1,14 @@
 import React, { Dispatch, FC, SetStateAction, useState } from 'react';
-import style from './style.module.css';
 import { HiOutlineArrowRight, HiOutlineXMark } from 'react-icons/hi2';
 import { useParams } from 'react-router-dom';
-import { useLiveUpdatesWS } from '@entities/Reaction/lib/hooks/useLiveUpdatesWS';
-import { useAppSelector } from '@shared/lib';
-import { useAbortController } from '@shared/lib';
-import { CreateButton, DefaultButton } from '@shared/ui/Button';
-import { ContactSchema } from '@entities/Contact';
-import { AddContact } from '../../../AddContact';
-import MessengerSettingsSchema from '@features/EditMessenger/model/types/MessengerSettingsSchema';
 import postContactsMembersApi from '@features/EditMembers/api/postContactsMembersApi';
+import { ContactSchema } from '@entities/Contact';
+import MessengerSettingsSchema from '@entities/Messenger/model/types/MessengerSettingsSchema';
+import { useLiveUpdatesWS } from '@entities/Reaction/lib/hooks/useLiveUpdatesWS';
+import { useAbortController, useAppSelector } from '@shared/lib';
+import { CreateButton, DefaultButton } from '@shared/ui/Button';
+import { AddContact } from '../../../AddContact';
+import style from './style.module.css';
 
 interface IPopupEditSubscribersProps {
     handleCancel: () => void;

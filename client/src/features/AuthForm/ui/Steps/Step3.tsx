@@ -8,7 +8,7 @@ import { useAppDispatch } from '@shared/lib';
 import { FormButton } from '@shared/ui/Button';
 import { FormInput } from '@shared/ui/Input';
 import AuthStepSchema from '../../model/types/AuthStepSchema';
-import stepStyle from './step.module.css';
+import style from './step.module.css';
 
 interface IStep3Props extends AuthStepSchema {
     watch: UseFormWatch<AuthFormSchema>;
@@ -45,7 +45,7 @@ const Step3: FC<IStep3Props> = ({ errors, register, handleStep, watch }) => {
     return (
         <>
             <HiOutlineFingerPrint />
-            <div className={stepStyle.TitleBlock}>
+            <div className={style.TitleBlock}>
                 <h1>Enter Your Password</h1>
                 <p>Your account is protected with an additional password.</p>
             </div>
@@ -63,7 +63,7 @@ const Step3: FC<IStep3Props> = ({ errors, register, handleStep, watch }) => {
                     })}
                 />
             </FormInput>
-            <div className={stepStyle.ButtonBlock}>
+            <div className={style.ButtonBlock}>
                 <FormButton
                     foo={event => {
                         handleStep(event, 0);

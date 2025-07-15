@@ -2,9 +2,9 @@ import React, { FC, memo } from 'react';
 import { HiOutlineTrash } from 'react-icons/hi2';
 import { useNavigate, useParams } from 'react-router-dom';
 import deleteMessengerApi from '@features/EditMessenger/api/deleteMessengerApi';
-import MessengerSettingsSchema from '@features/EditMessenger/model/types/MessengerSettingsSchema';
 import style from '@features/EditMessenger/ui/style.module.css';
 import { deleteMessenger } from '@entities/Messenger/lib/thunk/messengerThunk';
+import MessengerSettingsSchema from '@entities/Messenger/model/types/MessengerSettingsSchema';
 import { useAbortController, useAppDispatch } from '@shared/lib';
 import { SettingButton } from '@shared/ui/Button';
 

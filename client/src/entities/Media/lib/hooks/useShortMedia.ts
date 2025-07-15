@@ -1,9 +1,8 @@
 import { useEffect, useState } from 'react';
+import { FileObjectSchema } from '@entities/Media';
 import { getExt } from '@shared/lib';
-import FileObjectSchema from '../../model/types/FileObjectSchema';
-
-const isVideo = ['mp4', 'webm'];
-const MAX_WIDTH = 700;
+import { IS_VIDEO } from '../../consts/isVideo';
+import { MAX_WIDTH } from '../../consts/mediaWidth';
 
 const useShortMedia = (media: FileObjectSchema) => {
     const [preview, setPreview] = useState<string | null>(null);
@@ -31,7 +30,7 @@ const useShortMedia = (media: FileObjectSchema) => {
             setPreview(canvas.toDataURL('image/jpeg', 0.7));
         };
 
-        if (isVideo.includes(ext)) {
+        if (IS_VIDEO.includes(ext)) {
             const video = document.createElement('video');
             video.src = media.url;
             video.playsInline = true;

@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
+import { FileObjectSchema } from '@entities/Media';
 import useShortMedia from '../../lib/hooks/useShortMedia';
-import style from '../MessageMedia/style.module.css';
-import FileObjectSchema from '../../model/types/FileObjectSchema';
+import style from '../message-media.module.css';
 
 interface IPreviewMediaProps {
     media: FileObjectSchema;

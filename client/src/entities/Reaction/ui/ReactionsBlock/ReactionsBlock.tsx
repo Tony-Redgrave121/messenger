@@ -1,9 +1,9 @@
-import React, { FC, RefObject } from 'react';
-import style from './style.module.css';
 import { clsx } from 'clsx';
-import useReaction from '../../lib/hooks/useReaction';
+import React, { FC, RefObject } from 'react';
 import { useAppSelector } from '@shared/lib';
-import { MessageSchema } from '../../../Message';
+import { MessageSchema } from '../../../../features/Message';
+import useReaction from '../../lib/hooks/useReaction';
+import style from './style.module.css';
 
 interface ReactionSchemasBlockProps {
     message: MessageSchema;

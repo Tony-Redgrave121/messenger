@@ -1,8 +1,7 @@
 import React, { Dispatch, FC, memo, SetStateAction, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import useCloseLeftSidebar from '@widgets/LeftSidebar/lib/hooks/useCloseLeftSidebar';
-import { useAppSelector } from '@shared/lib';
-import { useSearch } from '@shared/lib';
+import { useSearch, useAppSelector } from '@shared/lib';
 import { SearchBar } from '@shared/ui/SearchBar';
 import { ContactList } from '../../../ContactList';
 import '@widgets/LeftSidebar/ui/LeftSidebar/left-sidebar.animation.css';

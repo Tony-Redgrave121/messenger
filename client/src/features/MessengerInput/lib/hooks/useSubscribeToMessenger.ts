@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
 import mapChatDTO from '@widgets/Messenger/api/mappers/mapChatDTO';
 import postContactsMembersApi from '@features/EditMembers/api/postContactsMembersApi';
-import { MessageSchema } from '@entities/Message';
+import { MessageSchema } from 'features/Message';
+import { AdaptMessengerSchema } from '@entities/Messenger';
 import { addMessenger } from '@entities/Messenger/model/slice/messengerSlice';
-import AdaptMessengerSchema from '@entities/Messenger/model/types/AdaptMessengerSchema';
 import isMember from '@entities/User/lib/IsMember/isMember';
 import { useAbortController, useAppDispatch, useAppSelector } from '@shared/lib';
 

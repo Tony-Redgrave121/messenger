@@ -7,7 +7,7 @@ import MessengerChangeAccess from '@features/EditMessenger/ui/MessengerChangeAcc
 import MessengerChangePrivacy from '@features/EditMessenger/ui/MessengerChangePrivacy';
 import MessengerChangeState from '@features/EditMessenger/ui/MessengerChangeState';
 import MessengerSettingsEditor from '@features/EditMessenger/ui/MessengerSettingsEditor';
-import AdaptMessengerSchema from '@entities/Messenger/model/types/AdaptMessengerSchema';
+import { AdaptMessengerSchema } from '@entities/Messenger';
 import { DefaultButton } from '@shared/ui/Button';
 import { Caption } from '@shared/ui/Caption';
 import { Sidebar } from '@shared/ui/Sidebar';

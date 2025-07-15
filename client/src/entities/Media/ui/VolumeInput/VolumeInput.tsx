@@ -1,10 +1,9 @@
 import { FC, RefObject } from 'react';
-import inputStyle from '@shared/ui/Input/styles/inputs.module.css';
-import volumeInputStyle from './volume-input.module.css';
 import { CSSTransition } from 'react-transition-group';
-import './volume-input.animation.css';
-import useVolume from './useVolume';
 import { VolumeButton } from '@shared/ui/Button';
+import useVolume from '../../lib/hooks/useVolume';
+import style from './volume-input.module.css';
+import './volume-input.animation.css';
 
 interface IVolumeInputProps {
     mediaRef: RefObject<HTMLVideoElement | null>;
@@ -16,7 +15,7 @@ const VolumeInput: FC<IVolumeInputProps> = ({ mediaRef }) => {
 
     return (
         <span
-            className={volumeInputStyle.VolumeBlock}
+            className={style.VolumeBlock}
             onMouseEnter={() => setIsEnter(true)}
             onMouseLeave={() => setIsEnter(false)}
         >
@@ -34,7 +33,7 @@ const VolumeInput: FC<IVolumeInputProps> = ({ mediaRef }) => {
                     type="range"
                     onChange={handleOnChange}
                     value={volume}
-                    className={inputStyle.Input}
+                    className={style.VolumeInput}
                     ref={inputRef}
                 />
             </CSSTransition>

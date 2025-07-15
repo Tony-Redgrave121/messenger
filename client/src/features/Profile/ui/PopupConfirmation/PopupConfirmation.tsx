@@ -1,6 +1,5 @@
 import { FC } from 'react';
 import style from './style.module.css';
-import '@shared/ui/Popup/popup-animation.css';
 
 interface IPopupConfirmationProps {
     onConfirm: () => void;

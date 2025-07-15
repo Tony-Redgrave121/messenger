@@ -151,10 +151,6 @@ html {
 body {
   line-height: 1;
   background-color: rgb(28, 28, 28);
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
 }
 
 ol,

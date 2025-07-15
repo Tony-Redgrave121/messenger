@@ -1,7 +1,7 @@
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { MessageSchema } from '@entities/Message';
-import fetchMessageApi from '@entities/Message/api/fetchMessageApi';
+import fetchMessageApi from '@features/Message/api/fetchMessageApi';
+import { MessageSchema } from 'features/Message';
 import { useAbortController } from '@shared/lib';
 
 const useFetchPost = (setMessagesList: Dispatch<SetStateAction<MessageSchema[]>>) => {
@@ -23,7 +23,7 @@ const useFetchPost = (setMessagesList: Dispatch<SetStateAction<MessageSchema[]>>
         };
 
         handlePostFetching();
-    }, [postId, getSignal, setMessagesList]);
+    }, [postId, setMessagesList]);
 
     return { channelPost };
 };

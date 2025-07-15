@@ -1,10 +1,10 @@
 import { Dispatch, FC, SetStateAction, useCallback, useRef } from 'react';
 import { HiOutlineArrowLeft, HiOutlineTrash, HiOutlineUserPlus } from 'react-icons/hi2';
 import { CSSTransition } from 'react-transition-group';
-import MessengerSettingsSchema from '@features/EditMessenger/model/types/MessengerSettingsSchema';
 import { ContactSchema } from '@entities/Contact';
 import MembersList from '@entities/Member/ui/MembersList/MembersList';
 import MessengerSettingsKeys from '@entities/Messenger/model/types/MessengerSettingsKeys';
+import MessengerSettingsSchema from '@entities/Messenger/model/types/MessengerSettingsSchema';
 import { closeForm } from '@shared/lib';
 import { ToggleState } from '@shared/types';
 import { CreateButton, DefaultButton } from '@shared/ui/Button';

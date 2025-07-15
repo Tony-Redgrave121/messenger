@@ -1,8 +1,8 @@
-import { AppRouter } from './providers/RouterProvider';
 import { Suspense, useEffect } from 'react';
-import { useAppDispatch, useAppSelector } from '@shared/lib';
 import { userCheckAuth } from '@entities/User/lib/thunk/userThunk';
 import { updateIsLoading } from '@entities/User/model/slice/userSlice';
+import { useAppDispatch, useAppSelector } from '@shared/lib';
+import { AppRouter } from './providers/RouterProvider';
 
 function App() {
     const isLoading = useAppSelector(state => state.user.isLoading);

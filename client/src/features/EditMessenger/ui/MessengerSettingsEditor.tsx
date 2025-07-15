@@ -1,6 +1,6 @@
 import React, { Dispatch, FC, lazy, SetStateAction, Suspense } from 'react';
 import EditFormKeys from '@features/EditMessenger/model/types/EditFormKeys';
-import MessengerSettingsSchema from '@features/EditMessenger/model/types/MessengerSettingsSchema';
+import MessengerSettingsSchema from '@entities/Messenger/model/types/MessengerSettingsSchema';
 
 const EditReactions = lazy(() => import('@entities/Messenger/ui/EditReactions/EditReactions'));
 const EditType = lazy(() => import('@entities/Messenger/ui/EditType/EditType'));

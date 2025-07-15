@@ -1,6 +1,6 @@
 import React, { FC, memo, ReactNode } from 'react';
-import { SwitchButton } from '../../index';
-import buttonStyle from '../../styles/button.module.css';
+import SwitchButton from '@shared/ui/Button/ui/SwitchButton/SwitchButton';
+import style from '../button.module.css';
 
 interface ISwitchSettingButtonProps {
     foo: () => void;
@@ -12,7 +12,7 @@ interface ISwitchSettingButtonProps {
 const SwitchSettingButton: FC<ISwitchSettingButtonProps> = memo(
     ({ foo, children, text, state }) => {
         return (
-            <button onClick={foo} className={buttonStyle.SettingButton}>
+            <button onClick={foo} className={style.SettingButton}>
                 <span>
                     {children}
                     <p>{text}</p>

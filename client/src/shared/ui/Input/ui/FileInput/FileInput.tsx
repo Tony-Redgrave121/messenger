@@ -1,18 +1,20 @@
-import { FC, memo } from 'react';
-import { Control, Controller } from 'react-hook-form';
+import { Control, Controller, FieldValue, FieldValues, Path } from 'react-hook-form';
 import { HiOutlineUserCircle } from 'react-icons/hi2';
-import AuthFormSchema from '@pages/Auth/model/types/AuthFormSchema';
-import { inputNames } from '@pages/Auth/model/types/InputNames';
 import style from './style.module.css';
 
-interface IFileInputProps {
-    control: Control<AuthFormSchema>;
+interface IFileInputProps<TField extends FieldValues, TName extends Path<FieldValue<TField>>> {
+    control: Control<FieldValue<TField>>;
     handleImageChange: (file: FileList | null, onChange: (value: File) => void) => void;
     picture: File | null;
-    name: inputNames;
+    name: TName;
 }
 
-const FileInput: FC<IFileInputProps> = memo(({ control, handleImageChange, picture, name }) => {
+function FileInput<TField extends FieldValues, TName extends Path<FieldValue<TField>>>({
+    control,
+    handleImageChange,
+    picture,
+    name,
+}: IFileInputProps<TField, TName>) {
     return (
         <div className={style.FileInput}>
             <Controller
@@ -29,15 +31,13 @@ const FileInput: FC<IFileInputProps> = memo(({ control, handleImageChange, pictu
             />
             <label htmlFor={name}>
                 {picture ? (
-                    <img src={URL.createObjectURL(picture)} alt="profile" />
+                    <img src={URL.createObjectURL(picture)} alt={name} />
                 ) : (
                     <HiOutlineUserCircle />
                 )}
             </label>
         </div>
     );
-});
-
-FileInput.displayName = 'FileInput';
+}
 
 export default FileInput;

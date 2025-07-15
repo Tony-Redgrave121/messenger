@@ -1,9 +1,9 @@
-import React, { FC } from 'react';
-import style from '@features/ContactList/ui/style.module.css';
-import { Member } from '@entities/Member';
+import React, { FC, memo } from 'react';
+import { ContactSchema } from '@entities/Contact';
 import { DropDownList } from '@shared/types';
 import { ContactButton } from '@shared/ui/Button';
-import { ContactSchema } from '../../../Contact';
+import Member from '../Member/Member';
+import style from './members-list.module.css';
 
 interface ContactListProps {
     members: ContactSchema[];
@@ -11,9 +11,9 @@ interface ContactListProps {
     dropList: (user_id: string) => DropDownList[];
 }
 
-const MembersList: FC<ContactListProps> = ({ members, text, dropList }) => {
+const MembersList: FC<ContactListProps> = memo(({ members, text, dropList }) => {
     return (
-        <section className={style.ContactListContainer}>
+        <section className={style.MembersListContainer}>
             {text && <p>{text}</p>}
             {members.map(member => (
                 <ContactButton key={member.user_id}>
@@ -22,6 +22,8 @@ const MembersList: FC<ContactListProps> = ({ members, text, dropList }) => {
             ))}
         </section>
     );
-};
+});
+
+MembersList.displayName = 'MembersList';
 
 export default MembersList;

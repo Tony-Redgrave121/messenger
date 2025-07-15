@@ -1,5 +1,5 @@
 import React, { FC, ReactNode } from 'react';
-import interButtonStyle from './inter-button.module.css';
+import style from './inter-button.module.css';
 
 interface IDefaultButtonProps {
     children?: ReactNode;
@@ -8,7 +8,7 @@ interface IDefaultButtonProps {
 
 const InterButton: FC<IDefaultButtonProps> = ({ children, foo }) => {
     return (
-        <button className={interButtonStyle.InterButton} onClick={foo}>
+        <button className={style.InterButton} onClick={foo}>
             {children}
         </button>
     );

@@ -1,7 +1,7 @@
-import React, { FC, ReactNode } from 'react';
-import buttonStyle from '../../styles/button.module.css';
-import playButtonStyle from './play-button.module.css';
 import { clsx } from 'clsx';
+import React, { FC, ReactNode } from 'react';
+import style from '../button.module.css';
+import playButtonStyle from './play-button.module.css';
 
 interface IPlayButton {
     foo?: () => void;
@@ -13,7 +13,7 @@ const PlayButton: FC<IPlayButton> = ({ foo, children, isMini }) => {
     return (
         <button
             onClick={foo}
-            className={clsx(isMini ? buttonStyle.PlayButtonMini : playButtonStyle.PlayButton)}
+            className={clsx(isMini ? style.PlayButtonMini : playButtonStyle.PlayButton)}
         >
             {children}
         </button>

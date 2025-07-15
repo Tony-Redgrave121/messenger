@@ -1,15 +1,14 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import { useMessageWS } from '@features/Message';
 import { setPopupChildren, setPopupState } from '@features/PopupMessage/model/slice/popupSlice';
+import { AdaptMessengerSchema } from '@entities/Messenger';
 import fetchMessagesApi from '@entities/Messenger/api/fetchMessagesApi';
 import fetchMessengerApi from '@entities/Messenger/api/fetchMessengerApi';
 import getReactionsApi from '@entities/Messenger/api/getReactionsApi';
 import mapMessengerDTO from '@entities/Messenger/api/mappers/mapMessengerDTO';
-import AdaptMessengerSchema from '@entities/Messenger/model/types/AdaptMessengerSchema';
 import { ReactionSchema } from '@entities/Reaction';
-import { isServerError, useAppDispatch, useAppSelector } from '@shared/lib';
-import { useAbortController } from '@shared/lib';
-import { useMessageWS } from '../../../Message';
+import { isServerError, useAppDispatch, useAppSelector, useAbortController } from '@shared/lib';
 
 const types = ['chat', 'channel', 'group'];
 

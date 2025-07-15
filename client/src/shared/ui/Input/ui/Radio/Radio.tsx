@@ -1,8 +1,8 @@
 import { ChangeEvent, FC } from 'react';
-import radioStyle from './radio.module.css';
+import style from './radio.module.css';
 
 interface IRadioProps {
-    foo?: (event?: ChangeEvent<any>) => void;
+    foo?: (event?: ChangeEvent<HTMLInputElement>) => void;
     state: boolean;
     text: string | number;
     desc?: string | number;
@@ -10,10 +10,10 @@ interface IRadioProps {
 
 const Radio: FC<IRadioProps> = ({ foo, text, desc, state }) => {
     return (
-        <label className={radioStyle.Radio}>
+        <label className={style.Radio}>
             <input type="radio" onChange={foo} checked={state} />
             <p>
-                {text} {desc?.toString && <small className={radioStyle.Desk}>{desc}</small>}
+                {text} {desc?.toString && <small className={style.Desk}>{desc}</small>}
             </p>
         </label>
     );

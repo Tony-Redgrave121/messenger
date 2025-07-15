@@ -1,7 +1,6 @@
 import { useEffect } from 'react';
 import { setContacts } from '@entities/Contact/model/slice/contactSlice';
-import { useAppDispatch, useAppSelector } from '@shared/lib';
-import { useAbortController } from '@shared/lib';
+import { useAppDispatch, useAppSelector, useAbortController } from '@shared/lib';
 import getContactsApi from '../../api/getContactsApi';
 
 const useGetContacts = () => {

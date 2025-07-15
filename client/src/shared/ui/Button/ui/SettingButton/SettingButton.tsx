@@ -1,7 +1,7 @@
-import { FC, ReactNode } from 'react';
-import buttonStyle from '../../styles/button.module.css';
-import settingButtonStyle from './setting-button.module.css';
 import { clsx } from 'clsx';
+import { FC, ReactNode } from 'react';
+import style from '../button.module.css';
+import settingButtonStyle from './setting-button.module.css';
 
 interface ISettingButtonProps {
     foo?: () => void;
@@ -15,10 +15,7 @@ const SettingButton: FC<ISettingButtonProps> = ({ foo, children, text, desc, isR
     return (
         <button
             onClick={foo}
-            className={clsx(
-                buttonStyle.SettingButton,
-                isRed && settingButtonStyle.SettingButtonRed,
-            )}
+            className={clsx(style.SettingButton, isRed && settingButtonStyle.SettingButtonRed)}
         >
             {children}
             <p>

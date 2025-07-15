@@ -1,10 +1,10 @@
 import debounce from 'debounce';
 import { Dispatch, SetStateAction, useCallback, useEffect, useState } from 'react';
-import MessengerSettingsSchema from '@features/EditMessenger/model/types/MessengerSettingsSchema';
-import getReactionsApi from '@entities/Messenger/api/getReactionsApi';
-import postMessengerReactionsApi from '@entities/Messenger/api/postMessengerReactionsApi';
 import { ReactionSchema } from '@entities/Reaction';
 import { useAbortController } from '@shared/lib';
+import getReactionsApi from '../../api/getReactionsApi';
+import postMessengerReactionsApi from '../../api/postMessengerReactionsApi';
+import MessengerSettingsSchema from '../../model/types/MessengerSettingsSchema';
 
 const useEditReactions = (
     messengerSettingsId: string,

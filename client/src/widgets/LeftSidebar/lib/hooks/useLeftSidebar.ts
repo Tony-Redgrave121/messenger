@@ -6,14 +6,13 @@ import mapSearchDTO from '@widgets/LeftSidebar/api/mappers/mapSearchDTO';
 import { MessengerCreationSchema } from '@features/CreateMessenger/model/types/MessengerCreationSchema';
 import UnifiedMessengerSchema from '@features/MessengerSearch/model/types/UnifiedMessengerSchema';
 import { setSidebarLeft } from '@entities/Messenger/model/slice/sidebarSlice';
-import { useAppDispatch, useAppSelector } from '@shared/lib';
-import { useAbortController } from '@shared/lib';
+import { useAppDispatch, useAppSelector, useAbortController } from '@shared/lib';
 import { MessengerTypes } from '@shared/types';
 import useCloseLeftSidebar from './useCloseLeftSidebar';
 
 const useLeftSidebar = () => {
     const [settings, setSettings] = useState(false);
-    const [messenger, setMessenger] = useState(false);
+    const [messengerDropDown, setMessengerDropDown] = useState(false);
     const [search, setSearch] = useState(false);
     const [profile, setProfile] = useState(false);
     const [filter, setFilter] = useState('');
@@ -26,7 +25,6 @@ const useLeftSidebar = () => {
     const refSidebar = useRef<HTMLDivElement>(null);
 
     const sidebarLeft = useAppSelector(state => state.sidebar.sidebarLeft);
-    const { userImg, userName, userId } = useAppSelector(state => state.user);
 
     const navigate = useNavigate();
     const { getSignal } = useAbortController();
@@ -96,12 +94,9 @@ const useLeftSidebar = () => {
         refSidebar,
         setSettings,
         settings,
-        userImg,
-        userName,
-        userId,
         refSearch,
-        setMessenger,
-        messenger,
+        setMessengerDropDown,
+        messengerDropDown,
         messengerCreation,
         setMessengerCreation,
         profile,

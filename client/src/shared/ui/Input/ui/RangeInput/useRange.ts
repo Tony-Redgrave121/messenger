@@ -1,5 +1,5 @@
 import { ChangeEvent, useRef } from 'react';
-import { rangeProgress } from '../../../../lib';
+import rangeProgress from '@shared/lib/RangeProgress/rangeProgress';
 
 const useRange = (foo: (value: number) => void) => {
     const inputRef = useRef<HTMLInputElement>(null);

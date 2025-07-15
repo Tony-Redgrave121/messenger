@@ -7,7 +7,7 @@ import { FormButton } from '@shared/ui/Button';
 import { FileInput, FormInput } from '@shared/ui/Input';
 import AuthFormSchema from '../../model/types/AuthFormSchema';
 import AuthStepSchema from '../../model/types/AuthStepSchema';
-import stepStyle from './step.module.css';
+import style from './step.module.css';
 
 interface IStep4Props extends AuthStepSchema {
     handleSubmit: UseFormHandleSubmit<AuthFormSchema>;
@@ -52,7 +52,7 @@ const Step4: FC<IStep4Props> = ({ errors, register, handleStep, handleSubmit, co
                 handleImageChange={handleImageChange}
                 picture={picture}
             />
-            <div className={stepStyle.TitleBlock}>
+            <div className={style.TitleBlock}>
                 <h1>Create Your Profile</h1>
                 <p>Please enter the data to create your profile.</p>
             </div>
@@ -69,7 +69,7 @@ const Step4: FC<IStep4Props> = ({ errors, register, handleStep, handleSubmit, co
             <FormInput errors={errors} field="user_bio">
                 <textarea rows={4} placeholder="Bio" {...register('user_bio')}></textarea>
             </FormInput>
-            <div className={stepStyle.ButtonBlock}>
+            <div className={style.ButtonBlock}>
                 <FormButton
                     foo={event => {
                         handleStep(event, 1);

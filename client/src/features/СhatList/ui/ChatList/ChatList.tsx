@@ -1,7 +1,6 @@
 import { lazy, memo, useEffect } from 'react';
 import { setMessengers } from '@entities/Messenger/model/slice/messengerSlice';
-import { useAppDispatch, useAppSelector } from '@shared/lib';
-import { useAbortController } from '@shared/lib';
+import { useAppDispatch, useAppSelector, useAbortController } from '@shared/lib';
 import chatListApi from '../../api/chatListApi';
 import style from './style.module.css';
 

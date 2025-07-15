@@ -1,7 +1,7 @@
 import { FC, memo, useRef } from 'react';
-import { getTitle } from '../../../lib';
-import useLoadBlob from '../../../lib/hooks/useLoadBlob/useLoadBlob';
-import style from './style.module.css';
+import getTitle from '@shared/lib/GetTitle/getTitle';
+import useLoadBlob from '@shared/lib/hooks/useLoadBlob/useLoadBlob';
+import style from './load-file.module.css';
 
 interface ILoadImage {
     imagePath?: string;

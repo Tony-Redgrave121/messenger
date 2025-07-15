@@ -1,4 +1,4 @@
-import AdaptMessengerSchema from '@entities/Messenger/model/types/AdaptMessengerSchema';
+import { AdaptMessengerSchema } from '@entities/Messenger';
 import { getDate } from '@shared/lib';
 
 const getHeaderDesc = (messenger: AdaptMessengerSchema) => {

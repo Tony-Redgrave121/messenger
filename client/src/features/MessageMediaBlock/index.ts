@@ -1,1 +1,1 @@
-export { default as MessageMediaBlock } from './ui/MessageMediaBlock';
+export { default as MessageMediaBlock } from './ui/MessageMediaBlock/MessageMediaBlock';

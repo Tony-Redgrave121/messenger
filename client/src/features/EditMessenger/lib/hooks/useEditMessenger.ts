@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import getMessengerSettingsApi from '@features/EditMessenger/api/getMessengerSettingsApi';
 import EditFormKeys from '@features/EditMessenger/model/types/EditFormKeys';
-import MessengerSettingsSchema from '@features/EditMessenger/model/types/MessengerSettingsSchema';
+import MessengerSettingsSchema from '@entities/Messenger/model/types/MessengerSettingsSchema';
 import { useAbortController } from '@shared/lib';
 
 const InitialSettings: MessengerSettingsSchema = {

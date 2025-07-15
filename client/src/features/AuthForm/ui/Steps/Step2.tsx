@@ -8,7 +8,7 @@ import { FormInput } from '@shared/ui/Input';
 import confirmEmailApi from '../../api/confirmEmailApi';
 import AuthFormSchema from '../../model/types/AuthFormSchema';
 import AuthStepSchema from '../../model/types/AuthStepSchema';
-import stepStyle from './step.module.css';
+import style from './step.module.css';
 
 interface IStep2Props extends AuthStepSchema {
     watch: UseFormWatch<AuthFormSchema>;
@@ -40,7 +40,7 @@ const Step2: FC<IStep2Props> = ({ errors, register, watch, handleStep, trigger }
     return (
         <>
             <HiOutlineEnvelope />
-            <div className={stepStyle.TitleBlock}>
+            <div className={style.TitleBlock}>
                 <h1>{watch(['user_email'])}</h1>
                 <p>We have sent you a message in Email with the code.</p>
             </div>
@@ -59,7 +59,7 @@ const Step2: FC<IStep2Props> = ({ errors, register, watch, handleStep, trigger }
                     })}
                 />
             </FormInput>
-            <div className={stepStyle.ButtonBlock}>
+            <div className={style.ButtonBlock}>
                 <FormButton
                     foo={event => {
                         handleStep(event, 0);

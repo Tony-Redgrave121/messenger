@@ -1,5 +1,5 @@
-import { MessageSchema } from '@entities/Message';
-import AdaptMessengerSchema from '@entities/Messenger/model/types/AdaptMessengerSchema';
+import { MessageSchema } from 'features/Message';
+import { AdaptMessengerSchema } from '@entities/Messenger';
 import ChatBlockSchema from '@entities/Messenger/model/types/ChatBlockSchema';
 
 const mapChatDTO = (

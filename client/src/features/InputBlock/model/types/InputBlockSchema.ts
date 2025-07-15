@@ -1,5 +1,5 @@
 import { Dispatch, RefObject, SetStateAction } from 'react';
-import { MessageSchema } from '@entities/Message';
+import { MessageSchema } from 'features/Message';
 
 export default interface InputBlockSchema {
     reply: MessageSchema | null;

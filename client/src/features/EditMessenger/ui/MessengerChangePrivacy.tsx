@@ -1,8 +1,8 @@
 import React, { Dispatch, FC, memo, SetStateAction } from 'react';
 import { HiOutlineHeart, HiOutlineLockClosed } from 'react-icons/hi2';
 import EditFormKeys from '@features/EditMessenger/model/types/EditFormKeys';
-import MessengerSettingsSchema from '@features/EditMessenger/model/types/MessengerSettingsSchema';
 import style from '@features/EditMessenger/ui/style.module.css';
+import MessengerSettingsSchema from '@entities/Messenger/model/types/MessengerSettingsSchema';
 import { openForm } from '@shared/lib';
 import { SettingButton } from '@shared/ui/Button';
 

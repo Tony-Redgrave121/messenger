@@ -1,9 +1,8 @@
 import { FC } from 'react';
-import style from './style.module.css';
 import { HiOutlineDocumentText } from 'react-icons/hi2';
-import useLoadBlob from '@shared/lib/hooks/useLoadBlob/useLoadBlob';
-import getFileName from '@shared/lib/GetFileName/getFileName';
 import MessageFileSchema from '@entities/Media/model/types/MessageFileSchema';
+import { useLoadBlob, getFileName } from '@shared/lib';
+import style from './style.module.css';
 
 interface IDocumentBlockProps {
     doc: MessageFileSchema;

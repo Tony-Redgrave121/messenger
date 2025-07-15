@@ -1,7 +1,6 @@
 import React, { Dispatch, FC, SetStateAction } from 'react';
 import { Contact, ContactSchema } from '@entities/Contact';
-import { useSearch } from '@shared/lib';
-import { useAppSelector } from '@shared/lib';
+import { useAppSelector, useSearch } from '@shared/lib';
 import { Checkbox } from '@shared/ui/Input';
 import { LoadFile } from '@shared/ui/LoadFile';
 import { NoResult } from '@shared/ui/NoResult';

@@ -1,5 +1,5 @@
 import React, { FC, ReactNode } from 'react';
-import buttonStyle from '../../styles/button.module.css';
+import style from '../button.module.css';
 
 interface IDefaultButtonProps {
     children?: ReactNode;
@@ -8,7 +8,7 @@ interface IDefaultButtonProps {
 
 const DefaultButton: FC<IDefaultButtonProps> = ({ children, foo }) => {
     return (
-        <button className={buttonStyle.DefaultButton} onClick={foo}>
+        <button className={style.DefaultButton} onClick={foo}>
             {children}
         </button>
     );

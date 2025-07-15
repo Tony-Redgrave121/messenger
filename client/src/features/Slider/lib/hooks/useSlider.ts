@@ -1,18 +1,18 @@
 import { RefObject, useEffect, useState } from 'react';
-import useZoom from './useZoom';
-import useSwipe from './useSwipe';
-import useLoadBlob from '@shared/lib/hooks/useLoadBlob/useLoadBlob';
+import { useParams } from 'react-router-dom';
+import fetchMessageApi from '@features/Message/api/fetchMessageApi';
+import { MessageSchema } from 'features/Message';
 import {
     useAppDispatch,
     useAbortController,
     useAppSelector,
     getExt,
     getFileName,
+    useLoadBlob,
 } from '@shared/lib';
 import { setCurrentSlide, setSlideNumber, setZoom } from '../../model/slice/sliderSlice';
-import { useParams } from 'react-router-dom';
-import { MessageSchema } from '@entities/Message';
-import fetchMessageApi from '@entities/Message/api/fetchMessageApi';
+import useSwipe from './useSwipe';
+import useZoom from './useZoom';
 
 const initialMessage: MessageSchema = {
     message_id: '',
@@ -43,7 +43,7 @@ const useSlider = (refSwipe: RefObject<HTMLDivElement | null>) => {
     const { setZoomSize, zoomSize, refZoom } = useZoom();
     const { handlePosition } = useSwipe(message, refSwipe, refZoom);
 
-    let { load, image } = useLoadBlob(
+    const { load, image } = useLoadBlob(
         currentSlide.message_file_name
             ? `messengers/${currentSlide.message_file_path}/${currentSlide.message_file_name}`
             : '',

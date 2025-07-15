@@ -1,28 +1,19 @@
-import React, { lazy, memo, Suspense, useMemo } from 'react';
-import {
-    HiBars3,
-    HiOutlineBugAnt,
-    HiOutlineCog8Tooth,
-    HiOutlineMegaphone,
-    HiOutlinePencil,
-    HiOutlineQuestionMarkCircle,
-    HiOutlineUser,
-    HiOutlineUsers,
-} from 'react-icons/hi2';
-import './left-sidebar.animation.css';
+import React, { lazy, memo, Suspense } from 'react';
+import { HiBars3, HiOutlinePencil } from 'react-icons/hi2';
 import { CSSTransition } from 'react-transition-group';
+import MessengersDropDown from '@widgets/LeftSidebar/ui/LeftSidebar/MessengersDropDown';
+import UserDropDown from '@widgets/LeftSidebar/ui/LeftSidebar/UserDropDown';
 import { ContactList } from '@features/ContactList';
 import { ChatList } from '@features/СhatList';
 import { useAppSelector } from '@shared/lib';
 import { CreateButton, DefaultButton } from '@shared/ui/Button';
 import { Caption } from '@shared/ui/Caption';
-import { DropDown } from '@shared/ui/DropDown';
-import { LoadFile } from '@shared/ui/LoadFile';
 import { SearchBar } from '@shared/ui/SearchBar';
 import { Sidebar } from '@shared/ui/Sidebar';
 import useGetContacts from '../../lib/hooks/useGetContacts';
 import useLeftSidebar from '../../lib/hooks/useLeftSidebar';
-import style from './style.module.css';
+import style from './left-sidebar.module.css';
+import './left-sidebar.animation.css';
 
 const MessengerSearch = lazy(() => import('@features/MessengerSearch/ui/MessengerSearch'));
 const Profile = lazy(() => import('@features/Profile/ui/Profile/Profile'));
@@ -37,11 +28,8 @@ const LeftSidebar = memo(() => {
         setSettings,
         settings,
         refSearch,
-        userImg,
-        userName,
-        userId,
-        setMessenger,
-        messenger,
+        setMessengerDropDown,
+        messengerDropDown,
         search,
         messengerCreation,
         setMessengerCreation,
@@ -56,79 +44,6 @@ const LeftSidebar = memo(() => {
 
     useGetContacts();
 
-    const messengersList = useMemo(
-        () => [
-            {
-                liChildren: <HiOutlineMegaphone />,
-                liText: 'New Channel',
-                liFoo: () =>
-                    setMessengerCreation(prev => ({
-                        state: !prev.state,
-                        type: 'channel',
-                    })),
-            },
-            {
-                liChildren: <HiOutlineUsers />,
-                liText: 'New Group',
-                liFoo: () =>
-                    setMessengerCreation(prev => ({
-                        state: !prev.state,
-                        type: 'group',
-                    })),
-            },
-            {
-                liChildren: <HiOutlineUser />,
-                liText: 'New Private Chat',
-                liFoo: () =>
-                    setMessengerCreation(prev => ({
-                        state: !prev.state,
-                        type: 'chat',
-                    })),
-            },
-        ],
-        [setMessengerCreation],
-    );
-
-    const dropDownList = useMemo(
-        () => [
-            {
-                liChildren: (
-                    <LoadFile
-                        imagePath={userImg ? `users/${userId}/${userImg}` : ''}
-                        imageTitle={userName}
-                    />
-                ),
-                liText: userName,
-                liFoo: () => setProfile(true),
-            },
-            {
-                liChildren: <HiOutlineUsers />,
-                liText: 'Contacts',
-                liFoo: () =>
-                    setMessengerCreation(prev => ({
-                        state: !prev.state,
-                        type: 'chat',
-                    })),
-            },
-            {
-                liChildren: <HiOutlineCog8Tooth />,
-                liText: 'Settings',
-                liFoo: () => setProfile(true),
-            },
-            {
-                liChildren: <HiOutlineQuestionMarkCircle />,
-                liText: 'CrowCaw Features',
-                liFoo: () => {},
-            },
-            {
-                liChildren: <HiOutlineBugAnt />,
-                liText: 'Report Bug',
-                liFoo: () => {},
-            },
-        ],
-        [setMessengerCreation, setProfile, userId, userImg, userName],
-    );
-
     return (
         <CSSTransition
             in={sidebarLeft}
@@ -141,7 +56,12 @@ const LeftSidebar = memo(() => {
                 <div className={style.TopBar}>
                     <DefaultButton foo={() => setSettings(!settings)}>
                         <HiBars3 />
-                        <DropDown list={dropDownList} state={settings} setState={setSettings} />
+                        <UserDropDown
+                            setMessengerCreation={setMessengerCreation}
+                            state={settings}
+                            setState={setSettings}
+                            setProfile={setProfile}
+                        />
                     </DefaultButton>
                     <SearchBar searchRef={refSearch} foo={handleInput} />
                 </div>
@@ -152,9 +72,13 @@ const LeftSidebar = memo(() => {
                         <ContactList contacts={contacts} text="Contacts" onClick={navigateChat} />
                     </>
                 )}
-                <CreateButton state={true} foo={() => setMessenger(!messenger)}>
+                <CreateButton state={true} foo={() => setMessengerDropDown(prev => !prev)}>
                     <HiOutlinePencil />
-                    <DropDown list={messengersList} state={messenger} setState={setMessenger} />
+                    <MessengersDropDown
+                        setMessengerCreation={setMessengerCreation}
+                        setState={setMessengerDropDown}
+                        state={messengerDropDown}
+                    />
                 </CreateButton>
                 {messengerCreation.type && (
                     <Suspense>

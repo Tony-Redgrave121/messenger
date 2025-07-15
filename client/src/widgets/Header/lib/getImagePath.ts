@@ -1,4 +1,4 @@
-import AdaptMessengerSchema from '@entities/Messenger/model/types/AdaptMessengerSchema';
+import { AdaptMessengerSchema } from '@entities/Messenger';
 
 const getImagePath = (messenger: AdaptMessengerSchema) => {
     return messenger.image

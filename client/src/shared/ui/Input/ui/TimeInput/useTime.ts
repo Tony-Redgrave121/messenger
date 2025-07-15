@@ -1,7 +1,7 @@
 import { ChangeEvent, Dispatch, RefObject, SetStateAction, useEffect, useRef } from 'react';
-import { rangeProgress } from '../../../../lib';
+import rangeProgress from '@shared/lib/RangeProgress/rangeProgress';
 
-const useVolume = (
+const useTime = (
     mediaRef: RefObject<HTMLVideoElement | null>,
     time: number,
     setTime: Dispatch<SetStateAction<number>>,
@@ -27,4 +27,4 @@ const useVolume = (
     };
 };
 
-export default useVolume;
+export default useTime;

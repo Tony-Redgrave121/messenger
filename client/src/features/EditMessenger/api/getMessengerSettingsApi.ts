@@ -1,5 +1,5 @@
 import { AxiosResponse } from 'axios';
-import MessengerSettingsSchema from '@features/EditMessenger/model/types/MessengerSettingsSchema';
+import MessengerSettingsSchema from '@entities/Messenger/model/types/MessengerSettingsSchema';
 import $api from '@shared/api/axiosApi';
 import { GET_MESSENGER_SETTINGS_ROUTE } from '@shared/config';
 

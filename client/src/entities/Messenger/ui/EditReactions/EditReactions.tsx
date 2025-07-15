@@ -1,9 +1,9 @@
 import React, { Dispatch, FC, memo, SetStateAction, useRef } from 'react';
 import { HiOutlineArrowLeft } from 'react-icons/hi2';
 import { CSSTransition } from 'react-transition-group';
-import MessengerSettingsSchema from '@features/EditMessenger/model/types/MessengerSettingsSchema';
 import useEditReactions from '@entities/Messenger/lib/hooks/useEditReactions';
 import MessengerSettingsKeys from '@entities/Messenger/model/types/MessengerSettingsKeys';
+import MessengerSettingsSchema from '@entities/Messenger/model/types/MessengerSettingsSchema';
 import { ReactionSchema } from '@entities/Reaction';
 import { closeForm } from '@shared/lib';
 import { ToggleState } from '@shared/types';

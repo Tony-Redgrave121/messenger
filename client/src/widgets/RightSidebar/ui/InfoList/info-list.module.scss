@@ -1,0 +1,11 @@
+@use "../../../../app/styles/variables.css" as v;
+
+.InfoList {
+  padding: 8px;
+  background-color: #212121;
+
+  li {
+    display: flex;
+    width: 100%;
+  }
+}

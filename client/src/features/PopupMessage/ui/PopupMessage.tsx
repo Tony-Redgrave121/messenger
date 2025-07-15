@@ -1,7 +1,6 @@
 import { useEffect } from 'react';
-import '@shared/ui/Popup/popup-animation.css';
 import { useAppDispatch, useAppSelector } from '@shared/lib';
-import Popup from '@shared/ui/Popup/Popup';
+import Popup from '@shared/ui/Popup/ui/Popup';
 import { setPopupState } from '../model/slice/popupSlice';
 
 const PopupMessage = () => {
@@ -16,7 +15,7 @@ const PopupMessage = () => {
         }
 
         return () => {
-            timer && clearTimeout(timer);
+            if (timer) clearTimeout(timer);
         };
     }, [dispatch, popupState]);
 

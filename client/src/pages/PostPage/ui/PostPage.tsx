@@ -1,5 +1,5 @@
 import React from 'react';
-import Post from '@widgets/Messenger/ui/Post';
+import Post from '@widgets/Messenger/ui/Post/Post';
 
 const PostPage = () => {
     return <Post />;

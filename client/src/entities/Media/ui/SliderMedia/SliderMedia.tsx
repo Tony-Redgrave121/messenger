@@ -1,10 +1,9 @@
 import React, { FC } from 'react';
-import useLoadBlob from '@shared/lib/hooks/useLoadBlob/useLoadBlob';
-import { getExt } from '@shared/lib';
 import { Player } from '@features/Player';
-import style from '../MessageMedia/style.module.css';
-import { VIDEO_TYPES } from '../../consts/videoTypes';
-import MessageFileSchema from '@entities/Media/model/types/MessageFileSchema';
+import { MessageFileSchema } from '@entities/Media';
+import { IS_VIDEO } from '@entities/Media/consts/isVideo';
+import { getExt, useLoadBlob } from '@shared/lib';
+import style from '../message-media.module.css';
 
 interface ISliderProps {
     media: MessageFileSchema;
@@ -22,7 +21,7 @@ const SliderMedia: FC<ISliderProps> = ({ media }) => {
     const geTag = () => {
         const ext = getExt(media.message_file_name);
 
-        if (VIDEO_TYPES.includes(ext)) {
+        if (IS_VIDEO.includes(ext)) {
             return (
                 <Player
                     key={media.message_file_id}
