@@ -15,7 +15,7 @@ import { MessengerCreationSchema } from '@features/CreateMessenger/model/types/M
 import { DefaultButton } from '@shared/ui/Button';
 import { Sidebar } from '@shared/ui/Sidebar';
 import style from './style.module.css';
-import '@widgets/LeftSidebar/ui/LeftSidebar/left-sidebar.animation.css';
+import './create-messenger.animation.css';
 
 interface IMessengerProps {
     messengerCreation: MessengerCreationSchema;
@@ -93,7 +93,7 @@ const CreateMessenger: FC<IMessengerProps> = memo(({ messengerCreation, setMesse
             in={animationState}
             nodeRef={refSidebar}
             timeout={300}
-            classNames="left-sidebar-node"
+            classNames="create-messenger-node"
             unmountOnExit
         >
             <Sidebar

@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { MessageSchema } from '@features/Message';
 import { useAppSelector } from '@shared/lib';
+import { MessageSchema } from '@shared/types';
 
 const SERVER_DOMAIN_NAME = process.env.VITE_SERVER_DOMAIN_NAME;
 

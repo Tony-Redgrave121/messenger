@@ -1,12 +1,11 @@
 import React, { Dispatch, FC, RefObject, SetStateAction, useRef } from 'react';
-import style from './style.module.css';
 import { HiOutlineDocumentPlus, HiOutlineDocumentText, HiOutlineXMark } from 'react-icons/hi2';
-import { Textarea } from '@shared/ui/Textarea';
-import { DefaultButton } from '@shared/ui/Button';
 import { UploadMedia, UploadDocument } from '@entities/Media';
+import { FileStateSchema, FileObjectSchema } from '@shared/types';
+import { DefaultButton } from '@shared/ui/Button';
+import { Textarea } from '@shared/ui/Textarea';
 import { UploadMediaBlock } from '../../../UploadMediaBlock';
-import FileStateSchema from '@entities/Media/model/types/FileStateSchema';
-import FileObjectSchema from '@entities/Media/model/types/FileObjectSchema';
+import style from './style.module.css';
 
 interface IPopupInputBlock {
     setState: Dispatch<SetStateAction<FileStateSchema>>;

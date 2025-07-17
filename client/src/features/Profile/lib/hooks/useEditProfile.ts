@@ -4,7 +4,7 @@ import getProfileApi from '@features/Profile/api/getProfileApi';
 import putProfileApi from '@features/Profile/api/putProfileApi';
 import EditProfileSchema from '@features/Profile/model/types/EditProfileSchema';
 import ProfileKeys from '@features/Profile/model/types/ProfileKeys';
-import { setUserBio, setUserImg, setUserName } from '@entities/User/model/slice/userSlice';
+import { setUserBio, setUserImg, setUserName } from '@entities/User';
 import { closeForm, useAbortController, useAppDispatch, useAppSelector } from '@shared/lib';
 import { ToggleState } from '@shared/types';
 

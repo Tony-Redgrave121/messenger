@@ -1,8 +1,8 @@
 import React, { FC, memo } from 'react';
 import { Link } from 'react-router-dom';
+import ChatBlockSchema from '@entities/Messenger/model/types/ChatBlockSchema';
 import { getDate, useAppSelector } from '@shared/lib';
 import { LoadFile } from '@shared/ui/LoadFile';
-import ChatBlockSchema from '../../model/types/ChatBlockSchema';
 import style from './style.module.css';
 
 interface IChatBlockProps {

@@ -1,5 +1,6 @@
-import { ContactSchema } from '@entities/Contact';
-import { AdaptMessengerSchema, MessengerSchema } from '@entities/Messenger';
+import AdaptMessengerSchema from '@entities/Messenger/model/types/AdaptMessengerSchema';
+import MessengerSchema from '@entities/Messenger/model/types/MessengerSchema';
+import { ContactSchema } from '@shared/types';
 
 const mapMessengerDTO = (messengerData: MessengerSchema | ContactSchema): AdaptMessengerSchema => {
     if ('user_id' in messengerData) {

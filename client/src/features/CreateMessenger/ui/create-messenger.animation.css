@@ -1,0 +1,32 @@
+.create-messenger-node-enter {
+  width: 0;
+  opacity: 0;
+}
+
+.create-messenger-node-enter-active {
+  opacity: 1;
+  width: 100%;
+  transition:
+    opacity 0.3s ease-in-out,
+    width 0.3s ease-in-out;
+}
+
+.create-messenger-node-exit {
+  opacity: 1;
+}
+
+.create-messenger-node-exit-active {
+  opacity: 0;
+  width: 0;
+  transition:
+    opacity 0.3s ease-in-out,
+    width 0.3s ease-in-out;
+}
+
+.create-messenger-node-exit-done {
+  opacity: 0;
+  width: 0;
+  transition:
+    opacity 0.3s ease-in-out,
+    width 0.3s ease-in-out;
+}

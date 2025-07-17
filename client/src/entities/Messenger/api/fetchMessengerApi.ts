@@ -1,8 +1,8 @@
 import { AxiosResponse } from 'axios';
-import { ContactSchema } from '@entities/Contact';
+import MessengerSchema from '@entities/Messenger/model/types/MessengerSchema';
 import $api from '@shared/api/axiosApi';
 import { MESSENGER_ROUTE } from '@shared/config';
-import MessengerSchema from '@entities/Messenger/model/types/MessengerSchema';
+import { ContactSchema } from '@shared/types';
 
 const fetchMessengerApi = async (
     user_id: string,

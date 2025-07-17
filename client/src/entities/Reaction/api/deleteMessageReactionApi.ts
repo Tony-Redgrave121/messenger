@@ -2,7 +2,7 @@ import { AxiosResponse } from 'axios';
 import $api from '@shared/api/axiosApi';
 import { MESSAGE_REACTIONS_ROUTE } from '@shared/config';
 
-const deleteMessageReaction = async (
+const deleteMessageReactionApi = async (
     message_id: string,
     user_id: string,
     reaction_id: string,
@@ -14,4 +14,4 @@ const deleteMessageReaction = async (
     );
 };
 
-export default deleteMessageReaction;
+export default deleteMessageReactionApi;

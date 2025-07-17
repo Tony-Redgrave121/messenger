@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { setPopupChildren, setPopupState } from '@features/PopupMessage/model/slice/popupSlice';
+import { setPopupChildren, setPopupState } from '@entities/Message';
 import { useAppDispatch } from '@shared/lib';
 
 const PageError = () => {

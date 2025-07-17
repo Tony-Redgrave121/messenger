@@ -1,6 +1,5 @@
 import React, { FC, memo } from 'react';
-import { ContactSchema } from '@entities/Contact';
-import { DropDownList } from '@shared/types';
+import { ContactSchema, DropDownList } from '@shared/types';
 import { ContactButton } from '@shared/ui/Button';
 import Member from '../Member/Member';
 import style from './members-list.module.css';

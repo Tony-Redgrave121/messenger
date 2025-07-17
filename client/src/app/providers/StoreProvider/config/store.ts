@@ -1,9 +1,9 @@
 import { Action, combineReducers, configureStore, ThunkAction } from '@reduxjs/toolkit';
 import wrapperSlice from '@widgets/Main/model/slice/wrapperSlice';
-import popupSlice from '@features/PopupMessage/model/slice/popupSlice';
 import sliderReducer from '@features/Slider/model/slice/sliderSlice';
 import contactSlice from '@entities/Contact/model/slice/contactSlice';
 import videoReducer from '@entities/Media/model/slice/videoSlice';
+import popupSlice from '@entities/Message/model/slice/popupSlice';
 import messengerSlice from '@entities/Messenger/model/slice/messengerSlice';
 import sidebarSlice from '@entities/Messenger/model/slice/sidebarSlice';
 import userReducer from '@entities/User/model/slice/userSlice';

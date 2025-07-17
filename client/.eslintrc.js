@@ -1,7 +1,7 @@
 module.exports = {
     root: true,
     parser: '@typescript-eslint/parser',
-    plugins: ['@typescript-eslint', 'react', 'react-hooks', 'prettier'],
+    plugins: ['@typescript-eslint', 'react', 'react-hooks', 'prettier', 'boundaries'],
     extends: [
         'eslint:recommended',
         'plugin:@typescript-eslint/recommended',
@@ -21,13 +21,53 @@ module.exports = {
             jsx: true,
         },
     },
+    settings: {
+        'import/resolver': {
+            typescript: {
+                alwaysTryTypes: true,
+                project: './tsconfig.json',
+            },
+        },
+        boundaries: {
+            default: 'disallow',
+            elements: [
+                { type: 'app', pattern: '@app/*' },
+                { type: 'pages', pattern: '@pages/*' },
+                { type: 'widgets', pattern: '@widgets/*' },
+                { type: 'features', pattern: '@features/*' },
+                { type: 'entities', pattern: '@entities/*' },
+                { type: 'shared', pattern: '@shared/*' },
+            ],
+        },
+    },
     rules: {
         'prettier/prettier': 'warn',
         'react/prop-types': 'off',
         'react/react-in-jsx-scope': 'off',
         'import/order': 'warn',
         'import/no-internal-modules': 'warn',
-        'boundaries/element-types': 'warn',
+        'boundaries/element-types': [
+            2,
+            {
+                default: 'disallow',
+                rules: [
+                    { from: 'shared', allow: [] },
+                    { from: 'entities', allow: ['shared'] },
+                    { from: 'features', allow: ['shared', 'entities'] },
+                    { from: 'widgets', allow: ['shared', 'entities', 'features'] },
+                    { from: 'pages', allow: ['shared', 'entities', 'features', 'widgets'] },
+                    { from: 'app', allow: ['pages', 'widgets', 'features', 'entities', 'shared'] },
+                ],
+            },
+        ],
     },
+    overrides: [
+        {
+            files: ['src/**/**/*.ts', 'src/**/**/*.tsx'],
+            rules: {
+                'import/no-internal-modules': 'off',
+            },
+        },
+    ],
     ignorePatterns: ['dist/', 'build/', 'node_modules/'],
 };

@@ -1,5 +1,5 @@
 import { ChangeEvent, RefObject, useEffect, useRef, useState } from 'react';
-import { setVolume } from '@entities/Media';
+import { setVolume } from '@entities/Media/model/slice/videoSlice';
 import { useAppDispatch, useAppSelector, rangeProgress } from '@shared/lib';
 
 const useVolume = (mediaRef: RefObject<HTMLVideoElement | null>) => {

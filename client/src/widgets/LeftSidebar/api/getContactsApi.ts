@@ -1,7 +1,7 @@
 import { AxiosResponse } from 'axios';
-import { ContactSchema } from '@entities/Contact';
 import $api from '@shared/api/axiosApi';
 import { GET_CONTACTS_ROUTE } from '@shared/config';
+import { ContactSchema } from '@shared/types';
 
 const getContactsApi = async (
     user_id: string,

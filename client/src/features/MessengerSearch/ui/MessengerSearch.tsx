@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router';
 import { CSSTransition } from 'react-transition-group';
 import '@widgets/LeftSidebar/ui/LeftSidebar/left-sidebar.animation.css';
 import UnifiedMessengerSchema from '@features/MessengerSearch/model/types/UnifiedMessengerSchema';
-import contactStyles from '@entities/Contact/ui/contact.module.css';
+import contactStyles from '@entities/Contact/ui/Contact/contact.module.css';
 import { useAppSelector, getDate } from '@shared/lib';
 import { MessengerTypes } from '@shared/types';
 import { ContactButton } from '@shared/ui/Button';

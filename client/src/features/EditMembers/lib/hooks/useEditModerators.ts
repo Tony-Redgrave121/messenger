@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import useEditSubscribers from '@features/EditMembers/lib/hooks/useEditSubscribers';
-import { ContactSchema } from '@entities/Contact';
+import { ContactSchema } from '@shared/types';
 
 const useEditModerators = (moderators: ContactSchema[]) => {
     const [newMembers, setNewMembers] = useState<ContactSchema[]>([]);

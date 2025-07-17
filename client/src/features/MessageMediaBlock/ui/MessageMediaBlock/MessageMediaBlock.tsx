@@ -1,5 +1,6 @@
 import React, { FC, memo } from 'react';
-import { MessageFileSchema, MessageMedia } from '@entities/Media';
+import MessageMedia from '@features/MessageMediaBlock/ui/MessageMedia/MessageMedia';
+import { MessageFileSchema } from '@shared/types';
 import style from './message-media-block.module.css';
 
 interface IMessageMediaProps {

@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
-import { FileObjectSchema } from '@entities/Media';
-import useShortMedia from '../../lib/hooks/useShortMedia';
+import useShortMedia from '@entities/Media/lib/hooks/useShortMedia';
+import { FileObjectSchema } from '@shared/types';
 import style from '../message-media.module.css';
 
 interface IPreviewMediaProps {

@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { UpdateMessengerSchema } from '@entities/Messenger';
-import ChatBlockSchema from '../types/ChatBlockSchema';
+import ChatBlockSchema from '@entities/Messenger/model/types/ChatBlockSchema';
+import UpdateMessengerSchema from '@entities/Messenger/model/types/UpdateMessengerSchema';
 
 interface ILiveUpdatesState {
     messengers: ChatBlockSchema[];

@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react';
 import mapChatDTO from '@widgets/Messenger/api/mappers/mapChatDTO';
 import postContactsMembersApi from '@features/EditMembers/api/postContactsMembersApi';
-import { MessageSchema } from 'features/Message';
+import { isMember } from '@entities/Member';
 import { AdaptMessengerSchema } from '@entities/Messenger';
 import { addMessenger } from '@entities/Messenger/model/slice/messengerSlice';
-import isMember from '@entities/User/lib/IsMember/isMember';
 import { useAbortController, useAppDispatch, useAppSelector } from '@shared/lib';
+import { MessageSchema } from '@shared/types';
 
 const useSubscribeToMessenger = (
     messenger: AdaptMessengerSchema,

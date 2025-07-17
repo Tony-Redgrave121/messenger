@@ -1,10 +1,10 @@
 import React, { Dispatch, FC, memo, RefObject, SetStateAction, useMemo } from 'react';
 import { InputBlock } from '@features/InputBlock';
 import useSubscribeToMessenger from '@features/MessengerInput/lib/hooks/useSubscribeToMessenger';
-import { MessageSchema } from 'features/Message';
+import { checkRights } from '@entities/Member';
 import { AdaptMessengerSchema } from '@entities/Messenger';
-import checkRights from '@entities/User/lib/CheckRights/checkRights';
 import { useAppSelector } from '@shared/lib';
+import { MessageSchema } from '@shared/types';
 import { SubscribeButton } from '@shared/ui/Button';
 
 interface IMessengerInputProps {

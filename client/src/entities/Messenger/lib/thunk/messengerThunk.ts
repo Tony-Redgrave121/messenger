@@ -1,12 +1,12 @@
 import { AppThunk } from '@app/providers/StoreProvider/config/store';
-import UpdateMessengerSchema from '@entities/Messenger/model/types/UpdateMessengerSchema';
-import { NOTIFICATIONS_KEY } from '../../consts/MessengerKeys';
+import { NOTIFICATIONS_KEY } from '@entities/Messenger/consts/MessengerKeys';
 import {
     updateMessengerMessage,
     setNotificationCount,
     setNotificationsFromStorage,
     removeMessenger,
-} from '../../model/slice/messengerSlice';
+} from '@entities/Messenger/model/slice/messengerSlice';
+import UpdateMessengerSchema from '@entities/Messenger/model/types/UpdateMessengerSchema';
 
 export const updateMessenger =
     (data: UpdateMessengerSchema): AppThunk =>

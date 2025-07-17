@@ -1,6 +1,6 @@
 import { useRef } from 'react';
-import { ContactSchema } from '@entities/Contact';
 import { useSearch } from '@shared/lib';
+import { ContactSchema } from '@shared/types';
 
 const useEditRemoved = (removed: ContactSchema[]) => {
     const refForm = useRef<HTMLDivElement>(null);

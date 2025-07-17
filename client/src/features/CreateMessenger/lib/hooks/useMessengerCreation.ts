@@ -5,10 +5,9 @@ import mapNewMessengerDTO from '@features/CreateMessenger/api/mappers/mapNewMess
 import postMessengerApi from '@features/CreateMessenger/api/postMessengerApi';
 import { MessengerCreationSchema } from '@features/CreateMessenger/model/types/MessengerCreationSchema';
 import NewMessengerSchema from '@features/CreateMessenger/model/types/NewMessengerSchema';
-import { ContactSchema } from '@entities/Contact';
-import { addMessenger } from '@entities/Messenger/model/slice/messengerSlice';
-import { useLiveUpdatesWS } from '@entities/Reaction/lib/hooks/useLiveUpdatesWS';
+import { addMessenger, useLiveUpdatesWS } from '@entities/Messenger';
 import { useAbortController, useAppDispatch, useAppSelector } from '@shared/lib';
+import { ContactSchema } from '@shared/types';
 
 const InitialValues: NewMessengerSchema = {
     messenger_name: '',

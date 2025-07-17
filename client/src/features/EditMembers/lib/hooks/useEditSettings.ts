@@ -4,8 +4,8 @@ import deleteMemberApi from '@features/EditMembers/api/deleteMemberApi';
 import deleteRemovedApi from '@features/EditMembers/api/deleteRemovedApi';
 import postMemberApi from '@features/EditMembers/api/postMemberApi';
 import putMessengerModeratorApi from '@features/EditMembers/api/putMessengerModeratorApi';
+import { useLiveUpdatesWS } from '@entities/Messenger';
 import MessengerSettingsSchema from '@entities/Messenger/model/types/MessengerSettingsSchema';
-import { useLiveUpdatesWS } from '@entities/Reaction/lib/hooks/useLiveUpdatesWS';
 import { useAppSelector, useAbortController } from '@shared/lib';
 
 const useEditSettings = (setSettings: Dispatch<SetStateAction<MessengerSettingsSchema>>) => {

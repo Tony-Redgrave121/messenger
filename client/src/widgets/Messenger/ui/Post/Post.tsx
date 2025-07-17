@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { PostHeader } from '@widgets/Header';
+import useFetchInitialData from '@widgets/Messenger/lib/hooks/useFetchInitialData';
 import useFetchPost from '@widgets/Messenger/lib/hooks/useFetchPost';
 import { InputBlock } from '@features/InputBlock';
-import { Message, MessageSchema, MessagesList } from '@features/Message';
-import useFetchInitialData from '@entities/Messenger/lib/hooks/useFetchInitialData';
+import { Message, MessagesList } from '@features/Message';
+import { MessageSchema } from '@shared/types';
 import style from '../messenger.module.css';
 
 const Post = () => {

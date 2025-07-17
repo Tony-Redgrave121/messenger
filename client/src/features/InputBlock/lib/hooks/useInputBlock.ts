@@ -1,8 +1,8 @@
 import { ChangeEvent, useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import FileStateSchema from '@entities/Media/model/types/FileStateSchema';
-import { useLiveUpdatesWS } from '@entities/Reaction/lib/hooks/useLiveUpdatesWS';
+import { useLiveUpdatesWS } from '@entities/Messenger';
 import { getFileObject, useAppSelector } from '@shared/lib';
+import { FileStateSchema } from '@shared/types';
 import postMessageApi from '../../api/postMessageApi';
 import InputBlockSchema from '../../model/types/InputBlockSchema';
 

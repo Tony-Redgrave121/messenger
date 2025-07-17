@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import useAbortController from '../useAbortController/useAbortController';
+import useAbortController from '@shared/lib/hooks/useAbortController/useAbortController';
 
 const SERVER_URL = process.env.VITE_SERVER_URL;
 

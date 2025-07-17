@@ -1,7 +1,7 @@
 import { AxiosResponse } from 'axios';
-import { ReactionSchema } from '@entities/Reaction';
 import $api from '@shared/api/axiosApi';
 import { GET_REACTIONS_ROUTE } from '@shared/config';
+import { ReactionSchema } from '@shared/types';
 
 const getReactionsApi = async (
     messenger_id: string | undefined,

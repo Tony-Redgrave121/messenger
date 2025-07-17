@@ -1,6 +1,6 @@
 import React, { Dispatch, FC, RefObject, SetStateAction } from 'react';
-import { FileStateSchema } from '@entities/Media';
 import { uploadFiles } from '@shared/lib';
+import { FileStateSchema } from '@shared/types';
 
 interface IUploadMediaProps {
     setState: Dispatch<SetStateAction<FileStateSchema>>;

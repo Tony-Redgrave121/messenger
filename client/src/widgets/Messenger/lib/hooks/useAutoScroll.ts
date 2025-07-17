@@ -1,5 +1,5 @@
 import { RefObject, useEffect } from 'react';
-import { MessageSchema } from 'features/Message';
+import { MessageSchema } from '@shared/types';
 
 const useAutoScroll = (refEnd: RefObject<HTMLDivElement | null>, messagesList: MessageSchema[]) => {
     useEffect(() => {

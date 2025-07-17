@@ -1,0 +1,48 @@
+@use "../../../../app/styles/variables.css" as v;
+
+.VideoPlayer {
+  display: flex;
+  position: relative;
+
+  video {
+    min-width: 100%;
+    min-height: 100%;
+  }
+
+  .BottomBar {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 4px;
+    flex-wrap: wrap;
+    width: 100%;
+    padding: 0 16px;
+    background: linear-gradient(transparent, #000000b3);
+
+    button {
+      padding: 8px;
+    }
+
+    .ControlBar {
+      justify-content: space-between;
+
+      &,
+      > div,
+      .TimeBlock {
+        display: flex;
+      }
+
+      .TimeBlock {
+        align-items: center;
+        padding: 8px;
+
+        p {
+          padding: 0 4px;
+        }
+      }
+    }
+  }
+}

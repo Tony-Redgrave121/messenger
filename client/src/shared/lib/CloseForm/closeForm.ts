@@ -1,5 +1,5 @@
 import { Dispatch, SetStateAction } from 'react';
-import { ToggleState } from '../../types';
+import ToggleState from '@shared/types/ToggleState';
 
 const closeForm = <T extends string>(
     key: string,

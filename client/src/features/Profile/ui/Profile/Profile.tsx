@@ -3,7 +3,7 @@ import { CSSTransition } from 'react-transition-group';
 import ProfileActions from '@features/Profile/ui/Profile/ProfileActions';
 import ProfileInfo from '@features/Profile/ui/Profile/ProfileInfo';
 import ProfileTopBar from '@features/Profile/ui/Profile/ProfileTopBar';
-import { deleteAccount } from '@entities/User/lib/thunk/userThunk';
+import { deleteAccount } from '@entities/User';
 import { useAppDispatch, useAppSelector, useLoadBlob } from '@shared/lib';
 import { Caption } from '@shared/ui/Caption';
 import { Popup } from '@shared/ui/Popup';

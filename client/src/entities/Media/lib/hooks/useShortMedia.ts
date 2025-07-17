@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
-import { FileObjectSchema } from '@entities/Media';
+import { IS_VIDEO } from '@entities/Media/consts/isVideo';
+import { MAX_WIDTH } from '@entities/Media/consts/mediaWidth';
 import { getExt } from '@shared/lib';
-import { IS_VIDEO } from '../../consts/isVideo';
-import { MAX_WIDTH } from '../../consts/mediaWidth';
+import { FileObjectSchema } from '@shared/types';
 
 const useShortMedia = (media: FileObjectSchema) => {
     const [preview, setPreview] = useState<string | null>(null);

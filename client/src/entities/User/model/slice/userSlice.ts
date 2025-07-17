@@ -5,9 +5,9 @@ import {
     logout,
     registration,
     userCheckAuth,
-} from '../../lib/thunk/userThunk';
-import UserStateShema from '../types/UserStateShema';
-import AuthSchema from '../types/AuthSchema';
+} from '@entities/User/lib/thunk/userThunk';
+import AuthSchema from '@entities/User/model/types/AuthSchema';
+import UserStateShema from '@entities/User/model/types/UserStateShema';
 
 const initialState: UserStateShema = {
     userId: '',
@@ -16,7 +16,7 @@ const initialState: UserStateShema = {
     userBio: '',
     userImg: null,
     isAuth: false,
-    isLoading: true,
+    isLoading: false,
 };
 
 const updateAuthState = (state: UserStateShema, action: PayloadAction<AuthSchema>) => {

@@ -1,9 +1,9 @@
 import { Dispatch, SetStateAction } from 'react';
 import { SubmitHandler, useForm, useWatch } from 'react-hook-form';
-import { setPopupChildren, setPopupState } from '@features/PopupMessage/model/slice/popupSlice';
 import putPasswordApi from '@features/Profile/api/putPasswordApi';
 import EditPasswordSchema from '@features/Profile/model/types/EditPasswordSchema';
 import ProfileKeys from '@features/Profile/model/types/ProfileKeys';
+import { setPopupChildren, setPopupState } from '@entities/Message';
 import { closeForm, useAppDispatch, useAppSelector } from '@shared/lib';
 import { ToggleState } from '@shared/types';
 

@@ -4,7 +4,7 @@ import {
     HiOutlineArrowRightOnRectangle,
     HiOutlinePencil,
 } from 'react-icons/hi2';
-import { logout } from '@entities/User/lib/thunk/userThunk';
+import { logout } from '@entities/User';
 import { openForm, useAppDispatch } from '@shared/lib';
 import { DefaultButton } from '@shared/ui/Button';
 import { TopBar } from '@shared/ui/TopBar';

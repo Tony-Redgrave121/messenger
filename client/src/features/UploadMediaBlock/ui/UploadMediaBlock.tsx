@@ -1,5 +1,6 @@
 import React, { FC, memo } from 'react';
-import { FileObjectSchema, PreviewMedia } from '@entities/Media';
+import { PreviewMedia } from '@entities/Media';
+import { FileObjectSchema } from '@shared/types';
 import style from './upload-media-block.module.css';
 
 interface IMedia {

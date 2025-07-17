@@ -1,8 +1,8 @@
 import { clsx } from 'clsx';
 import React, { FC, RefObject } from 'react';
+import useReaction from '@entities/Reaction/lib/hooks/useReaction';
 import { useAppSelector } from '@shared/lib';
-import { MessageSchema } from '../../../../features/Message';
-import useReaction from '../../lib/hooks/useReaction';
+import { MessageSchema } from '@shared/types';
 import style from './style.module.css';
 
 interface ReactionSchemasBlockProps {

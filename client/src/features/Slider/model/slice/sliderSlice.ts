@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import MessageFileSchema from '@entities/Media/model/types/MessageFileSchema';
+import MessageFileSchema from '@shared/types/MessageFileSchema';
 
 interface ISliderState {
     zoom: boolean;

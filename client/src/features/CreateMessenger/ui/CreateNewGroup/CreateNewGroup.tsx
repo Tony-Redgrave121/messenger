@@ -4,11 +4,10 @@ import { HiOutlinePhoto } from 'react-icons/hi2';
 import useMessengerCreation from '@features/CreateMessenger/lib/hooks/useMessengerCreation';
 import { MessengerCreationSchema } from '@features/CreateMessenger/model/types/MessengerCreationSchema';
 import SubmitButton from '@features/CreateMessenger/ui/SubmitButton/SubmitButton';
+import { AddContact } from '@entities/Contact';
 import { useAppSelector } from '@shared/lib';
 import { FormInput } from '@shared/ui/Input';
-import { AddContact } from '../../../AddContact';
 import style from '../style.module.css';
-import '@widgets/LeftSidebar/ui/LeftSidebar/left-sidebar.animation.css';
 
 interface IMessengerProps {
     messengerCreation: MessengerCreationSchema;

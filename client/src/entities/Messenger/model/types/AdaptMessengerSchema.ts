@@ -1,5 +1,4 @@
-import { MemberSchema } from '@entities/Member';
-import { MessengerTypes } from '@shared/types';
+import { MemberSchema, MessengerTypes } from '@shared/types';
 
 export default interface AdaptMessengerSchema {
     id: string;

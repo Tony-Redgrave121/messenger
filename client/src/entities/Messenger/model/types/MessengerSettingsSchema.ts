@@ -1,6 +1,4 @@
-import { MemberSchema } from '@entities/Member';
-import { ContactSchema } from '@entities/Contact';
-import { ReactionSchema } from '@entities/Reaction';
+import { MemberSchema, ReactionSchema, ContactSchema } from '@shared/types';
 
 export default interface MessengerSettingsSchema {
     messenger_setting_type: 'private' | 'public';

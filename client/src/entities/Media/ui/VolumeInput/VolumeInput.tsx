@@ -1,7 +1,7 @@
 import { FC, RefObject } from 'react';
 import { CSSTransition } from 'react-transition-group';
+import useVolume from '@entities/Media/lib/hooks/useVolume';
 import { VolumeButton } from '@shared/ui/Button';
-import useVolume from '../../lib/hooks/useVolume';
 import style from './volume-input.module.css';
 import './volume-input.animation.css';
 

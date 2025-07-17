@@ -2,11 +2,12 @@ import React, { lazy, memo, useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { MessengerHeader } from '@widgets/Header';
 import useAutoScroll from '@widgets/Messenger/lib/hooks/useAutoScroll';
-import { MessageSchema, MessagesList } from '@features/Message';
+import useFetchInitialData from '@widgets/Messenger/lib/hooks/useFetchInitialData';
+import { MessagesList } from '@features/Message';
 import { MessengerInput } from '@features/MessengerInput';
-import useFetchInitialData from '@entities/Messenger/lib/hooks/useFetchInitialData';
 import { clearNotification } from '@entities/Messenger/lib/thunk/messengerThunk';
 import { useAppDispatch } from '@shared/lib';
+import { MessageSchema } from '@shared/types';
 import style from '../messenger.module.css';
 
 const RightSidebar = lazy(() => import('@widgets/RightSidebar/ui/RightSidebar/RightSidebar'));

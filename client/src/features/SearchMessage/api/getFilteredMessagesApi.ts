@@ -1,7 +1,7 @@
 import { AxiosResponse } from 'axios';
-import { MessageSchema } from 'features/Message';
 import $api from '@shared/api/axiosApi';
 import { SEARCH_MESSAGES_ROUTE } from '@shared/config';
+import { MessageSchema } from '@shared/types';
 
 interface IGetMessagesParams {
     query: string;

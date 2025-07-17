@@ -1,8 +1,8 @@
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import fetchMessageApi from '@features/Message/api/fetchMessageApi';
-import { MessageSchema } from 'features/Message';
 import { useAbortController } from '@shared/lib';
+import { MessageSchema } from '@shared/types';
 
 const useFetchPost = (setMessagesList: Dispatch<SetStateAction<MessageSchema[]>>) => {
     const { type, messengerId, postId } = useParams();

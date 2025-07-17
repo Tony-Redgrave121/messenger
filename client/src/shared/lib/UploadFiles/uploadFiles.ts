@@ -1,6 +1,6 @@
 import { Dispatch, RefObject, SetStateAction } from 'react';
-import { getFileObject } from '../index';
-import FileStateSchema from '@entities/Media/model/types/FileStateSchema';
+import getFileObject from '@shared/lib/GetFileObject/getFileObject';
+import FileStateSchema from '@shared/types/FileStateSchema';
 
 const uploadFiles = (
     newFiles: FileList,

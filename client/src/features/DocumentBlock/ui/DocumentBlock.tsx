@@ -1,7 +1,7 @@
 import { FC } from 'react';
 import { HiOutlineDocumentText } from 'react-icons/hi2';
-import MessageFileSchema from '@entities/Media/model/types/MessageFileSchema';
 import { useLoadBlob, getFileName } from '@shared/lib';
+import MessageFileSchema from '@shared/types/MessageFileSchema';
 import style from './style.module.css';
 
 interface IDocumentBlockProps {

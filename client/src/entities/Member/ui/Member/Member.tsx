@@ -1,7 +1,6 @@
 import React, { FC, memo, ReactNode, useState } from 'react';
-import { ContactSchema } from '@entities/Contact';
 import { useAppSelector, getDate, contextMenu } from '@shared/lib';
-import { DropDownList } from '@shared/types';
+import { ContactSchema, DropDownList } from '@shared/types';
 import { DropDown } from '@shared/ui/DropDown';
 import { LoadFile } from '@shared/ui/LoadFile';
 import style from './member.module.css';

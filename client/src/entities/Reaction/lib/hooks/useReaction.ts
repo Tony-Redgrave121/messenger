@@ -1,10 +1,9 @@
 import { RefObject } from 'react';
 import { useParams } from 'react-router-dom';
-import { ReactionSchema } from '@entities/Reaction';
 import deleteMessageReactionApi from '@entities/Reaction/api/deleteMessageReactionApi';
 import postMessageReactionApi from '@entities/Reaction/api/postMessageReactionApi';
 import { useAbortController, useAppSelector } from '@shared/lib';
-import { MessageSchema } from '../../../../features/Message';
+import { ReactionSchema, MessageSchema } from '@shared/types';
 
 const useReaction = () => {
     const user_id = useAppSelector(state => state.user.userId);

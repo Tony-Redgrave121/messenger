@@ -3,7 +3,7 @@ import EditFormKeys from '@features/EditMessenger/model/types/EditFormKeys';
 import MessengerSettingsSchema from '@entities/Messenger/model/types/MessengerSettingsSchema';
 
 const EditReactions = lazy(() => import('@entities/Messenger/ui/EditReactions/EditReactions'));
-const EditType = lazy(() => import('@entities/Messenger/ui/EditType/EditType'));
+const EditType = lazy(() => import('@features/EditType/ui/EditType'));
 const EditModerators = lazy(() => import('../../EditMembers/ui/EditMembers/EditModerators'));
 const EditRemoved = lazy(() => import('../../EditMembers/ui/EditMembers/EditRemoved'));
 const EditSubscribers = lazy(() => import('../../EditMembers/ui/EditMembers/EditSubscribers'));

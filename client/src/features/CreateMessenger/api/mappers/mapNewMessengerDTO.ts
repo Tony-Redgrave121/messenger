@@ -1,5 +1,4 @@
-import ChatBlockSchema from '@entities/Messenger/model/types/ChatBlockSchema';
-import MessengerSchema from '@entities/Messenger/model/types/MessengerSchema';
+import { ChatBlockSchema, MessengerSchema } from '@entities/Messenger';
 
 const mapNewMessengerDTO = (newMessengerData: MessengerSchema): ChatBlockSchema => {
     return {

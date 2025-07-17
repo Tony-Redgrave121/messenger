@@ -1,7 +1,7 @@
 import { AxiosResponse } from 'axios';
-import { MessageSchema } from 'features/Message';
 import $api from '@shared/api/axiosApi';
 import { GET_MESSAGES_ROUTE } from '@shared/config';
+import { MessageSchema } from '@shared/types';
 
 const fetchMessagesApi = async (
     user_id: string,

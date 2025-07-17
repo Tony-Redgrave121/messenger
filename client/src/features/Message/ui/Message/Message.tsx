@@ -25,11 +25,11 @@ import { setWrapperState } from '@widgets/Main/model/slice/wrapperSlice';
 import { DocumentBlock } from '@features/DocumentBlock';
 import deleteMessageApi from '@features/Message/api/deleteMessageApi';
 import { MessageMediaBlock } from '@features/MessageMediaBlock';
-import MessageFileSchema from '@entities/Media/model/types/MessageFileSchema';
+import { checkRights } from '@entities/Member';
+import { useCopy } from '@entities/Message';
 import { AdaptMessengerSchema } from '@entities/Messenger';
-import { ReactionSchema, ReactionsBlock } from '@entities/Reaction';
-import useReaction from '@entities/Reaction/lib/hooks/useReaction';
-import checkRights from '@entities/User/lib/CheckRights/checkRights';
+import { ReactionsBlock } from '@entities/Reaction';
+import { useReaction } from '@entities/Reaction';
 import {
     useAppDispatch,
     useAppSelector,
@@ -38,10 +38,9 @@ import {
     scrollInto,
     getTime,
 } from '@shared/lib';
+import { MessageSchema, MessageFileSchema, ReactionSchema } from '@shared/types';
 import { DropDown } from '@shared/ui/DropDown';
 import { LoadFile } from '@shared/ui/LoadFile';
-import { MessageSchema } from '../../index';
-import useCopy from '../../lib/hooks/useCopy';
 import style from './message.module.css';
 
 interface IMessageProps {

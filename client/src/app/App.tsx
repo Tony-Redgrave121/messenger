@@ -1,6 +1,5 @@
 import { Suspense, useEffect } from 'react';
-import { userCheckAuth } from '@entities/User/lib/thunk/userThunk';
-import { updateIsLoading } from '@entities/User/model/slice/userSlice';
+import { updateIsLoading, userCheckAuth } from '@entities/User';
 import { useAppDispatch, useAppSelector } from '@shared/lib';
 import { AppRouter } from './providers/RouterProvider';
 
@@ -16,7 +15,7 @@ function App() {
     if (isLoading) return <></>;
 
     return (
-        <Suspense fallback={''}>
+        <Suspense>
             <AppRouter />
         </Suspense>
     );

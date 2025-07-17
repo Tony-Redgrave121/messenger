@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { ContactSchema } from '@entities/Contact';
+import { ContactSchema } from '@shared/types';
 
 interface ILiveUpdatesState {
     contacts: ContactSchema[];

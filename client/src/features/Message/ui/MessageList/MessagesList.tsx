@@ -1,7 +1,7 @@
 import React, { Dispatch, FC, RefObject, SetStateAction } from 'react';
-import { Message, MessageSchema } from '@features/Message';
+import { Message } from '@features/Message';
 import { AdaptMessengerSchema } from '@entities/Messenger';
-import { ReactionSchema } from '@entities/Reaction';
+import { ReactionSchema, MessageSchema } from '@shared/types';
 
 interface IMessagesListProps {
     messagesList: MessageSchema[];

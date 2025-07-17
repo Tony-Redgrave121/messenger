@@ -1,7 +1,6 @@
 import { RefObject, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import fetchMessageApi from '@features/Message/api/fetchMessageApi';
-import { MessageSchema } from 'features/Message';
 import {
     useAppDispatch,
     useAbortController,
@@ -10,6 +9,7 @@ import {
     getFileName,
     useLoadBlob,
 } from '@shared/lib';
+import { MessageSchema } from '@shared/types';
 import { setCurrentSlide, setSlideNumber, setZoom } from '../../model/slice/sliderSlice';
 import useSwipe from './useSwipe';
 import useZoom from './useZoom';

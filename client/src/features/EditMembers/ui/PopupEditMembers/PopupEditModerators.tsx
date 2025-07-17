@@ -2,13 +2,13 @@ import React, { Dispatch, FC, SetStateAction, useEffect, useRef, useState } from
 import { HiOutlineXMark } from 'react-icons/hi2';
 import { useParams } from 'react-router-dom';
 import putMessengerModeratorApi from '@features/EditMembers/api/putMessengerModeratorApi';
-import { ContactSchema } from '@entities/Contact';
+import { ContactList } from '@entities/Contact';
 import MessengerSettingsSchema from '@entities/Messenger/model/types/MessengerSettingsSchema';
 import { useAppSelector, useSearch } from '@shared/lib';
+import { ContactSchema } from '@shared/types';
 import { DefaultButton } from '@shared/ui/Button';
 import { NoResult } from '@shared/ui/NoResult';
 import { SearchBar } from '@shared/ui/SearchBar';
-import { ContactList } from '../../../ContactList';
 import style from './style.module.css';
 
 interface IPopupEditModeratorsProps {

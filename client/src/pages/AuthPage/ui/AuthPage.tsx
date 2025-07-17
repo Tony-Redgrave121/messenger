@@ -1,5 +1,5 @@
 import React from 'react';
-import { AuthForm } from '@features/AuthForm';
+import { AuthForm } from '@widgets/AuthForm';
 import style from './auth.module.css';
 
 const AuthPage = () => {

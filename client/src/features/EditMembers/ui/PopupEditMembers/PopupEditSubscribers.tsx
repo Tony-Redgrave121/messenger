@@ -2,12 +2,12 @@ import React, { Dispatch, FC, SetStateAction, useState } from 'react';
 import { HiOutlineArrowRight, HiOutlineXMark } from 'react-icons/hi2';
 import { useParams } from 'react-router-dom';
 import postContactsMembersApi from '@features/EditMembers/api/postContactsMembersApi';
-import { ContactSchema } from '@entities/Contact';
+import { AddContact } from '@entities/Contact';
+import { useLiveUpdatesWS } from '@entities/Messenger';
 import MessengerSettingsSchema from '@entities/Messenger/model/types/MessengerSettingsSchema';
-import { useLiveUpdatesWS } from '@entities/Reaction/lib/hooks/useLiveUpdatesWS';
 import { useAbortController, useAppSelector } from '@shared/lib';
+import { ContactSchema } from '@shared/types';
 import { CreateButton, DefaultButton } from '@shared/ui/Button';
-import { AddContact } from '../../../AddContact';
 import style from './style.module.css';
 
 interface IPopupEditSubscribersProps {
