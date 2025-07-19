@@ -12,7 +12,7 @@ import deleteMyContact from '@widgets/Header/lib/deleteMyContact';
 import leaveFromMessenger from '@widgets/Header/lib/leaveFromMessenger';
 import { AdaptMessengerSchema } from '@entities/Messenger';
 import { useAbortController, useAppDispatch, useAppSelector } from '@shared/lib';
-import { DropDown } from '@shared/ui/DropDown';
+import { DropDown } from '@shared/ui';
 
 interface IHeaderDropDownProps {
     messenger: AdaptMessengerSchema;

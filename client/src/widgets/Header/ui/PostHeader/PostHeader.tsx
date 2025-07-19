@@ -1,11 +1,11 @@
 import { FC, memo, useState } from 'react';
 import { HiOutlineMagnifyingGlass, HiOutlineXMark, HiOutlineArrowLeft } from 'react-icons/hi2';
 import { useNavigate } from 'react-router-dom';
-import SearchMessage from '@features/SearchMessage/ui/SearchMessage';
+import { SearchMessage } from '@features/SearchMessage';
 import { AdaptMessengerSchema } from '@entities/Messenger';
+import { setWrapperState } from '@entities/Messenger/model/slice/wrapperSlice';
 import { useAppDispatch } from '@shared/lib';
-import { DefaultButton } from '@shared/ui/Button';
-import { setWrapperState } from '../../../Main/model/slice/wrapperSlice';
+import { DefaultButton } from '@shared/ui';
 import style from '../header.module.css';
 
 interface ICommentsHeaderProps {

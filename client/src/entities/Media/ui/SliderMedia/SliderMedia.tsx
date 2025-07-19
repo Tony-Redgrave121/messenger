@@ -2,7 +2,7 @@ import React, { FC } from 'react';
 import { IS_VIDEO } from '@entities/Media/consts/isVideo';
 import Player from '@entities/Media/ui/Player/Player';
 import { getExt, useLoadBlob } from '@shared/lib';
-import MessageFileSchema from '@shared/types/MessageFileSchema';
+import { MessageFileSchema } from '@shared/types';
 import style from '../message-media.module.css';
 
 interface ISliderProps {

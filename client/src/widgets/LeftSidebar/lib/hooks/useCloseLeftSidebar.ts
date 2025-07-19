@@ -1,5 +1,5 @@
 import { useCallback } from 'react';
-import { setSidebarLeft } from '@entities/Messenger/model/slice/sidebarSlice';
+import { setSidebarLeft } from '@entities/Messenger';
 import { useAppDispatch } from '@shared/lib';
 
 const useCloseLeftSidebar = () => {

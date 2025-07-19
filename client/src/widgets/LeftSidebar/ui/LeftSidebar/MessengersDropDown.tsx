@@ -1,7 +1,7 @@
 import React, { Dispatch, FC, SetStateAction, useMemo } from 'react';
 import { HiOutlineMegaphone, HiOutlineUser, HiOutlineUsers } from 'react-icons/hi2';
-import { MessengerCreationSchema } from '@features/CreateMessenger/model/types/MessengerCreationSchema';
-import { DropDown } from '@shared/ui/DropDown';
+import { MessengerCreationSchema } from '@features/CreateMessenger';
+import { DropDown } from '@shared/ui';
 
 interface ICreateMessengersListProps {
     setMessengerCreation: Dispatch<SetStateAction<MessengerCreationSchema>>;

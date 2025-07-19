@@ -9,7 +9,6 @@ import React, {
     useRef,
     useState,
 } from 'react';
-import '@features/SearchMessage/ui/search-message.animation.css';
 import { HiOutlineXMark } from 'react-icons/hi2';
 import { useParams } from 'react-router-dom';
 import { CSSTransition } from 'react-transition-group';
@@ -17,10 +16,9 @@ import getFilteredMessagesApi from '@features/SearchMessage/api/getFilteredMessa
 import { AdaptMessengerSchema } from '@entities/Messenger';
 import { useAbortController, getDate, scrollInto, useAppSelector } from '@shared/lib';
 import { MessageSchema } from '@shared/types';
-import { DefaultButton } from '@shared/ui/Button';
-import { LoadFile } from '@shared/ui/LoadFile';
-import { SearchBar } from '@shared/ui/SearchBar';
+import { DefaultButton, LoadFile, SearchBar } from '@shared/ui';
 import style from './style.module.css';
+import './search-message.animation.css';
 
 interface IChatHeader {
     messenger: AdaptMessengerSchema;

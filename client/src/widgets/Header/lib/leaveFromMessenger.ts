@@ -1,7 +1,7 @@
 import { NavigateFunction } from 'react-router-dom';
 import { AppDispatch } from '@app/providers/StoreProvider/config/store';
-import deleteMemberApi from '@features/EditMembers/api/deleteMemberApi';
-import { deleteMessenger } from '@entities/Messenger/lib/thunk/messengerThunk';
+import { deleteMemberApi } from '@features/EditMessenger';
+import { deleteMessenger } from '@entities/Messenger';
 
 const leaveFromMessenger = async (
     userId: string,

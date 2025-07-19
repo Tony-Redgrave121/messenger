@@ -4,12 +4,10 @@ import { HiOutlineMagnifyingGlass, HiEllipsisVertical, HiOutlineArrowLeft } from
 import getHeaderDesc from '@widgets/Header/lib/getHeaderDesc';
 import getImagePath from '@widgets/Header/lib/getImagePath';
 import HeaderDropDown from '@widgets/Header/ui/MessengerHeader/HeaderDropDown';
-import SearchMessage from '@features/SearchMessage/ui/SearchMessage';
-import { AdaptMessengerSchema } from '@entities/Messenger';
-import { setSidebarLeft, setSidebarRight } from '@entities/Messenger/model/slice/sidebarSlice';
+import { SearchMessage } from '@features/SearchMessage';
+import { setSidebarLeft, setSidebarRight, AdaptMessengerSchema } from '@entities/Messenger';
 import { useAppDispatch, useAppSelector } from '@shared/lib';
-import { DefaultButton } from '@shared/ui/Button';
-import { LoadFile } from '@shared/ui/LoadFile';
+import { DefaultButton, LoadFile } from '@shared/ui';
 import style from '../header.module.css';
 
 interface IMessengerHeaderProps {

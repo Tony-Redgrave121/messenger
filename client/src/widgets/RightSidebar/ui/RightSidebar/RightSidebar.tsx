@@ -3,16 +3,12 @@ import { HiOutlinePencil, HiOutlineXMark, HiOutlineChatBubbleLeft } from 'react-
 import { useNavigate } from 'react-router-dom';
 import { CSSTransition } from 'react-transition-group';
 import InfoList from '@widgets/RightSidebar/ui/InfoList/InfoList';
-import EditMessenger from '@features/EditMessenger/ui/EditMessenger';
+import { EditMessenger } from '@features/EditMessenger';
 import { ImageBlock } from '@features/ImageBlock';
 import { checkRights, MembersList } from '@entities/Member';
-import { AdaptMessengerSchema } from '@entities/Messenger';
-import { setSidebarRight } from '@entities/Messenger/model/slice/sidebarSlice';
+import { setSidebarRight, AdaptMessengerSchema } from '@entities/Messenger';
 import { useAppSelector, getDate, useAppDispatch, useLoadBlob } from '@shared/lib';
-import { DefaultButton } from '@shared/ui/Button';
-import { Caption } from '@shared/ui/Caption';
-import { Sidebar } from '@shared/ui/Sidebar';
-import { TopBar } from '@shared/ui/TopBar';
+import { DefaultButton, Caption, Sidebar, TopBar } from '@shared/ui';
 import './right-sidebar.animation.css';
 
 interface IRightSidebarProps {

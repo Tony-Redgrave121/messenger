@@ -1,7 +1,7 @@
 import { RefObject, useCallback, useEffect } from 'react';
+import { setCurrentSlide, setSlideNumber } from '@entities/Media';
 import { useAppDispatch, useAppSelector } from '@shared/lib';
 import { MessageSchema } from '@shared/types';
-import { setCurrentSlide, setSlideNumber } from '../../model/slice/sliderSlice';
 
 const useSwipe = (
     message: MessageSchema,

@@ -1,17 +1,14 @@
 import React, { lazy, memo, Suspense } from 'react';
 import { HiBars3, HiOutlinePencil } from 'react-icons/hi2';
 import { CSSTransition } from 'react-transition-group';
+import useGetContacts from '@widgets/LeftSidebar/lib/hooks/useGetContacts';
+import useLeftSidebar from '@widgets/LeftSidebar/lib/hooks/useLeftSidebar';
 import MessengersDropDown from '@widgets/LeftSidebar/ui/LeftSidebar/MessengersDropDown';
 import UserDropDown from '@widgets/LeftSidebar/ui/LeftSidebar/UserDropDown';
 import { ChatList } from '@features/СhatList';
 import { ContactList } from '@entities/Contact';
 import { useAppSelector } from '@shared/lib';
-import { CreateButton, DefaultButton } from '@shared/ui/Button';
-import { Caption } from '@shared/ui/Caption';
-import { SearchBar } from '@shared/ui/SearchBar';
-import { Sidebar } from '@shared/ui/Sidebar';
-import useGetContacts from '../../lib/hooks/useGetContacts';
-import useLeftSidebar from '../../lib/hooks/useLeftSidebar';
+import { CreateButton, DefaultButton, Caption, SearchBar, Sidebar } from '@shared/ui';
 import style from './left-sidebar.module.css';
 import './left-sidebar.animation.css';
 

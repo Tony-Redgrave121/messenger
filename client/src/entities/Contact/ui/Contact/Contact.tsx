@@ -1,7 +1,7 @@
 import { FC, memo, ReactNode } from 'react';
 import { getDate } from '@shared/lib';
 import { ContactSchema } from '@shared/types';
-import { LoadFile } from '@shared/ui/LoadFile';
+import { LoadFile } from '@shared/ui';
 import style from './contact.module.css';
 
 interface IContactProps {

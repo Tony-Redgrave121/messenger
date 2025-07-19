@@ -1,0 +1,100 @@
+@use "../../../app/styles/variables.css" as v;
+
+.Input {
+  cursor: pointer;
+  border-radius: 5px;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background: transparent;
+
+  &::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    height: 12px;
+    width: 12px;
+    background: #a8a8a8;
+    border-radius: 50%;
+    transition: 0.2s all ease-in-out;
+    margin-top: -5px;
+
+    &:hover {
+      transform: scale(1.1);
+      background-color: white;
+    }
+  }
+
+  &::-moz-range-thumb {
+    height: 12px;
+    width: 12px;
+    background: #a8a8a8;
+    border-radius: 50%;
+    border: none;
+    transition: 0.2s all ease-in-out;
+
+    &:hover {
+      transform: scale(1.1);
+      background-color: white;
+    }
+  }
+
+  &::-ms-thumb {
+    height: 12px;
+    width: 12px;
+    background: #a8a8a8;
+    border-radius: 50%;
+    border: none;
+  }
+
+  &::-webkit-slider-runnable-track {
+    height: 2px;
+    border-radius: 5px;
+    background-color: #a8a8a8;
+    transition: 0.2s background-color ease-in-out;
+
+    &:hover {
+      background-color: white;
+    }
+  }
+
+  &::-moz-range-track {
+    height: 2px;
+    border-radius: 5px;
+    background-color: #a8a8a8;
+    transition: 0.2s background-color ease-in-out;
+  }
+
+  &::-ms-track {
+    height: 2px;
+    border-radius: 5px;
+    background-color: #a8a8a8;
+    border-color: transparent;
+    color: transparent;
+  }
+}
+
+.WideInput {
+  width: 100%;
+  height: 3px;
+
+  &::-webkit-slider-thumb {
+    height: 14px;
+    width: 14px;
+    margin-top: -5.5px;
+    background: white;
+  }
+
+  &::-moz-range-thumb {
+    height: 14px;
+    width: 14px;
+    background: white;
+    border: none;
+  }
+
+  &::-webkit-slider-runnable-track,
+  &::-moz-range-track,
+  &::-ms-track {
+    height: 3px;
+    background-color: #a8a8a8;
+    border-radius: 5px;
+  }
+}

@@ -1,0 +1,19 @@
+@use "../../../../app/styles/variables.css" as v;
+
+.ReplyBlock {
+  border-left: 3px solid white;
+  background-color: #2f2f2f;
+  padding: 5px;
+  border-radius: 5px;
+  font-size: 14px;
+  line-height: 1.4;
+  transition: 0.2s background-color ease-in-out;
+
+  &:hover {
+    background-color: #353535;
+  }
+
+  & > :first-child {
+    font-weight: 600;
+  }
+}

@@ -6,7 +6,7 @@ import { MessengerCreationSchema } from '@features/CreateMessenger/model/types/M
 import SubmitButton from '@features/CreateMessenger/ui/SubmitButton/SubmitButton';
 import { AddContact } from '@entities/Contact';
 import { useAppSelector } from '@shared/lib';
-import { FormInput } from '@shared/ui/Input';
+import { FormInput } from '@shared/ui';
 import style from '../style.module.css';
 
 interface IMessengerProps {
@@ -15,7 +15,7 @@ interface IMessengerProps {
     setAnimationState: Dispatch<SetStateAction<boolean>>;
 }
 
-const CreateMessenger: FC<IMessengerProps> = memo(
+const CreateNewGroup: FC<IMessengerProps> = memo(
     ({ messengerCreation, setMessengerCreation, setAnimationState }) => {
         const contacts = useAppSelector(state => state.contact.contacts);
 
@@ -86,6 +86,6 @@ const CreateMessenger: FC<IMessengerProps> = memo(
     },
 );
 
-CreateMessenger.displayName = 'CreateMessenger';
+CreateNewGroup.displayName = 'CreateNewGroup';
 
-export default CreateMessenger;
+export default CreateNewGroup;

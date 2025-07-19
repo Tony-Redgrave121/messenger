@@ -1,0 +1,21 @@
+@use "../../../../app/styles/variables.css" as v;
+
+.Desk {
+  position: relative;
+  bottom: unset;
+  display: block;
+  line-height: 1.3;
+  font-size: 14px;
+  color: #a9a9a9;
+}
+
+.SettingButtonRed {
+  &,
+  svg {
+    color: #fd5859;
+  }
+
+  &:hover {
+    background-color: #322525;
+  }
+}

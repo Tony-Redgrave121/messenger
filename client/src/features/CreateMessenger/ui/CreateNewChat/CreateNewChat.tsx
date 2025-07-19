@@ -2,13 +2,13 @@ import React, { Dispatch, FC, memo, SetStateAction, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ContactList } from '@entities/Contact';
 import { useSearch, useAppSelector } from '@shared/lib';
-import { SearchBar } from '@shared/ui/SearchBar';
+import { SearchBar } from '@shared/ui';
 
 interface IMessengerProps {
     setAnimationState: Dispatch<SetStateAction<boolean>>;
 }
 
-const CreateMessenger: FC<IMessengerProps> = memo(({ setAnimationState }) => {
+const CreateNewChat: FC<IMessengerProps> = memo(({ setAnimationState }) => {
     const contacts = useAppSelector(state => state.contact.contacts);
 
     const { filteredArr, handleInput } = useSearch(contacts, 'user_name');
@@ -30,6 +30,6 @@ const CreateMessenger: FC<IMessengerProps> = memo(({ setAnimationState }) => {
     );
 });
 
-CreateMessenger.displayName = 'CreateNewChat';
+CreateNewChat.displayName = 'CreateNewChat';
 
-export default CreateMessenger;
+export default CreateNewChat;

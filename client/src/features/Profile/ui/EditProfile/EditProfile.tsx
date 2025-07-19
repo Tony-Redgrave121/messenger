@@ -1,17 +1,21 @@
 import React, { Dispatch, FC, RefObject, SetStateAction, useRef } from 'react';
 import { HiOutlineArrowLeft, HiOutlineCheck } from 'react-icons/hi2';
 import { CSSTransition } from 'react-transition-group';
-import '@widgets/LeftSidebar/ui/LeftSidebar/left-sidebar.animation.css';
 import useEditProfile from '@features/Profile/lib/hooks/useEditProfile';
+import ProfileKeys from '@features/Profile/model/types/ProfileKeys';
 import { closeForm } from '@shared/lib';
 import { ToggleState } from '@shared/types';
-import { CreateButton, DefaultButton } from '@shared/ui/Button';
-import { Caption } from '@shared/ui/Caption';
-import { FileInput, FormInput } from '@shared/ui/Input';
-import { Sidebar } from '@shared/ui/Sidebar';
-import { TopBar } from '@shared/ui/TopBar';
-import ProfileKeys from '../../model/types/ProfileKeys';
+import {
+    CreateButton,
+    DefaultButton,
+    Caption,
+    FileInput,
+    FormInput,
+    Sidebar,
+    TopBar,
+} from '@shared/ui';
 import style from './style.module.css';
+import '../profile.animation.css';
 
 interface IProfileProps {
     state: boolean;
@@ -38,7 +42,7 @@ const EditProfile: FC<IProfileProps> = ({ state, setState, refSidebar }) => {
             in={state}
             nodeRef={refSidebar}
             timeout={300}
-            classNames="left-sidebar-node"
+            classNames="profile-node"
             unmountOnExit
         >
             <Sidebar

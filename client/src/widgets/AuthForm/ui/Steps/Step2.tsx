@@ -6,8 +6,7 @@ import AuthFormSchema from '@widgets/AuthForm/model/types/AuthFormSchema';
 import AuthStepSchema from '@widgets/AuthForm/model/types/AuthStepSchema';
 import { setPopupChildren, setPopupState } from '@entities/Message';
 import { useAppDispatch } from '@shared/lib';
-import { FormButton } from '@shared/ui/Button';
-import { FormInput } from '@shared/ui/Input';
+import { FormButton, FormInput } from '@shared/ui';
 import style from './step.module.css';
 
 interface IStep2Props extends AuthStepSchema {

@@ -1,6 +1,6 @@
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import fetchMessageApi from '@features/Message/api/fetchMessageApi';
+import { fetchMessageApi } from '@entities/Message';
 import { useAbortController } from '@shared/lib';
 import { MessageSchema } from '@shared/types';
 

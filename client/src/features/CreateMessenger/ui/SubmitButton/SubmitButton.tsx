@@ -2,7 +2,7 @@ import React, { FC, memo } from 'react';
 import { Control, SubmitHandler, UseFormHandleSubmit, useWatch } from 'react-hook-form';
 import { HiOutlineArrowRight } from 'react-icons/hi2';
 import NewMessengerSchema from '@features/CreateMessenger/model/types/NewMessengerSchema';
-import { CreateButton } from '@shared/ui/Button';
+import { CreateButton } from '@shared/ui';
 
 interface ISubmitButtonProps {
     control: Control<NewMessengerSchema>;

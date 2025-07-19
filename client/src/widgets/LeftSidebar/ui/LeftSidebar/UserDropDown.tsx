@@ -5,10 +5,9 @@ import {
     HiOutlineQuestionMarkCircle,
     HiOutlineUsers,
 } from 'react-icons/hi2';
-import { MessengerCreationSchema } from '@features/CreateMessenger/model/types/MessengerCreationSchema';
+import { MessengerCreationSchema } from '@features/CreateMessenger';
 import { useAppSelector } from '@shared/lib';
-import { DropDown } from '@shared/ui/DropDown';
-import { LoadFile } from '@shared/ui/LoadFile';
+import { DropDown, LoadFile } from '@shared/ui';
 
 interface ICreateMessengersListProps {
     setMessengerCreation: Dispatch<SetStateAction<MessengerCreationSchema>>;

@@ -5,7 +5,7 @@ import { Slider } from '@features/Slider';
 import style from './layout.module.css';
 
 const MainContainer = lazy(() => import('@widgets/Main/ui/Main'));
-const PopupMessage = lazy(() => import('@entities/Message/ui/PopupMessage'));
+const PopupMessage = lazy(() => import('@entities/Message/ui/PopupMessage/PopupMessage'));
 
 const PageLayout = () => {
     return (

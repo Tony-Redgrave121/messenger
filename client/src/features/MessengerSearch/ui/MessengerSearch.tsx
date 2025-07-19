@@ -2,14 +2,12 @@ import { clsx } from 'clsx';
 import React, { Dispatch, FC, SetStateAction, useRef } from 'react';
 import { useNavigate } from 'react-router';
 import { CSSTransition } from 'react-transition-group';
-import '@widgets/LeftSidebar/ui/LeftSidebar/left-sidebar.animation.css';
 import UnifiedMessengerSchema from '@features/MessengerSearch/model/types/UnifiedMessengerSchema';
-import contactStyles from '@entities/Contact/ui/Contact/contact.module.css';
 import { useAppSelector, getDate } from '@shared/lib';
 import { MessengerTypes } from '@shared/types';
-import { ContactButton } from '@shared/ui/Button';
-import { LoadFile } from '@shared/ui/LoadFile';
-import style from './style.module.css';
+import { ContactButton, LoadFile } from '@shared/ui';
+import style from './messenger-search.module.css';
+import './messenger-search.animation.css';
 
 interface IMessengerSearchProps {
     animationState: boolean;
@@ -48,7 +46,7 @@ const MessengerSearch: FC<IMessengerSearchProps> = ({
             in={animationState}
             nodeRef={searchListRef}
             timeout={300}
-            classNames="left-sidebar-node"
+            classNames="messenger-search-node"
             unmountOnExit
         >
             <div className={style.SearchListContainer} ref={searchListRef}>
@@ -71,7 +69,7 @@ const MessengerSearch: FC<IMessengerSearchProps> = ({
                         <p>Global search</p>
                         {searchRes.map(item => (
                             <ContactButton key={item.id} foo={() => handleClick(item.id)}>
-                                <div className={contactStyles.ContactBlock}>
+                                <div className={style.ContactBlock}>
                                     <span>
                                         <LoadFile
                                             imagePath={
@@ -82,7 +80,7 @@ const MessengerSearch: FC<IMessengerSearchProps> = ({
                                             imageTitle={item.name}
                                         />
                                     </span>
-                                    <div className={contactStyles.ContactInfo}>
+                                    <div className={style.ContactInfo}>
                                         <h4>{item.name}</h4>
                                         <p>
                                             {!Number(item.desc)

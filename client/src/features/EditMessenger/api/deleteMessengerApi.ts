@@ -1,6 +1,6 @@
+import { AxiosResponse } from 'axios';
 import $api from '@shared/api/axiosApi';
 import { MESSENGER_ROUTE } from '@shared/config';
-import { AxiosResponse } from 'axios';
 
 const deleteMessengerApi = async (
     messengerId: string,

@@ -5,8 +5,7 @@ import AuthFormSchema from '@widgets/AuthForm/model/types/AuthFormSchema';
 import AuthStepSchema from '@widgets/AuthForm/model/types/AuthStepSchema';
 import { registration } from '@entities/User';
 import { useAppDispatch } from '@shared/lib';
-import { FormButton } from '@shared/ui/Button';
-import { FileInput, FormInput } from '@shared/ui/Input';
+import { FormButton, FileInput, FormInput } from '@shared/ui';
 import style from './step.module.css';
 
 interface IStep4Props extends AuthStepSchema {

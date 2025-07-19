@@ -27,15 +27,17 @@ const useZoom = () => {
         if (!refZoom.current) return;
         const img = refZoom.current;
         const imgRect = img.getBoundingClientRect();
-        const screenWidth = window.innerWidth,
-            screenHeight = window.innerHeight;
-        const restWidth = imgRect.width - screenWidth,
-            restHeight = imgRect.height - screenHeight;
 
-        let startX = event.clientX;
-        let startY = event.clientY;
-        let offsetX = imgRect.left;
-        let offsetY = imgRect.top;
+        const screenWidth = window.innerWidth;
+        const screenHeight = window.innerHeight;
+
+        const restWidth = imgRect.width - screenWidth;
+        const restHeight = imgRect.height - screenHeight;
+
+        const startX = event.clientX;
+        const startY = event.clientY;
+        const offsetX = imgRect.left;
+        const offsetY = imgRect.top;
 
         const handlerDrag = (event: MouseEvent) => {
             const dx = event.clientX - startX,

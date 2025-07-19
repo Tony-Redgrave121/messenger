@@ -1,6 +1,7 @@
 import { RefObject, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import fetchMessageApi from '@features/Message/api/fetchMessageApi';
+import { setCurrentSlide, setSlideNumber, setZoom } from '@entities/Media';
+import { fetchMessageApi } from '@entities/Message';
 import {
     useAppDispatch,
     useAbortController,
@@ -10,7 +11,6 @@ import {
     useLoadBlob,
 } from '@shared/lib';
 import { MessageSchema } from '@shared/types';
-import { setCurrentSlide, setSlideNumber, setZoom } from '../../model/slice/sliderSlice';
 import useSwipe from './useSwipe';
 import useZoom from './useZoom';
 
@@ -115,8 +115,10 @@ const useSlider = (refSwipe: RefObject<HTMLDivElement | null>) => {
     const handleZoom = (side: boolean) => {
         const newZoom = side ? zoomSize - 20 : zoomSize + 20;
 
-        if (newZoom >= 100 && newZoom <= 200) zoomMedia(newZoom);
-        else side ? zoomMedia(100) : zoomMedia(200);
+        if (newZoom >= 100 && newZoom <= 200) return zoomMedia(newZoom);
+
+        if (side) zoomMedia(100);
+        else zoomMedia(200);
     };
 
     return {

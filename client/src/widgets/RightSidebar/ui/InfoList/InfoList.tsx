@@ -2,7 +2,7 @@ import React, { FC, memo, useState } from 'react';
 import { HiOutlineBell, HiOutlineExclamationCircle, HiOutlinePaperClip } from 'react-icons/hi2';
 import { useCopy } from '@entities/Message';
 import { AdaptMessengerSchema } from '@entities/Messenger';
-import { SettingButton, SwitchSettingButton } from '@shared/ui/Button';
+import { SettingButton, SwitchSettingButton } from '@shared/ui';
 import style from './info-list.module.css';
 
 const CLIENT_URL = process.env.VITE_CLIENT_URL;

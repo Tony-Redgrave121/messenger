@@ -1,0 +1,32 @@
+.messenger-search-node-enter {
+    width: 0;
+    opacity: 0;
+}
+
+.messenger-search-node-enter-active {
+    opacity: 1;
+    width: 100%;
+    transition:
+            opacity 0.3s ease-in-out,
+            width 0.3s ease-in-out;
+}
+
+.messenger-search-node-exit {
+    opacity: 1;
+}
+
+.messenger-search-node-exit-active {
+    opacity: 0;
+    width: 0;
+    transition:
+            opacity 0.3s ease-in-out,
+            width 0.3s ease-in-out;
+}
+
+.messenger-search-node-exit-done {
+    opacity: 0;
+    width: 0;
+    transition:
+            opacity 0.3s ease-in-out,
+            width 0.3s ease-in-out;
+}

@@ -1,0 +1,27 @@
+@use "../../../app/styles/variables.css" as v;
+
+.ImageContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  background: linear-gradient(
+    0deg,
+    rgba(0, 0, 0, 0.5) 0%,
+    rgba(255, 255, 255, 0.2) 100%
+  );
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  overflow: hidden;
+
+  img {
+    width: inherit;
+    height: inherit;
+    object-fit: cover;
+  }
+
+  h1 {
+    font-size: 18px;
+  }
+}

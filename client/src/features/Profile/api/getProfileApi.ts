@@ -1,7 +1,7 @@
 import { AxiosResponse } from 'axios';
+import EditProfileSchema from '@features/Profile/model/types/EditProfileSchema';
 import $api from '@shared/api/axiosApi';
 import { GET_PROFILE_ROUTE } from '@shared/config';
-import EditProfileSchema from '../model/types/EditProfileSchema';
 
 const getProfileApi = async (
     user_id: string,

@@ -1,1 +1,0 @@
-export { default as DocumentBlock } from './ui/DocumentBlock';

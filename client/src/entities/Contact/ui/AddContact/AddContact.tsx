@@ -2,9 +2,7 @@ import React, { Dispatch, FC, SetStateAction } from 'react';
 import Contact from '@entities/Contact/ui/Contact/Contact';
 import { useAppSelector, useSearch } from '@shared/lib';
 import { ContactSchema } from '@shared/types';
-import { Checkbox } from '@shared/ui/Input';
-import { LoadFile } from '@shared/ui/LoadFile';
-import { NoResult } from '@shared/ui/NoResult';
+import { Checkbox, LoadFile, NoResult } from '@shared/ui';
 import style from './style.module.css';
 
 interface ICheckboxContactProps {

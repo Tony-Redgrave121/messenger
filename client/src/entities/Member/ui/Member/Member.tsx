@@ -1,8 +1,7 @@
 import React, { FC, memo, ReactNode, useState } from 'react';
-import { useAppSelector, getDate, contextMenu } from '@shared/lib';
+import { useAppSelector, getDate, handleContextMenu } from '@shared/lib';
 import { ContactSchema, DropDownList } from '@shared/types';
-import { DropDown } from '@shared/ui/DropDown';
-import { LoadFile } from '@shared/ui/LoadFile';
+import { DropDown, LoadFile } from '@shared/ui';
 import style from './member.module.css';
 
 interface IContactsProps {
@@ -12,7 +11,7 @@ interface IContactsProps {
 }
 
 const Member: FC<IContactsProps> = memo(({ contact, children, dropList }) => {
-    const [contextMenuState, setContextMenuState] = useState(false);
+    const [contextMenu, setContextMenu] = useState(false);
     const [position, setPosition] = useState({ x: 0, y: 0 });
     const user_id = useAppSelector(state => state.user.userId);
 
@@ -21,10 +20,10 @@ const Member: FC<IContactsProps> = memo(({ contact, children, dropList }) => {
             className={style.Member}
             onContextMenu={event =>
                 user_id !== contact.user_id &&
-                contextMenu({
+                handleContextMenu({
                     event,
                     setPosition,
-                    setContextMenuState,
+                    setContextMenu,
                     height: 45,
                 })
             }
@@ -44,8 +43,8 @@ const Member: FC<IContactsProps> = memo(({ contact, children, dropList }) => {
             </div>
             <DropDown
                 list={dropList}
-                state={contextMenuState}
-                setState={setContextMenuState}
+                state={contextMenu}
+                setState={setContextMenu}
                 position={position}
             />
         </div>

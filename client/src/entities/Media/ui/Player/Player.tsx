@@ -3,8 +3,7 @@ import { HiArrowsPointingIn, HiArrowsPointingOut, HiMiniPause, HiPlay } from 're
 import { setCurrVideo } from '@entities/Media/model/slice/videoSlice';
 import VolumeInput from '@entities/Media/ui/VolumeInput/VolumeInput';
 import { useAppDispatch, useAppSelector, getVideoTime } from '@shared/lib';
-import { PlayButton } from '@shared/ui/Button';
-import { TimeInput } from '@shared/ui/Input';
+import { PlayButton, TimeInput } from '@shared/ui';
 import style from './style.module.css';
 
 interface IPlayerProps {

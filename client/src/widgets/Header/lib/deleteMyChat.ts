@@ -1,7 +1,7 @@
 import { NavigateFunction } from 'react-router-dom';
 import { AppDispatch } from '@app/providers/StoreProvider/config/store';
 import deleteChatApi from '@widgets/Header/api/deleteChatApi';
-import { deleteMessenger } from '@entities/Messenger/lib/thunk/messengerThunk';
+import { deleteMessenger } from '@entities/Messenger';
 
 const deleteMyChat = async (
     userId: string,

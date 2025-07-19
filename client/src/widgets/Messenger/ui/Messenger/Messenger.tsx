@@ -5,7 +5,7 @@ import useAutoScroll from '@widgets/Messenger/lib/hooks/useAutoScroll';
 import useFetchInitialData from '@widgets/Messenger/lib/hooks/useFetchInitialData';
 import { MessagesList } from '@features/Message';
 import { MessengerInput } from '@features/MessengerInput';
-import { clearNotification } from '@entities/Messenger/lib/thunk/messengerThunk';
+import { clearNotification } from '@entities/Messenger';
 import { useAppDispatch } from '@shared/lib';
 import { MessageSchema } from '@shared/types';
 import style from '../messenger.module.css';

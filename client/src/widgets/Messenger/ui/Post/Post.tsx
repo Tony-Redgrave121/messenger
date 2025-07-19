@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import { PostHeader } from '@widgets/Header';
 import useFetchInitialData from '@widgets/Messenger/lib/hooks/useFetchInitialData';
 import useFetchPost from '@widgets/Messenger/lib/hooks/useFetchPost';
-import { InputBlock } from '@features/InputBlock';
 import { Message, MessagesList } from '@features/Message';
+import { InputBlock } from '@features/MessengerInput';
 import { MessageSchema } from '@shared/types';
 import style from '../messenger.module.css';
 

@@ -1,0 +1,41 @@
+@use "../../../app/styles/variables.css" as v;
+
+.SearchBar {
+  position: relative;
+  display: flex;
+  width: 100%;
+  height: 42px;
+  padding: 0 8px;
+  transform-origin: right;
+
+  .SearchInput {
+    width: 100%;
+    border-radius: 22px;
+    background-color: #181818;
+    border: 1px solid #2f2f2f;
+    padding: 0 44px;
+    color: white;
+    transition-property: background-color, box-shadow;
+    transition-duration: 0.2s;
+    transition-timing-function: ease-in-out;
+
+    &:focus {
+      box-shadow: 0 0 0 1px #2f2f2f inset;
+      background-color: #212121;
+    }
+
+    &::placeholder {
+      color: #989898;
+    }
+  }
+
+  & > svg {
+    position: absolute;
+    bottom: 50%;
+    left: 22px;
+    transform: translateY(50%);
+    color: #818181;
+    width: 22px;
+    height: 22px;
+  }
+}

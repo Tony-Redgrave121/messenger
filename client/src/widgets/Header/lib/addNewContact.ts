@@ -1,6 +1,6 @@
 import { AppDispatch } from '@app/providers/StoreProvider/config/store';
 import postContactApi from '@widgets/Header/api/postContactApi';
-import { addContact } from '@entities/Contact/model/slice/contactSlice';
+import { addContact } from '@entities/Contact';
 
 const addNewContact = async (
     userId: string,

@@ -3,9 +3,9 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useNavigate } from 'react-router';
 import getFilteredMessengersApi from '@widgets/LeftSidebar/api/getFilteredMessengersApi';
 import mapSearchDTO from '@widgets/LeftSidebar/api/mappers/mapSearchDTO';
-import { MessengerCreationSchema } from '@features/CreateMessenger/model/types/MessengerCreationSchema';
-import UnifiedMessengerSchema from '@features/MessengerSearch/model/types/UnifiedMessengerSchema';
-import { setSidebarLeft } from '@entities/Messenger/model/slice/sidebarSlice';
+import { MessengerCreationSchema } from '@features/CreateMessenger';
+import { UnifiedMessengerSchema } from '@features/MessengerSearch';
+import { setSidebarLeft } from '@entities/Messenger';
 import { useAppDispatch, useAppSelector, useAbortController } from '@shared/lib';
 import { MessengerTypes } from '@shared/types';
 import useCloseLeftSidebar from './useCloseLeftSidebar';

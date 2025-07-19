@@ -4,7 +4,7 @@ export { useAppDispatch, useAppSelector } from './hooks/useRedux/useRedux';
 export { default as useLoadBlob } from './hooks/useLoadBlob/useLoadBlob';
 export { default as closeForm } from './CloseForm/closeForm';
 export { default as scrollInto } from './ScrollInto/scrollInto';
-export { default as contextMenu } from './ContextMenu/contextMenu';
+export { default as handleContextMenu } from './ContextMenu/handleContextMenu';
 export { default as openForm } from './OpenForm/openForm';
 export { default as getExt } from './GetExt/getExt';
 export { default as getFileName } from './GetFileName/getFileName';

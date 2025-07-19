@@ -1,8 +1,8 @@
 import { AxiosResponse } from 'axios';
+import ChatInfoSchema from '@widgets/LeftSidebar/model/types/ChatInfoSchema';
+import MessengerInfoSchema from '@widgets/LeftSidebar/model/types/MessengerInfoSchema';
 import $api from '@shared/api/axiosApi';
 import { SEARCH_MESSENGERS_ROUTE } from '@shared/config';
-import MessengerInfoSchema from '@widgets/LeftSidebar/model/types/MessengerInfoSchema';
-import ChatInfoSchema from '@widgets/LeftSidebar/model/types/ChatInfoSchema';
 
 const getFilteredMessengersApi = async (
     query: string,

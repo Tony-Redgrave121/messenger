@@ -1,5 +1,6 @@
 import React, { Dispatch, FC, RefObject, SetStateAction } from 'react';
-import { Message } from '@features/Message';
+import { MessageContext } from '@features/Message/lib/hooks/useMessageContext';
+import Message from '@features/Message/ui/Message/Message';
 import { AdaptMessengerSchema } from '@entities/Messenger';
 import { ReactionSchema, MessageSchema } from '@shared/types';
 
@@ -19,18 +20,18 @@ const MessagesList: FC<IMessagesListProps> = ({
     reactions,
 }) => {
     return (
-        <>
+        <MessageContext.Provider
+            value={{
+                messenger,
+                setReply,
+                socketRef,
+                reactions,
+            }}
+        >
             {messagesList.map(message => (
-                <Message
-                    message={message}
-                    messenger={messenger}
-                    key={message.message_id}
-                    setReply={setReply}
-                    socketRef={socketRef}
-                    reactions={reactions}
-                />
+                <Message message={message} key={message.message_id} />
             ))}
-        </>
+        </MessageContext.Provider>
     );
 };
 

@@ -1,0 +1,23 @@
+@use "../../../../app/styles/variables.css" as v;
+
+.CommentsContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #181818;
+  padding: 8px;
+  border-radius: 0 0 15px 0;
+  cursor: pointer;
+  transition: 0.2s background-color ease-in-out;
+  font-weight: 600;
+  font-size: 15px;
+
+  &:hover {
+    background-color: #212121;
+  }
+
+  > svg {
+    width: 24px;
+    height: 24px;
+  }
+}

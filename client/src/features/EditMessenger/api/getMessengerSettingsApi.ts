@@ -1,9 +1,9 @@
 import { AxiosResponse } from 'axios';
-import MessengerSettingsSchema from '@entities/Messenger/model/types/MessengerSettingsSchema';
+import { MessengerSettingsSchema } from '@entities/Messenger';
 import $api from '@shared/api/axiosApi';
 import { GET_MESSENGER_SETTINGS_ROUTE } from '@shared/config';
 
-const getMessengerSettings = async (
+const getMessengerSettingsApi = async (
     messenger_id: string,
     signal: AbortSignal,
 ): Promise<AxiosResponse<MessengerSettingsSchema>> => {
@@ -13,4 +13,4 @@ const getMessengerSettings = async (
     );
 };
 
-export default getMessengerSettings;
+export default getMessengerSettingsApi;

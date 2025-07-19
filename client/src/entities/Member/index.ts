@@ -3,3 +3,5 @@ export { default as MembersList } from './ui/MembersList/MembersList';
 
 export { default as isMember } from './lib/isMember';
 export { default as checkRights } from './lib/checkRights';
+
+export { default as postContactsMembersApi } from './api/postContactsMembersApi';

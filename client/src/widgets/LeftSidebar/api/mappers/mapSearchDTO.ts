@@ -1,6 +1,6 @@
 import isChatArray from '@widgets/LeftSidebar/lib/isChatArray';
 import isMessengerArray from '@widgets/LeftSidebar/lib/isMessengerArray';
-import UnifiedMessengerSchema from '@features/MessengerSearch/model/types/UnifiedMessengerSchema';
+import { UnifiedMessengerSchema } from '@features/MessengerSearch';
 
 const mapSearchDTO = (searchedData: unknown[]): UnifiedMessengerSchema[] => {
     if (isChatArray(searchedData)) {

@@ -3,14 +3,11 @@ import { CSSTransition } from 'react-transition-group';
 import ProfileActions from '@features/Profile/ui/Profile/ProfileActions';
 import ProfileInfo from '@features/Profile/ui/Profile/ProfileInfo';
 import ProfileTopBar from '@features/Profile/ui/Profile/ProfileTopBar';
+import { ImageBlock } from '@entities/Media';
 import { deleteAccount } from '@entities/User';
 import { useAppDispatch, useAppSelector, useLoadBlob } from '@shared/lib';
-import { Caption } from '@shared/ui/Caption';
-import { Popup } from '@shared/ui/Popup';
-import { Sidebar } from '@shared/ui/Sidebar';
-import { ImageBlock } from '../../../ImageBlock';
-import PopupConfirmation from '../PopupConfirmation/PopupConfirmation';
-import './profile.animation.css';
+import { Caption, Popup, PopupConfirmation, Sidebar } from '@shared/ui';
+import '../profile.animation.css';
 
 interface IProfileProps {
     state: boolean;

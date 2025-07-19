@@ -12,8 +12,7 @@ import React, {
 import { HiOutlineArrowLeft } from 'react-icons/hi2';
 import { CSSTransition } from 'react-transition-group';
 import { MessengerCreationSchema } from '@features/CreateMessenger/model/types/MessengerCreationSchema';
-import { DefaultButton } from '@shared/ui/Button';
-import { Sidebar } from '@shared/ui/Sidebar';
+import { DefaultButton, Sidebar } from '@shared/ui';
 import style from './style.module.css';
 import './create-messenger.animation.css';
 

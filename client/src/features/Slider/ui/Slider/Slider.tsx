@@ -1,7 +1,4 @@
 import { FC, useRef } from 'react';
-import style from './slider.module.css';
-import './slider.animation.css';
-
 import {
     HiOutlineShare,
     HiOutlineDocumentArrowDown,
@@ -13,14 +10,12 @@ import {
 } from 'react-icons/hi2';
 import { Link } from 'react-router-dom';
 import { CSSTransition } from 'react-transition-group';
-import { SliderMedia } from '@entities/Media';
-import { useAppDispatch, useAppSelector } from '@shared/lib';
-import { getDate } from '@shared/lib';
-import { WhiteButton } from '@shared/ui/Button';
-import { RangeInput } from '@shared/ui/Input';
-import { LoadFile } from '@shared/ui/LoadFile';
-import useSlider from '../../lib/hooks/useSlider';
-import { setState, setZoom } from '../../model/slice/sliderSlice';
+import useSlider from '@features/Slider/lib/hooks/useSlider';
+import { SliderMedia, setState, setZoom } from '@entities/Media';
+import { useAppDispatch, useAppSelector, getDate } from '@shared/lib';
+import { WhiteButton, RangeInput, LoadFile } from '@shared/ui';
+import style from './slider.module.css';
+import './slider.animation.css';
 
 const Slider: FC = () => {
     const refSwipe = useRef<HTMLDivElement | null>(null);

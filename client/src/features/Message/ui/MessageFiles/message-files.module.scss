@@ -1,0 +1,7 @@
+@use "../../../../app/styles/variables.css" as v;
+
+.DocumentBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}

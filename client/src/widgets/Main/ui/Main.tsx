@@ -1,7 +1,7 @@
 import { FC, ReactNode, useEffect, useRef } from 'react';
 import './main.animation.css';
 import { CSSTransition } from 'react-transition-group';
-import { syncNotifications } from '@entities/Messenger/lib/thunk/messengerThunk';
+import { syncNotifications } from '@entities/Messenger';
 import img from '@shared/assets/images/pattern.webp';
 import { useAppDispatch, useAppSelector } from '@shared/lib';
 import style from './main.module.css';

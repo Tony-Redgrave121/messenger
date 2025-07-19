@@ -1,7 +1,7 @@
 import React, { FC, memo } from 'react';
 import Contact from '@entities/Contact/ui/Contact/Contact';
 import { ContactSchema } from '@shared/types';
-import { ContactButton } from '@shared/ui/Button';
+import { ContactButton } from '@shared/ui';
 import style from './style.module.css';
 
 interface ContactListProps {

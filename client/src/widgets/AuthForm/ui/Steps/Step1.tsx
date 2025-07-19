@@ -4,8 +4,7 @@ import { HiOutlineChatBubbleLeftRight } from 'react-icons/hi2';
 import sendCodeApi from '@widgets/AuthForm/api/sendCodeApi';
 import AuthFormSchema from '@widgets/AuthForm/model/types/AuthFormSchema';
 import AuthStepSchema from '@widgets/AuthForm/model/types/AuthStepSchema';
-import { FormButton } from '@shared/ui/Button';
-import { FormInput } from '@shared/ui/Input';
+import { FormButton, FormInput } from '@shared/ui';
 import style from './step.module.css';
 
 interface IStep1Props extends AuthStepSchema {

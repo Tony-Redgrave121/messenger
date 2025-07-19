@@ -1,6 +1,6 @@
 import { AppDispatch } from '@app/providers/StoreProvider/config/store';
 import deleteContactApi from '@widgets/Header/api/deleteContactApi';
-import { deleteContact } from '@entities/Contact/model/slice/contactSlice';
+import { deleteContact } from '@entities/Contact';
 
 const deleteMyContact = async (
     userId: string,

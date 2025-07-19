@@ -2,7 +2,7 @@ import { memo } from 'react';
 import { HiOutlineExclamationCircle, HiOutlinePaperClip, HiOutlineUser } from 'react-icons/hi2';
 import { useCopy } from '@entities/Message';
 import { useAppSelector } from '@shared/lib';
-import { SettingButton } from '@shared/ui/Button';
+import { SettingButton } from '@shared/ui';
 import style from './profile.module.css';
 
 const CLIENT_URL = process.env.VITE_CLIENT_URL;

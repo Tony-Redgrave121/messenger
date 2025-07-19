@@ -1,7 +1,7 @@
 import React, { Dispatch, FC, memo, SetStateAction } from 'react';
 import { HiOutlineLockClosed, HiOutlineTrash } from 'react-icons/hi2';
 import { openForm } from '@shared/lib';
-import { SettingButton } from '@shared/ui/Button';
+import { SettingButton } from '@shared/ui';
 import style from './profile.module.css';
 
 interface IInfoListProps {
