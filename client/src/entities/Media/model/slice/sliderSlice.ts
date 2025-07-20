@@ -22,7 +22,7 @@ const initialState: ISliderState = {
     },
 };
 
-const appSlice = createSlice({
+const sliderSlice = createSlice({
     name: 'slider',
     initialState,
     reducers: {
@@ -44,6 +44,6 @@ const appSlice = createSlice({
     },
 });
 
-export default appSlice.reducer;
+export default sliderSlice.reducer;
 export const { setZoom, setState, setSlideNumber, setMessageId, setCurrentSlide } =
-    appSlice.actions;
+    sliderSlice.actions;

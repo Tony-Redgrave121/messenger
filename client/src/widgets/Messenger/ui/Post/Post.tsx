@@ -1,13 +1,16 @@
-import React, { useState } from 'react';
-import { PostHeader } from '@widgets/Header';
-import useFetchInitialData from '@widgets/Messenger/lib/hooks/useFetchInitialData';
+import React, { FC, ReactNode, useState } from 'react';
 import useFetchPost from '@widgets/Messenger/lib/hooks/useFetchPost';
-import { Message, MessagesList } from '@features/Message';
+import { useFetchInitialData } from '@features/EditMessenger';
+import { MessagesList } from '@features/Message';
 import { InputBlock } from '@features/MessengerInput';
 import { MessageSchema } from '@shared/types';
 import style from '../messenger.module.css';
 
-const Post = () => {
+interface IPostProps {
+    children?: ReactNode;
+}
+
+const Post: FC<IPostProps> = ({ children }) => {
     const [reply, setReply] = useState<MessageSchema | null>(null);
 
     const { messenger, reactions, messagesList, setMessagesList, socketRef } =
@@ -16,13 +19,12 @@ const Post = () => {
 
     return (
         <div className={style.MessengerContainer}>
-            <PostHeader commentsCount={channelPost?.comments_count ?? 0} messenger={messenger} />
+            {children}
             {channelPost && (
                 <section className={style.MessageBlock}>
-                    <Message
-                        message={channelPost}
+                    <MessagesList
+                        messagesList={[channelPost]}
                         messenger={{ ...messenger, type: 'channel' }}
-                        key={channelPost.message_id}
                         setReply={setReply}
                         socketRef={socketRef}
                         reactions={reactions}

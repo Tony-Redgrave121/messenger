@@ -5,15 +5,12 @@ import sharp from "sharp"
 import ApiError from "../errors/apiError"
 import {UploadedFile} from 'express-fileupload'
 import FileKeys from "../types/keys/FileKeys";
-
-const IMAGE_TYPES = ['jpg', 'jpeg', 'png', 'webp'] as const
+import getImageExtension from "./getImageExtension";
 
 const uploadFile = async (folder: string, file: UploadedFile, type: FileKeys) => {
     try {
-        const extension = path.extname(file.name).toLowerCase().replace('.', '')
-        const isImage = IMAGE_TYPES.includes(extension as typeof IMAGE_TYPES[number])
-
-        if (!extension) return ApiError.badRequest('File extension is missing')
+        const {isImage, extension} = getImageExtension(file)
+        if (!extension) return ApiError.badRequest('File extension is missing');
 
         const fileName = `${uuid.v4()}.${file.name}`
         const folderPath = path.join(__dirname, '../../static', folder)
@@ -23,7 +20,7 @@ const uploadFile = async (folder: string, file: UploadedFile, type: FileKeys) =>
 
         if (type !== 'document' && isImage) {
             await sharp(file.data)
-                .toFormat(extension as 'jpeg' | 'png' | 'webp')
+                .toFormat(extension as 'jpeg' | 'png' | 'webp' | 'jpg')
                 .jpeg({quality: 70})
                 .toFile(outputPath)
         } else {

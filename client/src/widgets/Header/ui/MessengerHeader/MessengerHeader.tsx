@@ -1,25 +1,23 @@
 import { clsx } from 'clsx';
-import { FC, memo, useState } from 'react';
+import { memo, useState } from 'react';
 import { HiOutlineMagnifyingGlass, HiEllipsisVertical, HiOutlineArrowLeft } from 'react-icons/hi2';
 import getHeaderDesc from '@widgets/Header/lib/getHeaderDesc';
 import getImagePath from '@widgets/Header/lib/getImagePath';
 import HeaderDropDown from '@widgets/Header/ui/MessengerHeader/HeaderDropDown';
+import { useFetchInitialData } from '@features/EditMessenger';
 import { SearchMessage } from '@features/SearchMessage';
-import { setSidebarLeft, setSidebarRight, AdaptMessengerSchema } from '@entities/Messenger';
+import { setSidebarLeft, setSidebarRight } from '@entities/Messenger';
 import { useAppDispatch, useAppSelector } from '@shared/lib';
 import { DefaultButton, LoadFile } from '@shared/ui';
 import style from '../header.module.css';
 
-interface IMessengerHeaderProps {
-    messenger: AdaptMessengerSchema;
-}
-
-const MessengerHeader: FC<IMessengerHeaderProps> = memo(({ messenger }) => {
+const MessengerHeader = memo(() => {
     const [settings, setSettings] = useState(false);
     const [inputState, setInputState] = useState(false);
 
     const sidebarLeft = useAppSelector(state => state.sidebar.sidebarLeft);
     const dispatch = useAppDispatch();
+    const { messenger } = useFetchInitialData();
 
     return (
         <header className={clsx(style.ChatHeader, style.MainHeader)}>

@@ -1,7 +1,7 @@
 import { AxiosResponse } from 'axios';
+import { ChatBlockSchema } from '@entities/Messenger';
 import $api from '@shared/api/axiosApi';
 import { GET_MESSENGERS_ROUTE } from '@shared/config';
-import ChatBlockSchema from '@entities/Messenger/model/types/ChatBlockSchema';
 
 const chatListApi = async (
     user_id: string,

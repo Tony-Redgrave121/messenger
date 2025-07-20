@@ -1,14 +1,13 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { getReactionsApi } from '@features/EditMessenger';
-import { useMessageWS } from '@features/Message';
-import { setPopupChildren, setPopupState } from '@entities/Message';
+import { setPopupChildren, setPopupState, useMessageWS } from '@entities/Message';
 import {
     fetchMessagesApi,
     fetchMessengerApi,
     mapMessengerDTO,
     AdaptMessengerSchema,
 } from '@entities/Messenger';
+import { getReactionsApi } from '@entities/Reaction';
 import { isServerError, useAppDispatch, useAppSelector, useAbortController } from '@shared/lib';
 import { ReactionSchema } from '@shared/types';
 

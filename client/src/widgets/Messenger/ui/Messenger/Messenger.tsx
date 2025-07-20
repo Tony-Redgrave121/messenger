@@ -1,8 +1,7 @@
-import React, { lazy, memo, useEffect, useRef, useState } from 'react';
+import React, { FC, memo, ReactNode, useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { MessengerHeader } from '@widgets/Header';
 import useAutoScroll from '@widgets/Messenger/lib/hooks/useAutoScroll';
-import useFetchInitialData from '@widgets/Messenger/lib/hooks/useFetchInitialData';
+import { useFetchInitialData } from '@features/EditMessenger';
 import { MessagesList } from '@features/Message';
 import { MessengerInput } from '@features/MessengerInput';
 import { clearNotification } from '@entities/Messenger';
@@ -10,13 +9,15 @@ import { useAppDispatch } from '@shared/lib';
 import { MessageSchema } from '@shared/types';
 import style from '../messenger.module.css';
 
-const RightSidebar = lazy(() => import('@widgets/RightSidebar/ui/RightSidebar/RightSidebar'));
+interface IMessengerProps {
+    children?: ReactNode;
+}
 
-const Messenger = memo(() => {
+const Messenger: FC<IMessengerProps> = memo(({ children }) => {
     const [reply, setReply] = useState<MessageSchema | null>(null);
     const refEnd = useRef<HTMLDivElement>(null);
 
-    const { messenger, setMessenger, reactions, messagesList, socketRef } = useFetchInitialData();
+    const { messenger, reactions, messagesList, socketRef } = useFetchInitialData();
     const { messengerId } = useParams();
 
     const dispatch = useAppDispatch();
@@ -30,7 +31,7 @@ const Messenger = memo(() => {
     return (
         <>
             <div className={style.MessengerContainer}>
-                <MessengerHeader messenger={messenger} />
+                {children}
                 <section className={style.MessageBlock} key={messengerId}>
                     <MessagesList
                         messagesList={messagesList}
@@ -49,7 +50,6 @@ const Messenger = memo(() => {
                     socketRef={socketRef}
                 />
             </div>
-            <RightSidebar entity={messenger} setEntity={setMessenger} key={messenger.id} />
         </>
     );
 });

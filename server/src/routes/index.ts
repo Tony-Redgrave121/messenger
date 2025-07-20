@@ -38,6 +38,8 @@ import {
     SEARCH_MESSAGES_ROUTE,
 
     PRIVATE_CHAT_ROUTE,
+
+    GET_FILE_ROUTE,
 } from "../utils/consts/routes"
 import express from "express"
 
@@ -47,6 +49,7 @@ import userController from "../config/user.config";
 import messengerManagementController from "../config/messengerManagement.config";
 import messengerSettingsController from "../config/messengerSettings.config";
 import searchController from "../config/search.config"
+import fileController from "../config/file.config";
 
 const index = express.Router()
 
@@ -103,5 +106,8 @@ index.get(SEARCH_MESSAGES_ROUTE, searchController.getMessages)
 
 // Chat
 index.delete(PRIVATE_CHAT_ROUTE, messengerManagementController.deleteChat)
+
+// File
+index.get(GET_FILE_ROUTE, fileController.getFile)
 
 export default index

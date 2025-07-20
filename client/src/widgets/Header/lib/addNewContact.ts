@@ -1,4 +1,4 @@
-import { AppDispatch } from '@app/providers/StoreProvider/config/store';
+import { Dispatch } from '@reduxjs/toolkit';
 import postContactApi from '@widgets/Header/api/postContactApi';
 import { addContact } from '@entities/Contact';
 
@@ -6,7 +6,7 @@ const addNewContact = async (
     userId: string,
     messengerId: string,
     signal: AbortSignal,
-    dispatch: AppDispatch,
+    dispatch: Dispatch,
 ) => {
     try {
         const newContact = await postContactApi(userId, messengerId, signal);

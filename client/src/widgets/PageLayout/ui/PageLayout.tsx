@@ -1,23 +1,17 @@
-import { lazy, Suspense } from 'react';
-import { Outlet } from 'react-router-dom';
-import { LeftSidebar } from '@widgets/LeftSidebar';
-import { Slider } from '@features/Slider';
+import React, { FC, lazy, ReactNode, Suspense } from 'react';
 import style from './layout.module.css';
 
-const MainContainer = lazy(() => import('@widgets/Main/ui/Main'));
 const PopupMessage = lazy(() => import('@entities/Message/ui/PopupMessage/PopupMessage'));
+const Slider = lazy(() => import('@features/Slider/ui/Slider/Slider'));
 
-const PageLayout = () => {
+interface IPageLayoutProps {
+    children: ReactNode;
+}
+
+const PageLayout: FC<IPageLayoutProps> = ({ children }) => {
     return (
         <div className={style.LayoutContainer}>
-            <div className={style.Layout}>
-                <LeftSidebar />
-                <Suspense>
-                    <MainContainer>
-                        <Outlet />
-                    </MainContainer>
-                </Suspense>
-            </div>
+            <div className={style.Layout}>{children}</div>
             <Suspense>
                 <PopupMessage />
                 <Slider />

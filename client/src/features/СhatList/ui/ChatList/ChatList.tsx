@@ -1,7 +1,7 @@
 import { lazy, memo, useEffect } from 'react';
-import { setMessengers } from '@entities/Messenger/model/slice/messengerSlice';
+import chatListApi from '@features/СhatList/api/chatListApi';
+import { setMessengers } from '@entities/Messenger';
 import { useAppDispatch, useAppSelector, useAbortController } from '@shared/lib';
-import chatListApi from '../../api/chatListApi';
 import style from './style.module.css';
 
 const ChatBlock = lazy(() => import('@entities/Messenger/ui/СhatBlock/ChatBlock'));

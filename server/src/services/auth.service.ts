@@ -11,12 +11,15 @@ import uploadFile from "../utils/uploadFile"
 import MailService from "./mail.service"
 import TokenService from "./token.service"
 import IUserFiles from "../types/fileTypes/IUserFiles";
+import {resizeImage} from "../utils/resizeImage";
+import getImageExtension from "../utils/getImageExtension";
 
 class AuthService {
     constructor(
         private readonly tokenService: TokenService,
         private readonly mailService: MailService,
-    ) {}
+    ) {
+    }
 
     public registration = async (
         user_name: string,
@@ -154,7 +157,17 @@ class AuthService {
     private async uploadUserImage(user_id: string, file?: UploadedFile | null): Promise<string | null> {
         if (!file) return null
 
-        const uploadResult = await uploadFile(`users/${user_id}`, file, 'media')
+        const {isImage, extension} = getImageExtension(file)
+        if (!extension || !isImage) throw ApiError.badRequest('The file extension is missing or the file is not an image');
+
+        const resizedBuffer = await resizeImage(file.data, 500, 500, extension as 'jpeg' | 'png' | 'webp' | 'jpg');
+        const resizedFile: UploadedFile = {
+            ...file,
+            data: resizedBuffer,
+            size: resizedBuffer.length,
+        };
+
+        const uploadResult = await uploadFile(`users/${user_id}`, resizedFile, 'media')
         if (!uploadResult || uploadResult instanceof ApiError) {
             throw ApiError.badRequest("Failed to upload user image")
         }

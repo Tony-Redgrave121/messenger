@@ -6,11 +6,11 @@ import {
     HiOutlineUserPlus,
 } from 'react-icons/hi2';
 import { useNavigate, useParams } from 'react-router-dom';
+import deleteChatApi from '@widgets/Header/api/deleteChatApi';
 import addNewContact from '@widgets/Header/lib/addNewContact';
-import deleteMyChat from '@widgets/Header/lib/deleteMyChat';
 import deleteMyContact from '@widgets/Header/lib/deleteMyContact';
-import leaveFromMessenger from '@widgets/Header/lib/leaveFromMessenger';
-import { AdaptMessengerSchema } from '@entities/Messenger';
+import { deleteMemberApi } from '@features/EditMessenger';
+import { AdaptMessengerSchema, deleteMessenger } from '@entities/Messenger';
 import { useAbortController, useAppDispatch, useAppSelector } from '@shared/lib';
 import { DropDown } from '@shared/ui';
 
@@ -34,6 +34,32 @@ const HeaderDropDown: FC<IHeaderDropDownProps> = memo(({ messenger, settings, se
         if (!messengerId) return [];
         const signal = getSignal();
 
+        const leaveFromMessenger = async () => {
+            try {
+                const res = await deleteMemberApi(userId, messengerId, signal);
+
+                if (res.status === 200) {
+                    dispatch(deleteMessenger(messengerId));
+                    navigate('/');
+                }
+            } catch (error) {
+                console.log(error);
+            }
+        };
+
+        const deleteMyChat = async () => {
+            try {
+                const res = await deleteChatApi(userId, messengerId, signal);
+
+                if (res.status === 200) {
+                    dispatch(deleteMessenger(messengerId));
+                    navigate('/');
+                }
+            } catch (error) {
+                console.log(error);
+            }
+        };
+
         switch (messenger.type) {
             case 'chat':
                 return [
@@ -56,7 +82,7 @@ const HeaderDropDown: FC<IHeaderDropDownProps> = memo(({ messenger, settings, se
                     {
                         liChildren: <HiOutlineTrash />,
                         liText: 'Delete Chat',
-                        liFoo: () => deleteMyChat(userId, messengerId, signal, dispatch, navigate),
+                        liFoo: () => deleteMyChat(),
                     },
                 ];
             case 'group':
@@ -69,8 +95,7 @@ const HeaderDropDown: FC<IHeaderDropDownProps> = memo(({ messenger, settings, se
                     {
                         liChildren: <HiOutlineTrash />,
                         liText: 'Leave Group',
-                        liFoo: () =>
-                            leaveFromMessenger(userId, messengerId, signal, dispatch, navigate),
+                        liFoo: () => leaveFromMessenger(),
                     },
                 ];
             case 'channel':
@@ -83,8 +108,7 @@ const HeaderDropDown: FC<IHeaderDropDownProps> = memo(({ messenger, settings, se
                     {
                         liChildren: <HiOutlineTrash />,
                         liText: 'Leave Channel',
-                        liFoo: () =>
-                            leaveFromMessenger(userId, messengerId, signal, dispatch, navigate),
+                        liFoo: () => leaveFromMessenger(),
                     },
                 ];
             default: {

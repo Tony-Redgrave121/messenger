@@ -1,8 +1,8 @@
 import debounce from 'debounce';
 import { Dispatch, SetStateAction, useCallback, useEffect, useState } from 'react';
-import getReactionsApi from '@features/EditMessenger/api/getReactionsApi';
 import postMessengerReactionsApi from '@features/EditMessenger/api/postMessengerReactionsApi';
 import { MessengerSettingsSchema } from '@entities/Messenger';
+import { getReactionsApi } from '@entities/Reaction';
 import { useAbortController } from '@shared/lib';
 import { ReactionSchema } from '@shared/types';
 

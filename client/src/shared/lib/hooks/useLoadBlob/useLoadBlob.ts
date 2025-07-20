@@ -3,7 +3,7 @@ import useAbortController from '@shared/lib/hooks/useAbortController/useAbortCon
 
 const SERVER_URL = process.env.VITE_SERVER_URL;
 
-const useLoadBlob = (imagePath?: string | boolean) => {
+const useLoadBlob = (imagePath?: string | boolean, quality?: string) => {
     const [load, setLoad] = useState(false);
     const [image, setImage] = useState('');
     const { getSignal } = useAbortController();
@@ -17,7 +17,9 @@ const useLoadBlob = (imagePath?: string | boolean) => {
         let objectUrl = '';
         const signal = getSignal();
 
-        fetch(`${SERVER_URL}/static/${imagePath}`, { signal })
+        fetch(`${SERVER_URL}/${!quality ? 'static/' : ''}${imagePath}?quality=${quality}`, {
+            signal,
+        })
             .then(data => data.blob())
             .then(blob => {
                 objectUrl = URL.createObjectURL(blob);
