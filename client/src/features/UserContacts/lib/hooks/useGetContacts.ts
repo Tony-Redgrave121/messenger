@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import getContactsApi from '@widgets/LeftSidebar/api/getContactsApi';
+import getContactsApi from '@features/UserContacts/api/getContactsApi';
 import { setContacts } from '@entities/Contact';
 import { useAppDispatch, useAppSelector, useAbortController } from '@shared/lib';
 

@@ -9,12 +9,13 @@ import DropDownMessage from '@features/Message/ui/Message/DropDownMessage';
 import DropDownReactions from '@features/Message/ui/Message/DropDownReactions';
 import MessageFiles from '@features/Message/ui/MessageFiles/MessageFiles';
 import OwnerLink from '@features/Message/ui/OwnerLink/OwnerLink';
-import ReplyBlock from '@features/Message/ui/ReplyBlock/ReplyBlock';
+import { ReplyBlock } from '@entities/Message';
 import { ReactionsBlock } from '@entities/Reaction';
 import { getTime } from '@shared/lib';
 import { MessageSchema } from '@shared/types';
 import style from '../message.module.css';
 import './message.animation.css';
+import OgAttachment from '@entities/Message/ui/OGAttachment/OGAttachment';
 
 interface IMessageProps {
     message: MessageSchema;
@@ -105,6 +106,7 @@ const Message: FC<IMessageProps> = memo(({ message }) => {
                                     setReactionMenu={setReactionMenu}
                                 />
                             </div>
+                            <OgAttachment text={message.message_text} />
                         </div>
                         <CommentLink messengerType={messenger.type} message={message} />
                     </div>

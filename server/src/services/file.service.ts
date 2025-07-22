@@ -3,6 +3,7 @@ import path from "path";
 import sharp from "sharp";
 import ApiError from "../errors/apiError";
 import {Response} from "express";
+import ffmpeg from 'fluent-ffmpeg';
 
 class FileService {
     public getFile = async (filepath: string, filename: string, quality: number, res: Response) => {
@@ -12,6 +13,7 @@ class FileService {
 
         const extension = path.extname(filename).toLowerCase();
         const isImage = ['.jpg', '.jpeg', '.png', '.webp'].includes(extension);
+        const isVideo = ['.mp4', '.webm', '.mov', '.avi', '.mkv'].includes(extension);
 
         if (isImage) {
             return sharp(originalPath)
@@ -19,9 +21,20 @@ class FileService {
                 .toFormat('jpeg')
                 .jpeg({ quality })
                 .pipe(res);
-        } else {
-            return fs.createReadStream(originalPath).pipe(res);
         }
+
+        if (isVideo && quality < 100) {
+            return ffmpeg(originalPath)
+                .outputOptions([
+                    '-vframes 1',
+                    '-q:v 15',
+                    '-s 400x400'
+                ])
+                .format('mjpeg')
+                .pipe(res, { end: true });
+        }
+
+        return fs.createReadStream(originalPath).pipe(res);
     }
 }
 

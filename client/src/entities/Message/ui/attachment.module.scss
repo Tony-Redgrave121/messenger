@@ -1,11 +1,13 @@
-@use "../../../../app/styles/variables.css" as v;
+@use "../../../app/styles/variables.css" as v;
 
 .ReplyBlock {
   border-left: 3px solid white;
+  color: white;
   background-color: #2f2f2f;
   padding: 5px;
   border-radius: 5px;
   font-size: 14px;
+  font-weight: 500;
   line-height: 1.4;
   transition: 0.2s background-color ease-in-out;
 
@@ -15,5 +17,22 @@
 
   & > :first-child {
     font-weight: 600;
+  }
+
+  img {
+    width: 100%;
+    border-radius: 8px;
+  }
+}
+
+.OGAttachment {
+  margin-bottom: 8px;
+
+  > * {
+    line-height: 1.5;
+  }
+
+  img {
+    margin: 3px 0;
   }
 }

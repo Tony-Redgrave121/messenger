@@ -4,15 +4,15 @@ import { ContactSchema } from '@shared/types';
 import { ContactButton } from '@shared/ui';
 import style from './style.module.css';
 
-interface ContactListProps {
+interface ContactsListProps {
     contacts: ContactSchema[];
     text?: string;
     onClick: (user_id: string) => void;
 }
 
-const ContactList: FC<ContactListProps> = memo(({ contacts, text, onClick }) => {
+const ContactsList: FC<ContactsListProps> = memo(({ contacts, text, onClick }) => {
     return (
-        <section className={style.ContactListContainer}>
+        <section className={style.ContactsListContainer}>
             {text && <p>{text}</p>}
             {contacts.length > 0 &&
                 contacts.map(contact => (
@@ -24,6 +24,6 @@ const ContactList: FC<ContactListProps> = memo(({ contacts, text, onClick }) => 
     );
 });
 
-ContactList.displayName = 'ContactList';
+ContactsList.displayName = 'ContactsList';
 
-export default ContactList;
+export default ContactsList;

@@ -13,8 +13,12 @@ class FileController {
 
             ensureRequiredFields([filepath, filename])
 
-            const mimeType = mime.lookup(filename) || 'application/octet-stream';
-            res.setHeader('Content-Type', mimeType);
+            if (quality < 100) {
+                res.setHeader('Content-Type', 'image/jpeg');
+            } else {
+                const mimeType = mime.lookup(filename) || 'application/octet-stream';
+                res.setHeader('Content-Type', mimeType);
+            }
 
             await this.fileService.getFile(filepath, filename, quality, res)
         } catch (e) {

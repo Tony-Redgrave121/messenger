@@ -2,7 +2,7 @@ import React, { Dispatch, FC, SetStateAction, useEffect, useRef, useState } from
 import { HiOutlineXMark } from 'react-icons/hi2';
 import { useParams } from 'react-router-dom';
 import postRemovedApi from '@features/EditMessenger/api/postRemovedApi';
-import { ContactList } from '@entities/Contact';
+import { ContactsList } from '@entities/Contact';
 import { useLiveUpdatesWS, MessengerSettingsSchema } from '@entities/Messenger';
 import { useAbortController, useSearch, useAppSelector } from '@shared/lib';
 import { ContactSchema } from '@shared/types';
@@ -86,7 +86,7 @@ const PopupEditRemoved: FC<IPopupEditModeratorsProps> = ({
             <div className={style.SearchBar}>
                 <SearchBar searchRef={searchRef} foo={handleInput} />
                 {filteredArr.length > 0 ? (
-                    <ContactList contacts={filteredArr} onClick={handleRemoveMember} />
+                    <ContactsList contacts={filteredArr} onClick={handleRemoveMember} />
                 ) : (
                     <NoResult filter={filter} />
                 )}

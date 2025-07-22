@@ -47,3 +47,6 @@ export const SEARCH_MESSAGES_ROUTE = '/search/messages';
 
 // Chat Route
 export const PRIVATE_CHAT_ROUTE = '/chat/:user_id';
+
+// Open Graph Route
+export const OPEN_GRAPH_ROUTE = '/opengraph';

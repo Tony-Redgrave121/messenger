@@ -1,6 +1,6 @@
 import React, { Dispatch, FC, memo, SetStateAction, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ContactList } from '@entities/Contact';
+import { ContactsList } from '@entities/Contact';
 import { useSearch, useAppSelector } from '@shared/lib';
 import { SearchBar } from '@shared/ui';
 
@@ -25,7 +25,7 @@ const CreateNewChat: FC<IMessengerProps> = memo(({ setAnimationState }) => {
     return (
         <>
             <SearchBar foo={handleInput} searchRef={searchRef} />
-            <ContactList contacts={filteredArr} text="Contacts" onClick={navigateChat} />
+            <ContactsList contacts={filteredArr} text="Contacts" onClick={navigateChat} />
         </>
     );
 });

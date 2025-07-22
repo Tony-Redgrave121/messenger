@@ -50,3 +50,6 @@ export const PRIVATE_CHAT_ROUTE = '/chat/:user_id'
 
 // File Route
 export const GET_FILE_ROUTE = '/messengers/:filepath/:filename'
+
+// Open Graph Route
+export const OPEN_GRAPH_ROUTE = '/opengraph'

@@ -4,13 +4,13 @@ import { ContactSchema, DropDownList } from '@shared/types';
 import { ContactButton } from '@shared/ui';
 import style from './members-list.module.css';
 
-interface ContactListProps {
+interface ContactsListProps {
     members: ContactSchema[];
     text?: string;
     dropList: (user_id: string) => DropDownList[];
 }
 
-const MembersList: FC<ContactListProps> = memo(({ members, text, dropList }) => {
+const MembersList: FC<ContactsListProps> = memo(({ members, text, dropList }) => {
     return (
         <section className={style.MembersListContainer}>
             {text && <p>{text}</p>}

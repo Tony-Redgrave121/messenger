@@ -1,9 +1,7 @@
 import debounce from 'debounce';
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { useNavigate } from 'react-router';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import getFilteredMessengersApi from '@widgets/LeftSidebar/api/getFilteredMessengersApi';
 import mapSearchDTO from '@widgets/LeftSidebar/api/mappers/mapSearchDTO';
-import useCloseLeftSidebar from '@widgets/LeftSidebar/lib/hooks/useCloseLeftSidebar';
 import { MessengerCreationSchema } from '@features/CreateMessenger';
 import { UnifiedMessengerSchema } from '@features/MessengerSearch';
 import { setSidebarLeft } from '@entities/Messenger';
@@ -25,21 +23,10 @@ const useLeftSidebar = () => {
     const refSidebar = useRef<HTMLDivElement>(null);
 
     const sidebarLeft = useAppSelector(state => state.sidebar.sidebarLeft);
-
-    const navigate = useNavigate();
     const { getSignal } = useAbortController();
-    const { closeSidebar } = useCloseLeftSidebar();
 
     const [searchRes, setSearchRes] = useState<UnifiedMessengerSchema[]>([]);
     const [active, setActive] = useState<MessengerTypes>('chat');
-
-    const navigateChat = useCallback(
-        (userId: string) => {
-            closeSidebar();
-            return navigate(`/chat/${userId}`);
-        },
-        [closeSidebar, navigate],
-    );
 
     const searchDebounce = useMemo(
         () =>
@@ -101,7 +88,6 @@ const useLeftSidebar = () => {
         setMessengerCreation,
         profile,
         setProfile,
-        navigateChat,
         searchRes,
         active,
         setActive,

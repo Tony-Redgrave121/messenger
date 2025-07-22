@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import { scrollInto } from '@shared/lib';
 import { MessageSchema } from '@shared/types';
-import style from './reply-block.module.css';
+import style from '../attachment.module.css';
 
 interface IReplyBlockProps {
     message: MessageSchema;

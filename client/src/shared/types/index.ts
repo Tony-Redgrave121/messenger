@@ -9,3 +9,4 @@ export type { default as MessageFileSchema } from './MessageFileSchema';
 export type { default as MessageSchema } from './MessageSchema';
 export type { default as FileStateSchema } from './FileStateSchema';
 export type { default as FileObjectSchema } from './FileObjectSchema';
+export type { default as OpenGraphDataSchema } from './OpenGraphDataSchema';

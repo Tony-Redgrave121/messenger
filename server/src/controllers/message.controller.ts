@@ -21,9 +21,6 @@ class MessageController {
 
             res.json(messages)
         } catch (e) {
-            console.log(e)
-            console.log(e)
-            console.log(e)
             next(e)
         }
     };
