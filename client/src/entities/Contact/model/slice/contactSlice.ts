@@ -16,6 +16,17 @@ const contactSlice = createSlice({
         setContacts(state, action: PayloadAction<ContactSchema[]>) {
             state.contacts = action.payload;
         },
+        updateContact(state, action: PayloadAction<{ userId: string; date: string }>) {
+            state.contacts = state.contacts.map(contact => {
+                if (contact.user_id === action.payload.userId) {
+                    return {
+                        ...contact,
+                        user_last_seen: action.payload.date,
+                    };
+                }
+                return contact;
+            });
+        },
         addContact(state, action: PayloadAction<ContactSchema>) {
             const exists = state.contacts.some(c => c.user_id === action.payload.user_id);
             if (!exists) state.contacts.push(action.payload);
@@ -27,4 +38,4 @@ const contactSlice = createSlice({
 });
 
 export default contactSlice.reducer;
-export const { setContacts, addContact, deleteContact } = contactSlice.actions;
+export const { setContacts, addContact, deleteContact, updateContact } = contactSlice.actions;

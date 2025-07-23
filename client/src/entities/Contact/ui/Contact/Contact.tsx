@@ -23,7 +23,7 @@ const Contact: FC<IContactProps> = memo(({ contact, children }) => {
             </span>
             <div className={style.ContactInfo}>
                 <h4>{contact.user_name}</h4>
-                <p>{getDate(contact.user_last_seen)}</p>
+                <p>{getDate(contact.user_last_seen, true)}</p>
             </div>
         </div>
     );

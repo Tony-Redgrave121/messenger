@@ -39,7 +39,7 @@ const Member: FC<IContactsProps> = memo(({ contact, children, dropList }) => {
             </span>
             <div className={style.MemberInfo}>
                 <h4>{contact.user_name}</h4>
-                <p>{getDate(contact.user_last_seen)}</p>
+                <p>{getDate(contact.user_last_seen, true)}</p>
             </div>
             <DropDown
                 list={dropList}

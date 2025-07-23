@@ -4,7 +4,7 @@ import { getDate } from '@shared/lib';
 const getHeaderDesc = (messenger: AdaptMessengerSchema) => {
     switch (messenger.type) {
         case 'chat':
-            return getDate(messenger.last_seen!);
+            return getDate(messenger.last_seen!, true);
         case 'group':
             return `${messenger.members_count} members`;
         case 'channel':
