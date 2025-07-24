@@ -1,4 +1,4 @@
-@use "../../../../app/styles/variables.css" as v;
+@use "../../../../app/styles/variables" as v;
 
 .MinBlock {
   min-width: 180px;
@@ -14,9 +14,9 @@
 
 .ShadowBlock {
   min-height: 137.5px;
+  min-width: 250px;
   width: 100%;
-  background: linear-gradient(120deg, #0001 33%, #0f0f0f54 50%, #0001 66%)
-    #282828;
+  background: linear-gradient(120deg, #0001 33%, v.$dark-900 50%, #0001 66%);
   animation: skeleton 1.5s infinite linear;
   background-size: 200% 100%;
 

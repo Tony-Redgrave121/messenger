@@ -1,9 +1,9 @@
-@use "../../../../app/styles/variables.css" as v;
+@use "../../../../app/styles/variables" as v;
 
 .FileInput {
   svg,
   img {
-    color: white;
+    color: v.$white;
     height: 160px;
     width: 160px;
     cursor: pointer;

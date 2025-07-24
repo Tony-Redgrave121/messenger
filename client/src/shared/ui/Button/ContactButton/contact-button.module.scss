@@ -1,4 +1,4 @@
-@use "../../../../app/styles/variables.css" as v;
+@use "../../../../app/styles/variables" as v;
 
 .ContactButton {
   padding: 4px 16px;
@@ -6,6 +6,6 @@
   transition: 0.2s background-color ease-in-out;
 
   &:hover {
-    background-color: #2b2b2b;
+    background-color: v.$dark-800;
   }
 }

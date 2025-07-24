@@ -1,4 +1,4 @@
-@use "../../../app/styles/variables.css" as v;
+@use "../../../app/styles/variables" as v;
 
 .TopBar {
   display: flex;
@@ -8,7 +8,7 @@
   height: 56px;
 
   > h1 {
-    color: white;
+    color: v.$white;
     font-size: 20px;
     padding-left: 24px;
     text-transform: capitalize;
@@ -33,12 +33,12 @@
 
     div {
       display: flex;
-      background-color: #181818;
+      background-color: v.$dark-1000;
       border-radius: 50%;
       padding: 35px;
 
       > svg {
-        color: white;
+        color: v.$white;
         height: 50px;
         width: 50px;
       }

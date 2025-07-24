@@ -1,8 +1,8 @@
-@use "../../../../app/styles/variables.css" as v;
+@use "../../../../app/styles/variables" as v;
 
 .InfoList {
   padding: 8px;
-  background-color: #212121;
+  background-color: v.$dark-1000;
 
   li {
     display: flex;

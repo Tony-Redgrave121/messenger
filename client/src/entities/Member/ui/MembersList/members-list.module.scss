@@ -1,4 +1,4 @@
-@use "../../../../app/styles/variables.css" as v;
+@use "../../../../app/styles/variables" as v;
 
 .MembersListContainer {
   display: flex;
@@ -6,7 +6,7 @@
   padding: 0 8px 8px;
 
   > p {
-    color: white;
+    color: v.$white;
     line-height: 1.5;
     padding: 8px 16px;
   }

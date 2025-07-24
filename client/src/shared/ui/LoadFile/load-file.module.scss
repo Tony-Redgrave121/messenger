@@ -1,14 +1,14 @@
-@use "../../../app/styles/variables.css" as v;
+@use "../../../app/styles/variables" as v;
 
 .ImageContainer {
   display: flex;
   justify-content: center;
   align-items: center;
-  color: white;
+  color: v.$white;
   background: linear-gradient(
     0deg,
-    rgba(0, 0, 0, 0.5) 0%,
-    rgba(255, 255, 255, 0.2) 100%
+    v.$black-40 0%,
+    v.$white-20 100%
   );
   width: 54px;
   height: 54px;

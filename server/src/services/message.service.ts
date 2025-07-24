@@ -20,7 +20,18 @@ class MessageService {
             {
                 messenger_id: messenger_id,
                 parent_post_id: post_id ?? null
-            } : {recipient_user_id: [messenger_id, user_id]}
+            } : {
+                [Op.or]: [
+                    {
+                        user_id: user_id,
+                        recipient_user_id: messenger_id
+                    },
+                    {
+                        user_id: messenger_id,
+                        recipient_user_id: user_id
+                    }
+                ]
+            }
 
         const messages = await index.message.findAll({
             where: whereBase,

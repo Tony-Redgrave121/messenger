@@ -44,11 +44,7 @@ const SliderMedia: FC<ISliderProps> = ({ media }) => {
         }
     };
 
-    return (
-        <>
-            {load && image ? geTag() : <div className={`${style.ShadowBlock} ${style.MinBlock}`} />}
-        </>
-    );
+    return <>{load && image ? geTag() : <div className={`${style.ShadowBlock} `} />}</>;
 };
 
 export default SliderMedia;

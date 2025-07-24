@@ -1,12 +1,12 @@
-@use "../../../app/styles/variables.css" as v;
+@use "../../../app/styles/variables" as v;
 
 .CaptionBlock {
   width: 100%;
-  background-color: #181818;
+  background-color: v.$dark-1000;
   padding: 6px 24px;
   font-size: 14px;
   line-height: 18px;
-  color: #aaaaaa;
+  color: v.$gray-400;
 
   p {
     padding-bottom: 6px;

@@ -1,4 +1,4 @@
-@use "../../../app/styles/variables.css" as v;
+@use "../../../app/styles/variables" as v;
 
 .MinBlock {
   min-width: 180px;
@@ -14,16 +14,20 @@
 }
 
 .ShadowBlock {
-  min-height: 137.5px;
-  width: 100%;
-  background: linear-gradient(120deg, #0001 33%, #0f0f0f54 50%, #0001 66%)
-    #282828;
-  animation: skeleton 1.5s infinite linear;
-  background-size: 200% 100%;
+  width: 48px;
+  height: 48px;
+  border: 5px solid v.$white;
+  border-bottom-color: transparent;
+  border-radius: 50%;
+  display: inline-block;
+  animation: rotation 1s linear infinite;
 
-  @keyframes skeleton {
-    to {
-      background-position-x: -200%;
+  @keyframes rotation {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
     }
   }
 }

@@ -1,3 +1,5 @@
+@use "../../../../app/styles/variables" as v;
+
 .Checkbox {
   display: flex;
   align-items: center;
@@ -8,14 +10,14 @@
   transition: 0.2s background-color ease-in-out;
 
   &:hover {
-    background-color: #2b2b2b;
+    background-color: v.$dark-800;
   }
 
   > input {
     height: 16px;
     width: 16px;
     border: 2px solid #8c959b;
-    background-color: #212121;
+    background-color: v.$dark-1000;
     border-radius: 4px;
 
     &:checked {
@@ -29,8 +31,8 @@
       height: 8px;
       width: 4px;
       margin: 0 0 1.2px 5px;
-      border-bottom: 2.5px solid #212121ff;
-      border-right: 2.5px solid #212121ff;
+      border-bottom: 2.5px solid v.$dark-1000;
+      border-right: 2.5px solid v.$dark-1000;
     }
   }
 }

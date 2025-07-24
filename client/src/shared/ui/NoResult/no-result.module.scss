@@ -1,4 +1,4 @@
-@use "../../../app/styles/variables.css" as v;
+@use "../../../app/styles/variables" as v;
 
 .NoResultContainer {
   display: flex;
@@ -13,7 +13,7 @@
 
   svg,
   h1 {
-    color: white;
+    color: v.$white;
   }
 
   svg {
@@ -25,6 +25,6 @@
   }
 
   p {
-    color: #a9a9a9;
+    color: v.$gray-400;
   }
 }

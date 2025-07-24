@@ -10,18 +10,18 @@
     padding: 15px;
     border-radius: 10px;
     color: #9d9d9d;
-    box-shadow: 0 0 0 1px #2f2f2f;
+    box-shadow: 0 0 0 1px v.$dark-800;
     width: 100%;
     height: auto;
     transition: 0.2s all ease-in-out;
 
     &:hover {
-      color: white;
+      color: v.$white;
       box-shadow: 0 0 0 1px white;
     }
 
     &:focus {
-      color: white;
+      color: v.$white;
       box-shadow: 0 0 0 2px white;
     }
 

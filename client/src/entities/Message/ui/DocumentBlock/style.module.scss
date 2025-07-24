@@ -1,17 +1,17 @@
-@use "../../../../app/styles/variables.css" as v;
+@use "../../../../app/styles/variables" as v;
 
 .DocumentBlock {
   display: flex;
   align-items: center;
   gap: 8px;
   line-height: 1.4;
-  color: white;
+  color: v.$white;
   padding: 5px 0;
   border-radius: 5px;
   transition: 0.2s background-color ease-in-out;
 
   &:hover {
-    background-color: #2f2f2f;
+    background-color: v.$dark-800;
   }
 
   svg {

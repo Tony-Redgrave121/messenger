@@ -1,4 +1,4 @@
-@use "../../../app/styles/variables.css" as v;
+@use "../../../app/styles/variables" as v;
 
 .MessageContainer {
   transform-origin: bottom left;
@@ -15,7 +15,7 @@
 
       .MessageContent {
         position: relative;
-        background-color: #181818;
+        background-color: v.$dark-1000;
         padding: 8px 8px 15px 8px;
         border-radius: 15px 15px 15px 0;
         margin-bottom: 1px;
@@ -35,7 +35,7 @@
             right: 8px;
             bottom: 4px;
             line-height: 1;
-            color: #a9a9a9;
+            color: v.$gray-400;
             font-size: 12px;
           }
 
@@ -50,7 +50,7 @@
       }
 
       .OwnerMessageContent {
-        background-color: #212121;
+        background-color: v.$dark-1000;
         border-radius: 15px 15px 0 15px;
       }
 

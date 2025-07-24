@@ -1,4 +1,4 @@
-@use "../../../../app/styles/variables.css" as v;
+@use "../../../../app/styles/variables" as v;
 
 .TitleBlock {
   text-align: center;
@@ -8,7 +8,7 @@
   }
 
   p {
-    color: #a6a6a6;
+    color: v.$gray-400;
   }
 }
 

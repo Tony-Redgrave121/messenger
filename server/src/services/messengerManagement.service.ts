@@ -230,29 +230,33 @@ class MessengerManagementService {
         })
 
         const chatUsersPlain = convertToPlain<IShortUser>(chatUsers)
-        const lastMessages = await index.message.findAll({
-            where: {
-                [Op.or]: [
-                    {
-                        user_id: user_id,
-                        recipient_user_id: chatUsersPlain.map(c => c.user_id)
-                    },
-                    {
-                        user_id: chatUsersPlain.map(c => c.user_id),
-                        recipient_user_id: user_id
-                    }
-                ]
-            },
-            limit: 1,
-            order: [['message_date', 'DESC']],
-            attributes: ['message_text', 'message_date']
-        })
 
-        const lastMessagesPlain = convertToPlain<ILastMessage>(lastMessages)
-        const fullLastMessages = lastMessagesPlain.map((l, i) => ({
-            message: l,
-            companion_id: chatUsersPlain[i].user_id
-        }))
+        const fullLastMessages = await Promise.all(
+            chatUsersPlain.map(async (user) => {
+                const lastMessage = await index.message.findOne({
+                    where: {
+                        [Op.or]: [
+                            {
+                                user_id,
+                                recipient_user_id: user.user_id,
+                            },
+                            {
+                                user_id: user.user_id,
+                                recipient_user_id: user_id,
+                            }
+                        ]
+                    },
+                    order: [['message_date', 'DESC']],
+                    attributes: ['message_text', 'message_date']
+                });
+
+                return {
+                    message: lastMessage ? convertToPlain<ILastMessage>(lastMessage) : null,
+                    companion_id: user.user_id,
+                };
+            })
+        );
+
 
         return chatUsersPlain.map(user => {
             const lastMessage = fullLastMessages.find(message => user.user_id === message.companion_id)

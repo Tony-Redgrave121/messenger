@@ -1,4 +1,4 @@
-@use "../../../app/styles/variables.css" as v;
+@use "../../../app/styles/variables" as v;
 
 .SearchBar {
   position: relative;
@@ -11,21 +11,21 @@
   .SearchInput {
     width: 100%;
     border-radius: 22px;
-    background-color: #181818;
-    border: 1px solid #2f2f2f;
+    background-color: v.$dark-1000;
+    border: 1px solid v.$dark-800;
     padding: 0 44px;
-    color: white;
+    color: v.$white;
     transition-property: background-color, box-shadow;
     transition-duration: 0.2s;
     transition-timing-function: ease-in-out;
 
     &:focus {
-      box-shadow: 0 0 0 1px #2f2f2f inset;
-      background-color: #212121;
+      box-shadow: 0 0 0 1px v.$dark-800 inset;
+      background-color: v.$dark-1000;
     }
 
     &::placeholder {
-      color: #989898;
+      color: v.$gray-500;
     }
   }
 

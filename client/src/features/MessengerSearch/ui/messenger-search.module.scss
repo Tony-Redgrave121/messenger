@@ -1,11 +1,11 @@
-@use "../../../app/styles/variables.css" as v;
+@use "../../../app/styles/variables" as v;
 
 .SearchListContainer {
   position: absolute;
   top: 55px;
   width: 100%;
   height: 100%;
-  background-color: #212121;
+  background-color: v.$dark-1000;
 
   nav {
     padding: 0 16px;
@@ -17,7 +17,7 @@
 
       button {
         position: relative;
-        color: #aaaaaa;
+        color: v.$gray-400;
         font-weight: 600;
         padding: 14px;
         border-radius: 8px 8px 0 0;
@@ -25,7 +25,7 @@
         transition: 0.2s color ease-in-out;
 
         &:hover {
-          background-color: #2d2d2d;
+          background-color: v.$dark-800;
         }
 
         &:after {
@@ -37,16 +37,16 @@
           display: block;
           height: 3px;
           border-radius: 8px 8px 0 0;
-          background-color: rgba(255, 255, 255, 0);
+          background-color: v.$white-0;
           transition: 0.2s background-color ease-in-out;
         }
       }
 
       .ActiveButton {
-        color: white;
+        color: v.$white;
 
         &:after {
-          background-color: white;
+          background-color: v.$white;
         }
       }
     }
@@ -58,7 +58,7 @@
     padding: 0 8px 8px;
 
     > p {
-      color: #aaaaaa;
+      color: v.$gray-400;
       font-weight: 600;
       padding: 16px;
     }
@@ -71,7 +71,7 @@
     gap: 18px;
 
     > svg {
-      color: #aaaaaa;
+      color: v.$gray-400;
       width: 26px;
       height: 26px;
       margin-left: auto;
@@ -90,13 +90,13 @@
       line-height: 1.5;
 
       h4 {
-        color: white;
+        color: v.$white;
         font-weight: 500;
         font-size: 16px;
       }
 
       p {
-        color: #a9a9a9;
+        color: v.$gray-400;
         font-size: 14px;
       }
     }

@@ -1,4 +1,4 @@
-@use "../../../../app/styles/variables.css" as v;
+@use "../../../../app/styles/variables" as v;
 
 .AuthForm {
   width: 100%;
@@ -16,7 +16,7 @@
     gap: 30px;
     width: 100%;
     max-width: 360px;
-    color: white;
+    color: v.$white;
     line-height: 1.5;
 
     svg {

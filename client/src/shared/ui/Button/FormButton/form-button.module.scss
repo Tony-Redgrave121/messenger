@@ -1,8 +1,8 @@
-@use "../../../../app/styles/variables.css" as v;
+@use "../../../../app/styles/variables" as v;
 
 .FormButton {
   width: 100%;
-  background-color: #2f2f2f;
+  background-color: v.$dark-800;
   padding: 15px 0;
   text-align: center;
   border-radius: 10px;

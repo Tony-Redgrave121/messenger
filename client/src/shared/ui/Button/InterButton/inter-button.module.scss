@@ -1,15 +1,15 @@
-@use "../../../../app/styles/variables.css" as v;
+@use "../../../../app/styles/variables" as v;
 
 .InterButton {
   position: relative;
-  color: white;
+  color: v.$white;
   border-radius: 100%;
-  background-color: #303030;
+  background-color: v.$dark-800;
   height: fit-content;
   transition: 0.2s background-color ease-in-out;
 
   &:hover {
-    background-color: #212121;
+    background-color: v.$dark-1000;
   }
 
   > svg {

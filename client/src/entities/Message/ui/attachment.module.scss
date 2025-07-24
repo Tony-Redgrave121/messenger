@@ -1,9 +1,9 @@
-@use "../../../app/styles/variables.css" as v;
+@use "../../../app/styles/variables" as v;
 
 .ReplyBlock {
   border-left: 3px solid white;
-  color: white;
-  background-color: #2f2f2f;
+  color: v.$white;
+  background-color: v.$dark-800;
   padding: 5px;
   border-radius: 5px;
   font-size: 14px;
@@ -12,7 +12,7 @@
   transition: 0.2s background-color ease-in-out;
 
   &:hover {
-    background-color: #353535;
+    background-color: v.$dark-800;
   }
 
   & > :first-child {

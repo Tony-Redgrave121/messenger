@@ -1,4 +1,4 @@
-@use "../../../app/styles/variables.css" as v;
+@use "../../../app/styles/variables" as v;
 
 .SearchBar {
   position: absolute;
@@ -11,12 +11,12 @@
 
   .SearchTopBar {
     display: flex;
-    background-color: #212121ff;
+    background-color: v.$dark-1000;
   }
 
   .SearchList {
-    background-color: #212121ff;
-    border: 1px solid #2f2f2f;
+    background-color: v.$dark-1000;
+    border: 1px solid v.$dark-800;
     border-radius: 16px;
     padding: 8px;
     transition: 0.3s all ease-in-out;
@@ -35,7 +35,7 @@
         align-items: center;
         width: inherit;
         gap: 16px;
-        color: white;
+        color: v.$white;
         overflow: hidden;
 
         & > :first-child {
@@ -52,7 +52,7 @@
           }
 
           & > :last-child {
-            color: #aaaaaa;
+            color: v.$gray-400;
             font-size: 14px;
             white-space: nowrap;
             text-overflow: ellipsis;
@@ -60,19 +60,19 @@
           }
 
           b {
-            color: white;
+            color: v.$white;
           }
         }
       }
 
       > p {
-        color: #aaaaaa;
+        color: v.$gray-400;
         font-size: 12px;
         white-space: nowrap;
       }
 
       &:hover {
-        background-color: #2f2f2f;
+        background-color: v.$dark-800;
         border-radius: 10px;
       }
     }

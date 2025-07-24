@@ -1,4 +1,4 @@
-@use "../../../app/styles/variables.css" as v;
+@use "../../../app/styles/variables" as v;
 
 .MessengerContainer {
   display: flex;
@@ -16,7 +16,7 @@
     align-items: start;
     flex-direction: column;
     gap: 8px;
-    color: white;
+    color: v.$white;
     width: 100%;
     bottom: 65px;
     max-height: calc(100% - 65px);

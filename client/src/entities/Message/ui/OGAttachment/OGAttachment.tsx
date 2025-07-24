@@ -30,7 +30,12 @@ const OgAttachment: FC<IOgAttachmentProps> = ({ text }) => {
     return (
         <>
             {ogData && (
-                <a className={clsx(style.ReplyBlock, style.OGAttachment)} href={ogData.url}>
+                <a
+                    className={clsx(style.ReplyBlock, style.OGAttachment)}
+                    href={ogData.url}
+                    target="_blank"
+                    rel="noreferrer"
+                >
                     <p>{ogData.siteName}</p>
                     <p>{ogData.title}</p>
                     <p>{ogData.description}</p>

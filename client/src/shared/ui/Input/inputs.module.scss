@@ -1,4 +1,4 @@
-@use "../../../app/styles/variables.css" as v;
+@use "../../../app/styles/variables" as v;
 
 .Input {
   cursor: pointer;
@@ -12,35 +12,35 @@
     -webkit-appearance: none;
     height: 12px;
     width: 12px;
-    background: #a8a8a8;
+    background-color: v.$gray-400;
     border-radius: 50%;
     transition: 0.2s all ease-in-out;
     margin-top: -5px;
 
     &:hover {
       transform: scale(1.1);
-      background-color: white;
+      background-color: v.$white;
     }
   }
 
   &::-moz-range-thumb {
     height: 12px;
     width: 12px;
-    background: #a8a8a8;
+    background-color: v.$gray-400;
     border-radius: 50%;
     border: none;
     transition: 0.2s all ease-in-out;
 
     &:hover {
       transform: scale(1.1);
-      background-color: white;
+      background-color: v.$white;
     }
   }
 
   &::-ms-thumb {
     height: 12px;
     width: 12px;
-    background: #a8a8a8;
+    background-color: v.$gray-400;
     border-radius: 50%;
     border: none;
   }
@@ -48,25 +48,25 @@
   &::-webkit-slider-runnable-track {
     height: 2px;
     border-radius: 5px;
-    background-color: #a8a8a8;
+    background-color: v.$gray-400;
     transition: 0.2s background-color ease-in-out;
 
     &:hover {
-      background-color: white;
+      background-color: v.$white;
     }
   }
 
   &::-moz-range-track {
     height: 2px;
     border-radius: 5px;
-    background-color: #a8a8a8;
+    background-color: v.$gray-400;
     transition: 0.2s background-color ease-in-out;
   }
 
   &::-ms-track {
     height: 2px;
     border-radius: 5px;
-    background-color: #a8a8a8;
+    background-color: v.$gray-400;
     border-color: transparent;
     color: transparent;
   }
@@ -94,7 +94,7 @@
   &::-moz-range-track,
   &::-ms-track {
     height: 3px;
-    background-color: #a8a8a8;
+    background-color: v.$gray-400;
     border-radius: 5px;
   }
 }

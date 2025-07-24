@@ -1,4 +1,4 @@
-@use "../../../app/styles/variables.css" as v;
+@use "../../../app/styles/variables" as v;
 
 .ChatHeader {
   position: absolute;
@@ -9,9 +9,9 @@
   justify-content: space-between;
   width: 100%;
   padding: 6.5px 18px;
-  background: #212121ff;
-  border-right: 1px solid rgb(15, 15, 15);
-  border-left: 1px solid rgb(15, 15, 15);
+  background-color: v.$dark-1000;
+  border-right: 1px solid v.$black;
+  border-left: 1px solid v.$black;
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
@@ -48,17 +48,17 @@
     }
 
     h3 {
-      color: white;
+      color: v.$white;
     }
 
     p {
       font-size: 14px;
-      color: #a9a9a9;
+      color: v.$gray-400;
     }
   }
 
   > p {
-    color: white;
+    color: v.$white;
     font-weight: 600;
     margin: auto 0;
   }

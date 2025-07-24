@@ -8,5 +8,5 @@ export default interface AdaptMessengerSchema {
     type: MessengerTypes;
     members?: MemberSchema[];
     members_count?: number;
-    last_seen?: Date;
+    last_seen?: Date | string;
 }

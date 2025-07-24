@@ -1,5 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Kumbh+Sans:wght,YOPQ@100..900,40..300&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap");
+@use "./variables" as v;
 
 html,
 body,
@@ -146,12 +145,12 @@ section {
 html {
   scroll-behavior: smooth;
   scrollbar-width: thin;
-  scrollbar-color: #2f2f2f transparent;
+  scrollbar-color: v.$dark-800 transparent;
 }
 
 body {
   line-height: 1;
-  background-color: rgb(28, 28, 28);
+  background-color: v.$dark-900;
 }
 
 ol,
@@ -182,7 +181,7 @@ table {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #2f2f2f;
+  background-color: v.$dark-800;
   border-radius: 5px;
 }
 
@@ -200,7 +199,6 @@ time {
   font-family:
     "Roboto",
     -apple-system,
-    apple color emoji,
     BlinkMacSystemFont,
     "Segoe UI",
     Roboto,

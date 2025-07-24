@@ -1,10 +1,10 @@
-@use "../../../../app/styles/variables.css" as v;
+@use "../../../../app/styles/variables" as v;
 
 .CommentsContainer {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: #181818;
+  background-color: v.$dark-1000;
   padding: 8px;
   border-radius: 0 0 15px 0;
   cursor: pointer;
@@ -13,7 +13,7 @@
   font-size: 15px;
 
   &:hover {
-    background-color: #212121;
+    background-color: v.$dark-1000;
   }
 
   > svg {
