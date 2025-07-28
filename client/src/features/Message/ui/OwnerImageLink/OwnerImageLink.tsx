@@ -11,7 +11,7 @@ interface IOwnerLinkProps {
     message: MessageSchema;
 }
 
-const OwnerLink: FC<IOwnerLinkProps> = ({ isOwner, messenger, message }) => {
+const OwnerImageLink: FC<IOwnerLinkProps> = ({ isOwner, messenger, message }) => {
     return (
         <>
             {!isOwner && (
@@ -41,4 +41,4 @@ const OwnerLink: FC<IOwnerLinkProps> = ({ isOwner, messenger, message }) => {
     );
 };
 
-export default OwnerLink;
+export default OwnerImageLink;

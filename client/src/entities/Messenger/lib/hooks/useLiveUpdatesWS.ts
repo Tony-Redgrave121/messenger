@@ -48,7 +48,7 @@ export const useLiveUpdatesWS = () => {
                     JSON.stringify({
                         user_id: userId,
                         data: {
-                            members: contacts.map(c => c.user_id),
+                            messenger_members: contacts.map(c => c.user_id),
                             userId: userId,
                             date: new Date(),
                         },

@@ -1,6 +1,8 @@
 @use "../../../../app/styles/variables" as v;
 
 .FormContainer {
+  background-color: v.$dark-900;
+
   &,
   .Form,
   .TopForm {
@@ -11,7 +13,7 @@
   }
 
   .TopForm {
-    padding: 72px 24px 16px;
+    padding: 72px 24px 24px;
     gap: 24px;
   }
 

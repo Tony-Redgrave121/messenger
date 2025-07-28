@@ -6,7 +6,7 @@ import ProfileKeys from '@features/Profile/model/types/ProfileKeys';
 import { closeForm } from '@shared/lib';
 import { ToggleState } from '@shared/types';
 import { CreateButton, DefaultButton, Caption, FormInput, Sidebar, TopBar } from '@shared/ui';
-import style from './style.module.css';
+import style from './edit-password.module.css';
 import '../profile.animation.css';
 
 interface IEditPasswordProps {

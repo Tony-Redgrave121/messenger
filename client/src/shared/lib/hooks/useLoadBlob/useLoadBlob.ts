@@ -30,9 +30,9 @@ const useLoadBlob = (imagePath?: string | boolean, quality?: string) => {
             })
             .finally(() => setLoad(true));
 
-        return () => {
-            if (objectUrl) URL.revokeObjectURL(objectUrl);
-        };
+        // return () => {
+        //     if (objectUrl) URL.revokeObjectURL(objectUrl);
+        // };
     }, [imagePath]);
 
     return {

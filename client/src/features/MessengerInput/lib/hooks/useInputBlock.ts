@@ -1,4 +1,4 @@
-import { ChangeEvent, useEffect, useRef, useState } from 'react';
+import { ChangeEvent, useCallback, useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import postMessageApi from '@features/MessengerInput/api/postMessageApi';
 import InputBlockSchema from '@features/MessengerInput/model/types/InputBlockSchema';
@@ -38,11 +38,11 @@ const useInputBlock = ({ reply, setReply, socketRef, members }: InputBlockSchema
         filesRef.current = null;
     };
 
-    const resetInput = () => {
+    const resetInput = useCallback(() => {
         setInputText('');
         if (refTextarea.current) refTextarea.current.value = '';
         setReply(null);
-    };
+    }, [setReply]);
 
     const uploadFiles = (event: ChangeEvent<HTMLInputElement>, type: string) => {
         filesRef.current = Array.from(event.target.files || []);
@@ -55,7 +55,7 @@ const useInputBlock = ({ reply, setReply, socketRef, members }: InputBlockSchema
         });
     };
 
-    const handleSubmit = async () => {
+    const handleSubmit = useCallback(async () => {
         if (!type || !messengerId || (!filesState.files && !inputText) || !socketRef.current)
             return;
 
@@ -86,18 +86,48 @@ const useInputBlock = ({ reply, setReply, socketRef, members }: InputBlockSchema
             }
 
             if (!postId && liveSocketRef?.readyState === WebSocket.OPEN) {
-                liveSocketRef.send(
-                    JSON.stringify({
-                        user_id: userId,
-                        method: 'UPDATE_LAST_MESSAGE',
-                        data: {
-                            messenger_id: type !== 'chat' ? messengerId : userId,
-                            message_date: newMessage.data.message_date,
-                            message_text: newMessage.data.message_text,
-                            messenger_members: members,
+                const commonData = {
+                    message_date: newMessage.data.message_date,
+                    message_text: newMessage.data.message_text,
+                };
+
+                if (type !== 'chat') {
+                    liveSocketRef.send(
+                        JSON.stringify({
+                            user_id: userId,
+                            method: 'UPDATE_LAST_MESSAGE',
+                            data: {
+                                messenger_id: messengerId,
+                                messenger_members: members,
+                                ...commonData,
+                            },
+                        }),
+                    );
+                } else {
+                    const messages = [
+                        {
+                            messenger_id: messengerId,
+                            messenger_members: userId,
                         },
-                    }),
-                );
+                        {
+                            messenger_id: userId,
+                            messenger_members: messengerId,
+                        },
+                    ];
+
+                    messages.forEach(msg => {
+                        liveSocketRef.send(
+                            JSON.stringify({
+                                user_id: userId,
+                                method: 'UPDATE_LAST_MESSAGE',
+                                data: {
+                                    ...msg,
+                                    ...commonData,
+                                },
+                            }),
+                        );
+                    });
+                }
             }
         } catch (e) {
             console.log(e);
@@ -105,12 +135,39 @@ const useInputBlock = ({ reply, setReply, socketRef, members }: InputBlockSchema
             resetInput();
             resetFileState();
         }
-    };
+    }, [
+        filesState,
+        inputText,
+        liveSocketRef,
+        members,
+        messengerId,
+        postId,
+        reply,
+        resetInput,
+        socketRef,
+        type,
+        userId,
+    ]);
 
     const handleCancel = () => {
         setFilesState(prev => ({ ...prev, popup: false }));
         setTimeout(resetFileState, 300);
     };
+
+    useEffect(() => {
+        const textarea = refTextarea.current;
+        if (!textarea) return;
+
+        const handleKeyDown = async (event: KeyboardEvent) => {
+            if (event.key === 'Enter') {
+                event.preventDefault();
+                await handleSubmit();
+            }
+        };
+
+        textarea.addEventListener('keypress', handleKeyDown);
+        return () => textarea.removeEventListener('keypress', handleKeyDown);
+    }, [handleSubmit]);
 
     return {
         mediaRef,

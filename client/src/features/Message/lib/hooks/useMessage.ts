@@ -1,30 +1,23 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { Dispatch, SetStateAction, useEffect, useMemo, useState } from 'react';
 import { useMessageContext } from '@features/Message/lib/hooks/useMessageContext';
-import { getTitle, handleContextMenu, useAppSelector } from '@shared/lib';
+import { handleContextMenu, useAppSelector } from '@shared/lib';
 import { MessageSchema } from '@shared/types';
 
-const useMessage = (message: MessageSchema) => {
+const useMessage = (
+    message: MessageSchema,
+    viewedIds: string[],
+    setViewedIds: Dispatch<SetStateAction<string[]>>,
+) => {
     const [contextMenu, setContextMenu] = useState(false);
-    const [animation, setAnimation] = useState(false);
-    const [isOwner, setIsOwner] = useState(false);
     const [position, setPosition] = useState({ x: 0, y: 0 });
+    const [animation, setAnimation] = useState(false);
 
-    const refLink = useRef<HTMLAnchorElement>(null);
     const userId = useAppSelector(state => state.user.userId);
     const { messenger } = useMessageContext();
 
-    useEffect(() => {
-        const timeout = setTimeout(() => setAnimation(true), 200);
-        return () => clearTimeout(timeout);
-    }, []);
-
-    useEffect(() => {
-        setIsOwner(message.user_id === userId && messenger.type !== 'channel');
+    const isOwner = useMemo(() => {
+        return message.user_id === userId && messenger.type !== 'channel';
     }, [message.user_id, messenger.type, userId]);
-
-    const onEntered = () => {
-        getTitle(refLink, message.user.user_name, 'color');
-    };
 
     const onContextMenu = (event: React.MouseEvent<HTMLDivElement>) => {
         return handleContextMenu({
@@ -35,17 +28,29 @@ const useMessage = (message: MessageSchema) => {
         });
     };
 
+    useEffect(() => {
+        const timeout = setTimeout(() => {
+            if (viewedIds.includes(message.message_id)) return;
+            setAnimation(true);
+
+            const markAsViewed = setTimeout(() => {
+                setViewedIds(prev => [...prev, message.message_id]);
+            }, 200);
+
+            return () => clearTimeout(markAsViewed);
+        }, 200);
+
+        return () => clearTimeout(timeout);
+    }, []);
+
     return {
         contextMenu,
         setContextMenu,
         animation,
         isOwner,
         position,
-        refLink,
         messenger,
-        onEntered,
         onContextMenu,
     };
 };
-
 export default useMessage;

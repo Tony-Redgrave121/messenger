@@ -1,4 +1,5 @@
-import React, { Dispatch, FC, memo, SetStateAction } from 'react';
+import React, { Dispatch, FC, memo, SetStateAction, useState } from 'react';
+import { createPortal } from 'react-dom';
 import {
     HiOutlineArrowLeft,
     HiOutlineArrowRightOnRectangle,
@@ -6,7 +7,7 @@ import {
 } from 'react-icons/hi2';
 import { logout } from '@entities/User';
 import { openForm, useAppDispatch } from '@shared/lib';
-import { DefaultButton, TopBar } from '@shared/ui';
+import { DefaultButton, Popup, PopupConfirmation, TopBar } from '@shared/ui';
 
 interface IProfileTopBarProps {
     setState: Dispatch<SetStateAction<boolean>>;
@@ -20,6 +21,7 @@ interface IProfileTopBarProps {
 
 const ProfileTopBar: FC<IProfileTopBarProps> = memo(({ setState, setFormsState }) => {
     const dispatch = useAppDispatch();
+    const [popup, setPopup] = useState(false);
 
     return (
         <TopBar>
@@ -33,10 +35,22 @@ const ProfileTopBar: FC<IProfileTopBarProps> = memo(({ setState, setFormsState }
                 <DefaultButton foo={() => openForm('profile', setFormsState)}>
                     <HiOutlinePencil />
                 </DefaultButton>
-                <DefaultButton foo={() => dispatch(logout())}>
+                <DefaultButton foo={() => setPopup(prev => !prev)}>
                     <HiOutlineArrowRightOnRectangle />
                 </DefaultButton>
             </span>
+            {createPortal(
+                <Popup state={popup} handleCancel={() => setPopup(false)}>
+                    <PopupConfirmation
+                        title="Log out"
+                        text="Are you sure you want to log out?"
+                        confirmButtonText="log out"
+                        onCancel={() => setPopup(false)}
+                        onConfirm={() => dispatch(logout())}
+                    />
+                </Popup>,
+                document.body,
+            )}
         </TopBar>
     );
 });

@@ -64,7 +64,7 @@ const MessengerSearch: FC<IMessengerSearchProps> = ({
                         ))}
                     </ul>
                 </nav>
-                {searchRes.length > 0 && (
+                {searchRes.length > 0 ? (
                     <div className={style.ListBlock}>
                         <p>Global search</p>
                         {searchRes.map(item => (
@@ -92,6 +92,8 @@ const MessengerSearch: FC<IMessengerSearchProps> = ({
                             </ContactButton>
                         ))}
                     </div>
+                ) : (
+                    <p>Nothing interesting here yet...</p>
                 )}
             </div>
         </CSSTransition>

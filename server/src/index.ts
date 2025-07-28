@@ -35,9 +35,8 @@ app.use(cors({
     origin: process.env.CLIENT_URL
 }))
 app.use('/static', express.static(path.join(__dirname, '../static'), {
-    maxAge: '0',
     setHeaders: (res) => {
-        res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate')
+        res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
     }
 }))
 app.use(fileUpload({}))

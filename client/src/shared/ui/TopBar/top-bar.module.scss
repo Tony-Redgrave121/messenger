@@ -17,14 +17,14 @@
     display: flex;
     align-items: center;
     gap: 24px;
-  }
 
-  p {
-    color: v.$white;
-    font-size: 20px;
-    margin: auto;
-    width: 100%;
-    font-weight: 600;
-    text-transform: capitalize;
+    > p {
+      color: v.$white;
+      font-size: 20px;
+      margin: auto;
+      width: 100%;
+      font-weight: 600;
+      text-transform: capitalize;
+    }
   }
 }

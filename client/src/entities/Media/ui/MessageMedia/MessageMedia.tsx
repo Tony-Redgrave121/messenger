@@ -5,7 +5,7 @@ import { setCurrentSlide, setMessageId, setState } from '@entities/Media/model/s
 import { getExt, useAppDispatch, useLoadBlob } from '@shared/lib';
 import { MessageFileSchema } from '@shared/types';
 import { PlayButton } from '@shared/ui';
-import style from './message-media.module.css';
+import style from './media.module.css';
 
 interface IMessageMediaProps {
     media: MessageFileSchema;

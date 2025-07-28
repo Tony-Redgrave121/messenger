@@ -26,7 +26,15 @@ const MessengerInput: FC<IMessengerInputProps> = memo(
         const members = useMemo(() => {
             if (messenger.type === 'chat') return [messenger.id, userId];
             return messenger.members?.map(({ user }) => user.user_id) ?? [];
-        }, [messenger]);
+        }, [messenger.id, messenger.members, messenger.type, userId]);
+
+        if (typeof buttonState !== 'boolean') {
+            return null;
+        }
+
+        if (messenger.type === 'channel' && !checkRights(messenger.members!, userId)) {
+            return null;
+        }
 
         if (!buttonState) {
             return (
@@ -34,10 +42,6 @@ const MessengerInput: FC<IMessengerInputProps> = memo(
                     {messenger.type === 'chat' ? 'Start conversation' : 'Subscribe'}
                 </SubscribeButton>
             );
-        }
-
-        if (messenger.type === 'channel' && !checkRights(messenger.members!, userId)) {
-            return null;
         }
 
         return (

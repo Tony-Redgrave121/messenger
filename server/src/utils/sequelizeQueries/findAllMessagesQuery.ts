@@ -6,7 +6,7 @@ const findAllMessagesQuery = {
             model: index.message,
             as: 'comments',
             attributes: [],
-            required: false
+            required: false,
         },
         {
             model: index.message_file,
@@ -20,7 +20,7 @@ const findAllMessagesQuery = {
             model: index.message,
             as: 'reply',
             attributes: ['message_id', 'message_text'],
-            include: [{model: index.users, attributes: ['user_id', 'user_name', 'user_img']}]
+            include: [{model: index.users, attributes: ['user_id', 'user_name', 'user_img']}],
         }
     ],
     group: [

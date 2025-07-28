@@ -1,0 +1,15 @@
+@use "../../../../app/styles/variables" as v;
+
+.ShadowBlock {
+  min-height: 80px;
+  width: 100%;
+  background: linear-gradient(120deg, #0001 33%, v.$dark-900 50%, #0001 66%);
+  animation: skeleton 1.5s infinite linear;
+  background-size: 200% 100%;
+
+  @keyframes skeleton {
+    to {
+      background-position-x: -200%;
+    }
+  }
+}

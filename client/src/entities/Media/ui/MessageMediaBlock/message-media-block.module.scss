@@ -12,25 +12,28 @@
     border-radius: 7.5px 7.5px 0 0;
   }
 
+  > div, img,
+  section {
+    height: 225px;
+  }
+
   img,
   section {
-    border: 2px solid v.$dark-1000;
-    height: auto;
+    border: .5px solid v.$dark-1000;
     object-fit: cover;
-    max-height: 300px;
     width: 100%;
   }
 
   > span {
     display: flex;
     width: 100%;
-    max-height: 137.5px;
+    height: 137.5px;
 
     img {
       flex-shrink: 1;
       max-width: 100%;
       min-width: 0;
-      min-height: 100px;
+      height: 137.5px;
     }
   }
 }

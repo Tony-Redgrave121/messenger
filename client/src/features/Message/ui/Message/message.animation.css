@@ -11,19 +11,24 @@
     transform 0.2s ease-in-out;
 }
 
-.message-scale-node-exit {
+.message-scale-node-enter-done {
   opacity: 1;
+  transform: scale(1);
 }
 
-.message-scale-node-exit-active {
-  opacity: 0;
-  transform: scale(0);
-  transition:
-    opacity 0.3s ease-in-out,
-    transform 0.2s ease-in-out;
-}
+/*.message-scale-node-exit {*/
+/*  opacity: 1;*/
+/*}*/
 
-.message-scale-node-exit-done {
-  opacity: 0;
-  transform: scale(0);
-}
+/*.message-scale-node-exit-active {*/
+/*  opacity: 0;*/
+/*  transform: scale(0);*/
+/*  transition:*/
+/*    opacity 0.3s ease-in-out,*/
+/*    transform 0.2s ease-in-out;*/
+/*}*/
+
+/*.message-scale-node-exit-done {*/
+/*  opacity: 0;*/
+/*  transform: scale(0);*/
+/*}*/

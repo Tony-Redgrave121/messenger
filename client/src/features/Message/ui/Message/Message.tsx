@@ -1,6 +1,6 @@
 import { clsx } from 'clsx';
-import React, { FC, memo, useRef, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import React, { Dispatch, FC, memo, SetStateAction, useRef, useState } from 'react';
+import { useParams } from 'react-router-dom';
 import { CSSTransition } from 'react-transition-group';
 import useMessage from '@features/Message/lib/hooks/useMessage';
 import { useMessageContext } from '@features/Message/lib/hooks/useMessageContext';
@@ -8,34 +8,28 @@ import CommentLink from '@features/Message/ui/CommentLink/CommentLink';
 import DropDownMessage from '@features/Message/ui/Message/DropDownMessage';
 import DropDownReactions from '@features/Message/ui/Message/DropDownReactions';
 import MessageFiles from '@features/Message/ui/MessageFiles/MessageFiles';
-import OwnerLink from '@features/Message/ui/OwnerLink/OwnerLink';
-import { ReplyBlock } from '@entities/Message';
+import OwnerImageLink from '@features/Message/ui/OwnerImageLink/OwnerImageLink';
+import OwnerNameLink from '@features/Message/ui/OwnerNameLink/OwnerNameLink';
+import { ReplyBlock, OGAttachment } from '@entities/Message';
 import { ReactionsBlock } from '@entities/Reaction';
 import { getTime } from '@shared/lib';
 import { MessageSchema } from '@shared/types';
 import style from '../message.module.css';
 import './message.animation.css';
-import OgAttachment from '@entities/Message/ui/OGAttachment/OGAttachment';
 
 interface IMessageProps {
     message: MessageSchema;
+    viewedIds: string[];
+    setViewedIds: Dispatch<SetStateAction<string[]>>;
 }
 
-const Message: FC<IMessageProps> = memo(({ message }) => {
+const Message: FC<IMessageProps> = memo(({ message, viewedIds, setViewedIds }) => {
     const [reactionMenu, setReactionMenu] = useState(false);
     const refMessage = useRef<HTMLDivElement>(null);
 
-    const {
-        contextMenu,
-        setContextMenu,
-        animation,
-        isOwner,
-        position,
-        refLink,
-        messenger,
-        onEntered,
-        onContextMenu,
-    } = useMessage(message);
+    const { contextMenu, setContextMenu, animation, isOwner, position, messenger, onContextMenu } =
+        useMessage(message, viewedIds, setViewedIds);
+
     const { socketRef } = useMessageContext();
     const { postId } = useParams();
 
@@ -43,13 +37,15 @@ const Message: FC<IMessageProps> = memo(({ message }) => {
         <CSSTransition
             in={animation}
             nodeRef={refMessage}
-            timeout={200}
+            timeout={100}
             classNames="message-scale-node"
-            unmountOnExit
-            onEntered={onEntered}
         >
             <div
-                className={clsx(style.MessageContainer, isOwner && style.OwnerMessageContainer)}
+                className={clsx(
+                    style.MessageContainer,
+                    isOwner && style.OwnerMessageContainer,
+                    viewedIds.includes(message.message_id) && style.ShowMessageContainer,
+                )}
                 ref={refMessage}
                 id={message.message_id}
             >
@@ -59,7 +55,7 @@ const Message: FC<IMessageProps> = memo(({ message }) => {
                         isOwner && style.OwnerMessageInnerBlock,
                     )}
                 >
-                    <OwnerLink isOwner={isOwner} message={message} messenger={messenger} />
+                    <OwnerImageLink isOwner={isOwner} message={message} messenger={messenger} />
                     <div className={style.MessageWrapper}>
                         <div
                             className={clsx(
@@ -71,19 +67,7 @@ const Message: FC<IMessageProps> = memo(({ message }) => {
                             )}
                         >
                             <ReplyBlock message={message} />
-                            {!isOwner && (
-                                <>
-                                    {messenger.type !== 'channel' ? (
-                                        <Link to={`/chat/${message.user.user_id}`} ref={refLink}>
-                                            {message.user.user_name}
-                                        </Link>
-                                    ) : (
-                                        <Link to={''} ref={refLink}>
-                                            {messenger.name}
-                                        </Link>
-                                    )}
-                                </>
-                            )}
+                            {!isOwner && <OwnerNameLink message={message} messenger={messenger} />}
                             <div className={style.MessageBlock} onContextMenu={onContextMenu}>
                                 <MessageFiles message={message} />
                                 <p>
@@ -106,7 +90,7 @@ const Message: FC<IMessageProps> = memo(({ message }) => {
                                     setReactionMenu={setReactionMenu}
                                 />
                             </div>
-                            <OgAttachment text={message.message_text} />
+                            <OGAttachment text={message.message_text} />
                         </div>
                         <CommentLink messengerType={messenger.type} message={message} />
                     </div>

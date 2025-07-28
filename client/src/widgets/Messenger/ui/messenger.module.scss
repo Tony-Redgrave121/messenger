@@ -2,8 +2,7 @@
 
 .MessengerContainer {
   display: flex;
-  align-items: center;
-  flex-direction: column;
+  justify-content: center;
   width: 100%;
   height: 100%;
   transition: 0.3s all ease-in-out;
@@ -12,18 +11,19 @@
 
   .MessageBlock {
     position: absolute;
-    display: flex;
-    align-items: start;
-    flex-direction: column;
-    gap: 8px;
     color: v.$white;
     width: 100%;
-    bottom: 65px;
-    max-height: calc(100% - 65px);
+    bottom: 70px;
+    height: calc(100% - 125px);
     overflow-y: scroll;
-    scroll-behavior: smooth;
+    //scroll-behavior: smooth;
     max-width: 700px;
-    padding: 64px 8px 8px;
+    padding: 8px;
+  }
+
+  .ChannelMessageBlock {
+    max-height: 100%;
+    bottom: 0;
   }
 
   > :last-child {

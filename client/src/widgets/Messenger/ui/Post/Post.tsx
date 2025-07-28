@@ -1,5 +1,6 @@
 import React, { FC, ReactNode, useState } from 'react';
 import useFetchPost from '@widgets/Messenger/lib/hooks/useFetchPost';
+import useInfiniteMessages from '@widgets/Messenger/lib/hooks/useInfiniteMessages';
 import { useFetchInitialData } from '@features/EditMessenger';
 import { MessagesList } from '@features/Message';
 import { InputBlock } from '@features/MessengerInput';
@@ -13,8 +14,9 @@ interface IPostProps {
 const Post: FC<IPostProps> = ({ children }) => {
     const [reply, setReply] = useState<MessageSchema | null>(null);
 
-    const { messenger, reactions, messagesList, setMessagesList, socketRef } =
-        useFetchInitialData();
+    const { messenger, reactions } = useFetchInitialData();
+    const { messagesList, setMessagesList, socketRef } = useInfiniteMessages();
+
     const { channelPost } = useFetchPost(setMessagesList);
 
     return (

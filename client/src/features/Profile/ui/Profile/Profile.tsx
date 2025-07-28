@@ -8,6 +8,7 @@ import { deleteAccount } from '@entities/User';
 import { useAppDispatch, useAppSelector, useLoadBlob } from '@shared/lib';
 import { Caption, Popup, PopupConfirmation, Sidebar } from '@shared/ui';
 import '../profile.animation.css';
+import { createPortal } from 'react-dom';
 
 interface IProfileProps {
     state: boolean;
@@ -68,15 +69,18 @@ const Profile: FC<IProfileProps> = memo(({ state, setState }) => {
                         refSidebar={refEditProfile}
                     />
                 </Suspense>
-                <Popup state={popup} handleCancel={() => setPopup(false)}>
-                    <PopupConfirmation
-                        title="Delete Account"
-                        text="Are you sure you want to permanently delete all your data?"
-                        confirmButtonText="delete"
-                        onCancel={() => setPopup(false)}
-                        onConfirm={() => dispatch(deleteAccount({ user_id: userId }))}
-                    />
-                </Popup>
+                {createPortal(
+                    <Popup state={popup} handleCancel={() => setPopup(false)}>
+                        <PopupConfirmation
+                            title="Delete Account"
+                            text="Are you sure you want to permanently delete all your data?"
+                            confirmButtonText="delete"
+                            onCancel={() => setPopup(false)}
+                            onConfirm={() => dispatch(deleteAccount({ user_id: userId }))}
+                        />
+                    </Popup>,
+                    document.body,
+                )}
             </Sidebar>
         </CSSTransition>
     );

@@ -22,7 +22,7 @@ interface ExtendedWebSocket extends WebSocket {
 }
 
 interface ILastSeenData {
-    members: string[],
+    messenger_members: string[],
     userId: string,
     date: string,
 }
@@ -50,8 +50,8 @@ const liveUpdatesHandlerWS = (aWss: WebSocketServer) => {
     }
 
     const handleBroadcastToMembers = (message: JoinMessage | UpdateLastMessage | UpdateLastSeen) => {
-        const {members, ...restData} = message.data
-        if (!members || members.length <= 0) return
+        const {messenger_members, ...restData} = message.data
+        if (!messenger_members || messenger_members.length <= 0) return
 
         const payload = JSON.stringify({
             method: message.method,
@@ -61,7 +61,7 @@ const liveUpdatesHandlerWS = (aWss: WebSocketServer) => {
         aWss.clients.forEach((client: ExtendedWebSocket) => {
             if (!client.user_id) return
 
-            if (members.includes(client.user_id)) {
+            if (messenger_members.includes(client.user_id)) {
                 client.send(payload)
             }
         })

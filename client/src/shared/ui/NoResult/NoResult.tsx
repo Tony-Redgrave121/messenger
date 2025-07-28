@@ -12,8 +12,12 @@ const NoResult: FC<INoResultProps> = ({ filter }) => {
             <HiMagnifyingGlass />
             <h1>No Results</h1>
             <p>
-                There were no results for &#34;{filter}&#34;.
-                <br /> Try a new search.
+                {filter && (
+                    <>
+                        There were no results for &#34;{filter}&#34;. <br />{' '}
+                    </>
+                )}
+                Try a new search.
             </p>
         </div>
     );

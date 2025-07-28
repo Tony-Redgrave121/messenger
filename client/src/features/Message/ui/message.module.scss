@@ -2,6 +2,7 @@
 
 .MessageContainer {
   transform-origin: bottom left;
+  opacity: 0;
 
   .MessageInnerBlock {
     display: flex;
@@ -50,7 +51,6 @@
       }
 
       .OwnerMessageContent {
-        background-color: v.$dark-1000;
         border-radius: 15px 15px 0 15px;
       }
 
@@ -63,6 +63,10 @@
   .OwnerMessageInnerBlock {
     justify-content: end;
   }
+}
+
+.ShowMessageContainer {
+  opacity: 1;
 }
 
 .OwnerMessageContainer {

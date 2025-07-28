@@ -9,7 +9,7 @@ const useSubscribeToMessenger = (
     messenger: AdaptMessengerSchema,
     messagesList: MessageSchema[],
 ) => {
-    const [buttonState, setButtonState] = useState(false);
+    const [buttonState, setButtonState] = useState<boolean | null>(null);
     const { getSignal } = useAbortController();
 
     const userId = useAppSelector(state => state.user.userId);
@@ -42,7 +42,7 @@ const useSubscribeToMessenger = (
         ) {
             setButtonState(true);
         } else setButtonState(false);
-    }, [messenger]);
+    }, [messenger, messagesList, userId]);
 
     return { buttonState, subscribeToMessenger };
 };

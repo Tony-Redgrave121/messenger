@@ -4,6 +4,7 @@ import sharp from "sharp";
 import ApiError from "../errors/apiError";
 import {Response} from "express";
 import ffmpeg from 'fluent-ffmpeg';
+import stream from 'stream';
 
 class FileService {
     public getFile = async (filepath: string, filename: string, quality: number, res: Response) => {
@@ -24,14 +25,21 @@ class FileService {
         }
 
         if (isVideo && quality < 100) {
-            return ffmpeg(originalPath)
+            const passthrough = new stream.PassThrough();
+            ffmpeg(originalPath)
                 .outputOptions([
                     '-vframes 1',
-                    '-q:v 15',
-                    '-s 400x400'
+                    '-q:v 5',
+                    '-vf scale=400:-1'
                 ])
                 .format('mjpeg')
-                .pipe(res, { end: true });
+                .on('error', (err) => {
+                    console.error('FFmpeg error:', err.message);
+                    res.sendStatus(500);
+                })
+                .pipe(passthrough);
+
+            return passthrough.pipe(res);
         }
 
         return fs.createReadStream(originalPath).pipe(res);

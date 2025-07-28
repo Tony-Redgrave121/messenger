@@ -44,7 +44,7 @@ const DropDownMessage: FC<IDropDownMessageProps> = ({
             socketRef.current.send(
                 JSON.stringify({
                     messenger_id: `${messengerId}${postId ? `/${postId}` : ''}`,
-                    userId: userId,
+                    user_id: userId,
                     method: 'REMOVE_MESSAGE',
                     data: messageDelete.data,
                 }),

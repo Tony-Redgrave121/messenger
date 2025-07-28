@@ -2,7 +2,7 @@
 
 .InputContainer {
   position: absolute;
-  bottom: 15px;
+  bottom: 20px;
   display: flex;
   gap: 8px;
   justify-content: space-between;
@@ -17,7 +17,7 @@
     width: 100%;
     background-color: v.$dark-1000;
     border-radius: 18px;
-    padding: 5px 8px;
+    padding: 4px 8px;
 
     .ReplyBlock {
       display: flex;

@@ -15,7 +15,14 @@ import IPostMessage from "../types/messageTypes/IPostMessage";
 import IFile from "../types/fileTypes/IFile";
 
 class MessageService {
-    public async fetchMessages(type: string, user_id: string, messenger_id: string, post_id?: string) {
+    public async fetchMessages(
+        type: string,
+        user_id: string,
+        messenger_id: string,
+        offset: string,
+        post_id?: string,
+        limit?: string,
+    ) {
         const whereBase = type !== "chat" ?
             {
                 messenger_id: messenger_id,
@@ -33,19 +40,43 @@ class MessageService {
                 ]
             }
 
-        const messages = await index.message.findAll({
+        const limitNumber = limit ? Number(limit) : 20
+        const totalCount = await index.message.count({where: whereBase})
+        const totalOffset = totalCount - limitNumber - Number(offset)
+
+        const totalLimit = totalOffset < 0 ? limitNumber + totalOffset : limitNumber
+
+        console.log(totalOffset)
+        console.log(totalLimit)
+
+        const messageIds = await index.message.findAll({
             where: whereBase,
+            order: [['message_date', 'ASC']],
+            limit: totalLimit > 0 ? totalLimit : 0,
+            attributes: ['message_id'],
+            offset: totalOffset > 0 ? totalOffset : 0,
+        });
+
+        const messageIdsPlain = convertToPlain<IMessageId>(messageIds)
+
+        const messages = await index.message.findAll({
+            where: {
+                message_id: messageIdsPlain.map(m => m.message_id),
+            },
             ...findAllMessagesQuery,
             attributes: {
                 include: [[Sequelize.fn("COUNT", Sequelize.col("comments.parent_post_id")), "comments_count"]]
             },
             order: [['message_date', 'ASC']],
-        })
+        });
 
         const messagesPlain = convertToPlain<IMessagesResponse>(messages)
-        return await Promise.all(
-            messagesPlain.map(async m => normalizeMessage(m))
-        )
+        return {
+            totalCount,
+            messages: await Promise.all(
+                messagesPlain.map(async m => normalizeMessage(m))
+            )
+        }
     }
 
     public async fetchMessage(message_id: string, messenger_id: string) {

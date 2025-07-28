@@ -9,20 +9,30 @@ class MessageController {
 
     public fetchMessages = async (req: Request, res: Response, next: NextFunction) => {
         try {
-            const validatedData = validateQueryParams(req.query, ['type', 'user_id', 'messenger_id'])
-            const {type, user_id, messenger_id} = validatedData
-            const {post_id} = req.query
 
-            if (typeof post_id !== "undefined" && typeof post_id !== "string") {
-                return next(ApiError.badRequest('Missing required fields'))
-            }
-
-            const messages = await this.messageService.fetchMessages(type, user_id, messenger_id, post_id)
-
-            res.json(messages)
         } catch (e) {
             next(e)
         }
+
+        const validatedData = validateQueryParams(req.query, ['type', 'user_id', 'offset'])
+        const {type, user_id, offset} = validatedData
+        const {post_id, limit} = req.query
+
+        const messenger_id = req.params.messenger_id
+
+        if (
+            typeof post_id !== "undefined" && typeof post_id !== "string" ||
+            typeof limit !== "undefined" && typeof limit !== "string"
+        ) {
+            return next(ApiError.badRequest('Missing required fields'))
+        }
+
+        const data = await this.messageService.fetchMessages(type, user_id, messenger_id, offset, post_id, limit)
+
+        res.setHeader('Access-Control-Expose-Headers', 'x-total-count');
+        res.setHeader('x-total-count', data.totalCount)
+
+        res.json(data.messages)
     };
 
     public fetchMessage = async (req: Request, res: Response, next: NextFunction) => {

@@ -40,6 +40,7 @@ const useMessageWS = () => {
                     setMessagesList(prev => [...prev, message.data]);
                     break;
                 case 'REMOVE_MESSAGE':
+                    console.log(message.data);
                     setMessagesList(prev => prev.filter(msg => msg.message_id !== message.data));
                     break;
                 case 'ADD_REACTION':

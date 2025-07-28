@@ -14,7 +14,7 @@ import {
     Sidebar,
     TopBar,
 } from '@shared/ui';
-import style from './style.module.css';
+import style from './edit-profile.module.css';
 import '../profile.animation.css';
 
 interface IProfileProps {

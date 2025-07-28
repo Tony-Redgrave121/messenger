@@ -1,12 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { setPopupChildren, setPopupState, useMessageWS } from '@entities/Message';
-import {
-    fetchMessagesApi,
-    fetchMessengerApi,
-    mapMessengerDTO,
-    AdaptMessengerSchema,
-} from '@entities/Messenger';
+import { setPopupChildren, setPopupState } from '@entities/Message';
+import { fetchMessengerApi, mapMessengerDTO, AdaptMessengerSchema } from '@entities/Messenger';
 import { getReactionsApi } from '@entities/Reaction';
 import { isServerError, useAppDispatch, useAppSelector, useAbortController } from '@shared/lib';
 import { ReactionSchema } from '@shared/types';
@@ -29,11 +24,9 @@ const useFetchInitialData = () => {
     const [messenger, setMessenger] = useState<AdaptMessengerSchema>(InitialMessenger);
 
     const { messengerId, type, postId } = useParams();
-    const user = useAppSelector(state => state.user);
+    const userId = useAppSelector(state => state.user.userId);
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
-
-    const { socketRef, messagesList, setMessagesList } = useMessageWS();
 
     const { getSignal } = useAbortController();
 
@@ -46,13 +39,10 @@ const useFetchInitialData = () => {
             return;
         }
 
-        const handleMessageList = async () => {
-            setMessagesList([]);
-
+        const handleFetching = async () => {
             try {
-                const [messenger, messages, reactions] = await Promise.all([
-                    fetchMessengerApi(user.userId, type, messengerId, signal),
-                    fetchMessagesApi(user.userId, type, messengerId, postId, signal),
+                const [messenger, reactions] = await Promise.all([
+                    fetchMessengerApi(userId, type, messengerId, signal),
                     getReactionsApi(
                         type === 'channel' && messengerId ? messengerId : undefined,
                         signal,
@@ -63,7 +53,6 @@ const useFetchInitialData = () => {
 
                 if (adaptMessenger.id) {
                     setMessenger(adaptMessenger);
-                    setMessagesList(prev => [...prev, ...messages.data]);
                     setReactions(reactions.data);
                 }
             } catch (error) {
@@ -75,16 +64,13 @@ const useFetchInitialData = () => {
             }
         };
 
-        handleMessageList();
+        handleFetching();
     }, [messengerId, postId]);
 
     return {
         messenger,
         setMessenger,
         reactions,
-        messagesList,
-        setMessagesList,
-        socketRef,
     };
 };
 

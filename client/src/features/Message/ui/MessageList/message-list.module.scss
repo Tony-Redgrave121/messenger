@@ -1,0 +1,13 @@
+@use "../../../../app/styles/variables" as v;
+
+.VirtuosoContainer {
+  height: 100%;
+  width: 100%;
+
+  > div > div {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    width: 100%;
+  }
+}

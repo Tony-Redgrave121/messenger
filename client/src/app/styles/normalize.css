@@ -141,7 +141,6 @@ section {
 }
 
 html {
-  scroll-behavior: smooth;
   scrollbar-width: thin;
   scrollbar-color: #2d2d2d transparent;
 }
