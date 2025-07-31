@@ -97,6 +97,21 @@ class MessengerManagementController {
             return next(e)
         }
     };
+    public fetchNotifications = async (req: Request, res: Response, next: NextFunction) => {
+        try {
+
+        } catch (e) {
+            return next(e)
+        }
+
+        const {user_id} = req.params
+        ensureRequiredFields([user_id])
+
+        const {messengers} = req.body
+
+        const notifications = await this.messengerManagementService.fetchNotifications(messengers, user_id)
+        res.json(notifications)
+    };
 }
 
 export default MessengerManagementController

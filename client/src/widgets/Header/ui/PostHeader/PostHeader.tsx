@@ -2,7 +2,7 @@ import { memo, useState } from 'react';
 import { HiOutlineMagnifyingGlass, HiOutlineXMark, HiOutlineArrowLeft } from 'react-icons/hi2';
 import { useNavigate } from 'react-router-dom';
 import { useFetchInitialData } from '@features/EditMessenger';
-import { SearchMessage } from '@features/SearchMessage';
+import { MessageSearch } from '@features/MessageSearch';
 import { setWrapperState } from '@entities/Messenger';
 import { useAppDispatch } from '@shared/lib';
 import { DefaultButton } from '@shared/ui';
@@ -32,7 +32,7 @@ const PostHeader = memo(() => {
                 <HiOutlineArrowLeft />
             </DefaultButton>
             <p>Comments</p>
-            <SearchMessage messenger={messenger} state={inputState} setState={setInputState} />
+            <MessageSearch messenger={messenger} state={inputState} setState={setInputState} />
             <span>
                 <DefaultButton foo={() => setInputState(!inputState)}>
                     {inputState ? <HiOutlineXMark /> : <HiOutlineMagnifyingGlass />}

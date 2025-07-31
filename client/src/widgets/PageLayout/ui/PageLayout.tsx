@@ -1,4 +1,5 @@
 import React, { FC, lazy, ReactNode, Suspense } from 'react';
+import { LiveUpdatesContext, useLiveUpdatesWS } from '@entities/Messenger';
 import style from './layout.module.css';
 
 const PopupMessage = lazy(() => import('@entities/Message/ui/PopupMessage/PopupMessage'));
@@ -9,9 +10,17 @@ interface IPageLayoutProps {
 }
 
 const PageLayout: FC<IPageLayoutProps> = ({ children }) => {
+    const { socketRef } = useLiveUpdatesWS();
+
     return (
         <div className={style.LayoutContainer}>
-            <div className={style.Layout}>{children}</div>
+            <LiveUpdatesContext.Provider
+                value={{
+                    socketRef: socketRef,
+                }}
+            >
+                <div className={style.Layout}>{children}</div>
+            </LiveUpdatesContext.Provider>
             <Suspense>
                 <PopupMessage />
                 <Slider />

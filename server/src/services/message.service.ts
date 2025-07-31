@@ -46,9 +46,6 @@ class MessageService {
 
         const totalLimit = totalOffset < 0 ? limitNumber + totalOffset : limitNumber
 
-        console.log(totalOffset)
-        console.log(totalLimit)
-
         const messageIds = await index.message.findAll({
             where: whereBase,
             order: [['message_date', 'ASC']],

@@ -3,7 +3,7 @@ import { HiOutlineArrowRight, HiOutlineXMark } from 'react-icons/hi2';
 import { useParams } from 'react-router-dom';
 import { AddContact } from '@entities/Contact';
 import { postContactsMembersApi } from '@entities/Member';
-import { useLiveUpdatesWS, MessengerSettingsSchema } from '@entities/Messenger';
+import { MessengerSettingsSchema, useLiveUpdatesContext } from '@entities/Messenger';
 import { useAbortController, useAppSelector } from '@shared/lib';
 import { ContactSchema } from '@shared/types';
 import { CreateButton, DefaultButton } from '@shared/ui';
@@ -16,10 +16,11 @@ interface IPopupEditSubscribersProps {
 
 const PopupEditSubscribers: FC<IPopupEditSubscribersProps> = ({ handleCancel, setSettings }) => {
     const [members, setMembers] = useState<ContactSchema[]>([]);
+
     const { messengerId } = useParams();
     const { getSignal } = useAbortController();
+    const { socketRef } = useLiveUpdatesContext();
 
-    const socketRef = useLiveUpdatesWS();
     const messengers = useAppSelector(state => state.messenger.messengers);
     const userId = useAppSelector(state => state.user.userId);
 
@@ -38,8 +39,8 @@ const PopupEditSubscribers: FC<IPopupEditSubscribersProps> = ({ handleCancel, se
                 members: [...prev.members, ...newMembers.data],
             }));
 
-            if (socketRef?.readyState === WebSocket.OPEN) {
-                socketRef.send(
+            if (socketRef.current?.readyState === WebSocket.OPEN) {
+                socketRef.current.send(
                     JSON.stringify({
                         user_id: userId,
                         method: 'JOIN_TO_MESSENGER',

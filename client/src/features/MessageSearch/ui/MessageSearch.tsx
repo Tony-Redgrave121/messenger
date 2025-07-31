@@ -12,9 +12,9 @@ import React, {
 import { HiOutlineXMark } from 'react-icons/hi2';
 import { useParams } from 'react-router-dom';
 import { CSSTransition } from 'react-transition-group';
-import getFilteredMessagesApi from '@features/SearchMessage/api/getFilteredMessagesApi';
-import { AdaptMessengerSchema } from '@entities/Messenger';
-import { useAbortController, getDate, scrollInto, useAppSelector } from '@shared/lib';
+import getFilteredMessagesApi from '@features/MessageSearch/api/getFilteredMessagesApi';
+import { AdaptMessengerSchema, useMessengerContext } from '@entities/Messenger';
+import { useAbortController, getDate, useAppSelector } from '@shared/lib';
 import { MessageSchema } from '@shared/types';
 import { DefaultButton, LoadFile, SearchBar } from '@shared/ui';
 import style from './style.module.css';
@@ -26,8 +26,9 @@ interface IChatHeader {
     setState: Dispatch<SetStateAction<boolean>>;
 }
 
-const SearchMessage: FC<IChatHeader> = memo(({ messenger, state, setState }) => {
+const MessageSearch: FC<IChatHeader> = memo(({ messenger, state, setState }) => {
     const [searchRes, setSearchRes] = useState<MessageSchema[]>([]);
+    const [messageId, setMessageId] = useState('');
     const [filter, setFilter] = useState('');
 
     const searchRef = useRef<HTMLDivElement>(null);
@@ -35,6 +36,7 @@ const SearchMessage: FC<IChatHeader> = memo(({ messenger, state, setState }) => 
 
     const { type, messengerId, postId } = useParams();
     const { getSignal } = useAbortController();
+    const { refVirtuoso, messagesList, handleFetching } = useMessengerContext();
 
     const userId = useAppSelector(state => state.user.userId);
 
@@ -95,11 +97,24 @@ const SearchMessage: FC<IChatHeader> = memo(({ messenger, state, setState }) => 
         setSearchRes([]);
     }, [messengerId]);
 
-    const onClick = (message_id: string) => {
-        setState(false);
-        scrollInto(message_id);
-        setSearchRes([]);
-    };
+    useEffect(() => {
+        if (!messageId) return;
+
+        const index = messagesList.findIndex(m => m.message_id === messageId);
+
+        if (index !== -1) {
+            setTimeout(
+                () => refVirtuoso.current?.scrollToIndex({ index: index, behavior: 'smooth' }),
+                300,
+            );
+
+            setState(false);
+            setSearchRes([]);
+            setMessageId('');
+        } else {
+            handleFetching();
+        }
+    }, [messagesList, messageId, setState, refVirtuoso, handleFetching]);
 
     return (
         <CSSTransition
@@ -127,7 +142,7 @@ const SearchMessage: FC<IChatHeader> = memo(({ messenger, state, setState }) => 
                             <button
                                 key={message.user.user_id + message.message_id}
                                 className={style.SearchedMessage}
-                                onClick={() => onClick(message.message_id)}
+                                onClick={() => setMessageId(message.message_id)}
                             >
                                 <div className={style.MessageInfo}>
                                     {messenger.type === 'channel' && !postId ? (
@@ -168,6 +183,6 @@ const SearchMessage: FC<IChatHeader> = memo(({ messenger, state, setState }) => 
     );
 });
 
-SearchMessage.displayName = 'SearchMessage';
+MessageSearch.displayName = 'SearchMessage';
 
-export default SearchMessage;
+export default MessageSearch;

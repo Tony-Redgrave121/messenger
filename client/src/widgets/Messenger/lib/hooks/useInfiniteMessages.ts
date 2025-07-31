@@ -10,7 +10,7 @@ const useInfiniteMessages = (refContainer: RefObject<HTMLElement | null>) => {
     const [firstMount, setFirstMount] = useState(true);
 
     const offsetRef = useRef(0);
-    const { socketRef, messagesList, setMessagesList } = useMessageWS();
+    const { socketRef, messagesList, setMessagesList } = useMessageWS(setTotalCount);
 
     const userId = useAppSelector(state => state.user.userId);
     const { getSignal } = useAbortController();

@@ -1,11 +1,11 @@
-import { useEffect, useRef, useState } from 'react';
+import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useAppSelector } from '@shared/lib';
 import { MessageSchema } from '@shared/types';
 
 const SERVER_DOMAIN_NAME = process.env.VITE_SERVER_DOMAIN_NAME;
 
-const useMessageWS = () => {
+const useMessageWS = (setTotalCount: Dispatch<SetStateAction<number>>) => {
     const [messagesList, setMessagesList] = useState<MessageSchema[]>([]);
 
     const socketRef = useRef<WebSocket | null>(null);
@@ -37,10 +37,11 @@ const useMessageWS = () => {
                 case 'CONNECTION':
                     break;
                 case 'POST_MESSAGE':
+                    setTotalCount(prev => prev + 1);
                     setMessagesList(prev => [...prev, message.data]);
                     break;
                 case 'REMOVE_MESSAGE':
-                    console.log(message.data);
+                    setTotalCount(prev => prev - 1);
                     setMessagesList(prev => prev.filter(msg => msg.message_id !== message.data));
                     break;
                 case 'ADD_REACTION':
@@ -155,7 +156,7 @@ const useMessageWS = () => {
         return () => {
             if (socket.readyState === 1) socket.close();
         };
-    }, [user.userId, messengerId, postId]);
+    }, [user.userId, messengerId, postId, setTotalCount]);
 
     return {
         socketRef,

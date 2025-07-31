@@ -33,7 +33,7 @@ const ChatBlock: FC<IChatBlockProps> = memo(({ messenger }) => {
                 </span>
                 <span className={style.MessageInfo}>
                     {lastMessage && <p>{lastMessageText}</p>}
-                    {notificationCount > 0 && <b>{notificationCount}</b>}
+                    {notificationCount.count > 0 && <b>{notificationCount.count}</b>}
                 </span>
             </div>
         </Link>

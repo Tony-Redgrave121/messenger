@@ -16,13 +16,12 @@
     bottom: 70px;
     height: calc(100% - 125px);
     overflow-y: scroll;
-    //scroll-behavior: smooth;
     max-width: 700px;
     padding: 8px;
   }
 
   .ChannelMessageBlock {
-    max-height: 100%;
+    height: calc(100% - 55px);
     bottom: 0;
   }
 

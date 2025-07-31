@@ -1,5 +1,6 @@
 import { clsx } from 'clsx';
 import React, { Dispatch, FC, memo, SetStateAction, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { useParams } from 'react-router-dom';
 import { CSSTransition } from 'react-transition-group';
 import useMessage from '@features/Message/lib/hooks/useMessage';
@@ -37,7 +38,7 @@ const Message: FC<IMessageProps> = memo(({ message, viewedIds, setViewedIds }) =
         <CSSTransition
             in={animation}
             nodeRef={refMessage}
-            timeout={100}
+            timeout={200}
             classNames="message-scale-node"
         >
             <div

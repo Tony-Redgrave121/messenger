@@ -5,7 +5,7 @@ import getHeaderDesc from '@widgets/Header/lib/getHeaderDesc';
 import getImagePath from '@widgets/Header/lib/getImagePath';
 import HeaderDropDown from '@widgets/Header/ui/MessengerHeader/HeaderDropDown';
 import { useFetchInitialData } from '@features/EditMessenger';
-import { SearchMessage } from '@features/SearchMessage';
+import { MessageSearch } from '@features/MessageSearch';
 import { setSidebarLeft, setSidebarRight } from '@entities/Messenger';
 import { useAppDispatch, useAppSelector } from '@shared/lib';
 import { DefaultButton, LoadFile } from '@shared/ui';
@@ -35,7 +35,7 @@ const MessengerHeader = memo(() => {
                     <p>{getHeaderDesc(messenger)}</p>
                 </div>
             </button>
-            <SearchMessage messenger={messenger} state={inputState} setState={setInputState} />
+            <MessageSearch messenger={messenger} state={inputState} setState={setInputState} />
             <span>
                 <DefaultButton foo={() => setInputState(true)}>
                     <HiOutlineMagnifyingGlass />

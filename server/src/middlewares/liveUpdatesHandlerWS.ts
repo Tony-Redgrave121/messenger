@@ -51,6 +51,7 @@ const liveUpdatesHandlerWS = (aWss: WebSocketServer) => {
 
     const handleBroadcastToMembers = (message: JoinMessage | UpdateLastMessage | UpdateLastSeen) => {
         const {messenger_members, ...restData} = message.data
+
         if (!messenger_members || messenger_members.length <= 0) return
 
         const payload = JSON.stringify({

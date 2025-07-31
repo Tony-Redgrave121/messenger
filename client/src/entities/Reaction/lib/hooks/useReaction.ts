@@ -39,6 +39,7 @@ const useReaction = () => {
                             user_id: user_id,
                             reaction: reaction,
                             users_ids: messageReaction.users_ids,
+                            recipient_user_id: message.recipient_user_id,
                         },
                     }),
                 );
@@ -63,6 +64,7 @@ const useReaction = () => {
                                 user_id: user_id,
                                 reaction: reactionResponse.data,
                                 users_ids: messageReaction?.users_ids ?? [],
+                                recipient_user_id: message.recipient_user_id,
                             },
                         }),
                     );

@@ -13,11 +13,13 @@ interface IMainContainerProps {
 const Main: FC<IMainContainerProps> = ({ children }) => {
     const wrapperRef = useRef<HTMLDivElement>(null);
     const wrapperState = useAppSelector(state => state.wrapper.wrapperState);
+    const userId = useAppSelector(state => state.user.userId);
+
     const dispatch = useAppDispatch();
 
     useEffect(() => {
-        dispatch(syncNotifications());
-    }, []);
+        dispatch(syncNotifications({ user_id: userId }));
+    }, [dispatch, userId]);
 
     return (
         <main style={{ backgroundImage: `url('${img}')` }} className={style.MainContainer}>

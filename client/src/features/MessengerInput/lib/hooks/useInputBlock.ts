@@ -2,7 +2,7 @@ import { ChangeEvent, useCallback, useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import postMessageApi from '@features/MessengerInput/api/postMessageApi';
 import InputBlockSchema from '@features/MessengerInput/model/types/InputBlockSchema';
-import { useLiveUpdatesWS } from '@entities/Messenger';
+import { useLiveUpdatesContext } from '@entities/Messenger';
 import { getFileObject, useAppSelector } from '@shared/lib';
 import { FileStateSchema } from '@shared/types';
 
@@ -23,7 +23,7 @@ const useInputBlock = ({ reply, setReply, socketRef, members }: InputBlockSchema
 
     const { type, messengerId, postId } = useParams();
     const userId = useAppSelector(state => state.user.userId);
-    const liveSocketRef = useLiveUpdatesWS();
+    const liveUpdates = useLiveUpdatesContext();
 
     useEffect(() => {
         if (filesState.files) setFilesState(prev => ({ ...prev, popup: true }));
@@ -85,14 +85,15 @@ const useInputBlock = ({ reply, setReply, socketRef, members }: InputBlockSchema
                 );
             }
 
-            if (!postId && liveSocketRef?.readyState === WebSocket.OPEN) {
+            if (!postId && liveUpdates.socketRef.current?.readyState === WebSocket.OPEN) {
                 const commonData = {
+                    message_id: newMessage.data.message_id,
                     message_date: newMessage.data.message_date,
                     message_text: newMessage.data.message_text,
                 };
 
                 if (type !== 'chat') {
-                    liveSocketRef.send(
+                    liveUpdates.socketRef.current.send(
                         JSON.stringify({
                             user_id: userId,
                             method: 'UPDATE_LAST_MESSAGE',
@@ -116,7 +117,7 @@ const useInputBlock = ({ reply, setReply, socketRef, members }: InputBlockSchema
                     ];
 
                     messages.forEach(msg => {
-                        liveSocketRef.send(
+                        liveUpdates.socketRef.current?.send(
                             JSON.stringify({
                                 user_id: userId,
                                 method: 'UPDATE_LAST_MESSAGE',
@@ -138,7 +139,7 @@ const useInputBlock = ({ reply, setReply, socketRef, members }: InputBlockSchema
     }, [
         filesState,
         inputText,
-        liveSocketRef,
+        liveUpdates,
         members,
         messengerId,
         postId,

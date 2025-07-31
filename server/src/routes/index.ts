@@ -39,7 +39,7 @@ import {
 
     PRIVATE_CHAT_ROUTE,
 
-    GET_FILE_ROUTE, OPEN_GRAPH_ROUTE,
+    GET_FILE_ROUTE, OPEN_GRAPH_ROUTE, MESSENGER_NOTIFICATIONS,
 } from "../utils/consts/routes"
 import express from "express"
 
@@ -69,6 +69,8 @@ index.get(GET_MESSAGES_ROUTE, messageController.fetchMessages)
 index.post(CREATE_MESSAGE_ROUTE, messageController.postMessage)
 index.get(CREATE_MESSAGE_ROUTE, messageController.fetchMessage)
 index.delete(DELETE_MESSAGE_ROUTE, messageController.deleteMessage)
+
+index.post(MESSENGER_NOTIFICATIONS, messengerManagementController.fetchNotifications)
 
 index.get(GET_CONTACTS_ROUTE, userController.getContacts)
 index.post(GET_CONTACTS_ROUTE, userController.postContact)

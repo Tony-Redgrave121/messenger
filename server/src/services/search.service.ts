@@ -65,8 +65,18 @@ class SearchService {
                 message_text: {[Op.iLike]: `%${query}%`}
             } :
             {
-                recipient_user_id: [messenger_id, user_id],
-                message_text: {[Op.iLike]: `%${query}%`}
+                [Op.or]: [
+                    {
+                        user_id: user_id,
+                        recipient_user_id: messenger_id,
+                        message_text: {[Op.iLike]: `%${query}%`}
+                    },
+                    {
+                        user_id: messenger_id,
+                        recipient_user_id: user_id,
+                        message_text: {[Op.iLike]: `%${query}%`}
+                    }
+                ]
             }
 
         return await index.message.findAll({

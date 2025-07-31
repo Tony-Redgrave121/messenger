@@ -3,7 +3,7 @@ import { HiOutlineXMark } from 'react-icons/hi2';
 import { useParams } from 'react-router-dom';
 import postRemovedApi from '@features/EditMessenger/api/postRemovedApi';
 import { ContactsList } from '@entities/Contact';
-import { useLiveUpdatesWS, MessengerSettingsSchema } from '@entities/Messenger';
+import { MessengerSettingsSchema, useLiveUpdatesContext } from '@entities/Messenger';
 import { useAbortController, useSearch, useAppSelector } from '@shared/lib';
 import { ContactSchema } from '@shared/types';
 import { DefaultButton, NoResult, SearchBar } from '@shared/ui';
@@ -24,7 +24,7 @@ const PopupEditRemoved: FC<IPopupEditModeratorsProps> = ({
     const [userToRemove, setUserToRemove] = useState<ContactSchema[]>([]);
     const owner_id = useAppSelector(state => state.user.userId);
 
-    const socketRef = useLiveUpdatesWS();
+    const { socketRef } = useLiveUpdatesContext();
     const { messengerId } = useParams();
     const { getSignal } = useAbortController();
 
@@ -57,8 +57,8 @@ const PopupEditRemoved: FC<IPopupEditModeratorsProps> = ({
                 ],
             }));
 
-            if (socketRef?.readyState === WebSocket.OPEN) {
-                socketRef.send(
+            if (socketRef.current?.readyState === WebSocket.OPEN) {
+                socketRef.current.send(
                     JSON.stringify({
                         user_id: userId,
                         method: 'REMOVE_FROM_MESSENGER',

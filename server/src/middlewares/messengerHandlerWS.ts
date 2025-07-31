@@ -33,7 +33,12 @@ const messengerHandlerWS = (aWss: WebSocketServer) => {
         })
 
         aWss.clients.forEach((client: ExtendedWebSocket) => {
-            if (client.messenger_id === message.messenger_id || client.messenger_id === message.user_id) {
+            if (message.data?.recipient_user_id && client.messenger_id === message.user_id) {
+                client.send(payload)
+                return
+            }
+
+            if (client.messenger_id === message.messenger_id) {
                 client.send(payload)
             }
         })

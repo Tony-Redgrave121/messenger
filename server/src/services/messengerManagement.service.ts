@@ -13,6 +13,7 @@ import ISettingReaction from "../types/settingTypes/ISettingReaction";
 import ILastMessage from "../types/messageTypes/ILastMessage";
 import IChatId from "../types/idTypes/IChatId";
 import IShortUser from "../types/userTypes/IShortUser";
+import NotificationSchema from "../types/messengerTypes/NotificationSchema";
 
 class MessengerManagementService {
     public async fetchMessenger(type: MessengerKeys, messenger_id: string) {
@@ -135,6 +136,73 @@ class MessengerManagementService {
 
             return reactions
         }
+    }
+
+
+    public async fetchNotifications(messengers: NotificationSchema, user_id: string) {
+        const newNotifications: NotificationSchema = {}
+        const keys = Object.keys(messengers)
+
+        for (const key of keys) {
+            if (!messengers[key]?.message_id) {
+                const messageId = await index.message.findOne({
+                    where: {
+                        [Op.or]: [
+                            {messenger_id: key},
+                            {
+                                user_id: key,
+                                recipient_user_id: user_id,
+                            },
+                        ]
+                    },
+                    attributes: ['message_id'],
+                    order: [['message_date', 'DESC']],
+                    limit: 1
+                })
+
+                if (!messageId) continue
+                const messageIdPlain = convertToPlain<IMessageId>(messageId)
+
+                newNotifications[key] = {
+                    message_id: messageIdPlain.message_id,
+                    count: 0,
+                }
+
+                continue
+            }
+
+            const message = await index.message.findOne({
+                where: {
+                    message_id: messengers[key].message_id
+                },
+                attributes: ['message_date']
+            })
+
+            if (!message) continue
+            const messagePlain = convertToPlain<{ message_date: Date }>(message)
+
+            const newCount = await index.message.count({
+                where: {
+                    [Op.or]: [
+                        {messenger_id: key},
+                        {
+                            user_id: key,
+                            recipient_user_id: user_id,
+                        },
+                    ],
+                    message_date: {
+                        [Op.gt]: messagePlain.message_date,
+                    },
+                }
+            })
+
+            newNotifications[key] = {
+                message_id: messengers[key].message_id,
+                count: newCount,
+            }
+        }
+
+        return newNotifications
     }
 
     public async postMessenger(

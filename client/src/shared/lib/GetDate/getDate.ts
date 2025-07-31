@@ -2,7 +2,7 @@ const zeroPad = (num: number) => num.toString().padStart(2, '0');
 
 export const getDate = (date: string | Date, isUserLastSeen?: boolean) => {
     const newDate = new Date(date);
-    if (isUserLastSeen && newDate.getTime() >= new Date().getTime() - 14000) return 'Online';
+    if (isUserLastSeen && newDate.getTime() >= new Date().getTime() - 12000) return 'Online';
 
     const currentDate = new Date();
     const time = new Date().getTime() - newDate.getTime();

@@ -1,10 +1,11 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import ChatBlockSchema from '@entities/Messenger/model/types/ChatBlockSchema';
+import NotificationSchema from '@entities/Messenger/model/types/NotificationSchema';
 import UpdateMessengerSchema from '@entities/Messenger/model/types/UpdateMessengerSchema';
 
 interface ILiveUpdatesState {
     messengers: ChatBlockSchema[];
-    notifications: Record<string, number>;
+    notifications: NotificationSchema;
 }
 
 const initialState: ILiveUpdatesState = {
@@ -34,15 +35,22 @@ const messengerSlice = createSlice({
         },
         setNotificationCount(
             state,
-            action: PayloadAction<{ messenger_id: string; count: number }>,
+            action: PayloadAction<{
+                messenger_id: string;
+                message_id: string;
+                count: number;
+            }>,
         ) {
-            state.notifications[action.payload.messenger_id] = action.payload.count;
+            state.notifications[action.payload.messenger_id] = {
+                message_id: action.payload.message_id,
+                count: action.payload.count,
+            };
         },
         removeMessenger(state, action: PayloadAction<string>) {
             state.messengers = state.messengers.filter(m => m.messenger_id !== action.payload);
             delete state.notifications[action.payload];
         },
-        setNotificationsFromStorage(state, action: PayloadAction<Record<string, number>>) {
+        setNotificationsFromStorage(state, action: PayloadAction<NotificationSchema>) {
             state.notifications = action.payload;
         },
     },

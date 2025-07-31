@@ -4,7 +4,7 @@ import deleteMemberApi from '@features/EditMessenger/api/deleteMemberApi';
 import deleteRemovedApi from '@features/EditMessenger/api/deleteRemovedApi';
 import postMemberApi from '@features/EditMessenger/api/postMemberApi';
 import putMessengerModeratorApi from '@features/EditMessenger/api/putMessengerModeratorApi';
-import { useLiveUpdatesWS, MessengerSettingsSchema } from '@entities/Messenger';
+import { MessengerSettingsSchema, useLiveUpdatesContext } from '@entities/Messenger';
 import { useAppSelector, useAbortController } from '@shared/lib';
 
 const useEditSettings = (setSettings: Dispatch<SetStateAction<MessengerSettingsSchema>>) => {
@@ -12,7 +12,7 @@ const useEditSettings = (setSettings: Dispatch<SetStateAction<MessengerSettingsS
     const { getSignal } = useAbortController();
 
     const [popup, setPopup] = useState(false);
-    const socketRef = useLiveUpdatesWS();
+    const { socketRef } = useLiveUpdatesContext();
 
     const messengers = useAppSelector(state => state.messenger.messengers);
 
@@ -65,8 +65,8 @@ const useEditSettings = (setSettings: Dispatch<SetStateAction<MessengerSettingsS
                 ],
             }));
 
-            if (socketRef?.readyState === WebSocket.OPEN) {
-                socketRef.send(
+            if (socketRef.current?.readyState === WebSocket.OPEN) {
+                socketRef.current.send(
                     JSON.stringify({
                         user_id: userId,
                         method: 'JOIN_TO_MESSENGER',
@@ -121,8 +121,8 @@ const useEditSettings = (setSettings: Dispatch<SetStateAction<MessengerSettingsS
                     moderators: [...prev.moderators.filter(({ user }) => user.user_id !== userId)],
                 }));
 
-                if (socketRef?.readyState === WebSocket.OPEN) {
-                    socketRef.send(
+                if (socketRef.current?.readyState === WebSocket.OPEN) {
+                    socketRef.current.send(
                         JSON.stringify({
                             user_id: userId,
                             method: 'REMOVE_FROM_MESSENGER',

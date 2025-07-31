@@ -26,6 +26,8 @@ export type { default as MessengerSettingsKeys } from './model/types/MessengerSe
 export type { default as MessengerSchema } from './model/types/MessengerSchema';
 
 export { useLiveUpdatesWS } from './lib/hooks/useLiveUpdatesWS';
+export { MessengerContext, useMessengerContext } from './lib/hooks/useMessengerContext';
+export { LiveUpdatesContext, useLiveUpdatesContext } from './lib/hooks/useLiveUpdatesContext';
 export { default as fetchMessengerApi } from './api/fetchMessengerApi';
 export { default as fetchMessagesApi } from './api/fetchMessagesApi';
 export { default as mapMessengerDTO } from './api/mappers/mapMessengerDTO';

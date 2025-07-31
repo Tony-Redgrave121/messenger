@@ -5,7 +5,7 @@ import mapNewMessengerDTO from '@features/CreateMessenger/api/mappers/mapNewMess
 import postMessengerApi from '@features/CreateMessenger/api/postMessengerApi';
 import { MessengerCreationSchema } from '@features/CreateMessenger/model/types/MessengerCreationSchema';
 import NewMessengerSchema from '@features/CreateMessenger/model/types/NewMessengerSchema';
-import { addMessenger, useLiveUpdatesWS } from '@entities/Messenger';
+import { addMessenger, useLiveUpdatesContext } from '@entities/Messenger';
 import { useAbortController, useAppDispatch, useAppSelector } from '@shared/lib';
 import { ContactSchema } from '@shared/types';
 
@@ -29,9 +29,9 @@ const useMessengerCreation = (
     const navigate = useNavigate();
     const userId = useAppSelector(state => state.user.userId);
     const dispatch = useAppDispatch();
-    const { getSignal } = useAbortController();
 
-    const socketRef = useLiveUpdatesWS();
+    const { getSignal } = useAbortController();
+    const { socketRef } = useLiveUpdatesContext();
 
     const handleImageChange = (file: FileList | null, onChange: (value: File) => void) => {
         if (file) {
@@ -74,8 +74,8 @@ const useMessengerCreation = (
                 const newMessengerData = newMessenger.data;
 
                 if (members) {
-                    if (newMessengerData && socketRef?.readyState === WebSocket.OPEN) {
-                        socketRef.send(
+                    if (newMessengerData && socketRef.current?.readyState === WebSocket.OPEN) {
+                        socketRef.current.send(
                             JSON.stringify({
                                 user_id: userId,
                                 method: 'JOIN_TO_MESSENGER',

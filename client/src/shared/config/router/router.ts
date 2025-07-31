@@ -50,3 +50,6 @@ export const PRIVATE_CHAT_ROUTE = '/chat/:user_id';
 
 // Open Graph Route
 export const OPEN_GRAPH_ROUTE = '/opengraph';
+
+// Notifications Route
+export const MESSENGER_NOTIFICATIONS = '/messenger-notifications/:user_id';

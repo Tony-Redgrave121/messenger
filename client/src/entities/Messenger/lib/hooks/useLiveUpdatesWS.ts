@@ -1,11 +1,8 @@
-import { useEffect } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 import { updateContact } from '@entities/Contact';
 import { deleteMessenger, updateMessenger } from '@entities/Messenger/lib/thunk/messengerThunk';
 import { addMessenger } from '@entities/Messenger/model/slice/messengerSlice';
 import { useAppDispatch, useAppSelector } from '@shared/lib';
-
-let socketInstance: WebSocket | null = null;
-let pingInterval: NodeJS.Timeout | null = null;
 
 const SERVER_DOMAIN_NAME = process.env.VITE_SERVER_DOMAIN_NAME;
 
@@ -13,42 +10,53 @@ export const useLiveUpdatesWS = () => {
     const userId = useAppSelector(state => state.user.userId);
     const contacts = useAppSelector(state => state.contact.contacts);
 
+    const socketRef = useRef<WebSocket | null>(null);
+    const pingInterval = useRef<NodeJS.Timeout | null>(null);
+
     const dispatch = useAppDispatch();
+    const contactsRef = useRef(contacts);
 
-    const onExit = () => {
-        if (!socketInstance) return;
+    useEffect(() => {
+        contactsRef.current = contacts;
+    }, [contacts]);
 
-        socketInstance.send(
+    const onExit = useCallback(() => {
+        const socket = socketRef.current;
+        if (!socket || socket.readyState !== WebSocket.OPEN) return;
+
+        socket.send(
             JSON.stringify({
                 user_id: userId,
                 data: {
-                    members: contacts.map(c => c.user_id),
+                    messenger_members: contactsRef.current?.map(c => c.user_id),
                     userId: userId,
                     date: new Date(),
                 },
                 method: 'EXIT',
             }),
         );
-    };
+    }, [userId, contactsRef]);
 
     useEffect(() => {
-        if (socketInstance && socketInstance.readyState <= 1) return;
-        socketInstance = new WebSocket(`ws://${SERVER_DOMAIN_NAME}/live-updates`);
+        if (socketRef.current && socketRef.current.readyState <= 1) return;
 
-        socketInstance.onopen = () => {
-            socketInstance?.send(
+        socketRef.current = new WebSocket(`ws://${SERVER_DOMAIN_NAME}/live-updates`);
+        const socket = socketRef.current;
+
+        socket.onopen = () => {
+            socket?.send(
                 JSON.stringify({
                     user_id: userId,
                     method: 'CONNECTION',
                 }),
             );
 
-            pingInterval = setInterval(() => {
-                socketInstance?.send(
+            pingInterval.current = setInterval(() => {
+                socket?.send(
                     JSON.stringify({
                         user_id: userId,
                         data: {
-                            messenger_members: contacts.map(c => c.user_id),
+                            messenger_members: contactsRef.current?.map(c => c.user_id),
                             userId: userId,
                             date: new Date(),
                         },
@@ -58,7 +66,7 @@ export const useLiveUpdatesWS = () => {
             }, 7500);
         };
 
-        socketInstance.onmessage = event => {
+        socket.onmessage = event => {
             const message = JSON.parse(event.data);
 
             switch (message.method) {
@@ -75,6 +83,7 @@ export const useLiveUpdatesWS = () => {
                     dispatch(
                         updateMessenger({
                             messenger_id: messageData.messenger_id,
+                            message_id: messageData.message_id,
                             message_text: messageData.message_text,
                             message_date: messageData.message_date,
                             isCurrentMessenger: messageData.messenger_id === currentMessengerId,
@@ -92,37 +101,38 @@ export const useLiveUpdatesWS = () => {
             }
         };
 
-        socketInstance.onclose = () => {
-            if (socketInstance?.readyState === WebSocket.CLOSED) onExit();
-            if (pingInterval) clearInterval(pingInterval);
+        socket.onclose = () => {
+            if (pingInterval.current) clearInterval(pingInterval.current);
         };
 
-        socketInstance.onerror = error => {
+        socket.onerror = error => {
             console.error('WebSocket Error:', error);
-            if (pingInterval) clearInterval(pingInterval);
+            if (pingInterval.current) clearInterval(pingInterval.current);
         };
 
         return () => {
-            if (socketInstance?.readyState === WebSocket.OPEN) {
+            if (socket?.readyState === WebSocket.OPEN) {
                 onExit();
-                socketInstance.close();
+                socket.close();
             }
 
-            if (pingInterval) clearInterval(pingInterval);
+            if (pingInterval.current) clearInterval(pingInterval.current);
         };
-    }, [dispatch, userId]);
+    }, [dispatch, userId, onExit, contactsRef]);
 
     useEffect(() => {
         const handleExit = () => {
-            if (socketInstance?.readyState === WebSocket.OPEN) {
+            if (socketRef.current?.readyState === WebSocket.OPEN) {
                 onExit();
-                socketInstance.close();
+                socketRef.current.close();
             }
         };
 
         window.addEventListener('beforeunload', handleExit);
         return () => window.removeEventListener('beforeunload', handleExit);
-    }, [userId]);
+    }, [onExit, userId]);
 
-    return socketInstance;
+    return {
+        socketRef,
+    };
 };

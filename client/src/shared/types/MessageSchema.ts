@@ -11,6 +11,7 @@ export default interface MessageSchema {
     messenger_id: string;
     message_files?: MessageFileSchema[];
     comments_count?: number;
+    recipient_user_id?: string;
     reactions?: {
         users_ids: string[];
         reaction_count: string;

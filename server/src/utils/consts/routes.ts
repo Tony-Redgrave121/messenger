@@ -53,3 +53,6 @@ export const GET_FILE_ROUTE = '/messengers/:filepath/:filename'
 
 // Open Graph Route
 export const OPEN_GRAPH_ROUTE = '/opengraph'
+
+// Notifications Route
+export const MESSENGER_NOTIFICATIONS = '/messenger-notifications/:user_id';

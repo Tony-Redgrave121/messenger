@@ -1,12 +1,13 @@
 import { clsx } from 'clsx';
 import React, { FC, memo, ReactNode, useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import { VirtuosoHandle } from 'react-virtuoso';
 import useInfiniteMessages from '@widgets/Messenger/lib/hooks/useInfiniteMessages';
 import { useFetchInitialData } from '@features/EditMessenger';
-import { MessagesList } from '@features/Message';
+import { MessageContext, MessagesList } from '@features/Message';
 import { MessengerInput } from '@features/MessengerInput';
 import { checkRights } from '@entities/Member';
-import { clearNotification } from '@entities/Messenger';
+import { clearNotification, MessengerContext } from '@entities/Messenger';
 import { useAppDispatch, useAppSelector } from '@shared/lib';
 import { MessageSchema } from '@shared/types';
 import style from '../messenger.module.css';
@@ -18,6 +19,8 @@ interface IMessengerProps {
 const Messenger: FC<IMessengerProps> = memo(({ children }) => {
     const [reply, setReply] = useState<MessageSchema | null>(null);
     const refEnd = useRef<HTMLDivElement | null>(null);
+
+    const refVirtuoso = useRef<VirtuosoHandle | null>(null);
     const refContainer = useRef<HTMLElement | null>(null);
 
     const { messenger, reactions } = useFetchInitialData();
@@ -32,12 +35,19 @@ const Messenger: FC<IMessengerProps> = memo(({ children }) => {
         if (messengerId) dispatch(clearNotification(messengerId));
     }, [dispatch, messengerId]);
 
-    // useAutoScroll(refEnd, messagesList);
-
     return (
         <>
             <div className={style.MessengerContainer}>
-                {children}
+                <MessengerContext.Provider
+                    value={{
+                        refVirtuoso,
+                        messagesList,
+                        handleFetching,
+                        totalCount,
+                    }}
+                >
+                    {children}
+                </MessengerContext.Provider>
                 <section
                     className={clsx(
                         style.MessageBlock,
@@ -48,15 +58,21 @@ const Messenger: FC<IMessengerProps> = memo(({ children }) => {
                     ref={refContainer}
                     key={messengerId}
                 >
-                    <MessagesList
-                        messagesList={messagesList}
-                        messenger={messenger}
-                        setReply={setReply}
-                        socketRef={socketRef}
-                        reactions={reactions}
-                        onStartReached={handleFetching}
-                        totalCount={totalCount}
-                    />
+                    <MessageContext.Provider
+                        value={{
+                            messenger,
+                            setReply,
+                            socketRef,
+                            reactions,
+                        }}
+                    >
+                        <MessagesList
+                            messagesList={messagesList}
+                            onStartReached={handleFetching}
+                            totalCount={totalCount}
+                            refVirtuoso={refVirtuoso}
+                        />
+                    </MessageContext.Provider>
                     <div ref={refEnd} />
                 </section>
                 <MessengerInput
