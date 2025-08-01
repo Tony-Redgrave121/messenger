@@ -16,7 +16,9 @@ const Contact: FC<IContactProps> = memo(({ contact, children }) => {
             <span>
                 <LoadFile
                     imagePath={
-                        contact.user_img ? `users/${contact.user_id}/${contact.user_img}` : ''
+                        contact.user_img
+                            ? `users/${contact.user_id}/avatar/${contact.user_img}`
+                            : ''
                     }
                     imageTitle={contact.user_name}
                 />

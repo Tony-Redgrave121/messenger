@@ -29,7 +29,7 @@ const UserDropDown: FC<ICreateMessengersListProps> = ({
             {
                 liChildren: (
                     <LoadFile
-                        imagePath={userImg ? `users/${userId}/${userImg}` : ''}
+                        imagePath={userImg ? `users/${userId}/avatar/${userImg}` : ''}
                         imageTitle={userName}
                     />
                 ),

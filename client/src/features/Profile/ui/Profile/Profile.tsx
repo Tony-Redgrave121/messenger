@@ -1,4 +1,5 @@
 import React, { Dispatch, FC, lazy, memo, SetStateAction, Suspense, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { CSSTransition } from 'react-transition-group';
 import ProfileActions from '@features/Profile/ui/Profile/ProfileActions';
 import ProfileInfo from '@features/Profile/ui/Profile/ProfileInfo';
@@ -8,7 +9,6 @@ import { deleteAccount } from '@entities/User';
 import { useAppDispatch, useAppSelector, useLoadBlob } from '@shared/lib';
 import { Caption, Popup, PopupConfirmation, Sidebar } from '@shared/ui';
 import '../profile.animation.css';
-import { createPortal } from 'react-dom';
 
 interface IProfileProps {
     state: boolean;
@@ -29,7 +29,7 @@ const Profile: FC<IProfileProps> = memo(({ state, setState }) => {
     });
 
     const { userImg, userName, userId } = useAppSelector(state => state.user);
-    const { image } = useLoadBlob(userImg ? `users/${userId}/${userImg}` : '');
+    const { image } = useLoadBlob(userImg ? `users/${userId}/avatar/${userImg}` : '');
 
     const dispatch = useAppDispatch();
 

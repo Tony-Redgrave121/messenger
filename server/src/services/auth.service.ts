@@ -3,16 +3,13 @@ import index from "../models"
 import * as uuid from "uuid"
 import IUser from "../types/userTypes/IUser"
 import bcrypt from "bcrypt"
-import {UploadedFile} from "express-fileupload"
 import path from "path"
 import * as fs from "fs"
 import getRandomCryptoValue from "../utils/getRandomCryptoValue"
-import uploadFile from "../utils/uploadFile"
 import MailService from "./mail.service"
 import TokenService from "./token.service"
 import IUserFiles from "../types/fileTypes/IUserFiles";
-import {resizeImage} from "../utils/resizeImage";
-import getImageExtension from "../utils/getImageExtension";
+import uploadAvatar from "../utils/uploadAvatar";
 
 class AuthService {
     constructor(
@@ -34,7 +31,7 @@ class AuthService {
         const user_id = uuid.v4()
         const activationCode = uuid.v4()
         const hashedPassword = await bcrypt.hash(user_password, 5)
-        const user_img = await this.uploadUserImage(user_id, user_files?.user_img)
+        const user_img = await uploadAvatar(`users/${user_id}/avatar`, user_files?.user_img)
 
         await index.users.create({
             user_id: user_id,
@@ -152,27 +149,6 @@ class AuthService {
         if (!user) return ApiError.notFound("User not found")
 
         return user
-    }
-
-    private async uploadUserImage(user_id: string, file?: UploadedFile | null): Promise<string | null> {
-        if (!file) return null
-
-        const {isImage, extension} = getImageExtension(file)
-        if (!extension || !isImage) throw ApiError.badRequest('The file extension is missing or the file is not an image');
-
-        const resizedBuffer = await resizeImage(file.data, 500, 500, extension as 'jpeg' | 'png' | 'webp' | 'jpg');
-        const resizedFile: UploadedFile = {
-            ...file,
-            data: resizedBuffer,
-            size: resizedBuffer.length,
-        };
-
-        const uploadResult = await uploadFile(`users/${user_id}`, resizedFile, 'media')
-        if (!uploadResult || uploadResult instanceof ApiError) {
-            throw ApiError.badRequest("Failed to upload user image")
-        }
-
-        return uploadResult.file || null
     }
 
     private handleTokenSaving = async (user_id: string, payload: object) => {

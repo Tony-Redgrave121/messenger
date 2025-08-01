@@ -23,7 +23,7 @@ class UserService {
         let user_img_base64: string | null = null
 
         if (userPlain.user_img) {
-            const imagePath = path.join(__dirname, "../../static/users", user_id, userPlain.user_img)
+            const imagePath = path.join(__dirname, "../../static/users", user_id, 'avatar', userPlain.user_img)
 
             try {
                 const imageBuffer = await fs.promises.readFile(imagePath)
@@ -54,7 +54,7 @@ class UserService {
         let user_img = userPlain.user_img
 
         if (user_files?.user_img) {
-            const folder = `users/${user_id}`
+            const folder = `users/${user_id}/avatar`
             const newImage = await changeOldImage(userPlain.user_img, folder, user_files.user_img)
 
             if (newImage instanceof ApiError) throw newImage

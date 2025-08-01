@@ -22,7 +22,8 @@ const OwnerImageLink: FC<IOwnerLinkProps> = ({ isOwner, messenger, message }) =>
                     {messenger.type === 'channel' ? (
                         <LoadFile
                             imagePath={
-                                messenger.image && `messengers/${messenger.id}/${messenger.image}`
+                                messenger.image &&
+                                `messengers/${messenger.id}/avatar/${messenger.image}`
                             }
                             imageTitle={messenger.name}
                         />
@@ -30,7 +31,7 @@ const OwnerImageLink: FC<IOwnerLinkProps> = ({ isOwner, messenger, message }) =>
                         <LoadFile
                             imagePath={
                                 message.user.user_img &&
-                                `users/${message.user.user_id}/${message.user.user_img}`
+                                `users/${message.user.user_id}/avatar/${message.user.user_img}`
                             }
                             imageTitle={message.user.user_name}
                         />

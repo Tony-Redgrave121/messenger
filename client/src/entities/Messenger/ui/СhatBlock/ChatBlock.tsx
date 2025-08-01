@@ -20,7 +20,7 @@ const ChatBlock: FC<IChatBlockProps> = memo(({ messenger }) => {
     const lastMessageText = lastMessage?.message_text || 'Media';
 
     const imagePath = messenger_image
-        ? `${messenger_type !== 'chat' ? 'messengers' : 'users'}/${messenger_id}/${messenger_image}`
+        ? `${messenger_type !== 'chat' ? 'messengers' : 'users'}/${messenger_id}/avatar/${messenger_image}`
         : '';
 
     return (

@@ -1,10 +1,8 @@
-import { lazy, memo, useEffect } from 'react';
+import { memo, useEffect } from 'react';
 import chatListApi from '@features/СhatList/api/chatListApi';
-import { setMessengers } from '@entities/Messenger';
+import { ChatBlock, setMessengers } from '@entities/Messenger';
 import { useAppDispatch, useAppSelector, useAbortController } from '@shared/lib';
 import style from './style.module.css';
-
-const ChatBlock = lazy(() => import('@entities/Messenger/ui/СhatBlock/ChatBlock'));
 
 const ChatList = memo(() => {
     const userId = useAppSelector(state => state.user.userId);

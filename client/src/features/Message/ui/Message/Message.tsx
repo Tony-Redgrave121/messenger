@@ -33,6 +33,7 @@ const Message: FC<IMessageProps> = memo(({ message, viewedIds, setViewedIds }) =
 
     const { socketRef } = useMessageContext();
     const { postId } = useParams();
+    const { refContainer } = useMessageContext();
 
     return (
         <CSSTransition
@@ -76,20 +77,26 @@ const Message: FC<IMessageProps> = memo(({ message, viewedIds, setViewedIds }) =
                                     <small>{getTime(message.message_date)}</small>
                                 </p>
                                 <ReactionsBlock message={message} socketRef={socketRef} />
-                                <DropDownMessage
-                                    position={position}
-                                    message={message}
-                                    contextMenu={contextMenu}
-                                    setContextMenu={setContextMenu}
-                                    setReactionMenu={setReactionMenu}
-                                />
-                                <DropDownReactions
-                                    message={message}
-                                    position={position}
-                                    setContextMenu={setContextMenu}
-                                    reactionMenu={reactionMenu}
-                                    setReactionMenu={setReactionMenu}
-                                />
+                                {refContainer.current &&
+                                    createPortal(
+                                        <>
+                                            <DropDownMessage
+                                                position={position}
+                                                message={message}
+                                                contextMenu={contextMenu}
+                                                setContextMenu={setContextMenu}
+                                                setReactionMenu={setReactionMenu}
+                                            />
+                                            <DropDownReactions
+                                                message={message}
+                                                position={position}
+                                                setContextMenu={setContextMenu}
+                                                reactionMenu={reactionMenu}
+                                                setReactionMenu={setReactionMenu}
+                                            />
+                                        </>,
+                                        refContainer.current,
+                                    )}
                             </div>
                             <OGAttachment text={message.message_text} />
                         </div>

@@ -13,7 +13,7 @@ const useMessage = (
     const [animation, setAnimation] = useState(false);
 
     const userId = useAppSelector(state => state.user.userId);
-    const { messenger } = useMessageContext();
+    const { messenger, refContainer } = useMessageContext();
 
     const isOwner = useMemo(() => {
         return message.user_id === userId && messenger.type !== 'channel';
@@ -21,10 +21,10 @@ const useMessage = (
 
     const onContextMenu = (event: React.MouseEvent<HTMLDivElement>) => {
         return handleContextMenu({
+            refContainer,
             event,
             setPosition,
             setContextMenu,
-            height: 100,
         });
     };
 

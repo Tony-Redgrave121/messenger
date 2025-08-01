@@ -7,6 +7,7 @@ export interface IMessageContext {
     setReply: Dispatch<SetStateAction<MessageSchema | null>>;
     socketRef: RefObject<WebSocket | null>;
     reactions: ReactionSchema[];
+    refContainer: RefObject<HTMLElement | null>;
 }
 
 export const MessageContext = createContext<IMessageContext | null>(null);

@@ -24,7 +24,7 @@ const RightSidebar = () => {
 
     const { image } = useLoadBlob(
         messenger.image
-            ? `${messenger.type !== 'chat' ? 'messengers' : 'users'}/${messenger.id}/${messenger.image}`
+            ? `${messenger.type !== 'chat' ? 'messengers' : 'users'}/${messenger.id}/avatar/${messenger.image}`
             : '',
     );
 

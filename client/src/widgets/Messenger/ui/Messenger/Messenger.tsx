@@ -64,6 +64,7 @@ const Messenger: FC<IMessengerProps> = memo(({ children }) => {
                             setReply,
                             socketRef,
                             reactions,
+                            refContainer,
                         }}
                     >
                         <MessagesList

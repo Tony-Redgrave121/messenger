@@ -1,7 +1,6 @@
 import index from "../models"
 import ApiError from "../errors/apiError";
 import * as uuid from "uuid";
-import uploadFile from "../utils/uploadFile";
 import {Op, Sequelize} from "sequelize";
 import deleteAllMessages from "../utils/deleteAllMessages";
 import MessengerKeys from "../types/keys/MessengerKeys";
@@ -14,6 +13,7 @@ import ILastMessage from "../types/messageTypes/ILastMessage";
 import IChatId from "../types/idTypes/IChatId";
 import IShortUser from "../types/userTypes/IShortUser";
 import NotificationSchema from "../types/messengerTypes/NotificationSchema";
+import uploadAvatar from "../utils/uploadAvatar";
 
 class MessengerManagementService {
     public async fetchMessenger(type: MessengerKeys, messenger_id: string) {
@@ -217,10 +217,7 @@ class MessengerManagementService {
         let messenger_image = null
 
         if (messenger_files?.messenger_image) {
-            const result = await uploadFile(`messengers/${messenger_id}`, messenger_files.messenger_image, 'media')
-            if (result instanceof ApiError) throw ApiError.badRequest(`Error with user image creation`)
-
-            messenger_image = result.file
+            messenger_image = await uploadAvatar(`messengers/${messenger_id}/avatar`, messenger_files.messenger_image)
         }
 
         const messenger = await index.messenger.create({
