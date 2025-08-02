@@ -29,8 +29,6 @@ const Profile: FC<IProfileProps> = memo(({ state, setState }) => {
     });
 
     const { userImg, userName, userId } = useAppSelector(state => state.user);
-    const { image } = useLoadBlob(userImg ? `users/${userId}/avatar/${userImg}` : '');
-
     const dispatch = useAppDispatch();
 
     return (
@@ -47,7 +45,7 @@ const Profile: FC<IProfileProps> = memo(({ state, setState }) => {
             >
                 <ProfileTopBar setState={setState} setFormsState={setFormsState} />
                 <ImageBlock
-                    image={image}
+                    imagePath={userImg ? `users/${userId}/avatar/${userImg}` : ''}
                     info={{
                         name: userName,
                         type: 'online',

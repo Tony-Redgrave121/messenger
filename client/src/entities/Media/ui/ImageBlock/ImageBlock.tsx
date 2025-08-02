@@ -1,16 +1,19 @@
 import React, { FC, memo } from 'react';
+import { useLoadBlob } from '@shared/lib';
 import { LoadFile } from '@shared/ui';
 import style from './style.module.css';
 
 interface IImageBlockProps {
-    image: string;
+    imagePath: string;
     info: {
         name: string;
         type: string;
     };
 }
 
-const ImageBlock: FC<IImageBlockProps> = memo(({ image, info }) => {
+const ImageBlock: FC<IImageBlockProps> = memo(({ imagePath, info }) => {
+    const { image } = useLoadBlob(imagePath);
+
     return (
         <>
             {image ? (

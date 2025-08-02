@@ -1,6 +1,6 @@
 import { memo, useEffect } from 'react';
 import chatListApi from '@features/СhatList/api/chatListApi';
-import { ChatBlock, setMessengers } from '@entities/Messenger';
+import { ChatBlock, setMessengers, useCloseLeftSidebar } from '@entities/Messenger';
 import { useAppDispatch, useAppSelector, useAbortController } from '@shared/lib';
 import style from './style.module.css';
 
@@ -10,6 +10,7 @@ const ChatList = memo(() => {
     const dispatch = useAppDispatch();
 
     const { getSignal } = useAbortController();
+    const { closeSidebar } = useCloseLeftSidebar();
 
     useEffect(() => {
         const signal = getSignal();
@@ -29,7 +30,11 @@ const ChatList = memo(() => {
     return (
         <ul className={style.ChatList}>
             {messengers.map(messenger => (
-                <ChatBlock key={messenger.messenger_id} messenger={messenger} />
+                <ChatBlock
+                    onClick={closeSidebar}
+                    key={messenger.messenger_id}
+                    messenger={messenger}
+                />
             ))}
         </ul>
     );

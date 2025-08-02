@@ -36,7 +36,7 @@ app.use(cors({
 }))
 app.use('/static', express.static(path.join(__dirname, '../static'), {
     setHeaders: (res) => {
-        res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
+        res.setHeader('Cache-Control', 'public, max-age=604800, immutable');
     }
 }))
 app.use(fileUpload({}))

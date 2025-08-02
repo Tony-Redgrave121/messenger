@@ -75,7 +75,7 @@ class MessengerSettingsService {
 
         let messenger_image: string | null = null
         if (messengerPlain.messenger_image) {
-            const imagePath = path.join(__dirname, "../../static/messengers", messenger_id, messengerPlain.messenger_image)
+            const imagePath = path.join(__dirname, "../../static/messengers", messenger_id, 'avatar', messengerPlain.messenger_image)
 
             if (fs.existsSync(imagePath)) {
                 messenger_image = fs.readFileSync(imagePath).toString('base64')
@@ -287,7 +287,7 @@ class MessengerSettingsService {
         let messenger_image = null
 
         if (messenger_files?.messenger_image) {
-            const folder = `messengers/${messenger_id}`
+            const folder = `messengers/${messenger_id}/avatar`
             messenger_image = await changeOldImage(oldMessenger.messenger_image, folder, messenger_files.messenger_image)
 
             if (messenger_image instanceof ApiError) return messenger_image

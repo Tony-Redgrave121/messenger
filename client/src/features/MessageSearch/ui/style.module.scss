@@ -17,9 +17,12 @@
   .SearchList {
     background-color: v.$dark-900;
     border: 1px solid v.$dark-800;
-    border-radius: 16px;
+    border-radius: 0 0 16px 16px;
     padding: 8px;
     transition: 0.3s all ease-in-out;
+    max-height: 25vh;
+    width: calc(100% - 42px);
+    overflow-y: scroll;
 
     .SearchedMessage {
       justify-content: space-between;

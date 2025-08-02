@@ -7,7 +7,7 @@ import { EditMessenger, useFetchInitialData } from '@features/EditMessenger';
 import { ImageBlock } from '@entities/Media';
 import { checkRights, MembersList } from '@entities/Member';
 import { setSidebarRight } from '@entities/Messenger';
-import { useAppSelector, getDate, useAppDispatch, useLoadBlob } from '@shared/lib';
+import { useAppSelector, getDate, useAppDispatch } from '@shared/lib';
 import { DefaultButton, Caption, Sidebar, TopBar } from '@shared/ui';
 import './right-sidebar.animation.css';
 
@@ -21,12 +21,6 @@ const RightSidebar = () => {
 
     const user_id = useAppSelector(state => state.user.userId);
     const sidebarRight = useAppSelector(state => state.sidebar.sidebarRight);
-
-    const { image } = useLoadBlob(
-        messenger.image
-            ? `${messenger.type !== 'chat' ? 'messengers' : 'users'}/${messenger.id}/avatar/${messenger.image}`
-            : '',
-    );
 
     const MembersDropDown = (user_id: string) => [
         {
@@ -60,7 +54,11 @@ const RightSidebar = () => {
                     )}
                 </TopBar>
                 <ImageBlock
-                    image={image}
+                    imagePath={
+                        messenger.image
+                            ? `${messenger.type !== 'chat' ? 'messengers' : 'users'}/${messenger.id}/avatar/${messenger.image}`
+                            : ''
+                    }
                     info={{
                         name: messenger.name,
                         type:

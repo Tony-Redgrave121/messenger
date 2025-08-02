@@ -3,7 +3,7 @@ import { HiOutlineMagnifyingGlass, HiOutlineXMark, HiOutlineArrowLeft } from 're
 import { useNavigate } from 'react-router-dom';
 import { useFetchInitialData } from '@features/EditMessenger';
 import { MessageSearch } from '@features/MessageSearch';
-import { setWrapperState } from '@entities/Messenger';
+import { setWrapperState, useMessengerContext } from '@entities/Messenger';
 import { useAppDispatch } from '@shared/lib';
 import { DefaultButton } from '@shared/ui';
 import style from '../header.module.css';
@@ -14,6 +14,7 @@ const PostHeader = memo(() => {
     const dispatch = useAppDispatch();
 
     const { messenger } = useFetchInitialData();
+    const { messagesList } = useMessengerContext();
 
     const handleClose = () => {
         dispatch(setWrapperState(false));
@@ -31,7 +32,7 @@ const PostHeader = memo(() => {
             <DefaultButton foo={handleClose}>
                 <HiOutlineArrowLeft />
             </DefaultButton>
-            <p>Comments</p>
+            <p>{messagesList.length} Comments</p>
             <MessageSearch messenger={messenger} state={inputState} setState={setInputState} />
             <span>
                 <DefaultButton foo={() => setInputState(!inputState)}>

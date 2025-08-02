@@ -7,9 +7,10 @@ import style from './style.module.css';
 
 interface IChatBlockProps {
     messenger: ChatBlockSchema;
+    onClick?: () => void;
 }
 
-const ChatBlock: FC<IChatBlockProps> = memo(({ messenger }) => {
+const ChatBlock: FC<IChatBlockProps> = memo(({ messenger, onClick }) => {
     const { messenger_id, messenger_name, messenger_image, messenger_type, messages } = messenger;
 
     const notifications = useAppSelector(state => state.messenger.notifications);
@@ -24,7 +25,11 @@ const ChatBlock: FC<IChatBlockProps> = memo(({ messenger }) => {
         : '';
 
     return (
-        <Link to={`${messenger_type}/${messenger_id}`} className={style.ChatContainer}>
+        <Link
+            to={`${messenger_type}/${messenger_id}`}
+            className={style.ChatContainer}
+            onClick={onClick}
+        >
             <LoadFile imagePath={imagePath} imageTitle={messenger_name} />
             <div className={style.DescContainer}>
                 <span className={style.MessengerInfo}>

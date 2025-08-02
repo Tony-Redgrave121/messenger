@@ -1,4 +1,4 @@
-import React, { FC, memo } from 'react';
+import React, { FC, memo, useRef } from 'react';
 import Member from '@entities/Member/ui/Member/Member';
 import { ContactSchema, DropDownList } from '@shared/types';
 import { ContactButton } from '@shared/ui';
@@ -11,12 +11,18 @@ interface ContactsListProps {
 }
 
 const MembersList: FC<ContactsListProps> = memo(({ members, text, dropList }) => {
+    const refContainer = useRef<HTMLDivElement>(null);
+
     return (
-        <section className={style.MembersListContainer}>
+        <section className={style.MembersListContainer} ref={refContainer}>
             {text && <p>{text}</p>}
             {members.map(member => (
                 <ContactButton key={member.user_id}>
-                    <Member contact={member} dropList={dropList(member.user_id)} />
+                    <Member
+                        refContainer={refContainer}
+                        contact={member}
+                        dropList={dropList(member.user_id)}
+                    />
                 </ContactButton>
             ))}
         </section>

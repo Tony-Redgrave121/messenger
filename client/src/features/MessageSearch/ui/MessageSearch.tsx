@@ -149,7 +149,7 @@ const MessageSearch: FC<IChatHeader> = memo(({ messenger, state, setState }) => 
                                         <LoadFile
                                             imagePath={
                                                 messenger.image &&
-                                                `messengers/${messenger.id}/${messenger.image}`
+                                                `messengers/${messenger.id}/avatar/${messenger.image}`
                                             }
                                             imageTitle={messenger.name}
                                         />
@@ -157,7 +157,7 @@ const MessageSearch: FC<IChatHeader> = memo(({ messenger, state, setState }) => 
                                         <LoadFile
                                             imagePath={
                                                 message.user.user_img &&
-                                                `users/${message.user.user_id}/${message.user.user_img}`
+                                                `users/${message.user.user_id}/avatar/${message.user.user_img}`
                                             }
                                             imageTitle={message.user.user_name}
                                         />

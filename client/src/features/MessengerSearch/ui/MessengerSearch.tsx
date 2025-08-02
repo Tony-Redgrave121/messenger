@@ -74,7 +74,7 @@ const MessengerSearch: FC<IMessengerSearchProps> = ({
                                         <LoadFile
                                             imagePath={
                                                 item.img
-                                                    ? `${active === 'chat' ? 'users' : 'messengers'}/${item.id}/${item.img}`
+                                                    ? `${active === 'chat' ? 'users' : 'messengers'}/${item.id}/avatar/${item.img}`
                                                     : ''
                                             }
                                             imageTitle={item.name}

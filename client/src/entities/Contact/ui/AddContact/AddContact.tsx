@@ -41,7 +41,7 @@ const AddContact: FC<ICheckboxContactProps> = ({ members, setMembers }) => {
                         <LoadFile
                             imagePath={
                                 contact.user_img
-                                    ? `users/${contact.user_id}/${contact.user_img}`
+                                    ? `users/${contact.user_id}/avatar/${contact.user_img}`
                                     : ''
                             }
                             imageTitle={contact.user_name}

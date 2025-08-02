@@ -38,7 +38,7 @@ const useInfiniteMessages = (refContainer: RefObject<HTMLElement | null>) => {
                 type,
                 messengerId,
                 postId,
-                5,
+                15,
                 offsetRef.current,
                 signal,
             );

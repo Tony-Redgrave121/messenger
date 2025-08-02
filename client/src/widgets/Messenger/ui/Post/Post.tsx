@@ -5,6 +5,7 @@ import useInfiniteMessages from '@widgets/Messenger/lib/hooks/useInfiniteMessage
 import { useFetchInitialData } from '@features/EditMessenger';
 import { MessageContext, MessagesList } from '@features/Message';
 import { InputBlock } from '@features/MessengerInput';
+import { MessengerContext } from '@entities/Messenger';
 import { MessageSchema } from '@shared/types';
 import style from '../messenger.module.css';
 
@@ -19,14 +20,23 @@ const Post: FC<IPostProps> = ({ children }) => {
     const refContainer = useRef<HTMLElement | null>(null);
 
     const { messenger, reactions } = useFetchInitialData();
-    const { messagesList, socketRef, handleFetching, totalCount, setMessagesList } =
+    const { messagesList, socketRef, handleFetching, totalCount } =
         useInfiniteMessages(refContainer);
 
-    const { channelPost } = useFetchPost(setMessagesList);
+    const { channelPost } = useFetchPost();
 
     return (
         <div className={style.MessengerContainer}>
-            {children}
+            <MessengerContext.Provider
+                value={{
+                    refVirtuoso,
+                    messagesList,
+                    handleFetching,
+                    totalCount,
+                }}
+            >
+                {children}
+            </MessengerContext.Provider>
             {channelPost && (
                 <section className={style.MessageBlock} ref={refContainer}>
                     <MessageContext.Provider
@@ -35,12 +45,13 @@ const Post: FC<IPostProps> = ({ children }) => {
                             setReply,
                             socketRef,
                             reactions,
+                            refContainer,
                         }}
                     >
                         <MessagesList
-                            messagesList={messagesList}
+                            messagesList={[channelPost, ...messagesList]}
                             onStartReached={handleFetching}
-                            totalCount={totalCount}
+                            totalCount={totalCount + 1}
                             refVirtuoso={refVirtuoso}
                         />
                     </MessageContext.Provider>

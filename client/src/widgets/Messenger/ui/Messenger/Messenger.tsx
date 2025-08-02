@@ -18,7 +18,6 @@ interface IMessengerProps {
 
 const Messenger: FC<IMessengerProps> = memo(({ children }) => {
     const [reply, setReply] = useState<MessageSchema | null>(null);
-    const refEnd = useRef<HTMLDivElement | null>(null);
 
     const refVirtuoso = useRef<VirtuosoHandle | null>(null);
     const refContainer = useRef<HTMLElement | null>(null);
@@ -74,7 +73,6 @@ const Messenger: FC<IMessengerProps> = memo(({ children }) => {
                             refVirtuoso={refVirtuoso}
                         />
                     </MessageContext.Provider>
-                    <div ref={refEnd} />
                 </section>
                 <MessengerInput
                     reply={reply}

@@ -26,6 +26,7 @@ export type { default as MessengerSettingsKeys } from './model/types/MessengerSe
 export type { default as MessengerSchema } from './model/types/MessengerSchema';
 
 export { useLiveUpdatesWS } from './lib/hooks/useLiveUpdatesWS';
+export { default as useCloseLeftSidebar } from './lib/hooks/useCloseLeftSidebar';
 export { MessengerContext, useMessengerContext } from './lib/hooks/useMessengerContext';
 export { LiveUpdatesContext, useLiveUpdatesContext } from './lib/hooks/useLiveUpdatesContext';
 export { default as fetchMessengerApi } from './api/fetchMessengerApi';
