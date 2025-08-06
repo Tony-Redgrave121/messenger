@@ -11,7 +11,7 @@ const PageError = () => {
         dispatch(setPopupState(true));
         dispatch(setPopupChildren('An unforeseen error occurred'));
         navigate('/');
-    }, []);
+    }, [dispatch, navigate]);
 
     return <></>;
 };

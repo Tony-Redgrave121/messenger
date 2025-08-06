@@ -13,7 +13,6 @@ interface IPopupEditModeratorsProps {
     handleCancel: () => void;
     moderators: ContactSchema[];
     members: ContactSchema[];
-    setMembers: Dispatch<SetStateAction<ContactSchema[]>>;
     setSettings: Dispatch<SetStateAction<MessengerSettingsSchema>>;
 }
 
@@ -21,7 +20,6 @@ const PopupEditMembers: FC<IPopupEditModeratorsProps> = ({
     handleCancel,
     moderators,
     members,
-    setMembers,
     setSettings,
 }) => {
     const [unrated, setUnrated] = useState<ContactSchema[]>([]);
@@ -68,7 +66,7 @@ const PopupEditMembers: FC<IPopupEditModeratorsProps> = ({
         <>
             <div className={style.ToolsBlock}>
                 <span>
-                    <DefaultButton foo={handleCancel}>
+                    <DefaultButton foo={handleCancel} ariaLabel="Back">
                         <HiOutlineXMark />
                     </DefaultButton>
                     <p>Moderators</p>

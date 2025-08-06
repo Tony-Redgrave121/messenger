@@ -26,16 +26,22 @@ const ProfileTopBar: FC<IProfileTopBarProps> = memo(({ setState, setFormsState }
     return (
         <TopBar>
             <span>
-                <DefaultButton foo={() => setState(false)}>
+                <DefaultButton foo={() => setState(false)} ariaLabel="Back">
                     <HiOutlineArrowLeft />
                 </DefaultButton>
                 <p>Settings</p>
             </span>
             <span>
-                <DefaultButton foo={() => openForm('profile', setFormsState)}>
+                <DefaultButton
+                    foo={() => openForm('profile', setFormsState)}
+                    ariaLabel="Open Profile"
+                >
                     <HiOutlinePencil />
                 </DefaultButton>
-                <DefaultButton foo={() => setPopup(prev => !prev)}>
+                <DefaultButton
+                    foo={() => setPopup(prev => !prev)}
+                    ariaLabel="Open the drop-down menu"
+                >
                     <HiOutlineArrowRightOnRectangle />
                 </DefaultButton>
             </span>

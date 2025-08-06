@@ -111,17 +111,28 @@
       transition: 0.3s left ease-in-out;
 
       .ImageBlock {
-        display: flex;
-        justify-content: center;
         align-items: center;
         width: 100vw;
         height: 100%;
         transform: scale(1);
 
+        > div, & {
+          display: inline-flex;
+          justify-content: center;
+        }
+
+        > div {
+          max-height: 65%;
+        }
+
+        img {
+          max-height: 65%;
+          max-width: calc(100% - 40px);
+        }
+
         img {
           position: relative;
           z-index: 2;
-          max-height: 65%;
           object-fit: contain;
         }
       }

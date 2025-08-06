@@ -33,13 +33,13 @@ const DocumentBlock: FC<IDocumentBlockProps> = ({ doc }) => {
     };
 
     return (
-        <a onClick={handleClick} className={style.DocumentBlock}>
+        <button onClick={handleClick} className={style.DocumentBlock}>
             <HiOutlineDocumentText />
             <div>
                 <h4>{getFileName(doc.message_file_name)}</h4>
                 <p>{(doc.message_file_size / 1048576).toFixed(2)} MB &#183;</p>
             </div>
-        </a>
+        </button>
     );
 };
 

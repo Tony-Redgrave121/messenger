@@ -3,6 +3,7 @@ import { IS_VIDEO } from '@entities/Media/consts/isVideo';
 import Player from '@entities/Media/ui/Player/Player';
 import { getExt, useLoadBlob } from '@shared/lib';
 import { MessageFileSchema } from '@shared/types';
+import { StopPropagationWrapper } from '@shared/ui';
 import style from '../message-media.module.css';
 
 interface ISliderProps {
@@ -14,22 +15,11 @@ const SliderMedia: FC<ISliderProps> = ({ media }) => {
         `messengers/${media.message_file_path}/${media.message_file_name}`,
     );
 
-    const handlePropagation = (event: React.MouseEvent<HTMLElement>) => {
-        event.stopPropagation();
-    };
-
     const geTag = () => {
         const ext = getExt(media.message_file_name);
 
         if (IS_VIDEO.includes(ext)) {
-            return (
-                <Player
-                    key={media.message_file_id}
-                    id={media.message_file_id}
-                    src={image}
-                    foo={handlePropagation}
-                />
-            );
+            return <Player key={media.message_file_id} id={media.message_file_id} src={image} />;
         } else {
             return (
                 <img
@@ -38,13 +28,19 @@ const SliderMedia: FC<ISliderProps> = ({ media }) => {
                     key={media.message_file_id}
                     id={media.message_file_id}
                     draggable={'false'}
-                    onClick={handlePropagation}
                 />
             );
         }
     };
 
-    return <>{load && image ? geTag() : <div className={`${style.ShadowBlock} `} />}</>;
+    return (
+        <>
+            {load && image ? (
+                <StopPropagationWrapper>{geTag()}</StopPropagationWrapper>
+            ) : (
+                <div className={style.ShadowBlock} />
+            )}
+        </>
+    );
 };
-
 export default SliderMedia;

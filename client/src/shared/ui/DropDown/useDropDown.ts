@@ -28,11 +28,17 @@ const useDropDown = (state: boolean, setState: Dispatch<SetStateAction<boolean>>
             if (event.key === 'Escape') setState(false);
         };
 
+        const handleMouesDown = () => {
+            setState(false);
+        };
+
         overlayCurr.addEventListener('mousemove', handleMouseMove);
+        overlayCurr.addEventListener('mousedown', handleMouesDown);
         window.addEventListener('keydown', handleKeyDown);
 
         return () => {
             overlayCurr.removeEventListener('mousemove', handleMouseMove);
+            overlayCurr.removeEventListener('mousedown', handleMouesDown);
             window.removeEventListener('keydown', handleKeyDown);
         };
     }, [setState, state]);

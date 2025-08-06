@@ -13,3 +13,29 @@
     padding-left: 24px;
   }
 }
+
+.DropDownCreateButton {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  width: 52px;
+  height: 52px;
+
+  > span {
+    right: 0;
+    bottom: 0;
+  }
+
+  ul {
+    top: unset;
+    bottom: calc(100% + 8px);
+    right: 0;
+    transform-origin: bottom right;
+  }
+}
+
+.DropDownButton {
+  position: relative;
+
+
+}

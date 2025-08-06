@@ -114,7 +114,11 @@ const EditMessengerForm: FC<IEditMessengerFormProps> = memo(
                         />
                     </FormInput>
                 </div>
-                <CreateButton state={isValid} foo={handleSubmit(onSubmit)}>
+                <CreateButton
+                    state={isValid}
+                    foo={handleSubmit(onSubmit)}
+                    ariaLabel="Commit changes"
+                >
                     <HiOutlineCheck />
                 </CreateButton>
             </>

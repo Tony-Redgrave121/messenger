@@ -30,10 +30,10 @@ const CommentLink: FC<ICommentLinkProps> = ({ messengerType, message }) => {
     return (
         <>
             {messengerType === 'channel' && !postId && (
-                <div className={style.CommentsContainer} onClick={commentsOnClick}>
+                <button className={style.CommentsContainer} onClick={commentsOnClick}>
                     <p>{message?.comments_count || 0} Comments</p>
                     <HiOutlineChevronRight />
-                </div>
+                </button>
             )}
         </>
     );

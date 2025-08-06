@@ -38,6 +38,7 @@ const MessagesList: FC<IMessagesListProps> = ({
                 if (atTop) onStartReached();
             }}
             firstItemIndex={totalCount - messagesList?.length}
+            aria-live="polite"
         />
     );
 };

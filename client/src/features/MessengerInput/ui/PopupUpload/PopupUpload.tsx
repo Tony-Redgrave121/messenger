@@ -33,12 +33,12 @@ const PopupUpload: FC<IPopupInputBlock> = ({
         <>
             <div className={style.ToolsBlock}>
                 <span>
-                    <DefaultButton foo={handleCancel}>
+                    <DefaultButton foo={handleCancel} ariaLabel="Cancel">
                         <HiOutlineXMark />
                     </DefaultButton>
                     <h1>Send {files.length} files</h1>
                 </span>
-                <DefaultButton foo={() => {}}>
+                <DefaultButton foo={() => {}} ariaLabel="Add files to message">
                     <label htmlFor="addNewFile">
                         <HiOutlineDocumentPlus />
                     </label>

@@ -34,7 +34,10 @@ const EditPassword: FC<IEditPasswordProps> = ({ state, setState, refSidebar }) =
             >
                 <TopBar>
                     <span>
-                        <DefaultButton foo={() => closeForm('password', setState)}>
+                        <DefaultButton
+                            foo={() => closeForm('password', setState)}
+                            ariaLabel="Close"
+                        >
                             <HiOutlineArrowLeft />
                         </DefaultButton>
                         <p>Edit Password</p>
@@ -63,7 +66,11 @@ const EditPassword: FC<IEditPasswordProps> = ({ state, setState, refSidebar }) =
                         Use at least 8 characters with a mix of letters, numbers, and symbols to
                         increase password strength
                     </Caption>
-                    <CreateButton state={isValid} foo={handleSubmit(handleChange)}>
+                    <CreateButton
+                        state={isValid}
+                        foo={handleSubmit(handleChange)}
+                        ariaLabel="Commit changes"
+                    >
                         <HiOutlineCheck />
                     </CreateButton>
                 </div>

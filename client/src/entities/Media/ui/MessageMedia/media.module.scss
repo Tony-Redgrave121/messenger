@@ -5,11 +5,34 @@
   height: 125px;
 }
 
-.MediaBlock {
+.MediaButton {
   display: flex;
   position: relative;
   cursor: pointer;
   width: 100%;
+
+  &:after {
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 100%;
+  }
+
+  &:focus-visible:after {
+    box-shadow: 0 0 0 2px white inset;
+    -webkit-box-shadow: 0 0 0 2px white inset;
+    -moz-box-shadow: 0 0 0 2px white inset;
+  }
+
+  > svg {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: initial;
+    height: 20%;
+    max-height: 80px;
+  }
 }
 
 .ShadowBlock {

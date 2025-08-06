@@ -14,7 +14,11 @@ const SubmitButton: FC<ISubmitButtonProps> = memo(({ control, handleSubmit, hand
     const messengerName = useWatch({ control, name: 'messenger_name' });
 
     return (
-        <CreateButton state={messengerName.length > 4} foo={handleSubmit(handleCreation)}>
+        <CreateButton
+            state={messengerName.length > 4}
+            foo={handleSubmit(handleCreation)}
+            ariaLabel="Commit changes"
+        >
             <HiOutlineArrowRight />
         </CreateButton>
     );

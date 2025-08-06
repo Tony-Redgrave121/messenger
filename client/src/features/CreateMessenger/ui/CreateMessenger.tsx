@@ -107,6 +107,7 @@ const CreateMessenger: FC<IMessengerProps> = memo(({ messengerCreation, setMesse
                                 state: false,
                             }))
                         }
+                        ariaLabel="Back"
                     >
                         <HiOutlineArrowLeft />
                     </DefaultButton>

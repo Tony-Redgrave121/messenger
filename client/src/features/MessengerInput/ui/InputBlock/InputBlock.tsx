@@ -71,30 +71,37 @@ const InputBlock: FC<InputBlockSchema> = ({ reply, setReply, socketRef, members 
                                     : reply.message_text}
                             </p>
                         </button>
-                        <DefaultButton foo={() => setReply(null)}>
+                        <DefaultButton foo={() => setReply(null)} ariaLabel="Back">
                             <HiOutlineXMark />
                         </DefaultButton>
                     </div>
                 )}
                 <div className={style.InputBlock}>
-                    <DefaultButton foo={() => setEmoji(!emoji)}>
-                        <HiOutlineFaceSmile />
+                    <div className={style.DropDownBlock}>
+                        <DefaultButton foo={() => setEmoji(!emoji)} ariaLabel="Open emoji">
+                            <HiOutlineFaceSmile />
+                        </DefaultButton>
                         <DropDown
                             list={possiblyEmojis}
                             state={emoji}
                             setState={setEmoji}
                             styles={['EmojiContainer']}
                         />
-                    </DefaultButton>
+                    </div>
                     <Textarea
                         textareaRef={refTextarea}
                         inputText={inputText}
                         setInputText={setInputText}
                     />
-                    <DefaultButton foo={() => setUpload(!upload)}>
-                        <HiMiniPaperClip />
+                    <div className={style.DropDownBlock}>
+                        <DefaultButton
+                            foo={() => setUpload(!upload)}
+                            ariaLabel="Attach files to a message"
+                        >
+                            <HiMiniPaperClip />
+                        </DefaultButton>
                         <DropDown list={dropDownUpload} state={upload} setState={setUpload} />
-                    </DefaultButton>
+                    </div>
                     {filesState.files && (
                         <Popup state={filesState.popup} handleCancel={handleCancel}>
                             <PopupUpload
@@ -111,30 +118,28 @@ const InputBlock: FC<InputBlockSchema> = ({ reply, setReply, socketRef, members 
                     )}
                 </div>
             </div>
-            <InterButton foo={handleSubmit}>
+            <InterButton foo={handleSubmit} ariaLabel="Send a message">
                 <HiOutlinePaperAirplane />
             </InterButton>
-            <label htmlFor="media">
-                <input
-                    ref={mediaRef}
-                    name="media"
-                    id="media"
-                    type="file"
-                    accept="image/*, video/*"
-                    onChange={event => uploadFiles(event, 'media')}
-                    multiple
-                />
-            </label>
-            <label htmlFor="documentInput">
-                <input
-                    ref={documentRef}
-                    name="document"
-                    id="documentInput"
-                    type="file"
-                    onChange={event => uploadFiles(event, 'document')}
-                    multiple
-                />
-            </label>
+            <input
+                ref={mediaRef}
+                name="media"
+                id="media"
+                type="file"
+                accept="image/*, video/*"
+                onChange={event => uploadFiles(event, 'media')}
+                multiple
+                aria-label="media"
+            />
+            <input
+                ref={documentRef}
+                name="document"
+                id="documentInput"
+                type="file"
+                onChange={event => uploadFiles(event, 'document')}
+                multiple
+                aria-label="documentInput"
+            />
         </div>
     );
 };

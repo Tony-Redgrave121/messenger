@@ -1,5 +1,5 @@
 import { memo, useEffect } from 'react';
-import chatListApi from '@features/СhatList/api/chatListApi';
+import chatListApi from '@features/ChatList/api/chatListApi';
 import { ChatBlock, setMessengers, useCloseLeftSidebar } from '@entities/Messenger';
 import { useAppDispatch, useAppSelector, useAbortController } from '@shared/lib';
 import style from './style.module.css';
@@ -28,13 +28,11 @@ const ChatList = memo(() => {
     }, [dispatch, userId]);
 
     return (
-        <ul className={style.ChatList}>
+        <ul className={style.ChatList} aria-live="polite">
             {messengers.map(messenger => (
-                <ChatBlock
-                    onClick={closeSidebar}
-                    key={messenger.messenger_id}
-                    messenger={messenger}
-                />
+                <li key={messenger.messenger_id}>
+                    <ChatBlock onClick={closeSidebar} messenger={messenger} />
+                </li>
             ))}
         </ul>
     );

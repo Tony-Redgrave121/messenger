@@ -6,7 +6,7 @@ import ProfileInfo from '@features/Profile/ui/Profile/ProfileInfo';
 import ProfileTopBar from '@features/Profile/ui/Profile/ProfileTopBar';
 import { ImageBlock } from '@entities/Media';
 import { deleteAccount } from '@entities/User';
-import { useAppDispatch, useAppSelector, useLoadBlob } from '@shared/lib';
+import { useAppDispatch, useAppSelector } from '@shared/lib';
 import { Caption, Popup, PopupConfirmation, Sidebar } from '@shared/ui';
 import '../profile.animation.css';
 

@@ -36,7 +36,7 @@ const Slider: FC = () => {
             unmountOnExit
         >
             <div className={style.SliderContainer} ref={refSlider}>
-                <div onClick={event => event.stopPropagation()} className={style.ToolsBlock}>
+                <div className={style.ToolsBlock}>
                     <Link to={`/chat/${message.user.user_id}`}>
                         <LoadFile
                             imagePath={
@@ -98,7 +98,15 @@ const Slider: FC = () => {
                         </WhiteButton>
                     </span>
                 )}
-                <div className={style.Slider} onClick={() => dispatch(setState(false))}>
+                <div
+                    className={style.Slider}
+                    onClick={() => dispatch(setState(false))}
+                    onKeyDown={e => {
+                        if (e.key === 'Enter' || e.key === ' ') dispatch(setState(false));
+                    }}
+                    role="button"
+                    tabIndex={0}
+                >
                     <div className={style.Swipe} ref={refSwipe}>
                         {message.message_files?.map(media => (
                             <div key={media.message_file_id} className={style.ImageBlock}>

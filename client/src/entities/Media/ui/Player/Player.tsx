@@ -9,10 +9,9 @@ import style from './style.module.css';
 interface IPlayerProps {
     src: string;
     id: string;
-    foo?: (event: React.MouseEvent<HTMLElement>) => void;
 }
 
-const Player: FC<IPlayerProps> = ({ src, id, foo }) => {
+const Player: FC<IPlayerProps> = ({ src, id }) => {
     const [pause, setPause] = useState(true);
     const [fullScreen, setFullScreen] = useState(true);
     const [time, setTime] = useState(0);
@@ -96,7 +95,8 @@ const Player: FC<IPlayerProps> = ({ src, id, foo }) => {
     const getDuration = useMemo(() => getVideoTime(duration), [duration]);
 
     return (
-        <section className={style.VideoPlayer} onClick={event => foo && foo(event)} ref={playerRef}>
+        <section className={style.VideoPlayer} ref={playerRef}>
+            {/* eslint-disable-next-line jsx-a11y/media-has-caption */}
             <video src={src} id={id} ref={videoRef} />
             {!zoom && (
                 <>
@@ -121,7 +121,7 @@ const Player: FC<IPlayerProps> = ({ src, id, foo }) => {
                                 </span>
                             </div>
                             <div>
-                                <PlayButton foo={handleFullscreen}>
+                                <PlayButton foo={handleFullscreen} isMini>
                                     {fullScreen ? <HiArrowsPointingOut /> : <HiArrowsPointingIn />}
                                 </PlayButton>
                             </div>

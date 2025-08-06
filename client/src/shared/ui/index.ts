@@ -36,3 +36,5 @@ export { default as Sidebar } from './Sidebar/Sidebar';
 export { default as Textarea } from './Textarea/Textarea';
 
 export { default as TopBar } from './TopBar/TopBar';
+
+export { default as StopPropagationWrapper } from './StopPropagationWrapper/StopPropagationWrapper';

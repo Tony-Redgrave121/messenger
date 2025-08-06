@@ -21,7 +21,7 @@ const MessengerHeader = memo(() => {
 
     return (
         <header className={clsx(style.ChatHeader, style.MainHeader)}>
-            <DefaultButton foo={() => dispatch(setSidebarLeft(!sidebarLeft))}>
+            <DefaultButton foo={() => dispatch(setSidebarLeft(!sidebarLeft))} ariaLabel="Back">
                 <HiOutlineArrowLeft />
             </DefaultButton>
             <button className={style.DeskBlock} onClick={() => dispatch(setSidebarRight(true))}>
@@ -37,17 +37,22 @@ const MessengerHeader = memo(() => {
             </button>
             <MessageSearch messenger={messenger} state={inputState} setState={setInputState} />
             <span>
-                <DefaultButton foo={() => setInputState(true)}>
+                <DefaultButton foo={() => setInputState(true)} ariaLabel="Find messages">
                     <HiOutlineMagnifyingGlass />
                 </DefaultButton>
-                <DefaultButton foo={() => setSettings(prev => !prev)}>
-                    <HiEllipsisVertical />
+                <div className={style.DropDownButton}>
+                    <DefaultButton
+                        foo={() => setSettings(prev => !prev)}
+                        ariaLabel="Open the drop-down menu"
+                    >
+                        <HiEllipsisVertical />
+                    </DefaultButton>
                     <HeaderDropDown
                         messenger={messenger}
                         settings={settings}
                         setSettings={setSettings}
                     />
-                </DefaultButton>
+                </div>
             </span>
         </header>
     );

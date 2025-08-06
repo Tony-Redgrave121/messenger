@@ -1,6 +1,7 @@
 import { clsx } from 'clsx';
 import { FC, ReactNode, useRef } from 'react';
 import { CSSTransition } from 'react-transition-group';
+import { StopPropagationWrapper } from '@shared/ui';
 import style from './style.module.css';
 import './popup.animation.css';
 
@@ -26,8 +27,13 @@ const Popup: FC<IPopupProps> = ({ state, handleCancel, children, isMessage }) =>
                 className={clsx(isMessage ? style.PopupMessage : style.Popup)}
                 ref={popupRef}
                 onClick={handleCancel}
+                onKeyDown={e => {
+                    if (e.key === 'Enter' || e.key === ' ') handleCancel();
+                }}
+                role="button"
+                tabIndex={0}
             >
-                <div onClick={event => event.stopPropagation()}>{children}</div>
+                <StopPropagationWrapper>{children}</StopPropagationWrapper>
             </div>
         </CSSTransition>
     );

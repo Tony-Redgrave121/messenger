@@ -132,6 +132,7 @@ const MessageSearch: FC<IChatHeader> = memo(({ messenger, state, setState }) => 
                             setState(false);
                             setSearchRes([]);
                         }}
+                        ariaLabel="Back"
                     >
                         <HiOutlineXMark />
                     </DefaultButton>

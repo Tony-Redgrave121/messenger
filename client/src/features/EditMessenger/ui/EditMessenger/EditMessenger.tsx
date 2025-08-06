@@ -43,6 +43,7 @@ const EditMessenger: FC<IEditMessengerProps> = ({ state, setState }) => {
                                 setState(false);
                                 setIsLoaded(false);
                             }}
+                            ariaLabel="Back"
                         >
                             <HiOutlineArrowLeft />
                         </DefaultButton>

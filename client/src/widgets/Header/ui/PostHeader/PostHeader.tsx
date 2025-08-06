@@ -29,13 +29,13 @@ const PostHeader = memo(() => {
 
     return (
         <header className={style.ChatHeader}>
-            <DefaultButton foo={handleClose}>
+            <DefaultButton foo={handleClose} ariaLabel="Close">
                 <HiOutlineArrowLeft />
             </DefaultButton>
             <p>{messagesList.length} Comments</p>
             <MessageSearch messenger={messenger} state={inputState} setState={setInputState} />
             <span>
-                <DefaultButton foo={() => setInputState(!inputState)}>
+                <DefaultButton foo={() => setInputState(!inputState)} ariaLabel="Find messages">
                     {inputState ? <HiOutlineXMark /> : <HiOutlineMagnifyingGlass />}
                 </DefaultButton>
             </span>

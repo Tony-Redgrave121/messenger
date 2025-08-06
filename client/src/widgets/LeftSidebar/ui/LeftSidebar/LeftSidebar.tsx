@@ -4,8 +4,8 @@ import { CSSTransition } from 'react-transition-group';
 import useLeftSidebar from '@widgets/LeftSidebar/lib/hooks/useLeftSidebar';
 import MessengersDropDown from '@widgets/LeftSidebar/ui/LeftSidebar/MessengersDropDown';
 import UserDropDown from '@widgets/LeftSidebar/ui/LeftSidebar/UserDropDown';
+import { ChatList } from '@features/ChatList';
 import { UserContacts } from '@features/UserContacts';
-import { ChatList } from '@features/СhatList';
 import { CreateButton, DefaultButton, Caption, SearchBar, Sidebar } from '@shared/ui';
 import style from './left-sidebar.module.css';
 import './left-sidebar.animation.css';
@@ -44,28 +44,36 @@ const LeftSidebar = memo(() => {
         >
             <Sidebar styles={['LeftSidebarContainer']} ref={refSidebar}>
                 <div className={style.TopBar}>
-                    <DefaultButton foo={() => setSettings(!settings)}>
-                        <HiBars3 />
+                    <div className={style.DropDownButton}>
+                        <DefaultButton foo={() => setSettings(!settings)} ariaLabel="Find messages">
+                            <HiBars3 />
+                        </DefaultButton>
                         <UserDropDown
                             setMessengerCreation={setMessengerCreation}
                             state={settings}
                             setState={setSettings}
                             setProfile={setProfile}
                         />
-                    </DefaultButton>
+                    </div>
                     <SearchBar searchRef={refSearch} foo={handleInput} />
                 </div>
                 <ChatList />
                 <Caption />
                 <UserContacts />
-                <CreateButton state={true} foo={() => setMessengerDropDown(prev => !prev)}>
-                    <HiOutlinePencil />
+                <div className={style.DropDownCreateButton}>
+                    <CreateButton
+                        state={true}
+                        foo={() => setMessengerDropDown(prev => !prev)}
+                        ariaLabel="Open the sidebar to create a new messenger"
+                    >
+                        <HiOutlinePencil />
+                    </CreateButton>
                     <MessengersDropDown
                         setMessengerCreation={setMessengerCreation}
                         setState={setMessengerDropDown}
                         state={messengerDropDown}
                     />
-                </CreateButton>
+                </div>
                 {messengerCreation.type && (
                     <Suspense>
                         <CreateMessenger

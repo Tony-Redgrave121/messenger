@@ -17,7 +17,7 @@ const SwitchSettingButton: FC<ISwitchSettingButtonProps> = memo(
                     {children}
                     <p>{text}</p>
                 </span>
-                <SwitchButton state={state} foo={foo} />
+                <SwitchButton state={state} />
             </button>
         );
     },

@@ -43,12 +43,15 @@ const RightSidebar = () => {
         >
             <Sidebar styles={['RightSidebarContainer']} ref={refRightSidebar}>
                 <TopBar>
-                    <DefaultButton foo={() => dispatch(setSidebarRight(false))}>
+                    <DefaultButton foo={() => dispatch(setSidebarRight(false))} ariaLabel="Close">
                         <HiOutlineXMark />
                     </DefaultButton>
                     <p>{messenger.type} info</p>
                     {messenger.members && checkRights(messenger.members, user_id) && (
-                        <DefaultButton foo={() => setEditMessenger(true)}>
+                        <DefaultButton
+                            foo={() => setEditMessenger(true)}
+                            ariaLabel="Change messenger"
+                        >
                             <HiOutlinePencil />
                         </DefaultButton>
                     )}

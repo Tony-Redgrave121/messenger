@@ -21,7 +21,7 @@ const VolumeInput: FC<IVolumeInputProps> = ({ mediaRef }) => {
         >
             <VolumeButton handleVolume={handleVolume} />
             <CSSTransition
-                timeout={300}
+                timeout={200}
                 classNames="volume-input-node"
                 nodeRef={inputRef}
                 in={isEnter}

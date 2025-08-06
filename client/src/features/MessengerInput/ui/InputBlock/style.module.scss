@@ -67,16 +67,12 @@
       width: 100%;
       min-height: 42px;
 
-      &:first-child,
-      &:last-child {
+      .DropDownBlock {
+        position: relative;
+
         ul {
           top: unset;
           bottom: calc(100% + 10px);
-        }
-      }
-
-      > button {
-        ul {
           right: 0;
           transform-origin: bottom right;
         }

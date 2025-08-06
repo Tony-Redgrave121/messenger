@@ -77,7 +77,7 @@ const PopupEditRemoved: FC<IPopupEditModeratorsProps> = ({
         <>
             <div className={style.ToolsBlock}>
                 <span>
-                    <DefaultButton foo={handleCancel}>
+                    <DefaultButton foo={handleCancel} ariaLabel="Back">
                         <HiOutlineXMark />
                     </DefaultButton>
                     <p>Removed Users</p>

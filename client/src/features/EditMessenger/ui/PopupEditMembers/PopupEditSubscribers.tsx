@@ -62,7 +62,7 @@ const PopupEditSubscribers: FC<IPopupEditSubscribersProps> = ({ handleCancel, se
         <>
             <div className={style.ToolsBlock}>
                 <span>
-                    <DefaultButton foo={handleCancel}>
+                    <DefaultButton foo={handleCancel} ariaLabel="Cancel">
                         <HiOutlineXMark />
                     </DefaultButton>
                     <p>Add Subscribers</p>
@@ -71,7 +71,11 @@ const PopupEditSubscribers: FC<IPopupEditSubscribersProps> = ({ handleCancel, se
             <div className={style.SearchBar}>
                 <AddContact members={members} setMembers={setMembers} />
             </div>
-            <CreateButton state={members.length > 0} foo={handleAddMembers}>
+            <CreateButton
+                state={members.length > 0}
+                foo={handleAddMembers}
+                ariaLabel="Commit changes"
+            >
                 <HiOutlineArrowRight />
             </CreateButton>
         </>

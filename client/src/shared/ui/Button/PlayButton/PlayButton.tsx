@@ -14,6 +14,7 @@ const PlayButton: FC<IPlayButton> = ({ foo, children, isMini }) => {
         <button
             onClick={foo}
             className={clsx(isMini ? style.PlayButtonMini : playButtonStyle.PlayButton)}
+            aria-label="Play"
         >
             {children}
         </button>

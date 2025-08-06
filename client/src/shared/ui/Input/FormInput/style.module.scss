@@ -5,6 +5,10 @@
   display: flex;
   width: 100%;
 
+  > label {
+    display: none;
+  }
+
   input,
   textarea {
     padding: 15px;

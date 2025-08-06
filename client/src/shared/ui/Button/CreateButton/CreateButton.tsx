@@ -8,9 +8,10 @@ interface ICreateButtonProps {
     foo: () => void;
     state: boolean;
     children: ReactNode;
+    ariaLabel?: string;
 }
 
-const CreateButton: FC<ICreateButtonProps> = ({ foo, children, state }) => {
+const CreateButton: FC<ICreateButtonProps> = ({ foo, children, state, ariaLabel }) => {
     const refButton = useRef<HTMLButtonElement>(null);
 
     return (
@@ -22,7 +23,9 @@ const CreateButton: FC<ICreateButtonProps> = ({ foo, children, state }) => {
             unmountOnExit
         >
             <span className={style.CreateButton} ref={refButton}>
-                <InterButton foo={foo}>{children}</InterButton>
+                <InterButton foo={foo} ariaLabel={ariaLabel}>
+                    {children}
+                </InterButton>
             </span>
         </CSSTransition>
     );

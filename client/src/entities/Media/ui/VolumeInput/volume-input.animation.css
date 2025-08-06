@@ -1,5 +1,5 @@
 .volume-input-node-enter {
-  max-width: 0 !important;
+  max-width: 10px !important;
   opacity: 0;
 }
 
@@ -7,8 +7,8 @@
   opacity: 1;
   max-width: 50px !important;
   transition:
-    opacity 0.3s ease-in-out,
-    max-width 0.3s ease-in-out;
+    opacity .3s ease-in-out,
+    max-width .3s ease-in-out;
 }
 
 .volume-input-node-exit {
@@ -17,16 +17,16 @@
 
 .volume-input-node-exit-active {
   opacity: 0;
-  max-width: 0 !important;
+  max-width: 10px !important;
   transition:
-    opacity 0.3s ease-in-out,
-    max-width 0.3s ease-in-out;
+    opacity .3s ease-in-out,
+    max-width .3s ease-in-out;
 }
 
 .volume-input-node-exit-done {
   opacity: 0;
-  max-width: 0 !important;
+  max-width: 10px !important;
   transition:
-    opacity 0.3s ease-in-out,
-    max-width 0.3s ease-in-out;
+    opacity .3s ease-in-out,
+    max-width .3s ease-in-out;
 }

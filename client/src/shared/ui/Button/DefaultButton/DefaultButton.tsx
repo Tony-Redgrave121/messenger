@@ -4,11 +4,12 @@ import style from '../button.module.css';
 interface IDefaultButtonProps {
     children?: ReactNode;
     foo: (event?: React.MouseEvent<HTMLButtonElement>) => void;
+    ariaLabel?: string;
 }
 
-const DefaultButton: FC<IDefaultButtonProps> = ({ children, foo }) => {
+const DefaultButton: FC<IDefaultButtonProps> = ({ children, foo, ariaLabel }) => {
     return (
-        <button className={style.DefaultButton} onClick={foo}>
+        <button className={style.DefaultButton} onClick={foo} aria-label={ariaLabel}>
             {children}
         </button>
     );

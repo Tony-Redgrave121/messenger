@@ -75,7 +75,10 @@ const EditType: FC<IEditTypeProps> = ({ setState, state, messengerType, messenge
             >
                 <TopBar>
                     <span>
-                        <DefaultButton foo={() => closeForm('channelType', setState)}>
+                        <DefaultButton
+                            foo={() => closeForm('channelType', setState)}
+                            ariaLabel="Close"
+                        >
                             <HiOutlineArrowLeft />
                         </DefaultButton>
                         <p>Channel Type</p>

@@ -13,6 +13,7 @@ dist/
 client/build/
 server/dist/
 server/static/
+tsconfig.tsbuildinfo
 
 # Logs
 npm-debug.log*

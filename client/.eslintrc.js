@@ -1,7 +1,7 @@
 module.exports = {
     root: true,
     parser: '@typescript-eslint/parser',
-    plugins: ['@typescript-eslint', 'react', 'react-hooks', 'prettier', 'boundaries'],
+    plugins: ['@typescript-eslint', 'react', 'react-hooks', 'prettier', 'boundaries', 'jsx-a11y'],
     extends: [
         'eslint:recommended',
         'plugin:@typescript-eslint/recommended',
@@ -9,6 +9,7 @@ module.exports = {
         'plugin:react-hooks/recommended',
         'plugin:prettier/recommended',
         'prettier',
+        'plugin:jsx-a11y/recommended',
         '@feature-sliced',
         '@feature-sliced/eslint-config/rules/import-order',
         '@feature-sliced/eslint-config/rules/public-api',
@@ -66,6 +67,15 @@ module.exports = {
             files: ['src/**/**/*.ts', 'src/**/**/*.tsx'],
             rules: {
                 'import/no-internal-modules': 'off',
+            },
+        },
+        {
+            files: ['service-worker.js'],
+            env: {
+                serviceworker: true,
+            },
+            globals: {
+                console: 'readonly',
             },
         },
     ],

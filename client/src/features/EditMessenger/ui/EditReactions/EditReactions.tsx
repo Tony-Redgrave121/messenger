@@ -67,7 +67,10 @@ const EditReactions: FC<IEditReactionsProps> = ({
             >
                 <TopBar>
                     <span>
-                        <DefaultButton foo={() => closeForm('reactions', setState)}>
+                        <DefaultButton
+                            foo={() => closeForm('reactions', setState)}
+                            ariaLabel="Close"
+                        >
                             <HiOutlineArrowLeft />
                         </DefaultButton>
                         <p>Reactions</p>

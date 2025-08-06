@@ -65,7 +65,10 @@ const EditMembers: FC<IEditMemberProps> = ({ setState, state, members, removed, 
             >
                 <TopBar>
                     <span>
-                        <DefaultButton foo={() => closeForm('removedUsers', setState)}>
+                        <DefaultButton
+                            foo={() => closeForm('removedUsers', setState)}
+                            ariaLabel="Close"
+                        >
                             <HiOutlineArrowLeft />
                         </DefaultButton>
                         <p>Removed Users</p>
@@ -74,7 +77,11 @@ const EditMembers: FC<IEditMemberProps> = ({ setState, state, members, removed, 
                 <div className={style.FormContainer} ref={refForm}>
                     <div>
                         <SearchBar foo={handleInput} searchRef={searchRef} />
-                        <CreateButton state={true} foo={() => setPopup(true)}>
+                        <CreateButton
+                            state={true}
+                            foo={() => setPopup(true)}
+                            ariaLabel="Open Popup"
+                        >
                             <HiOutlineUserPlus />
                         </CreateButton>
                     </div>

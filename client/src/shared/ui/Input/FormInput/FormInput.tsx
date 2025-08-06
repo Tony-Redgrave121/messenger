@@ -11,7 +11,7 @@ interface IFormInputProps {
 const FormInput: FC<IFormInputProps> = memo(({ children, errors, field }) => {
     return (
         <div className={style.FormInput}>
-            <label htmlFor={field} />
+            <label htmlFor={field}>{field}</label>
             {children}
             <small>{errors[field] && `${errors[field]!.message?.toString()}*`}</small>
         </div>

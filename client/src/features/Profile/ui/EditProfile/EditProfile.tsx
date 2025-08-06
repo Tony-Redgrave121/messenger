@@ -51,7 +51,7 @@ const EditProfile: FC<IProfileProps> = ({ state, setState, refSidebar }) => {
             >
                 <TopBar>
                     <span>
-                        <DefaultButton foo={() => closeForm('profile', setState)}>
+                        <DefaultButton foo={() => closeForm('profile', setState)} ariaLabel="Close">
                             <HiOutlineArrowLeft />
                         </DefaultButton>
                         <p>Edit Profile</p>
@@ -87,7 +87,11 @@ const EditProfile: FC<IProfileProps> = ({ state, setState, refSidebar }) => {
                         <br />
                         Example: 23 y.o. designer from San Francisco
                     </Caption>
-                    <CreateButton state={isValid} foo={handleSubmit(handleChange)}>
+                    <CreateButton
+                        state={isValid}
+                        foo={handleSubmit(handleChange)}
+                        ariaLabel="Commit changes"
+                    >
                         <HiOutlineCheck />
                     </CreateButton>
                 </div>

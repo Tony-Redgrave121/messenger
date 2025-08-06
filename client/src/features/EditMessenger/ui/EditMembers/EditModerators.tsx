@@ -42,7 +42,7 @@ const EditModerators: FC<IEditMemberProps> = ({
 }) => {
     const refEditModerators = useRef<HTMLDivElement>(null);
 
-    const { newMembers, setNewMembers, refForm, searchRef, filteredArr, handleInput, filter } =
+    const { newMembers, refForm, searchRef, filteredArr, handleInput, filter } =
         useEditModerators(moderators);
     const { deleteFromGroup, dismissModerator, handleCancel, setPopup, popup } =
         useEditSettings(setSettings);
@@ -77,7 +77,10 @@ const EditModerators: FC<IEditMemberProps> = ({
             >
                 <TopBar>
                     <span>
-                        <DefaultButton foo={() => closeForm('moderators', setState)}>
+                        <DefaultButton
+                            foo={() => closeForm('moderators', setState)}
+                            ariaLabel="Close"
+                        >
                             <HiOutlineArrowLeft />
                         </DefaultButton>
                         <p>Moderators</p>
@@ -86,7 +89,11 @@ const EditModerators: FC<IEditMemberProps> = ({
                 <div className={style.FormContainer} ref={refForm}>
                     <div>
                         <SearchBar foo={handleInput} searchRef={searchRef} />
-                        <CreateButton state={true} foo={() => setPopup(true)}>
+                        <CreateButton
+                            state={true}
+                            foo={() => setPopup(true)}
+                            ariaLabel="Open Popup"
+                        >
                             <HiOutlineUserPlus />
                         </CreateButton>
                     </div>
@@ -104,7 +111,6 @@ const EditModerators: FC<IEditMemberProps> = ({
                             handleCancel={handleCancel}
                             members={members}
                             moderators={newMembers}
-                            setMembers={setNewMembers}
                             setSettings={setSettings}
                         />
                     </Popup>

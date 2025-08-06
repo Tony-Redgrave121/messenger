@@ -4,7 +4,6 @@ import { IS_VIDEO } from '@entities/Media/consts/isVideo';
 import { setCurrentSlide, setMessageId, setState } from '@entities/Media/model/slice/sliderSlice';
 import { getExt, useAppDispatch, useLoadBlob } from '@shared/lib';
 import { MessageFileSchema } from '@shared/types';
-import { PlayButton } from '@shared/ui';
 import style from './media.module.css';
 
 interface IMessageMediaProps {
@@ -32,14 +31,10 @@ export const MessageMedia: FC<IMessageMediaProps> = ({ media, messageId }) => {
     return (
         <>
             {load ? (
-                <div className={style.MediaBlock} onClick={handleClick}>
+                <button className={style.MediaButton} onClick={handleClick}>
                     <img src={image} alt="media" />
-                    {IS_VIDEO.includes(ext) && (
-                        <PlayButton>
-                            <HiPlay />
-                        </PlayButton>
-                    )}
-                </div>
+                    {IS_VIDEO.includes(ext) && <HiPlay />}
+                </button>
             ) : (
                 <div className={`${style.ShadowBlock} ${style.MinBlock}`} />
             )}

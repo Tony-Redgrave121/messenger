@@ -58,7 +58,10 @@ const EditSubscribers: FC<IEditSubscribersProps> = ({ setState, state, members, 
             >
                 <TopBar>
                     <span>
-                        <DefaultButton foo={() => closeForm('subscribers', setState)}>
+                        <DefaultButton
+                            foo={() => closeForm('subscribers', setState)}
+                            ariaLabel="Close"
+                        >
                             <HiOutlineArrowLeft />
                         </DefaultButton>
                         <p>Add Subscribers</p>
@@ -67,7 +70,11 @@ const EditSubscribers: FC<IEditSubscribersProps> = ({ setState, state, members, 
                 <div className={style.FormContainer} ref={refForm}>
                     <div>
                         <SearchBar foo={handleInput} searchRef={searchRef} />
-                        <CreateButton state={true} foo={() => setPopup(true)}>
+                        <CreateButton
+                            state={true}
+                            foo={() => setPopup(true)}
+                            ariaLabel="Open Popup"
+                        >
                             <HiOutlineUserPlus />
                         </CreateButton>
                     </div>
