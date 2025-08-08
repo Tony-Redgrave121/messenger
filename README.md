@@ -20,7 +20,7 @@ npm run preview - Preview the production build
 
 ## Project architecture
 
-The project was written in accordance with the Feature sliced design methodology.
+The project was written in accordance with the Feature sliced design methodology
 
 Link to documentation - [feature sliced design](https://feature-sliced.design/docs/get-started/tutorial)
 
@@ -28,7 +28,7 @@ Link to documentation - [feature sliced design](https://feature-sliced.design/do
 
 ## Linting
 
-The project uses eslint to check typescript code, strictly control key architectural principles, and ensure accessibility.
+The project uses eslint to check typescript code, strictly control key architectural principles, and ensure accessibility
 
 ##### Running linters
 
@@ -41,7 +41,7 @@ The project uses eslint to check typescript code, strictly control key architect
 
 The project contains a vite config: `vite.config.ts`
 
-The builder is adapted to the main features of the application.
+The builder is adapted to the main features of the application
 
 Build:
 - **[vite](client/vite.config.ts)**
@@ -50,9 +50,9 @@ Build:
 
 ## Working with data
 
-Data interaction is carried out using the redux toolkit.
+Data interaction is carried out using the redux toolkit
 
-Requests to the server are sent using [Axios](client/src/shared/api/axiosApi.ts).
+Requests to the server are sent using [Axios](client/src/shared/api/axiosApi.ts)
 
 ----
 
@@ -107,7 +107,7 @@ The router configuration is located in [client/src/app/providers/RouterProvider]
 
 ## Shared
 
-- The project uses a custom UI library (client/src/shared/ui). All UI components are located in /client/src/shared/ui.
-- All assets are located in /client/src/shared/assets: [assets](client/src/shared/assets).
-- All auxiliary development tools, such as hooks, contexts, wrappers, or testing helpers, are located in /client/src/shared/lib: [lib](client/src/shared/lib).
-- The [config](client/src/shared/config) folder contains configuration files.
+- The project uses a custom UI library (client/src/shared/ui). All UI components are located in /client/src/shared/ui
+- All assets are located in /client/src/shared/assets: [assets](client/src/shared/assets)
+- All auxiliary development tools, such as hooks, contexts, wrappers, or testing helpers, are located in /client/src/shared/lib: [lib](client/src/shared/lib)
+- The [config](client/src/shared/config) folder contains configuration files
