@@ -107,7 +107,7 @@ The router configuration is located in [client/src/app/providers/RouterProvider]
 
 ## Shared
 
-- The project uses a custom UI library (client/src/shared/ui). All UI components are located in /client/src/shared/ui
-- All assets are located in /client/src/shared/assets: [assets](client/src/shared/assets)
-- All auxiliary development tools, such as hooks, contexts, wrappers, or testing helpers, are located in /client/src/shared/lib: [lib](client/src/shared/lib)
-- The [config](client/src/shared/config) folder contains configuration files
+- The project uses a custom UI library (client/src/shared/ui). All UI components are located in /client/src/shared/ui.
+- All assets are located in /client/src/shared/assets: [assets](client/src/shared/assets).
+- All auxiliary development tools, such as hooks, contexts, wrappers, or testing helpers, are located in /client/src/shared/lib: [lib](client/src/shared/lib).
+- The [config](client/src/shared/config) folder contains configuration files.
